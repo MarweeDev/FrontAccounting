@@ -1,0 +1,50 @@
+.container {  
+    display: grid;
+    grid-template-columns: auto auto 4.5fr;
+    grid-template-rows: 1fr 0fr 0fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "col1 col2 col3"
+      ". . ."
+      ". . .";
+
+    background-color: var(--color-adicional-secundario);
+}
+
+.container div {
+    padding: 20px 20px;
+    letter-spacing: 1px;
+    font-size: 13px;
+}
+  
+.col1 { 
+    grid-area: col1;
+    font-weight: 900;
+    line-height: 19px;
+    text-align: center;
+    max-width: fit-content;
+    background-color: var(--color-adicional-primario);
+}
+.col1 p {
+    color: rgb(255, 255, 255) !important;
+    margin: 0px;
+}
+  
+.col2 { 
+    grid-area: col2;
+    font-weight: 300;
+    line-height: 19px;
+    text-align: center;
+    max-width: fit-content;
+    color:  var(--color-texto-terciario) !important;
+}
+  
+.col3 { 
+    grid-area: col3;
+    font-weight: 300;
+    line-height: 19px;
+    text-align: left;
+    color:  var(--color-texto-terciario) !important;
+}
+  

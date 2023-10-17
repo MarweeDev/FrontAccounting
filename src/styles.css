@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --color-primario:rgba(255, 51, 0, 1);
+    --color-secundario:rgba(208, 40, 0, 1);
+    --color-terciario:rgba(109, 1, 1, 1);
+    --color-adicional-primario:rgba(28, 47, 75, 1);
+    --color-adicional-secundario: rgba(43, 67, 103, 1);
+    --color-texto-primario: #e1e1e1;
+    --color-texto-secundario: #e9e9e9;
+    --color-texto-terciario: rgba(217, 217, 217, 1);
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-adicional-primario);
+}
+
+html {
+    color: var(--color-adicional-primario);
+}
+
+body {
+    margin: 0px;
+    color: var(--color-adicional-primario);
+}
