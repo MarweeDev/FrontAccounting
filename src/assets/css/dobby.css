@@ -1,0 +1,87 @@
+:root {
+  --color-success: #45E936;
+  --color-danger: #FF3535;
+  --color-warning: #FFB800;
+  --color-info: #6a7fc1;
+}
+
+
+/*Colores alert*/
+.success { background: var(--color-success) !important; color: #ffffff !important; }
+.danger { background: var(--color-danger) !important; color: #ffffff !important }
+.warning { background: var(--color-warning) !important; color: #ffffff !important }
+.info { background: var(--color-info) !important; color: #ffffff !important }
+
+/*texto alert*/
+.txt-success { color: var(--color-success) !important; }
+.txt-danger { color: var(--color-danger) !important; }
+.txt-warning { color: var(--color-warning) !important; }
+.txt-info { color: var(--color-info) !important; }
+
+/*Botones alert*/
+.btn-success { 
+  background: var(--color-success) !important; 
+  color: #d1fdca !important;
+  border-color: var(--color-success);
+  transition: all .5s;
+}
+.btn-success:hover { background: #71f462 !important; cursor: pointer;}
+
+/*Botones*/
+.btn {
+  padding: 10px;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-radius: 5px !important;
+}
+
+/*Bordes*/
+.border-success:hover { border-color: var(--color-success); }
+.border-danger:hover { border-color: var(--color-danger); }
+.border-warning:hover { border-color: var(--color-warning); }
+.border-info:hover { border-color: var(--color-info); }
+
+/*Row - Col*/
+.row {
+  display: flex;
+  margin: 5px;
+  padding: 5px;
+}
+.row .col {
+  margin: 5px;
+  padding: 5px;
+  flex: 1 0 0%;
+}
+
+/*Card*/
+.card {
+  width: 22em;
+  padding: 10px;
+  margin: 10px;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 5px;
+}
+
+/*Icon*/
+.icon {
+  padding: 10px !important;
+  width: fit-content !important;
+}
+.icon span {
+  color: #ffffff !important;
+}
+
+/*Width*/
+.wth-f { width: auto !important; }
+.wth-lr { width: 100% !important; }
+.wth-1 { width: 15em !important; }
+.wth-2 { width: 22em !important; }
+.wth-3 { width: 42em !important; }
+
+/*Radius*/
+.rd-1 { border-radius: 5px; }
+.rd-2 { border-radius: 10px; }
+.rd-3 { border-radius: 30px; }
+.rd-4 { border-radius: 50px; }
+.rd-5 { border-radius: 80px; }
