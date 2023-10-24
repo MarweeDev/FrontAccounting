@@ -4,12 +4,25 @@ import { CommonModule } from '@angular/common';
 //Routing
 import { SalesRouting } from './sales.routing'
 
+//Pages
+import { NeworderComponent } from './pages/neworder/neworder.component';
+import { ActiveservicesComponent } from './pages/activeservices/activeservices.component';
+import { PendingservicesComponent } from './pages/pendingservices/pendingservices.component';
+
 //Components
-import { NeworderComponent } from './components/neworder/neworder.component';
+import { OrderComponent } from './components/order/order.component'; //nueva orden
+import { AssignmentComponent } from './components/assignment/assignment.component'; //nueva orden
 
 @NgModule({
   declarations: [
-    NeworderComponent
+    //pages
+    NeworderComponent,
+    ActiveservicesComponent,
+    PendingservicesComponent,
+
+    //components
+    OrderComponent,
+    AssignmentComponent
   ],
   imports: [
     CommonModule,

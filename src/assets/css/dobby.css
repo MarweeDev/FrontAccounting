@@ -3,6 +3,7 @@
   --color-danger: #FF3535;
   --color-warning: #FFB800;
   --color-info: #6a7fc1;
+  --color-company: rgba(255, 51, 0, 1);
 }
 
 
@@ -11,12 +12,22 @@
 .danger { background: var(--color-danger) !important; color: #ffffff !important }
 .warning { background: var(--color-warning) !important; color: #ffffff !important }
 .info { background: var(--color-info) !important; color: #ffffff !important }
+.company { background: var(--color-company) !important; color: #ffffff !important }
 
 /*texto alert*/
 .txt-success { color: var(--color-success) !important; }
 .txt-danger { color: var(--color-danger) !important; }
 .txt-warning { color: var(--color-warning) !important; }
 .txt-info { color: var(--color-info) !important; }
+.txt-company { color: var(--color-company) !important; }
+
+/*Botones global*/
+.btn {
+  padding: 10px;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-radius: 5px !important;
+}
 
 /*Botones alert*/
 .btn-success { 
@@ -27,19 +38,12 @@
 }
 .btn-success:hover { background: #71f462 !important; cursor: pointer;}
 
-/*Botones*/
-.btn {
-  padding: 10px;
-  border-style: solid !important;
-  border-width: 1px !important;
-  border-radius: 5px !important;
-}
-
 /*Bordes*/
 .border-success:hover { border-color: var(--color-success); }
 .border-danger:hover { border-color: var(--color-danger); }
 .border-warning:hover { border-color: var(--color-warning); }
 .border-info:hover { border-color: var(--color-info); }
+.border-company:hover { border-color: var(--color-company); }
 
 /*Row - Col*/
 .row {
@@ -61,6 +65,8 @@
   background-color: rgba(255, 255, 255, 1);
   border: 1px solid var(--color-texto-terciario);
   border-radius: 5px;
+  cursor: pointer; 
+  transition: all .8s;
 }
 
 /*Icon*/
