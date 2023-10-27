@@ -1,14 +1,97 @@
-<section class="container-filter"></section>
-<section class="container">
-    <div class="card border-company wth-2">
-        <div class="card-title">
-            title
-        </div>
-        <div class="card-body">
-            content
-        </div>
-        <div class="card-footer">
-            footer
-        </div>
+<section class="container-component">
+
+    <!--Lista de productos seleccionados-->
+    <div class="container-add">
+        <button type="button">
+            <span class="danger">{{valueCount}}</span>
+            <i class="fa-solid fa-cart-shopping"></i>
+        </button>
     </div>
+
+    <!--Titulo componente-->
+    <div class="container-prev">
+        <h3 class="title">Orden de productos</h3>
+        <button type="button" class="btn btn-info rd-4" (click)="viewPrev()">
+            Generar reasignación (#1 - Mesa barra) <i class="fa-solid fa-pencil"></i>
+        </button>
+    </div>
+
+    <br>
+
+    <div class="content">
+
+        <!--Producto-->
+        <div class="card wth-2" id="card-1">
+            <div class="card-title" id="card-title-1" style="display: none;">
+                <i class="fa-solid fa-circle-check txt-success"></i>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="icon rd-4">
+                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <p><strong>Hamburguesa doble carne 250g</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p class="p"><small class="txt-company">$ 25.500</small></p>
+                <p>
+                    <small>
+                        Carne 100% de res, tocineta y salsa de la casa.
+                    </small> 
+                </p>
+                <div class="btn-add">
+                    <button type="button" class="prev" id="1" (click)="deleteitem($event)">
+                        <i id="1" class="fa-solid fa-minus txt-danger"></i>
+                    </button>
+                    <input type="number" class="input-count" id="input-1" value="0" readonly>
+                    <button type="button" class="next" id="1" (click)="additem($event)">
+                        <i id="1" class="fa-solid fa-plus txt-success"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!--Producto 2-->
+        <div class="card wth-2" id="card-2">
+            <div class="card-title" id="card-title-2" style="display: none;">
+                <i class="fa-solid fa-circle-check txt-success"></i>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="icon rd-4">
+                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <p><strong>Hamburguesa doble carne 250g</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p class="p"><small class="txt-company">$ 25.500</small></p>
+                <p>
+                    <small>
+                        Carne 100% de res, tocineta y salsa de la casa.
+                    </small> 
+                </p>
+                <div class="btn-add">
+                    <button type="button" class="prev" id="2" (click)="deleteitem($event)">
+                        <i id="2" class="fa-solid fa-minus txt-danger"></i>
+                    </button>
+                    <input type="number" class="input-count" id="input-2" value="0" readonly>
+                    <button type="button" class="next" id="2" (click)="additem($event)">
+                        <i id="2" class="fa-solid fa-plus txt-success"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
 </section>

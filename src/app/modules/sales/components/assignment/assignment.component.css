@@ -1,15 +1,29 @@
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     font-size: 13px;
     letter-spacing: 1px;
-    padding-top: 20px;
+    margin: auto;
+    max-width: fit-content;
+}
+
+.title {
+    color: rgb( 97 109 138 );
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
 }
 
 .card { width: 18rem !important; border-radius: 5px 18px 5px 18px; }
 .card:hover { box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.4); border-radius: 5px 18px 18px 18px; }
-.card .card-title { text-align: end; }
+.card .card-title { text-align: end; font-size: 12px; }
 .card .card-title .status { float: left; color: #ffd500; text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1); }
 .card .card-title small { padding: 3px 10px; border-radius: 10px; font-weight: bold; box-shadow: 2px 2px 3px inset rgba(0, 0, 0, 0.1); }
 .card .card-body .row { margin-top: 0%; margin-bottom: 0%; }

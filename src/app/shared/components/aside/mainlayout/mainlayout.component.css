@@ -1,0 +1,75 @@
+.container {
+    margin-right: 10px;
+    padding-right: 20px;
+    /*border-right: 1px solid var(--color-texto-terciario);*/
+}
+
+h3 {
+    color: rgb( 97 109 138 );
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+select {
+    color: rgb( 97 109 138 );
+    border-color: var(--color-texto-terciario);
+    width: 100%;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+ul li {
+    margin: 0px;
+    margin-bottom: 5px;
+    padding: 0px;
+    list-style: none;
+}
+ul li button {
+    padding-left: 20px;
+    padding-right: 20px;
+    border-color: transparent;
+    background-color: transparent;
+    transition: all .5s;
+    color: rgb( 97 109 138 );
+    letter-spacing: 1px;
+    font-size: 12px;
+    width: 100%;
+    text-align: start;
+}
+ul li .active {
+    cursor: pointer;
+    border-color: var(--color-texto-terciario);
+}
+ul li .selected {
+    cursor: pointer;
+    border-color: var(--color-texto-terciario);
+    border-left-color: var(--color-primario);
+    border-left-width: 2px !important;
+    color: var(--color-primario);
+    background-color: rgb(255, 255, 255);
+}
+ul li .selected i {
+    color: var(--color-primario);
+    transition: all .5s;
+}
+ul li .selected:hover, ul li .selected:hover i {
+    cursor: pointer;
+    border-color: var(--color-texto-terciario);
+    border-left-color: var(--color-primario);
+    color: var(--color-primario);
+}
+ul li button:hover {
+    cursor: pointer;
+    color: rgb( 97 109 138 );
+    border-color: var(--color-texto-terciario);
+    background-color: rgb(255, 255, 255);
+}
+ul li button:hover i {
+    color: rgb( 97 109 138 );
+}
+ul li button i {
+    color: rgb( 97 109 138 );
+}

@@ -1,17 +1,130 @@
-.container-filter {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    font-size: 13px;
-    letter-spacing: 1px;
-    padding-top: 20px;
+.container-component {
+    position: relative;
+    height: calc(100vh - 111px);
 }
 
-.container {
+.container-prev {
+    text-align: start;
+    display: flex;
+}
+.container-prev button {
+    margin-top: -3px;
+    margin-left: 10px;
+    padding: 8px 20px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.container-prev button i {
+    margin-left: 15px;
+}
+
+.container-add {
+    position: fixed;
+    right: 15px;
+    bottom: 10px;
+}
+.container-add button {
+    position: relative;
+    padding: 16px 15px;
+    border-radius: 50px;
+    color: rgb( 97 109 138 );
+    border: 1px solid var(--color-texto-terciario);
+    background-color: rgb(255, 255, 255);
+    transition: all .5s;
+}
+.container-add button:hover {
+    cursor: pointer;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+.container-add button i {
+    font-size: 20px;
+    color: rgb( 97 109 138 );
+    transition: all .5s;
+}
+.container-add button:hover i {
+    color: var(--color-primario);
+}
+.container-add button span {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    padding: 5px 7px;
+    border-radius: 50px;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.title {
+    color: rgb( 97 109 138 );
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    font-size: 13px;
-    letter-spacing: 1px;
-    padding-top: 20px;
+    justify-content: left;
+}
+
+.card { width: 18rem !important; border-radius: 5px 18px 5px 18px; cursor: auto; position: relative; }
+.card-hover .icon-img { filter: grayscale(0%) !important; opacity: 1 !important; }
+.card:hover { box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.8); border-radius: 5px 18px 18px 18px; }
+.card .card-title { position: absolute; right: 12px;}
+.card .card-title i {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.card .card-body .row { margin-top: 0%; margin-bottom: 0%; }
+.card .card-body .row .col { margin-bottom: 0%; }
+.card .card-body .row .col:nth-child(1) { max-width: fit-content !important; padding: 0% !important; }
+.card .card-body .row .col .icon { padding: 0px !important; padding-right: 15px !important; }
+.card .card-body .row .col .icon img { width: 60px; height: auto; opacity: .5; filter: grayscale(100%); transition: all .8s; }
+.card:hover .card-body .row .col .icon img { filter: grayscale(0%); opacity: .8; }
+.card .card-body .row .col:nth-child(2) { margin-top: 10px; margin-right: 0px; padding-right: 0px; }
+.card .card-body .row .col p { padding: 0px; margin: 0px; font-size: 13px; letter-spacing: 1.5px; color: rgb( 97, 109, 138) !important; }
+.card .card-body .row .col p strong { color: rgb( 97, 109, 138) !important; }
+.card .card-body .row .col p small { font-weight: 500; font-size: 12px; opacity: .7; }
+.card .card-footer { text-align: center; }
+.card .card-footer .p { opacity: 1 !important; }
+.card .card-footer p { margin: 0% 10px; opacity: .5; }
+
+.card .card-footer .btn-add { 
+    display: flex; 
+    justify-content: center; 
+    padding: 10px 0px; 
+}
+.card .card-footer .btn-add button { 
+    border: 1px solid var(--color-texto-terciario); 
+    padding: 8px 10px; 
+    transition: all .5s; 
+    background-color: var(--background-secundario);
+}
+.card .card-footer .btn-add button:disabled {
+    cursor: no-drop !important;
+    opacity: .5;
+    background-color: var(--color-texto-secundario);
+    box-shadow: none !important;
+}
+.card .card-footer .btn-add button:hover { box-shadow: 2px 2px 5px inset rgba(0, 0, 0, 0.2); cursor: pointer; }
+.card .card-footer .btn-add .prev { border-radius: 20px 0 0 20px; margin-right: -1px; }
+.card .card-footer .btn-add .next { border-radius: 0 20px 20px 0; margin-left: -1px; }
+.card .card-footer .btn-add input 
+{ 
+    width: 40px; 
+    text-align: center; 
+    box-shadow: 1px 1px 2px inset rgba(0, 0, 0, 0.2); 
+    border: 1px solid var(--color-texto-terciario); 
+    outline: none; 
+    appearance:textfield;
+}
+.card .card-footer .btn-add input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none; 
 }

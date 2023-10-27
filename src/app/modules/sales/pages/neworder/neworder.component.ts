@@ -9,8 +9,13 @@ import { ActivatedRoute } from '@angular/router';
 export class NeworderComponent implements OnInit  {
   
   title : string | undefined;
+  assignmentDisabled : boolean | undefined;
+  orderDisabled : boolean | undefined;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {
+    this.assignmentDisabled = true;
+    this.orderDisabled = false;
+   }
 
   ngOnInit(): void {
     const titleDOM = this.route.snapshot.routeConfig?.title;

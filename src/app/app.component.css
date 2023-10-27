@@ -1,0 +1,7 @@
+.row {
+    height: calc(100vh - 106px);
+}
+
+.row .col:nth-child(1) { max-width: fit-content; }
+
+.row .col:nth-child(2) { position: relative; } 

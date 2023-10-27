@@ -1,0 +1,34 @@
+<section class="container">
+    <h3>Filtro</h3>
+    <select *ngIf="true">
+        <option selected>Todos</option>
+        <!--se deben cargar de la tabla estados-->
+        <option>Disponible</option>
+        <option>Reservada</option>
+        <option>Descartada</option>
+    </select>
+    <br><br>
+    <h3>Módulos</h3>
+    <ul>
+        <li>
+            <button type="button" class="btn selected" data-title="Ventas">
+                <i class="fa-solid fa-chart-simple"></i> Ventas
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn" data-title="modulo 2">
+                <i class="fa-solid fa-gear"></i> Configuración
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn" data-title="modulo 2">
+                <i class="fa-solid fa-sliders"></i> Parametrización
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn" data-title="modulo 2">
+                <i class="fa-solid fa-users-gear"></i> Accesos
+            </button>
+        </li>
+    </ul>
+</section>

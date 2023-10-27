@@ -18,7 +18,7 @@
     display: flex;
 }
 .col1 button {
-    padding: 20px 20px;
+    padding: 10px 20px;
     letter-spacing: 1px;
     font-weight: 300;
     border: none;
@@ -33,7 +33,7 @@
     transition: all .5s;
     cursor: pointer;
 }
-.col1 .active::before {
+.col1 .active_::before {
     content: '';
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
@@ -54,7 +54,7 @@
     border-left: 1px solid var(--color-texto-terciario);
 }
 .col2 input {
-    padding: 20px 20px;
+    padding: 15px 20px;
     border: none;
     outline: none;
     text-align: center;
