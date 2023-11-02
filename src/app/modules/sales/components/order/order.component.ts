@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NeworderComponent } from '../../pages/neworder/neworder.component'
+import { NeworderComponent } from '../../pages/neworder/neworder.component';
+import { ProductDTO } from '../../../../core/models/product';
 
 @Component({
   selector: 'app-order',
@@ -8,13 +9,35 @@ import { NeworderComponent } from '../../pages/neworder/neworder.component'
 })
 export class OrderComponent implements OnInit {
 
+  VisibleAlert : boolean = false;
+
   valueCount : number = 0;
+  _btn_modal_add : boolean = true;
+  _modal_add : boolean = false;
+  heightAuto : string = "height: auto;";
+
+  titleBtnPrev : string = "Default";
+
+  idMesa : number = 0;
+  ListProduct: ProductDTO[] = [];
+  totalProduct: number = 0;
 
   constructor(private newOrder : NeworderComponent) {
+    this.titleBtnPrev = "#" + newOrder.mesaModels.id + " - " + newOrder.mesaModels.nombre;
+    this.idMesa = Number(newOrder.mesaModels.id);
   }
 
   ngOnInit(): void {
     
+  }
+
+  OnTotal(){
+    let arrayValue : number[] = [];
+    for (var i=0; i<this.ListProduct.length; i++) {
+      let price = Number(this.ListProduct[i].precio?.toString().replace('$','').replace('.','')) * Number(this.ListProduct[i]?.id_estado);
+      arrayValue.push(price);
+    } 
+    this.totalProduct = Number(arrayValue.reduce((acumulador, numero) => acumulador + numero, 0));
   }
 
   OnValidateAddItem(e:any, input:any){
@@ -47,6 +70,23 @@ export class OrderComponent implements OnInit {
       if (element.value < 10) { 
         element.value = Number(element.value) + 1;
         this.OnValidateAddItem(e, element);
+
+        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        if (exist == 0) 
+        {
+          const product = new ProductDTO();
+          product.id = e.target.attributes['id'].value;
+          product.nombre = e.target.attributes['name'].value;
+          product.precio = e.target.attributes['price'].value;
+          product.id_estado = Number(element.value);
+          this.ListProduct?.push(product);
+        }
+        else {
+          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          this.ListProduct[row].id_estado = Number(element.value);
+        }
+
+        this.OnTotal();
       }
     }
   }
@@ -61,8 +101,38 @@ export class OrderComponent implements OnInit {
     }
   }
 
+  OnClose() {
+    this._btn_modal_add = true;
+    this._modal_add = false;
+    this.heightAuto = "height: auto;";
+  }
+  OnOpen() {
+    this._btn_modal_add = false;
+    this._modal_add = true;
+    this.heightAuto = "container-add-open";
+  }
   viewPrev() {
     this.newOrder.assignmentDisabled = true;
     this.newOrder.orderDisabled = false;
+  }
+  viewOk() {
+    this.viewPrev();
+    this.newOrder.VisibleToask = true;
+    setTimeout(() => {
+      this.newOrder.VisibleToask = false;
+    }, 3000);
+  }
+  viewCancel() {
+    this.VisibleAlert = true;
+  }
+
+  //esto tiene que ir en el componente creado en shared
+  viewOkModal() {
+    this.VisibleAlert = false;
+    this.newOrder.assignmentDisabled = true;
+    this.newOrder.orderDisabled = false;
+  }
+  viewCancelModal() {
+    this.VisibleAlert = false;
   }
 }

@@ -8,7 +8,7 @@
     <div class="content">
 
         <!--Success-->
-        <div class="card border-success wth-2" (click)="viewNext()">
+        <div class="card border-success wth-2" id="1" status="Disponible" name="Mesa barra" (click)="viewNext($event, this)">
             <div class="card-title">
                 <span class="fa-solid fa-lock-open status" title="Disponible"></span>
                 <small class="success" >#1</small>
@@ -35,7 +35,7 @@
         </div>
     
         <!--Warning-->
-        <div class="card border-warning wth-2" (click)="viewNext()">
+        <div class="card border-warning wth-2" id="2" status="Reservada" name="Mesa barra" (click)="viewNext($event, this)">
             <div class="card-title">
                 <span class="fa-solid fa-unlock-keyhole status" title="Reservada"></span>
                 <small class="warning" >#2</small>
@@ -62,7 +62,7 @@
         </div>
     
         <!--Danger-->
-        <div class="card border-danger wth-2" (click)="viewNext()">
+        <div class="card border-danger wth-2" id="3" status="Descartada" name="Mesa barra"  (click)="viewNext($event, this)">
             <div class="card-title">
                 <span class="fa-solid fa-lock status" title="Descartada"></span>
                 <small class="danger" >#3</small>

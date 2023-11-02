@@ -14,10 +14,16 @@ export class AssignmentComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  viewNext() {
-    this.newOrder.assignmentDisabled = false;
-    this.newOrder.orderDisabled = true;
-
-    //Aquí va la logica de la orden
+  viewNext(e:any, dom:any) {
+    if(e.target.attributes['id'].value != undefined && e.target.attributes['name'].value != undefined) {
+      this.newOrder.assignmentDisabled = false;
+      this.newOrder.orderDisabled = true;
+  
+      //Aquí va la logica de la orden
+      //console.log(e.target.attributes);
+      this.newOrder.mesaModels.id = e.target.attributes['id'].value;
+      this.newOrder.mesaModels.numero = e.target.attributes['id'].value;
+      this.newOrder.mesaModels.nombre = e.target.attributes['name'].value;
+    }
   }
 }

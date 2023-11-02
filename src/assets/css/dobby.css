@@ -32,7 +32,7 @@
 /*Botones alert*/
 .btn-success { 
   background: var(--color-success) !important; 
-  color: #d1fdca !important;
+  color: #ffffff !important;
   border-color: var(--color-success);
   transition: all .5s;
 }
@@ -40,7 +40,7 @@
 
 .btn-danger { 
   background: var(--color-danger) !important; 
-  color: #d1fdca !important;
+  color: #ffffff !important;
   border-color: var(--color-danger);
   transition: all .5s;
 }
@@ -48,7 +48,7 @@
 
 .btn-warning { 
   background: var(--color-warning) !important; 
-  color: #d1fdca !important;
+  color: #ffffff !important;
   border-color: var(--color-warning);
   transition: all .5s;
 }
@@ -65,11 +65,19 @@
 
 .btn-company { 
   background: var(--color-company) !important; 
-  color: #d1fdca !important;
+  color: #ffffff !important;
   border-color: var(--color-company);
   transition: all .5s;
 }
 .btn-company:hover { background: rgb(255, 97, 58) !important; cursor: pointer;}
+
+.btn-default { 
+  background: var(--color-texto-primario) !important; 
+  color: var(--color-adicional-secundario) !important;
+  border-color: var(--color-texto-terciario);
+  transition: all .5s;
+}
+.btn-default:hover { background: var(--color-texto-terciario) !important; cursor: pointer;}
 
 /*Bordes*/
 .border-success:hover { border-color: var(--color-success); }
@@ -108,8 +116,31 @@
   padding: 10px !important;
   width: fit-content !important;
 }
-.icon span {
-  color: #ffffff !important;
+/*icon status*/
+.icon-success span {
+  color: var(--color-success) !important;
+  background-color: #cdffc8 !important;
+  padding: 20px;
+}
+.icon-danger span {
+  color: var(--color-danger) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+.icon-warning span {
+  color: var(--color-warning) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+.icon-info span {
+  color: var(--color-info) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+.icon-company span {
+  color: var(--color-company) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
 }
 
 /*Width*/

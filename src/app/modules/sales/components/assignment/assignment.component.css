@@ -21,7 +21,8 @@
     justify-content: left;
 }
 
-.card { width: 18rem !important; border-radius: 5px 18px 5px 18px; }
+.card { position: relative; width: 18rem !important; border-radius: 5px 18px 5px 18px; }
+.card::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 1; }
 .card:hover { box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.4); border-radius: 5px 18px 18px 18px; }
 .card .card-title { text-align: end; font-size: 12px; }
 .card .card-title .status { float: left; color: #ffd500; text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1); }
