@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NeworderComponent } from '../../pages/neworder/neworder.component';
 import { ProductDTO } from '../../../../core/models/product';
+import { CategoriaProductoDTO } from '../../../../core/models/categoriaProducto';
+import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
   selector: 'app-order',
@@ -22,13 +24,28 @@ export class OrderComponent implements OnInit {
   ListProduct: ProductDTO[] = [];
   totalProduct: number = 0;
 
-  constructor(private newOrder : NeworderComponent) {
+  //#region propietari
+  ListFilter : CategoriaProductoDTO[] = [];
+  //#endregion
+
+  constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService) {
     this.titleBtnPrev = "#" + newOrder.mesaModels.id + " - " + newOrder.mesaModels.nombre;
     this.idMesa = Number(newOrder.mesaModels.id);
   }
 
   ngOnInit(): void {
-    
+    this.OnSetValueList();
+  }
+
+  OnSetValueList(){
+    //Cargar filtros
+    this.ListFilter = [
+      { id: 1, nombre: 'Entrada' },
+      { id: 2, nombre: 'Platos fuertes' },
+      { id: 3, nombre: 'Bebidas' }
+    ];
+
+    this.DataShared.OnSetList(this.ListFilter); 
   }
 
   OnTotal(){
@@ -97,6 +114,15 @@ export class OrderComponent implements OnInit {
       if (element.value > 0) { 
         element.value = Number(element.value) - 1;
         this.OnValidateAddItem(e, element);
+
+        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        if (exist > 0) 
+        {
+          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          this.ListProduct[row].id_estado = Number(element.value);
+        }
+
+        this.OnTotal();
       }
     }
   }

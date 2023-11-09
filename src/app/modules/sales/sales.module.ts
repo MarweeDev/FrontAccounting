@@ -11,7 +11,8 @@ import { PendingservicesComponent } from './pages/pendingservices/pendingservice
 
 //Components
 import { OrderComponent } from './components/order/order.component'; //nueva orden
-import { AssignmentComponent } from './components/assignment/assignment.component'; //nueva orden
+import { AssignmentComponent } from './components/assignment/assignment.component';
+import { ReserveComponent } from './components/reserve/reserve.component'; //nueva orden
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AssignmentComponent } from './components/assignment/assignment.componen
 
     //components
     OrderComponent,
-    AssignmentComponent
+    AssignmentComponent,
+    ReserveComponent
   ],
   imports: [
     CommonModule,

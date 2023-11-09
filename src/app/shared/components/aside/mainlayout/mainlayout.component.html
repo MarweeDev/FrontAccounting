@@ -1,11 +1,8 @@
 <section class="container">
     <h3>Filtro</h3>
-    <select *ngIf="true">
-        <option selected>Todos</option>
-        <!--se deben cargar de la tabla estados-->
-        <option>Disponible</option>
-        <option>Reservada</option>
-        <option>Descartada</option>
+    <select [disabled]="statusDisabled">
+        <option class="option" value="" selected>Todos</option>
+        <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
     </select>
     <br><br>
     <h3>Módulos</h3>

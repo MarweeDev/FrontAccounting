@@ -16,6 +16,9 @@ select {
     border-color: var(--color-texto-terciario);
     width: 100%;
 }
+select:disabled {
+    cursor: no-drop;
+}
 
 ul {
     margin: 0px;

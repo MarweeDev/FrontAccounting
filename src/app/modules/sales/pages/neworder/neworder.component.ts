@@ -12,11 +12,11 @@ const models : GlobalModels = new GlobalModels();
 export class NeworderComponent implements OnInit  {
   
   title : string | undefined;
-  
 
   //#region Propiedades
   assignmentDisabled : boolean | undefined;
   orderDisabled : boolean | undefined;
+  reserveDisabled : boolean | undefined;
   orderModels = models.order;
   mesaModels = models.mesa;
   productModels = models.product;
@@ -26,6 +26,7 @@ export class NeworderComponent implements OnInit  {
   constructor(private route: ActivatedRoute) {
     this.assignmentDisabled = true;
     this.orderDisabled = false;
+    this.reserveDisabled = false;
   }
 
   ngOnInit(): void {

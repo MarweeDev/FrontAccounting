@@ -1,0 +1,82 @@
+.container {
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin: auto;
+    max-width: fit-content;
+}
+
+.container-prev {
+    text-align: start;
+    display: flex;
+}
+.container-prev .title {
+    color: rgb( 97 109 138 );
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+.container-prev button {
+    margin-top: -3px;
+    margin-left: 10px;
+    padding: 8px 20px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.container-prev button i {
+    margin-left: 15px;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+.content .container-table {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 7px;
+    background-color: rgba(255, 255, 255, 1);
+}
+.content .container-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.content .container-table table thead tr th {
+    text-align: left;
+    padding: 10px;
+    background-color: var(--color-info);
+    color: rgb(255, 255, 255);
+    box-shadow: 4px 5px 6px rgba(0, 0, 0, .3);
+}
+.content .container-table table thead tr th:first-child {
+    border-radius: 5px 0px 0px 5px;
+}
+.content .container-table table thead tr th:last-child {
+    border-radius: 0px 5px 5px 0px;
+}
+.content .container-table table tbody tr td {
+    text-align: left;
+    padding: 10px;
+    font-size: 12px;
+}
+.content .container-table table tbody tr td button {
+    margin: 0px 3px;
+    font-size: 12px;
+    position: relative;
+}
+.content .container-table table tbody tr td button::before {
+    content: '';
+    position: absolute;
+    top: 0px; bottom: 0px;
+    left: 0px; right: 0px;
+}
+.content .container-table table tbody tr td:last-child {
+    text-align: center;
+}

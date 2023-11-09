@@ -10,7 +10,6 @@
         <!--Success-->
         <div class="card border-success wth-2" id="1" status="Disponible" name="Mesa barra" (click)="viewNext($event, this)">
             <div class="card-title">
-                <span class="fa-solid fa-lock-open status" title="Disponible"></span>
                 <small class="success" >#1</small>
             </div>
             <div class="card-body">
@@ -35,9 +34,8 @@
         </div>
     
         <!--Warning-->
-        <div class="card border-warning wth-2" id="2" status="Reservada" name="Mesa barra" (click)="viewNext($event, this)">
+        <div class="card border-warning wth-2" id="2" status="Reservado" name="Mesa barra" (click)="viewNext($event, this)">
             <div class="card-title">
-                <span class="fa-solid fa-unlock-keyhole status" title="Reservada"></span>
                 <small class="warning" >#2</small>
             </div>
             <div class="card-body">
@@ -49,7 +47,7 @@
                     </div>
                     <div class="col">
                         <p><strong>Mesa barra</strong></p>
-                        <p><small class="txt-warning">Reservada</small></p>
+                        <p><small class="txt-warning">Reservado</small></p>
                     </div>
                 </div>
             </div>
@@ -60,12 +58,11 @@
                 </small></p>
             </div>
         </div>
-    
-        <!--Danger-->
-        <div class="card border-danger wth-2" id="3" status="Descartada" name="Mesa barra"  (click)="viewNext($event, this)">
+
+        <!--Success-->
+        <div class="card border-success wth-2" id="3" status="Disponible" name="Mesa balcon" (click)="viewNext($event, this)">
             <div class="card-title">
-                <span class="fa-solid fa-lock status" title="Descartada"></span>
-                <small class="danger" >#3</small>
+                <small class="success" >#3</small>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -75,8 +72,8 @@
                         </div>
                     </div>
                     <div class="col">
-                        <p><strong>Mesa barra</strong></p>
-                        <p><small class="txt-danger">Descartada</small></p>
+                        <p><strong>Mesa balcon</strong></p>
+                        <p><small class="txt-success">Disponible</small></p>
                     </div>
                 </div>
             </div>
@@ -88,6 +85,83 @@
             </div>
         </div>
     
+        <!--Danger-->
+        <div class="card border-danger wth-2" id="4" status="Descartado" name="Mesa división"  (click)="viewNext($event, this)">
+            <div class="card-title">
+                <small class="danger" >#4</small>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="icon rd-4">
+                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <p><strong>Mesa división</strong></p>
+                        <p><small class="txt-danger">Descartado</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p><small>
+                    <i class="fa-solid fa-people-group"></i>
+                    Capacidad para 3 persona(s)
+                </small></p>
+            </div>
+        </div>
+    
+    </div>
+
+    <!--esto tiene que ir en el componente creado en shared-->
+    <div class="alert-modal" *ngIf="VisibleAlert">
+        <div class="container-modal">
+            <div class="row">
+                <div class="col">
+                    <div class="icon-modal icon icon-warning">
+                        <span class="fa-solid fa-triangle-exclamation rd-4"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="header-modal">
+                        <h3>Reservada</h3>
+                    </div>
+                    <div class="body-modal">
+                        <p>¿Esta mesa tiene reservas activas para hoy <strong>{{fecha}}</strong>, que desea hacer?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-modal">
+                <button type="button" class="btn btn-default rd-4" (click)="viewPrevModal()">Volver</button>
+                <button type="button" class="btn btn-success rd-4" (click)="viewReserverModal()">Ver reservas</button>
+                <!--<button type="button" class="btn btn-danger rd-4" (click)="viewCancelModal()">Cancelar</button>
+                <button type="button" class="btn btn-success rd-4" (click)="viewOkModal()">Iniciar</button>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-modal" *ngIf="VisibleAlertDescar">
+        <div class="container-modal">
+            <div class="row">
+                <div class="col">
+                    <div class="icon-modal icon icon-danger">
+                        <span class="fa-solid fa-lock rd-4"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="header-modal">
+                        <h3>Descartada</h3>
+                    </div>
+                    <div class="body-modal">
+                        <p>Esta mesa esta descartada actualmente. ¿Desea habilitarla y asignarla?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-modal">
+                <button type="button" class="btn btn-default rd-4" (click)="viewPrevModal()">Volver</button>
+                <button type="button" class="btn btn-success rd-4" (click)="viewOkSuccessModal()">Habilitar</button>
+            </div>
+        </div>
     </div>
 
 </section>
