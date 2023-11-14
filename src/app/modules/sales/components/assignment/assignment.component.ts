@@ -13,6 +13,7 @@ export class AssignmentComponent implements OnInit {
 
   VisibleAlert : boolean = false;
   VisibleAlertDescar : boolean = false;
+  VisibleAlertClient : boolean = false;
   fecha ?: string;
   idMesa : number = 0;
   ListProduct: ProductDTO[] = [];
@@ -39,7 +40,7 @@ export class AssignmentComponent implements OnInit {
       { id: 6, nombre: 'Descatado' }
     ];
 
-    this.DataShared.OnSetList(this.ListFilter); 
+    //this.DataShared.OnSetList(this.ListFilter); 
   }
 
   viewNext(e:any, dom:any) {
@@ -53,19 +54,19 @@ export class AssignmentComponent implements OnInit {
         case "Disponible":
           this.VisibleAlert = false;
           this.VisibleAlertDescar = false;
-
-          this.newOrder.assignmentDisabled = false;
-          this.newOrder.orderDisabled = true;
+          this.VisibleAlertClient = true;
           break;
 
         case "Reservado":
           this.VisibleAlert = true;
           this.VisibleAlertDescar = false;
+          this.VisibleAlertClient = false;
           break;
         
         case "Descartado":
           this.VisibleAlert = false;
           this.VisibleAlertDescar = true;
+          this.VisibleAlertClient = false;
           break;
       }
     }
@@ -78,6 +79,7 @@ export class AssignmentComponent implements OnInit {
   viewPrevModal() {
     this.VisibleAlert = false;
     this.VisibleAlertDescar = false;
+    this.VisibleAlertClient = false;
   }
   viewReserverModal(){
     if (this.newOrder.mesaModels.id != undefined && this.newOrder.mesaModels.nombre != undefined) {
@@ -130,6 +132,20 @@ export class AssignmentComponent implements OnInit {
     else {
       this.VisibleAlert = false;
       this.VisibleAlertDescar = false;
+    }
+  }
+  viewOkClientModal() {
+    if (this.newOrder.mesaModels.id != undefined && this.newOrder.mesaModels.nombre != undefined) {
+      this.VisibleAlert = false;
+      this.VisibleAlertDescar = false;
+      this.VisibleAlertClient = false;
+      this.newOrder.assignmentDisabled = false;
+      this.newOrder.orderDisabled = true;
+
+      //Cambiar estado de la mesa
+    }
+    else {
+      this.viewOkModal();
     }
   }
 }

@@ -18,7 +18,8 @@
     font-size: 13px;
 }
   
-.col1 { 
+.col1 {
+    padding: 0px 0px !important;
     grid-area: col1;
     font-weight: 500;
     line-height: 19px;
@@ -26,13 +27,16 @@
     max-width: fit-content;
     background-color: var(--color-adicional-primario);
     background: linear-gradient(90deg, rgba(43,67,103,1) 0%, rgba(28,47,75,1) 27%);
-    border-radius: 0px 20px 20px 0px;
 }
-.col1 p {
+.col1 button {
+    padding: 10px 20px;
     color: rgb(255, 255, 255) !important;
     margin: 0px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
-.col1 p i { color: rgb(255, 255, 255) !important; }
+.col1 button i { color: rgb(255, 255, 255) !important; }
   
 .col2 { 
     grid-area: col2;

@@ -45,7 +45,7 @@ export class OrderComponent implements OnInit {
       { id: 3, nombre: 'Bebidas' }
     ];
 
-    this.DataShared.OnSetList(this.ListFilter); 
+    //this.DataShared.OnSetList(this.ListFilter); 
   }
 
   OnTotal(){

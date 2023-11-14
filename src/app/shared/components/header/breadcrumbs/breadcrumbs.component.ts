@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -7,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  constructor() { }
+  title : string = "Name error";
+
+  constructor(private route : ActivatedRoute) {
+
+    const titleDOM = this.route.snapshot.routeConfig?.title;
+    if(titleDOM){ this.title = titleDOM.toString()}
+   }
 
   ngOnInit(): void {
     

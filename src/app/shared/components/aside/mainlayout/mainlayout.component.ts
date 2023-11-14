@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { EstadoDTO } from '../../../../core/models/estado';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
   templateUrl: './mainlayout.component.html',
   styleUrls: ['./mainlayout.component.css']
 })
-export class MainlayoutComponent implements OnInit {
+export class MainlayoutComponent implements OnInit, AfterViewInit {
 
   //#region propietari
   ListFilter : any[] = [];
@@ -15,24 +15,26 @@ export class MainlayoutComponent implements OnInit {
   //#endregion
 
   //#region Constructor
-  constructor(private DataShared: DataSharedServicesService) {
-    this.DataShared.OnGetList().subscribe((list) => {
-      if (list != undefined && list.length > 0 && list[0].id != 0) {
-        this.ListFilter = list;
-        this.statusDisabled = false;
-      }
-      else {
-        this.ListFilter = list;
-        this.statusDisabled = true;
-      }
-    });
+  constructor(private DataShared: DataSharedServicesService, private router: Router) {
+    this.ListFilter = [
+      { id: 4, nombre: 'Disponible' },
+      { id: 5, nombre: 'Reservado' },
+      { id: 6, nombre: 'Descatado' }
+    ];
   }
 
   ngOnInit(): void {
   }
+
+  ngAfterViewInit(): void {
+    
+  }
   //#endregion
 
   //#region Methods
+  OnRouterModule(router:any){
+    this.router.navigate([router]);
+  }
   //#endregion
 
 }

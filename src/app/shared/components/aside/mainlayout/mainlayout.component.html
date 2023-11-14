@@ -1,14 +1,18 @@
 <section class="container">
     <h3>Filtro</h3>
-    <select [disabled]="statusDisabled">
-        <option class="option" value="" selected>Todos</option>
+    <select >
         <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
     </select>
     <br><br>
     <h3>Módulos</h3>
     <ul>
         <li>
-            <button type="button" class="btn selected" data-title="Ventas">
+            <button type="button" class="btn" data-title="Ventas" (click)="OnRouterModule('/home')">
+                <i class="fa-solid fa-house-chimney"></i> Inicio
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn selected" data-title="Ventas" (click)="OnRouterModule('/sales/neworder')">
                 <i class="fa-solid fa-chart-simple"></i> Ventas
             </button>
         </li>

@@ -91,6 +91,19 @@
 .alert-modal .container-modal .body-modal p {
     color: rgb( 97, 109, 138);
     font-weight: 400;
+    margin-bottom: 10px;
+}
+.alert-modal .container-modal .body-modal .container-txt input {
+    color: rgb( 97, 109, 138);
+    font-weight: 400;
+    padding: 10px 20px;
+    text-align: center;
+    width: 90%;
+    border: 1px solid var(--color-texto-terciario);
+    outline: none;
+}
+.alert-modal .container-modal .body-modal .container-txt span {
+    padding: 10px;
 }
 .alert-modal .container-modal .footer-modal {
     margin-top: 15px;
