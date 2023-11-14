@@ -7,7 +7,7 @@ import { ActiveservicesComponent } from './pages/activeservices/activeservices.c
 import { PendingservicesComponent } from './pages/pendingservices/pendingservices.component';
 
 const routes: Routes = [
-    { path: 'neworder', component: NeworderComponent, title: 'Ventas' },
+    { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
     { path: 'activeservices', component: ActiveservicesComponent, title: 'Servicios activos' },
     { path: 'pendingservices', component: PendingservicesComponent, title: 'Servicios pendientes' },
     { path: '**', redirectTo: 'neworder' }

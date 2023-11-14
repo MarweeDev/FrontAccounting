@@ -41,6 +41,7 @@ ul li button {
     font-size: 12px;
     width: 100%;
     text-align: start;
+    font-weight: unset;
 }
 ul li .active {
     cursor: pointer;

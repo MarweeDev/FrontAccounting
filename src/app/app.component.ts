@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
 
   //Estado menu
-  statusDisabledMain : boolean = true;
+  statusDisabledMain : boolean = false;
   
   //#region Constructor
   constructor() {
@@ -17,5 +17,31 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
   }
   //#endregion
-  
+
+  //#region methods
+  OnExpandBar(){
+    let element :any = document.getElementById('icon_btn_open');
+    if(element != undefined){
+      if (this.statusDisabledMain) {
+        this.statusDisabledMain = false;
+        element.className = "fa-solid fa-bars";
+        console.log("Close bar: ", this.statusDisabledMain);
+      }
+      else{
+        this.statusDisabledMain = true;
+        element.className = "fa-solid fa-bars-staggered";
+        console.log("Open bar: ", this.statusDisabledMain);
+      }
+    }
+  }
+  OnHiddenBar(){
+    let element :any = document.getElementById('icon_btn_open');
+    let elementSlider :any = document.getElementById('slider_left');
+    if(element != undefined && elementSlider != undefined){
+      element.className = "fa-solid fa-bars";
+      elementSlider.className = "slider animate__animated animate__fadeOutLeft";
+      setTimeout(()=>{this.statusDisabledMain = false;},1000);
+    }
+  }
+  //#endregion  
 }
