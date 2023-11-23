@@ -2,7 +2,8 @@
   --color-success: #45E936;
   --color-danger: #FF3535;
   --color-warning: #FFB800;
-  --color-info: #6a7fc1;
+  --color-info: hsl(226, 41%, 59%);
+  --color-info-dark: #6568c9;
   --color-company: rgba(255, 51, 0, 1);
 }
 

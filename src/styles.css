@@ -25,6 +25,7 @@ html {
 
 body {
     margin: 0px;
+    padding-top: 3.8rem;
     color: var(--color-adicional-primario);
     background-color: var(--background-primario);
 }

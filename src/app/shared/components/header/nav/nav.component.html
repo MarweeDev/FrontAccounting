@@ -1,12 +1,12 @@
-<section class="container">
+<section class="container" (click)="OnHiddenBar()">
     <div class="col1">
-        <button type="button" class="active">
+        <button type="button" (click)="OnRouterModule('/sales/neworder')">
             Nueva orden
         </button>
-        <button type="button">
+        <button type="button" (click)="OnRouterModule('/sales/activeservices')">
             Servicios en curso
         </button>
-        <button type="button">
+        <button type="button" (click)="OnRouterModule('/sales/pendingservices')">
             Servicios pendientes
         </button>
         <button type="button">

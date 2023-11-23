@@ -2,6 +2,7 @@
     margin-right: 10px;
     padding-right: 20px;
     /*border-right: 1px solid var(--color-texto-terciario);*/
+    z-index: 2;
 }
 
 h3 {
@@ -67,13 +68,14 @@ ul li .selected:hover, ul li .selected:hover i {
 }
 ul li button:hover {
     cursor: pointer;
-    color: rgb( 97 109 138 );
+    color: var(--background-primario);
     border-color: var(--color-texto-terciario);
-    background-color: rgb(255, 255, 255);
+    background-color: var(--color-info);
 }
 ul li button:hover i {
-    color: rgb( 97 109 138 );
+    color: var(--background-primario);
 }
 ul li button i {
     color: rgb( 97 109 138 );
+    transition: all .5s;
 }
