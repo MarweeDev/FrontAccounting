@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 
@@ -7,19 +7,22 @@ import { AppComponent } from 'src/app/app.component';
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.css']
 })
-export class BreadcrumbsComponent implements OnInit {
+export class BreadcrumbsComponent implements OnInit, AfterViewInit {
 
   title : string = "Name error";
 
+  //#region constructor
   constructor(private route : ActivatedRoute, private app: AppComponent) {
 
-    const titleDOM = this.route.snapshot.routeConfig?.title;
-    if(titleDOM){ this.title = titleDOM.toString()}
-   }
-
+  }
   ngOnInit(): void {
     
   }
+  ngAfterViewInit(): void {
+    const titleDOM = this.route.snapshot.routeConfig?.title;
+    if(titleDOM){ this.title = titleDOM.toString()}
+  }
+  //#endregion
 
   //#region method
   OnExpandBar(){

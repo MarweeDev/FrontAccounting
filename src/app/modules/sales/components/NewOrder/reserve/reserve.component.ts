@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NeworderComponent } from '../../pages/neworder/neworder.component';
+import { NeworderComponent } from '../../../pages/neworder/neworder.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({

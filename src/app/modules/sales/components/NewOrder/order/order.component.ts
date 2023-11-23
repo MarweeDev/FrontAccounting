@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NeworderComponent } from '../../pages/neworder/neworder.component';
-import { ProductDTO } from '../../../../core/models/product';
-import { CategoriaProductoDTO } from '../../../../core/models/categoriaProducto';
+import { NeworderComponent } from '../../../pages/neworder/neworder.component';
+import { ProductDTO } from '../../../../../core/models/product';
+import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -21,6 +21,7 @@ export class OrderComponent implements OnInit {
   titleBtnPrev : string = "Default";
 
   idMesa : number = 0;
+  NameClient ?: string = "name";
   ListProduct: ProductDTO[] = [];
   totalProduct: number = 0;
 
@@ -31,6 +32,7 @@ export class OrderComponent implements OnInit {
   constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService) {
     this.titleBtnPrev = "#" + newOrder.mesaModels.id + " - " + newOrder.mesaModels.nombre;
     this.idMesa = Number(newOrder.mesaModels.id);
+    this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
 
   ngOnInit(): void {

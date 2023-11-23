@@ -1,0 +1,70 @@
+<section class="container-component">
+
+    <!--Titulo componente-->
+    <div class="container-prev">
+        <h3 class="title">Proceso de pago</h3>
+        <button type="button" class="btn btn-info btn-span rd-4" (click)="viewPrev()">
+            Reasignar orden | ({{titleBtnPrev}}) <i class="fa-solid fa-pencil"></i>
+        </button>
+    </div>
+
+    <br>
+
+    <div class="content">
+        
+        <div class="row row-init">
+            <div class="col">
+                <div class="container-header">
+                    <h1>Orden</h1>
+                    <p>181123</p>
+                </div>
+                <div class="container-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ivan Gomez</td>
+                                <td>3177555798</td>
+                                <td>13 Nov</td>
+                                <td>15:30 pm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col">
+                <div class="footer">
+                    <div class="row">
+                        <div class="col">
+                            Total
+                        </div>
+                        <div class="col">
+                            ${{totalProduct}}
+                        </div>
+                    </div>
+                </div>
+                <div class="action">
+                    <div class="btn-order">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-success rd-4" (click)="viewOk()">Pagar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>

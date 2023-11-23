@@ -10,9 +10,12 @@ import { ActiveservicesComponent } from './pages/activeservices/activeservices.c
 import { PendingservicesComponent } from './pages/pendingservices/pendingservices.component';
 
 //Components
-import { OrderComponent } from './components/order/order.component'; //nueva orden
-import { AssignmentComponent } from './components/assignment/assignment.component';
-import { ReserveComponent } from './components/reserve/reserve.component'; //nueva orden
+import { OrderComponent } from './components/NewOrder/order/order.component'; //nueva orden
+import { AssignmentComponent } from './components/NewOrder/assignment/assignment.component'; //nueva orden
+import { ReserveComponent } from './components/NewOrder/reserve/reserve.component'; //nueva orden
+
+import { ServicesComponent } from './components/ActiveServices/services/services.component'; //servicios en curso
+import { PayorderComponent } from './components/ActiveServices/payorder/payorder.component'; //servicios en curso
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { ReserveComponent } from './components/reserve/reserve.component'; //nue
     //components
     OrderComponent,
     AssignmentComponent,
-    ReserveComponent
+    ReserveComponent,
+    
+    ServicesComponent,
+    PayorderComponent
   ],
   imports: [
     CommonModule,

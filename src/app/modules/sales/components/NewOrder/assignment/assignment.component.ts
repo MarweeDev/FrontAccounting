@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NeworderComponent } from '../../pages/neworder/neworder.component';
-import { ProductDTO } from '../../../../core/models/product';
+import { NeworderComponent } from '../../../pages/neworder/neworder.component';
+import { ProductDTO } from '../../../../../core/models/product';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { EstadoDTO } from 'src/app/core/models/estado';
 
@@ -135,17 +135,30 @@ export class AssignmentComponent implements OnInit {
     }
   }
   viewOkClientModal() {
-    if (this.newOrder.mesaModels.id != undefined && this.newOrder.mesaModels.nombre != undefined) {
-      this.VisibleAlert = false;
-      this.VisibleAlertDescar = false;
-      this.VisibleAlertClient = false;
-      this.newOrder.assignmentDisabled = false;
-      this.newOrder.orderDisabled = true;
+    let element :any = document.getElementById('txt_client');
+    let elementSpan :any = document.getElementById('alert_txt_client');
+    if (element != undefined && elementSpan != undefined) {
+      if (this.newOrder.mesaModels.id != undefined && this.newOrder.mesaModels.nombre != undefined) {
 
-      //Cambiar estado de la mesa
-    }
-    else {
-      this.viewOkModal();
+        if (element.value != undefined && element.value != "") {
+          this.VisibleAlert = false;
+          this.VisibleAlertDescar = false;
+          this.VisibleAlertClient = false;
+          this.newOrder.assignmentDisabled = false;
+          this.newOrder.orderDisabled = true;
+          this.newOrder.orderModels.nombre_cliente = element.value;
+          elementSpan.style = "display: none;";
+        }
+        else {
+          elementSpan.style = "display: unset;";
+          setTimeout(() => {
+            elementSpan.style = "display: none;";
+          }, 3000);
+        }
+      }
+      else {
+        this.viewOkModal();
+      }
     }
   }
 }

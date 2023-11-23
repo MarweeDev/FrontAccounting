@@ -10,7 +10,7 @@ const routes: Routes = [
     { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
     { path: 'activeservices', component: ActiveservicesComponent, title: 'Servicios activos' },
     { path: 'pendingservices', component: PendingservicesComponent, title: 'Servicios pendientes' },
-    { path: '**', redirectTo: 'neworder' }
+    { path: '**', redirectTo: 'activeservices' }
 ];
 
 @NgModule({
