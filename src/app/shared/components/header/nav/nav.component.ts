@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    
+    let storedState = localStorage.getItem('event-active');
   }
   //#endregion
 
@@ -34,6 +34,22 @@ export class NavComponent implements OnInit {
       elementSlider.className = "slider animate__animated animate__fadeOutLeft";
       setTimeout(()=>{this.app.statusDisabledMain = false;},1000);
     }
+  }
+
+  onButtonGroupClick(e:any){
+    let clickedElement = e.target || e.srcElement;
+    debugger;
+    if( clickedElement.nodeName === "BUTTON" ) {
+  
+      let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
+      // if a Button already has Class: .active
+      if( isCertainButtonAlreadyActive ) {
+        isCertainButtonAlreadyActive.classList.remove("active");
+      }
+  
+      clickedElement.className += " active";
+    }
+  
   }
   //#endregion
 }

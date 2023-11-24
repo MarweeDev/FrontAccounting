@@ -10,7 +10,7 @@
 
     border: 1px solid var(--color-texto-terciario);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 1) !important;
     font-size: 13px;
     margin: 20px;
     margin-top: 0rem;
@@ -36,27 +36,15 @@
     background: none;
     transition: all .5s;
     color:  var(--color-texto-terciario);
+    cursor: pointer;
     position: relative;
 }
 
 .col1 .active, .col1 button:hover {
-    background-color: var(--color-info);
+    background-color: var(--color-info-dark);
     color: rgba(255, 255, 255, 1);
     transition: all .5s;
     cursor: pointer;
-}
-.col1 .active_::before {
-    content: '';
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-top: 10px solid var(--color-primario);
-    bottom: -10px;
-    z-index: 2;
-    left: calc(50% - 12px);
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;   
 }
   
 .col2 { 

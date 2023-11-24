@@ -35,6 +35,22 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   OnRouterModule(router:any){
     this.router.navigate([router]);
   }
+
+  onButtonGroupClick(e:any){
+    let clickedElement = e.target || e.srcElement;
+    debugger;
+    if( clickedElement.nodeName === "BUTTON" ) {
+  
+      let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
+      // if a Button already has Class: .active
+      if( isCertainButtonAlreadyActive ) {
+        isCertainButtonAlreadyActive.classList.remove("active");
+      }
+  
+      clickedElement.className += " active";
+    }
+  
+  }
   //#endregion
 
 }

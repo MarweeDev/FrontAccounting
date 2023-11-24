@@ -42,18 +42,38 @@
 }
 .col1 button:hover {
     background-color: var(--color-info-dark);
+    box-shadow: 0px 2px 3px rgba(0,0,0,.1);
 }
 .col1 button i { 
     color: rgb(255, 255, 255) !important;
 }
   
-.col2 { 
+.col2 {
+    padding: 0px 0px !important;
     grid-area: col2;
     font-weight: 300;
     line-height: 19px;
     text-align: center;
     max-width: fit-content;
     color:  var(--color-texto-terciario) !important;
+    border-left: 1px solid var(--color-info-dark);
+}
+.col2 button {
+    padding: 11px 14px;
+    color: rgb(255, 255, 255) !important;
+    margin: 5px;
+    margin-left: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+}
+.col2 button:hover {
+    background-color: var(--color-info-dark);
+    box-shadow: 0px 2px 3px rgba(0,0,0,.1);
+}
+.col2 button i { 
+    color: rgb(255, 255, 255) !important;
 }
   
 .col3 { 

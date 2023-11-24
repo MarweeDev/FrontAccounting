@@ -35,19 +35,36 @@
 .content {
     /*display: flex;
     flex-wrap: wrap;
-    justify-content: left;*/
-    margin: 0px 1rem;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 1);
+    justify-content: left;
+    
+    margin: 0px 1rem;*/
+    padding: 0px 0px 20px 0px;
 }
 
 .content .row-init {
     flex-wrap: wrap;
 }
+.content .row-init .col-init {
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 10px;
+    padding: 3rem !important;
+    margin: 0px;
+}
 
-.content .container-header h1 {
+.content .container-header .header-float {
+    width: fit-content;
+    text-align: center;
+}
+.content .container-header .header-float h1 {
     padding: 0px;
     margin: 0px;
+}
+.content .container-header .float {
+    float: right;
+    margin-top: -15px;
+    font-size: 12px;
+    text-align: end;
 }
 
 .content .container-table {
@@ -105,29 +122,52 @@
     text-align: center;
 }
 
-.content .action {
+
+.content .row-init .col-final {
+    padding: 3rem !important;
+    padding-top: 0rem !important;
+    margin: 0px;
+    max-width: fit-content;
+}
+.content .row-init .col-final select {
+    color: rgb( 97 109 138 );
+    border-color: var(--color-texto-terciario);
+    width: 20rem;
+    background-color: rgba(255, 255, 255, 1);
+}
+@media screen and (max-width: 800px ) {
+    .content .row-init .col-final {
+        padding: 3rem !important;
+        max-width: unset;
+    }
+    .content .row-init .col-final select {
+        width: 100%;
+    }
+}
+
+.content .row-init .col-final .action {
     padding-top: 20px;
 }
-.content .action .row {
+.content .row-init .col-final .action .row {
     padding: 0px;
     margin: 0px;
 }
-.content .action .row .col  {
+.content .row-init .col-final .action .row .col  {
     margin: 0px;
     padding: 0px;
 }
-.content .action .row .col button {
+.content .row-init .col-final .action .row .col button {
     font-size: 10px;
     font-weight: 800;
     text-transform: uppercase;
 }
-.content .action .row .col:nth-child(1)  {
+.content .row-init .col-final .action .row .col:nth-child(1)  {
     max-width: fit-content;
 }
-.content .action .row .col:nth-child(1) button  {
+.content .row-init .col-final .action .row .col:nth-child(1) button  {
     padding: 10px 20px;
 }
-.content .action .row .col:nth-child(2) button  {
+.content .row-init .col-final .action .row .col:nth-child(2) button  {
     width: 96%;
     margin-left: 10px;
 }

@@ -1,16 +1,14 @@
 <section class="container">
-    <h3>Filtro</h3>
+    <!-- <h3>Filtro</h3>
     <select >
         <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
     </select>
-    <br><br>
-    <h3>Módulos</h3>
-    <ul>
-        <li>
-            <button type="button" class="btn" data-title="Ventas" (click)="OnRouterModule('/home')">
-                <i class="fa-solid fa-house-chimney"></i> Inicio
-            </button>
-        </li>
+    <br><br> -->
+    <h3>
+        <i class="fa-solid fa-ellipsis-vertical"></i> 
+        Módulos
+    </h3>
+    <ul (click)="onButtonGroupClick($event)">
         <li>
             <button type="button" class="btn" data-title="Ventas" (click)="OnRouterModule('/sales/neworder')">
                 <i class="fa-solid fa-chart-simple"></i> Ventas
@@ -33,7 +31,10 @@
         </li>
     </ul>
 
-    <h3>Módulos Admin</h3>
+    <h3>
+        <i class="fa-solid fa-ellipsis-vertical"></i> 
+        Módulos Admin
+    </h3>
     <ul>
         <li>
             <button type="button" class="btn" data-title="modulo 2">

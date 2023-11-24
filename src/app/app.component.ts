@@ -7,8 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  //Estado menu
+  //#region properties
+
+  /*Estado menu*/
   statusDisabledMain : boolean = false;
+
+  /*Propiedad para titulo del breadcrumbs*/
+  globalTitle : string = "module"
+
+  //#endregion
   
   //#region Constructor
   constructor() {

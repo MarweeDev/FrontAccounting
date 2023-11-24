@@ -1,5 +1,5 @@
 <section class="container" (click)="OnHiddenBar()">
-    <div class="col1">
+    <div class="col1" (click)="onButtonGroupClick($event)">
         <button type="button" (click)="OnRouterModule('/sales/neworder')">
             Nueva orden
         </button>

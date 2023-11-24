@@ -8,11 +8,16 @@ import { ActiveservicesComponent } from '../../../pages/activeservices/activeser
 })
 export class PayorderComponent {
 
-  titleBtnPrev: string = "Default";
   totalProduct: number = 0;
+  ListFilter : any[] = [];
 
   constructor(private ActiveServices: ActiveservicesComponent) {
-
+    this.ListFilter = [
+      { id: 1, nombre: 'Efectivo' },
+      { id: 2, nombre: 'Tarjeta' },
+      { id: 3, nombre: 'Transferencia' },
+      { id: 3, nombre: 'Pendiente' }
+    ];
   }
 
   viewPrev() {
@@ -25,5 +30,4 @@ export class PayorderComponent {
   }
   viewCancel() {
   }
-
 }

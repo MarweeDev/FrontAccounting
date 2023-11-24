@@ -10,6 +10,7 @@ h3 {
     font-size: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
+    margin-top: 2rem;
 }
 
 select {
@@ -46,25 +47,13 @@ ul li button {
 }
 ul li .active {
     cursor: pointer;
+    color: var(--background-primario);
     border-color: var(--color-texto-terciario);
+    background-color: var(--color-info);
 }
-ul li .selected {
-    cursor: pointer;
-    border-color: var(--color-texto-terciario);
-    border-left-color: var(--color-primario);
-    border-left-width: 2px !important;
-    color: var(--color-primario);
-    background-color: rgb(255, 255, 255);
-}
-ul li .selected i {
-    color: var(--color-primario);
+ul li .active i {
+    color: var(--background-primario);
     transition: all .5s;
-}
-ul li .selected:hover, ul li .selected:hover i {
-    cursor: pointer;
-    border-color: var(--color-texto-terciario);
-    border-left-color: var(--color-primario);
-    color: var(--color-primario);
 }
 ul li button:hover {
     cursor: pointer;

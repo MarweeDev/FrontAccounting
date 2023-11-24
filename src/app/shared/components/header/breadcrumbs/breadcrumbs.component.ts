@@ -9,18 +9,17 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class BreadcrumbsComponent implements OnInit, AfterViewInit {
 
-  title : string = "Name error";
+  title : string = "NameModule";
 
   //#region constructor
-  constructor(private route : ActivatedRoute, private app: AppComponent) {
+  constructor(private route : ActivatedRoute, private app: AppComponent, private router: Router) {
 
   }
   ngOnInit(): void {
     
   }
   ngAfterViewInit(): void {
-    const titleDOM = this.route.snapshot.routeConfig?.title;
-    if(titleDOM){ this.title = titleDOM.toString()}
+    //this.title = this.app.globalTitle;
   }
   //#endregion
 
@@ -38,6 +37,10 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
         console.log("Open bar: ", this.app.statusDisabledMain);
       }
     }
+  }
+
+  OnRouterModule(router:any){
+    this.router.navigate([router]);
   }
   //#endregion
 }
