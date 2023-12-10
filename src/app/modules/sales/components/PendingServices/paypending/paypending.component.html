@@ -1,0 +1,96 @@
+<section class="container-component">
+
+    <!--Titulo componente-->
+    <div class="container-prev">
+        <h3 class="title">Proceso de pago</h3>
+        <button type="button" class="btn btn-info btn-span rd-4" (click)="viewPrev()">
+            Cambiar orden <i class="fa-solid fa-pencil"></i>
+        </button>
+    </div>
+
+    <br>
+
+    <div class="content">
+        
+        <div class="row row-init">
+            <div class="col col-init">
+                <div class="container-header">
+                    <div class="float">
+                        <p><strong>Generada:</strong> Luis</p>
+                        <p><strong>Cliente:</strong> Ivan</p>
+                        <p><strong>Fecha de creación:</strong> 24-11-2023</p>
+                    </div>
+                    <div class="header-float">
+                        <h1>Orden</h1>
+                        <p><small>154417</small></p>
+                    </div>
+                </div>
+                <br>
+                <div class="container-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ivan Gomez</td>
+                                <td>3177555798</td>
+                                <td>13 Nov</td>
+                                <td>15:30 pm</td>
+                            </tr>
+                            <tr>
+                                <td>Ivan Gomez</td>
+                                <td>3177555798</td>
+                                <td>13 Nov</td>
+                                <td>15:30 pm</td>
+                            </tr>
+                            <tr>
+                                <td>Ivan Gomez</td>
+                                <td>3177555798</td>
+                                <td>13 Nov</td>
+                                <td>15:30 pm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <div class="footer">
+                    <div class="row">
+                        <div class="col">
+                            Total
+                        </div>
+                        <div class="col">
+                            ${{totalProduct}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-final">
+                <h3>Medio de pago</h3>
+                <select>
+                    <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
+                </select>
+
+                <div class="action">
+                    <div class="btn-order">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-success rd-4" (click)="viewOk()">Pagar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>

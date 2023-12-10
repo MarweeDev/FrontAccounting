@@ -10,32 +10,15 @@
     </h3>
     <ul (click)="onButtonGroupClick($event)">
         <li>
-            <button type="button" class="btn" data-title="Ventas" (click)="OnRouterModule('/sales/neworder')">
+            <button type="button" class="btn" data-title="Ventas" id="option-1" (click)="OnRouterModule('/sales/neworder', $event)">
                 <i class="fa-solid fa-chart-simple"></i> Ventas
             </button>
         </li>
         <li>
-            <button type="button" class="btn" data-title="modulo 2">
+            <button type="button" class="btn" data-title="modulo 2" id="option-2" (click)="OnRouterModule('/sales/neworder', $event)">
                 <i class="fa-solid fa-gear"></i> Configuración
             </button>
         </li>
-        <li>
-            <button type="button" class="btn" data-title="modulo 2">
-                <i class="fa-solid fa-sliders"></i> Parametrización
-            </button>
-        </li>
-        <li>
-            <button type="button" class="btn" data-title="modulo 2">
-                <i class="fa-solid fa-users-gear"></i> Accesos
-            </button>
-        </li>
-    </ul>
-
-    <h3>
-        <i class="fa-solid fa-ellipsis-vertical"></i> 
-        Módulos Admin
-    </h3>
-    <ul>
         <li>
             <button type="button" class="btn" data-title="modulo 2">
                 <i class="fa-solid fa-sliders"></i> Parametrización

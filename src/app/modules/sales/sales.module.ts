@@ -17,6 +17,9 @@ import { ReserveComponent } from './components/NewOrder/reserve/reserve.componen
 import { ServicesComponent } from './components/ActiveServices/services/services.component'; //servicios en curso
 import { PayorderComponent } from './components/ActiveServices/payorder/payorder.component'; //servicios en curso
 
+import { ServicesPayComponent } from './components/PendingServices/services-pay/services-pay.component';
+import { PaypendingComponent } from './components/PendingServices/paypending/paypending.component'; //servicios pendientes
+
 @NgModule({
   declarations: [
     //pages
@@ -30,7 +33,10 @@ import { PayorderComponent } from './components/ActiveServices/payorder/payorder
     ReserveComponent,
     
     ServicesComponent,
-    PayorderComponent
+    PayorderComponent,
+    
+    ServicesPayComponent,
+    PaypendingComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 <app-breadcrumbs></app-breadcrumbs>
-<app-nav></app-nav>
+<app-nav *ngIf="navDisabled"></app-nav>
 
 <div id="slider_left" class="slider animate__animated animate__fadeInLeft" *ngIf="statusDisabledMain">
     <app-mainlayout></app-mainlayout>
@@ -8,3 +8,16 @@
 <div class="content" (click)="OnHiddenBar()">
     <router-outlet></router-outlet>
 </div>
+
+<section class="container-loader-module" *ngIf="statusLoaderModule">
+    <div class="container-loader-margin">
+        <div class="custom-loader"></div>
+        <p class="info">Cargando componentes</p>
+    </div>
+</section>
+
+<section class="container-loader-component" *ngIf="statusLoaderComponent">
+    <div class="container-loader-margin">
+        <div class="custom-loader"></div>
+    </div>
+</section>

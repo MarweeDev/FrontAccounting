@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActiveservicesComponent } from '../../../pages/activeservices/activeservices.component';
+import { PendingservicesComponent } from '../../../pages/pendingservices/pendingservices.component';
 
 @Component({
   selector: 'app-payorder',
   templateUrl: './payorder.component.html',
   styleUrls: ['./payorder.component.css']
 })
-export class PayorderComponent {
+export class PayorderComponent implements OnInit {
 
   totalProduct: number = 0;
   ListFilter : any[] = [];
@@ -20,9 +21,15 @@ export class PayorderComponent {
     ];
   }
 
+  ngOnInit(): void {
+    
+  }
+
   viewPrev() {
     this.ActiveServices.servicesDisabled = true;
     this.ActiveServices.PayDisabled = false;
+    /*this.PendingServices.servicesPendingDisabled = true;
+    this.PendingServices.PayPendingDisabled = false;*/
   }
 
   viewOk() {

@@ -1,12 +1,12 @@
 <section class="container" (click)="OnHiddenBar()">
     <div class="col1" (click)="onButtonGroupClick($event)">
-        <button type="button" (click)="OnRouterModule('/sales/neworder')">
+        <button type="button" id="nav-1" (click)="OnRouterModule('/sales/neworder', $event)">
             Nueva orden
         </button>
-        <button type="button" (click)="OnRouterModule('/sales/activeservices')">
+        <button type="button" id="nav-2" (click)="OnRouterModule('/sales/activeservices', $event)">
             Servicios en curso
         </button>
-        <button type="button" (click)="OnRouterModule('/sales/pendingservices')">
+        <button type="button" id="nav-3" (click)="OnRouterModule('/sales/pendingservices', $event)">
             Servicios pendientes
         </button>
         <button type="button">
@@ -15,7 +15,7 @@
     </div>
     <div class="col2">
         <label for="searchId">
-            <input type="search" placeholder="Buscador" id="searchId">
+            <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (change)="OnSearchChange(searchTerm)">
             <span>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </span>

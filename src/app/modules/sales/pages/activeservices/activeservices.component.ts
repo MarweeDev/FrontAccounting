@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-activeservices',
@@ -12,7 +13,8 @@ export class ActiveservicesComponent implements OnInit {
   public PayDisabled : boolean = false;
   //#endregion
 
-  constructor() {
+  constructor(private app: AppComponent) {
+    this.app.navDisabled = true;
   }
 
   ngOnInit(): void {

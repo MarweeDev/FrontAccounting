@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
   selector: 'app-nav',
@@ -9,21 +10,36 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class NavComponent implements OnInit {
 
+  searchTerm = '';
+
   //#region Constructor
-  constructor(private router: Router, private app: AppComponent) {
+  constructor(private router: Router, private app: AppComponent, private DataShared: DataSharedServicesService) {
+    
   }
 
   ngOnInit(): void {
+    
   }
 
   ngAfterViewInit(): void {
-    let storedState = localStorage.getItem('event-active');
+    let storedState = localStorage.getItem('nav');
+    if (storedState) {
+      document.getElementById(storedState)?.classList.add("active");
+    }
   }
   //#endregion
 
   //#region Methods
-  OnRouterModule(router:any){
+  OnRouterModule(router:any, e:any){
+    localStorage.setItem('nav', e.target.id);
+    this.app.navDisabled = true;
+
     this.router.navigate([router]);
+    this.app.OnLoadingComponent();
+  }
+
+  OnSearchChange(search: string) {
+    this.DataShared.OnSet(search);
   }
 
   OnHiddenBar(){
@@ -38,7 +54,6 @@ export class NavComponent implements OnInit {
 
   onButtonGroupClick(e:any){
     let clickedElement = e.target || e.srcElement;
-    debugger;
     if( clickedElement.nodeName === "BUTTON" ) {
   
       let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");

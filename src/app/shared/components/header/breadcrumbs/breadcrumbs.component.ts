@@ -29,18 +29,21 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
     if(element != undefined){
       if (this.app.statusDisabledMain) {
         this.app.OnHiddenBar();
-        console.log("Close bar: ", this.app.statusDisabledMain);
       }
       else{
         this.app.statusDisabledMain = true;
         element.className = "fa-solid fa-bars-staggered";
-        console.log("Open bar: ", this.app.statusDisabledMain);
       }
     }
   }
 
   OnRouterModule(router:any){
-    this.router.navigate([router]);
+    localStorage.removeItem('option');
+    this.app.navDisabled = false;
+
+    this.router.navigate([router]);  
+    this.app.OnHiddenBar();
+    this.app.OnLoadingModule();
   }
   //#endregion
 }

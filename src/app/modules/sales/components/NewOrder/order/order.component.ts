@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NeworderComponent } from '../../../pages/neworder/neworder.component';
 import { ProductDTO } from '../../../../../core/models/product';
 import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
+import { AppComponent } from 'src/app/app.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -11,25 +12,30 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 })
 export class OrderComponent implements OnInit {
 
+  searchTerm : string = '';
+
   VisibleAlert : boolean = false;
 
   valueCount : number = 0;
-  _btn_modal_add : boolean = true;
-  _modal_add : boolean = false;
-  heightAuto : string = "height: auto;";
+
+  _btn_modal_add : boolean = false;
+  _modal_add : boolean = true;
+
+  heightAuto : string = "container-add container-add-open";
 
   titleBtnPrev : string = "Default";
 
   idMesa : number = 0;
   NameClient ?: string = "name";
   ListProduct: ProductDTO[] = [];
-  totalProduct: number = 0;
+  totalProduct: string = "0";
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
+  ListProductData: ProductDTO[] = [];
   //#endregion
 
-  constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService) {
+  constructor(private newOrder : NeworderComponent, private app: AppComponent, private DataShared: DataSharedServicesService) {
     this.titleBtnPrev = "#" + newOrder.mesaModels.id + " - " + newOrder.mesaModels.nombre;
     this.idMesa = Number(newOrder.mesaModels.id);
     this.NameClient = this.newOrder.orderModels.nombre_cliente;
@@ -37,6 +43,27 @@ export class OrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.OnSetValueList();
+
+    this.DataShared.OnGet().subscribe((list: any) => {
+      this.searchTerm = list;
+
+      if (list == undefined || list == null || list == "") {
+        this.ListProductData.forEach(item => {
+          let element :any = document.getElementById('card-' + item.id);
+          if(element != null)
+            element.removeAttribute("style");
+        });
+      }
+      else {
+        let rows = this.ListProductData.filter(item => !item.nombre?.toLowerCase().includes(list.toLowerCase()));
+        if(rows.length > 0) {
+          rows.forEach(item => {
+            let element :any = document.getElementById('card-' + item.id);
+            element.style = "display: none;"
+          });
+        }
+      }
+    });
   }
 
   OnSetValueList(){
@@ -47,7 +74,13 @@ export class OrderComponent implements OnInit {
       { id: 3, nombre: 'Bebidas' }
     ];
 
-    //this.DataShared.OnSetList(this.ListFilter); 
+    //Cargar productos
+    this.ListProductData = [
+      { id: 1, nombre: 'Hamburguesa doble carne 250g', descripcion: 'Carne 100% de res, tocineta y salsa de la casa.', precio : 25500  },
+      { id: 2, nombre: 'Palitos de queso', descripcion: '6 palitos rellenos de queso con salsa agridulce.', precio : 8500  },
+      { id: 3, nombre: 'New Yort premium', descripcion: 'Corte de carne premium 250g de res.', precio : 150000  },
+      { id: 4, nombre: 'Wagu', descripcion: 'Corte de carne premium 250g de res japon.', precio : 500000  },
+    ];
   }
 
   OnTotal(){
@@ -56,7 +89,9 @@ export class OrderComponent implements OnInit {
       let price = Number(this.ListProduct[i].precio?.toString().replace('$','').replace('.','')) * Number(this.ListProduct[i]?.id_estado);
       arrayValue.push(price);
     } 
-    this.totalProduct = Number(arrayValue.reduce((acumulador, numero) => acumulador + numero, 0));
+    this.totalProduct = Number(arrayValue.reduce((acumulador, numero) => acumulador + numero, 0)).toString();
+    let convertTotal = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Number(this.totalProduct));
+    this.totalProduct = convertTotal.trim();
   }
 
   OnValidateAddItem(e:any, input:any){
@@ -96,7 +131,7 @@ export class OrderComponent implements OnInit {
           const product = new ProductDTO();
           product.id = e.target.attributes['id'].value;
           product.nombre = e.target.attributes['name'].value;
-          product.precio = e.target.attributes['price'].value;
+          product.precio = e.target.attributes['value'].value;
           product.id_estado = Number(element.value);
           this.ListProduct?.push(product);
         }
@@ -111,17 +146,24 @@ export class OrderComponent implements OnInit {
   }
 
   deleteitem(e:any) {
+    
     let element :any = document.getElementById('input-' + e.target.id);
     if (element != undefined) {
       if (element.value > 0) { 
         element.value = Number(element.value) - 1;
         this.OnValidateAddItem(e, element);
 
-        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
-        if (exist > 0) 
-        {
-          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
-          this.ListProduct[row].id_estado = Number(element.value);
+        if(element.value == 0){
+            let newList = this.ListProduct.filter(item => item.id !== e.target.attributes['id'].value);
+            this.ListProduct = newList;
+        }
+        else {
+          let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+          if (exist > 0) 
+          {
+            let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+            this.ListProduct[row].id_estado = Number(element.value);
+          }
         }
 
         this.OnTotal();
@@ -132,12 +174,12 @@ export class OrderComponent implements OnInit {
   OnClose() {
     this._btn_modal_add = true;
     this._modal_add = false;
-    this.heightAuto = "height: auto;";
+    this.heightAuto = "container-add";
   }
   OnOpen() {
     this._btn_modal_add = false;
     this._modal_add = true;
-    this.heightAuto = "container-add-open";
+    this.heightAuto = "container-add container-add-open";
   }
   viewPrev() {
     this.newOrder.assignmentDisabled = true;

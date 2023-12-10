@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalModels } from '../../../../core/models/globalModels';
+import { AppComponent } from 'src/app/app.component';
 
 const models : GlobalModels = new GlobalModels();
 
@@ -23,10 +24,11 @@ export class NeworderComponent implements OnInit  {
   VisibleToask : boolean = false;
   //#endregion
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private app: AppComponent) {
     this.assignmentDisabled = true;
     this.orderDisabled = false;
     this.reserveDisabled = false;
+    this.app.navDisabled = true;
   }
 
   ngOnInit(): void {

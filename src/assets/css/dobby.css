@@ -2,7 +2,7 @@
   --color-success: #45E936;
   --color-danger: #FF3535;
   --color-warning: #FFB800;
-  --color-info: hsl(226, 41%, 59%);
+  --color-info: #6C80C1;
   --color-info-dark: #6568c9;
   --color-company: rgba(255, 51, 0, 1);
 }
@@ -149,9 +149,25 @@
 /*Width*/
 .wth-f { width: auto !important; }
 .wth-lr { width: 100% !important; }
-.wth-1 { width: 15em !important; }
+.wth-1 { width: 16em !important; }
 .wth-2 { width: 22em !important; }
 .wth-3 { width: 42em !important; }
+
+/*Padding*/
+.p-1 { padding: 5px !important; }
+.p-2 { padding: 10px !important; }
+.p-3 { padding: 30px !important; }
+.p-4 { padding: 50px !important; }
+.p-5 { padding: 80px !important; }
+
+.p-x { padding-left: 10px !important; padding-right: 10px !important; }
+.p-z { padding-top: 10px !important; padding-bottom: 10px !important; }
+
+/*float*/
+.f-n { float: none !important; }
+.f-l { float: left !important; }
+.f-r { float: right !important; }
+.f-i { float: inherit !important; }
 
 /*Radius*/
 .rd-1 { border-radius: 5px !important; }

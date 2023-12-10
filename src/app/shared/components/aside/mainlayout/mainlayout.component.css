@@ -44,6 +44,15 @@ ul li button {
     width: 100%;
     text-align: start;
     font-weight: unset;
+    position: relative;
+}
+ul li button::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 ul li .active {
     cursor: pointer;

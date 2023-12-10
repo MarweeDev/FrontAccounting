@@ -1,79 +1,5 @@
 <section class="container-component">
 
-    <!--Lista de productos seleccionados-->
-    <div class="container-add" [class]="heightAuto" *ngIf="valueCount !== 0">
-        <button type="button" class="button animate__bounceIn" (click)="OnOpen()" *ngIf="_btn_modal_add">
-            <span class="danger">{{valueCount}}</span>
-            <i class="fa-solid fa-basket-shopping"></i>
-        </button>
-        <div class="modal-add animate__bounceIn" *ngIf="_modal_add">
-            <div class="header">
-                <div class="row">
-                    <div class="col">
-                        <button type="button" class="btn btn-info rd-4" (click)="OnClose()">
-                            <span class="fa-solid fa-left-long"></span>
-                            Seguir
-                        </button>
-                    </div>
-                    <div class="col">
-                        <h3>Orden</h3>
-                        <h5>
-                            <small>01231028</small>
-                        </h5>
-                    </div>
-                    <div class="col">
-                        <h3>Mesa</h3>
-                        <h5>
-                            <small>#{{idMesa}}</small>
-                        </h5>
-                    </div>
-                </div>
-            </div>
-            <div class="content">
-                <div class="grid rd-2">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of ListProduct">
-                                <td>{{item.nombre}}</td>
-                                <td>{{item.precio}}</td>
-                                <td>{{item.id_estado}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="footer">
-                <div class="row">
-                    <div class="col">
-                        Total
-                    </div>
-                    <div class="col">
-                        ${{totalProduct}}
-                    </div>
-                </div>
-            </div>
-            <div class="action">
-                <div class="btn-order">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-success rd-4" (click)="viewOk()">Registrar orden</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!--Titulo componente-->
     <div class="container-prev">
         <h3 class="title">Orden de productos</h3>
@@ -84,119 +10,130 @@
 
     <br>
 
-    <!--Contenido productos-->
-    <div class="content">
+    <div class="row">
+        <div class="col col-product">
+            
+            <!--Contenido productos-->
+            <div class="content">
 
-        <!--Producto-->
-        <div class="card wth-2" id="card-1">
-            <div class="card-title" id="card-title-1" style="display: none;">
-                <i class="fa-solid fa-circle-check txt-success"></i>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="icon rd-4">
-                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                <!--Producto-->
+                <div class="card" *ngFor="let item of ListProductData" [id]="'card-' + item.id">
+                    <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">
+                        <i class="fa-solid fa-circle-check txt-success"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-body">
+                            <div class="col">
+                                <div class="icon rd-4">
+                                    <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p><strong>{{item.nombre}}</strong></p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <p><strong>Hamburguesa doble carne 250g</strong></p>
+                    <div class="card-footer">
+                        <p class="p"><small class="txt-company">{{item.precio}}</small></p>
+                        <p>
+                            <small>
+                                {{item.descripcion}}
+                            </small> 
+                        </p>
+                        <div class="btn-add">
+                            <button type="button" class="prev" [id]="item.id" (click)="deleteitem($event)">
+                                <i class="fa-solid fa-minus txt-danger"></i>
+                            </button>
+
+                            <input type="number" class="input-count" [id]="'input-' + item.id" value="0" readonly>
+
+                            <button type="button" class="next" [id]="item.id" [name]="item.nombre" [value]="item.precio" (click)="additem($event)">
+                                <i class="fa-solid fa-plus txt-success"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer">
-                <p class="p"><small class="txt-company">$25.500</small></p>
-                <p>
-                    <small>
-                        Carne 100% de res, tocineta y salsa de la casa.
-                    </small> 
-                </p>
-                <div class="btn-add">
-                    <button type="button" class="prev" id="1" (click)="deleteitem($event)">
-                        <i class="fa-solid fa-minus txt-danger"></i>
-                    </button>
 
-                    <input type="number" class="input-count" id="input-1" value="0" readonly>
-                    <button type="button" class="next" id="1" name="Hamburguesa doble carne 250g" price="$25.500" (click)="additem($event)">
-                        <i class="fa-solid fa-plus txt-success"></i>
-                    </button>
-                </div>
             </div>
         </div>
 
-        <!--Producto 2-->
-        <div class="card wth-2" id="card-2">
-            <div class="card-title" id="card-title-2" style="display: none;">
-                <i class="fa-solid fa-circle-check txt-success"></i>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="icon rd-4">
-                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
+        <div class="col col-order" *ngIf="valueCount !== 0">
+            <!--Lista de productos seleccionados-->
+            <div [class]="heightAuto" *ngIf="valueCount !== 0">
+                <button type="button" class="button animate__bounceIn" (click)="OnOpen()" *ngIf="_btn_modal_add">
+                    <span class="danger">{{valueCount}}</span>
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </button>
+                <div class="modal-add animate__bounceIn" *ngIf="_modal_add">
+                    <div class="header">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-info rd-4" (click)="OnClose()">
+                                    Minimizar
+                                </button>
+                            </div>
+                            <div class="col">
+                                <h3>Orden</h3>
+                                <h5>
+                                    <small>01231028</small>
+                                </h5>
+                            </div>
+                            <div class="col">
+                                <h3>Mesa</h3>
+                                <h5>
+                                    <small>#{{idMesa}}</small>
+                                </h5>
+                            </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <p><strong>Palitos de queso</strong></p>
+                    <div class="content">
+                        <div class="grid rd-2">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of ListProduct">
+                                        <td>{{item.nombre}}</td>
+                                        <td>{{item.precio}}</td>
+                                        <td>{{item.id_estado}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <p class="p"><small class="txt-company">$8.500</small></p>
-                <p>
-                    <small>
-                        6 palitos rellenos de queso con salsa agridulce
-                    </small> 
-                </p>
-                <div class="btn-add">
-                    <button type="button" class="prev" id="2" (click)="deleteitem($event)">
-                        <i class="fa-solid fa-minus txt-danger"></i>
-                    </button>
-                    <input type="number" class="input-count" id="input-2" value="0" readonly>
-                    <button type="button" class="next" id="2" name="Palitos de queso" price="$8.500" (click)="additem($event)">
-                        <i class="fa-solid fa-plus txt-success"></i>
-                    </button>
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col">
+                                Total
+                            </div>
+                            <div class="col">
+                                {{totalProduct}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action">
+                        <div class="btn-order">
+                            <div class="row">
+                                <div class="col">
+                                    <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-success rd-4" (click)="viewOk()">Registrar orden</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!--Producto 3-->
-        <div class="card wth-2" id="card-3">
-            <div class="card-title" id="card-title-3" style="display: none;">
-                <i class="fa-solid fa-circle-check txt-success"></i>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="icon rd-4">
-                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <p><strong>New Yort premium</strong></p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <p class="p"><small class="txt-company">$150.000</small></p>
-                <p>
-                    <small>
-                        Corte de carne premium 250g de res
-                    </small> 
-                </p>
-                <div class="btn-add">
-                    <button type="button" class="prev" id="3" (click)="deleteitem($event)">
-                        <i class="fa-solid fa-minus txt-danger"></i>
-                    </button>
-                    <input type="number" class="input-count" id="input-3" value="0" readonly>
-                    <button type="button" class="next" id="3" name="New Yort premium" price="$150.000" (click)="additem($event)">
-                        <i class="fa-solid fa-plus txt-success"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    
 
     <!--esto tiene que ir en el componente creado en shared-->
     <div class="alert-modal" *ngIf="VisibleAlert">
