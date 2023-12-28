@@ -15,10 +15,10 @@ import { AssignmentComponent } from './components/NewOrder/assignment/assignment
 import { ReserveComponent } from './components/NewOrder/reserve/reserve.component'; //nueva orden
 
 import { ServicesComponent } from './components/ActiveServices/services/services.component'; //servicios en curso
-import { PayorderComponent } from './components/ActiveServices/payorder/payorder.component'; //servicios en curso
 
-import { ServicesPayComponent } from './components/PendingServices/services-pay/services-pay.component';
-import { PaypendingComponent } from './components/PendingServices/paypending/paypending.component'; //servicios pendientes
+import { ServicesPayComponent } from './components/PendingServices/services-pay/services-pay.component'; //servicios pendientes
+
+import { PayorderComponent } from './components/Payment/payorder/payorder.component'; //pagos
 
 @NgModule({
   declarations: [
@@ -35,8 +35,7 @@ import { PaypendingComponent } from './components/PendingServices/paypending/pay
     ServicesComponent,
     PayorderComponent,
     
-    ServicesPayComponent,
-    PaypendingComponent
+    ServicesPayComponent
   ],
   imports: [
     CommonModule,

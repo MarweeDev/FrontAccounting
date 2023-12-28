@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PendingservicesComponent } from '../../../pages/pendingservices/pendingservices.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-services-pay',
@@ -8,7 +9,7 @@ import { PendingservicesComponent } from '../../../pages/pendingservices/pending
 })
 export class ServicesPayComponent implements OnInit {
 
-  constructor(private PendingServices: PendingservicesComponent){}
+  constructor(private PendingServices: PendingservicesComponent, private router: Router){}
 
   ngOnInit(): void {
     
@@ -17,7 +18,7 @@ export class ServicesPayComponent implements OnInit {
   viewNext(e:any, dom:any) {
     if(e.target.attributes['id'].value != undefined && e.target.attributes['status'].value != undefined && e.target.attributes['name'].value != undefined) {
       this.PendingServices.servicesPendingDisabled = false;
-      this.PendingServices.PayPendingDisabled = true;
+      this.router.navigate(['/sales/payments']);
     }
   }
 

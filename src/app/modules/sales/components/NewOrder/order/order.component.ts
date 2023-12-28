@@ -4,6 +4,8 @@ import { ProductDTO } from '../../../../../core/models/product';
 import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
 import { AppComponent } from 'src/app/app.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
+import { Router } from '@angular/router';
+import { PendingservicesComponent } from '../../../pages/pendingservices/pendingservices.component';
 
 @Component({
   selector: 'app-order',
@@ -13,6 +15,8 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 export class OrderComponent implements OnInit {
 
   searchTerm : string = '';
+
+  btn_pay : boolean = true;
 
   VisibleAlert : boolean = false;
 
@@ -35,21 +39,46 @@ export class OrderComponent implements OnInit {
   ListProductData: ProductDTO[] = [];
   //#endregion
 
-  constructor(private newOrder : NeworderComponent, private app: AppComponent, private DataShared: DataSharedServicesService) {
-    this.titleBtnPrev = "#" + newOrder.mesaModels.id + " - " + newOrder.mesaModels.nombre;
-    this.idMesa = Number(newOrder.mesaModels.id);
+  constructor(private newOrder : NeworderComponent, 
+    private app: AppComponent, 
+    private DataShared: DataSharedServicesService,
+    private router: Router) 
+    {
+    this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
+    this.idMesa = Number(newOrder.mesaModels.numero);
     this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
 
   ngOnInit(): void {
     this.OnSetValueList();
+    this.OnReloadSearch();
+  }
 
+  OnValidateCheck() {
+    let element: any = document.getElementById('input-pay');
+    let elementLabel: any = document.getElementById('label-pay')?.classList;
+    let elementIcon: any = document.getElementById('icon-pay')?.classList;
+    if(element.checked){
+      elementLabel.add("label-active");
+      elementIcon.remove("fa-regular");
+      elementIcon.add("fa-solid");
+      this.btn_pay = false;
+    }
+    else {
+      elementLabel.remove("label-active");
+      elementIcon.remove("fa-solid");
+      elementIcon.add("fa-regular");
+      this.btn_pay = true;
+    }
+  }
+
+  OnReloadSearch() {
     this.DataShared.OnGet().subscribe((list: any) => {
       this.searchTerm = list;
 
       if (list == undefined || list == null || list == "") {
         this.ListProductData.forEach(item => {
-          let element :any = document.getElementById('card-' + item.id);
+          let element :any = document.getElementById('card-order-' + item.id);
           if(element != null)
             element.removeAttribute("style");
         });
@@ -58,7 +87,7 @@ export class OrderComponent implements OnInit {
         let rows = this.ListProductData.filter(item => !item.nombre?.toLowerCase().includes(list.toLowerCase()));
         if(rows.length > 0) {
           rows.forEach(item => {
-            let element :any = document.getElementById('card-' + item.id);
+            let element :any = document.getElementById('card-order-' + item.id);
             element.style = "display: none;"
           });
         }
@@ -90,13 +119,12 @@ export class OrderComponent implements OnInit {
       arrayValue.push(price);
     } 
     this.totalProduct = Number(arrayValue.reduce((acumulador, numero) => acumulador + numero, 0)).toString();
-    let convertTotal = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Number(this.totalProduct));
-    this.totalProduct = convertTotal.trim();
+    this.totalProduct = this.OnConvertNumberPrice(this.totalProduct);
   }
 
   OnValidateAddItem(e:any, input:any){
     let elementTitle :any = document.getElementById('card-title-' + e.target.id)?.style;
-    let elementCard :any = document.getElementById('card-' + e.target.id)?.classList;
+    let elementCard :any = document.getElementById('card-order-' + e.target.id)?.classList;
     if (elementTitle != undefined && input != undefined) {
       if (input.value > 0) { 
         elementTitle.display = "unset";
@@ -116,6 +144,11 @@ export class OrderComponent implements OnInit {
       }
       this.valueCount = arrayValue.reduce((acumulador, numero) => acumulador + numero, 0);
     }
+  }
+
+  OnConvertNumberPrice(valor:any): string{
+    let convertTotal = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Number(valor));
+    return convertTotal;
   }
 
   additem(e:any) {
@@ -191,6 +224,11 @@ export class OrderComponent implements OnInit {
     setTimeout(() => {
       this.newOrder.VisibleToask = false;
     }, 3000);
+  }
+  viewPay() {
+    this.router.navigate(['/sales/activeservices']);
+    localStorage.setItem("servicesPendingDisabled", "false");
+    localStorage.setItem("PayPendingDisabled", "true");
   }
   viewCancel() {
     this.VisibleAlert = true;

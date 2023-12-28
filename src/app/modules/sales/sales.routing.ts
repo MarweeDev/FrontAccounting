@@ -6,10 +6,14 @@ import { NeworderComponent } from './pages/neworder/neworder.component';
 import { ActiveservicesComponent } from './pages/activeservices/activeservices.component';
 import { PendingservicesComponent } from './pages/pendingservices/pendingservices.component';
 
+//Components
+import { PayorderComponent } from './components/Payment/payorder/payorder.component';
+
 const routes: Routes = [
     { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
     { path: 'activeservices', component: ActiveservicesComponent, title: 'Servicios activos' },
     { path: 'pendingservices', component: PendingservicesComponent, title: 'Servicios pendientes' },
+    { path: 'payments', component: PayorderComponent, title: 'Realizando pago' },
     { path: '**', redirectTo: 'activeservices' }
 ];
 

@@ -193,3 +193,28 @@ select {
 select::-ms-expand {
   display: none;
 }
+
+
+/* Estilo del scrollbar principal */
+::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+  scrollbar-width: thin; /* Para Firefox */
+}
+/* Estilo de la pista (track) del scrollbar */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color de fondo de la pista */
+}
+/* Estilo del "pulgar" (thumb) del scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-info); /* Color del "pulgar" */
+  border-radius: 6px; /* Bordes redondeados del "pulgar" */
+}
+/* Estilo del "pulgar" al pasar el ratón sobre él */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-info); /* Cambiar color al pasar el ratón sobre el "pulgar" */
+}
+/* Estilo del scrollbar para Firefox */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-info) #f1f1f1;
+}

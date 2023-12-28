@@ -17,7 +17,7 @@
             <div class="content">
 
                 <!--Producto-->
-                <div class="card" *ngFor="let item of ListProductData" [id]="'card-' + item.id">
+                <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
                     <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">
                         <i class="fa-solid fa-circle-check txt-success"></i>
                     </div>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <p class="p"><small class="txt-company">{{item.precio}}</small></p>
+                        <p class="p"><small class="txt-company">{{OnConvertNumberPrice(item.precio)}}</small></p>
                         <p>
                             <small>
                                 {{item.descripcion}}
@@ -99,7 +99,7 @@
                                 <tbody>
                                     <tr *ngFor="let item of ListProduct">
                                         <td>{{item.nombre}}</td>
-                                        <td>{{item.precio}}</td>
+                                        <td>{{OnConvertNumberPrice(item.precio)}}</td>
                                         <td>{{item.id_estado}}</td>
                                     </tr>
                                 </tbody>
@@ -115,6 +115,13 @@
                                 {{totalProduct}}
                             </div>
                         </div>
+                        <div class="action-check">
+                            <label class="btn rd-4" id="label-pay" (click)="OnValidateCheck()" for="input-pay">
+                                <input type="checkbox" id="input-pay">
+                                <i id="icon-pay" class="fa-regular fa-circle-check"></i>
+                                Adelantar pago
+                            </label>
+                        </div>
                     </div>
                     <div class="action">
                         <div class="btn-order">
@@ -123,7 +130,8 @@
                                     <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn btn-success rd-4" (click)="viewOk()">Registrar orden</button>
+                                    <button type="button" class="btn btn-success rd-4" *ngIf="btn_pay" (click)="viewOk()">Registrar orden</button>
+                                    <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">Pagar orden</button>
                                 </div>
                             </div>
                         </div>

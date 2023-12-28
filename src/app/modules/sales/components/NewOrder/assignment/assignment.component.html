@@ -8,9 +8,9 @@
     <div class="content">
 
         <!--Success-->
-        <div class="card border-success wth-2" id="1" status="Disponible" name="Mesa barra" (click)="viewNext($event, this)">
+        <div class="card border-info wth-2" *ngFor="let item of ListMesaData" [id]="'card-assig-' + item.id" (click)="viewNext($event, item.estado_mesa, item.nombre, item.numero)">
             <div class="card-title">
-                <small class="success" >#1</small>
+                <small class="info" >#{{item.numero}}</small>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -20,93 +20,15 @@
                         </div>
                     </div>
                     <div class="col">
-                        <p><strong>Mesa barra</strong></p>
-                        <p><small class="txt-success">Disponible</small></p>
+                        <p><strong>{{item.nombre}}</strong></p>
+                        <p><small [className]="OnGetClass(item.estado_mesa)">{{OnGetStatus(item.estado_mesa)}}</small></p>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
                 <p><small>
                     <i class="fa-solid fa-people-group"></i>
-                    Capacidad para 6 persona(s)
-                </small></p>
-            </div>
-        </div>
-    
-        <!--Warning-->
-        <div class="card border-warning wth-2" id="2" status="Reservado" name="Mesa barra" (click)="viewNext($event, this)">
-            <div class="card-title">
-                <small class="warning" >#2</small>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="icon rd-4">
-                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <p><strong>Mesa barra</strong></p>
-                        <p><small class="txt-warning">Reservado</small></p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <p><small>
-                    <i class="fa-solid fa-people-group"></i>
-                    Capacidad para 4 persona(s)
-                </small></p>
-            </div>
-        </div>
-
-        <!--Success-->
-        <div class="card border-success wth-2" id="3" status="Disponible" name="Mesa balcon" (click)="viewNext($event, this)">
-            <div class="card-title">
-                <small class="success" >#3</small>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="icon rd-4">
-                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <p><strong>Mesa balcon</strong></p>
-                        <p><small class="txt-success">Disponible</small></p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <p><small>
-                    <i class="fa-solid fa-people-group"></i>
-                    Capacidad para 2 persona(s)
-                </small></p>
-            </div>
-        </div>
-    
-        <!--Danger-->
-        <div class="card border-danger wth-2" id="4" status="Descartado" name="Mesa división"  (click)="viewNext($event, this)">
-            <div class="card-title">
-                <small class="danger" >#4</small>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="icon rd-4">
-                            <img class="icon-img" src="../../../../../assets/img/marwee.png">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <p><strong>Mesa división</strong></p>
-                        <p><small class="txt-danger">Descartado</small></p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <p><small>
-                    <i class="fa-solid fa-people-group"></i>
-                    Capacidad para 3 persona(s)
+                    Capacidad para {{item.capacidad}} persona(s)
                 </small></p>
             </div>
         </div>

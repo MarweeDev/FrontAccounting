@@ -18,7 +18,7 @@
 .content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .card { position: relative; width: 18rem !important; border-radius: 5px 18px 5px 18px; }

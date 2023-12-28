@@ -15,7 +15,7 @@
     </div>
     <div class="col2">
         <label for="searchId">
-            <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (change)="OnSearchChange(searchTerm)">
+            <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
             <span>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </span>

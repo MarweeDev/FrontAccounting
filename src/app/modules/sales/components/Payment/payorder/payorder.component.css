@@ -50,6 +50,9 @@
     border-radius: 10px;
     padding: 3rem !important;
     margin: 0px;
+    max-height: calc(53vh - 4rem);
+    position: relative;
+    overflow: auto;
 }
 
 .content .container-header .header-float {

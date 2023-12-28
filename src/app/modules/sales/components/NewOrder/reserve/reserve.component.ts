@@ -14,7 +14,7 @@ export class ReserveComponent {
   idMesa : number = 0;
 
   constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService) {
-    this.titleBtnPrev = "#" + newOrder.mesaModels.id + " - " + newOrder.mesaModels.nombre;
+    this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
     this.idMesa = Number(newOrder.mesaModels.id);
   }
 
