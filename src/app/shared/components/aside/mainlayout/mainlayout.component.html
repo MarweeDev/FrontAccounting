@@ -10,24 +10,31 @@
     </h3>
     <ul (click)="onButtonGroupClick($event)">
         <li>
-            <button type="button" class="btn" data-title="Ventas" id="option-1" (click)="OnRouterModule('/sales/neworder', $event)">
+            <button type="button" class="btn" data-title="Ventas" id="option-1">
                 <i class="fa-solid fa-chart-simple"></i> Ventas
             </button>
-        </li>
-        <li>
-            <button type="button" class="btn" data-title="modulo 2" id="option-2" (click)="OnRouterModule('/sales/neworder', $event)">
-                <i class="fa-solid fa-gear"></i> Configuración
-            </button>
-        </li>
-        <li>
-            <button type="button" class="btn" data-title="modulo 2">
-                <i class="fa-solid fa-sliders"></i> Parametrización
-            </button>
-        </li>
-        <li>
-            <button type="button" class="btn" data-title="modulo 2">
-                <i class="fa-solid fa-users-gear"></i> Accesos
-            </button>
+            <ul>
+                <li>
+                    <button type="button" id="nav-1" (click)="OnRouterModule('/sales/neworder', $event)">
+                        Nueva orden
+                    </button>
+                </li>
+                <li>
+                    <button type="button" id="nav-2" (click)="OnRouterModule('/sales/activeservices', $event)">
+                        Servicios en curso
+                    </button>
+                </li>
+                <li>
+                    <button type="button" id="nav-3" (click)="OnRouterModule('/sales/pendingservices', $event)">
+                        Servicios pendientes
+                    </button>
+                </li>
+                <li>
+                    <button type="button">
+                        Parametrizar módulo
+                    </button>
+                </li>
+            </ul>
         </li>
     </ul>
 </section>

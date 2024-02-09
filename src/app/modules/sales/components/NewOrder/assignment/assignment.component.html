@@ -7,6 +7,11 @@
 
     <div class="content">
 
+        <!--Mensaje de error-->
+        <div>
+            <span>{{mensajeError}}</span>
+        </div>
+
         <!--Success-->
         <div class="card border-info wth-2" *ngFor="let item of ListMesaData" [id]="'card-assig-' + item.id" (click)="viewNext($event, item.estado_mesa, item.nombre, item.numero)">
             <div class="card-title">

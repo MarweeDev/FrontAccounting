@@ -9,6 +9,7 @@ import { BreadcrumbsComponent } from './components/header/breadcrumbs/breadcrumb
 import { MainlayoutComponent } from './components/aside/mainlayout/mainlayout.component';
 import { FooterComponent } from './components/footer/footer/footer.component';
 import { FilterSearchPipe } from './pipes/search/filter-search.pipe';
+import { StatusComponent } from './components/error/status/status.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { FilterSearchPipe } from './pipes/search/filter-search.pipe';
     BreadcrumbsComponent,
     MainlayoutComponent,
     FooterComponent,
+    StatusComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ import { FilterSearchPipe } from './pipes/search/filter-search.pipe';
     NavComponent, 
     BreadcrumbsComponent,
     MainlayoutComponent,
-    FooterComponent
+    FooterComponent,
+    StatusComponent
   ]
 })
 export class SharedModule { }

@@ -204,6 +204,82 @@ export class OrderComponent implements OnInit {
     }
   }
 
+  //#region agregar y eliminar desde la orden
+  additemOrder(e:any) {
+    let element :any = document.getElementById('input-' + e.target.id);
+    if (element != undefined) {
+      if (element.value < 10) { 
+        element.value = Number(element.value) + 1;
+        this.OnValidateAddItem(e, element);
+
+        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        if (exist == 0) 
+        {
+          const product = new ProductDTO();
+          product.id = e.target.attributes['id'].value;
+          product.nombre = e.target.attributes['name'].value;
+          product.precio = e.target.attributes['value'].value;
+          product.id_estado = Number(element.value);
+          this.ListProduct?.push(product);
+        }
+        else {
+          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          this.ListProduct[row].id_estado = Number(element.value);
+        }
+
+        this.OnTotal();
+      }
+    }
+  }
+  deleteitemOrder(e:any) {
+    let element :any = document.getElementById('input-' + e);
+    if (element != undefined) {
+      if (element.value > 0) { 
+        element.value = Number(element.value) - 1;
+        this.OnValidateAddItemOrder(e, element);
+
+        if(element.value == 0){
+            let newList = this.ListProduct.filter(item => item.id !== e);
+            this.ListProduct = newList;
+        }
+        else {
+          let exist = this.ListProduct.filter(item => item.id == e).length;
+          if (exist > 0) 
+          {
+            let row = this.ListProduct.findIndex(item => item.id == e);
+            this.ListProduct[row].id_estado = Number(element.value);
+          }
+        }
+
+        this.OnTotal();
+      }
+    }
+  }
+  OnValidateAddItemOrder(e:any, input:any){
+    let elementTitle :any = document.getElementById('card-title-' + e)?.style;
+    let elementCard :any = document.getElementById('card-order-' + e)?.classList;
+    if (elementTitle != undefined && input != undefined) {
+      if (input.value > 0) { 
+        elementTitle.display = "unset";
+        elementCard.add("card-hover");
+      }
+      else {
+        elementTitle.display = "none";
+        elementCard.remove("card-hover");
+      }
+    }
+
+    let count :any = document.getElementsByClassName('input-count');
+    if (count != undefined) {
+      let arrayValue : number[] = [];
+      for (var i=0; i<count.length; i++) {
+        arrayValue.push(Number(count[i].value));
+      }
+      this.valueCount = arrayValue.reduce((acumulador, numero) => acumulador + numero, 0);
+    }
+  }
+  //#endregion
+
   OnClose() {
     this._btn_modal_add = true;
     this._modal_add = false;

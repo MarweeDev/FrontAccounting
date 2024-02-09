@@ -4,6 +4,7 @@ import { ProductDTO } from '../../../../../core/models/product';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { EstadoDTO } from 'src/app/core/models/estado';
 import { MesaDTO } from 'src/app/core/models/mesa';
+import { MesaService } from 'src/app/core/services/mesa/mesa.service'
 
 @Component({
   selector: 'app-assignment',
@@ -25,9 +26,11 @@ export class AssignmentComponent implements OnInit {
   //#region propietari
   ListFilter : EstadoDTO[] = [];
   ListMesaData : MesaDTO[] = [];
+  mensajeError : string = '';
   //#endregion
 
-  constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService) {
+  constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService, 
+    private apiMesa : MesaService) {
     const DateTime = new Date();
     this.fecha = DateTime.getDate() + "-" + Number(DateTime.getMonth() + 1) + "-" + DateTime.getFullYear();
   }
@@ -69,11 +72,26 @@ export class AssignmentComponent implements OnInit {
     ];
 
     //Cargar mesas
-    this.ListMesaData = [
-      { id: 1, numero: 10, nombre: 'Mesa familiar', capacidad: 6, estado_mesa : 4  },
-      { id: 2, numero: 1, nombre: 'Mesa doble', capacidad: 2, estado_mesa : 5  },
-      { id: 3, numero: 5, nombre: 'Mesa barra', capacidad: 4, estado_mesa : 6  },
-    ]; 
+    this.apiMesa.get().subscribe(data => {
+      this.ListMesaData = data.result
+    },
+    error => {
+      if (error.status !== undefined && error.status !== null && error.status !== 0) {
+        if (error.status === 401) {
+          this.mensajeError = "Error de autorización, valida vericidad de la key en el servicio.";
+        } else if (error.status === 403) {
+          this.mensajeError = "Error de autorización, valida los permisos asignados para usar el servicio.";
+        } else if (error.status === 404) {
+          this.mensajeError = "Error de recutsos, valida el servicio ya que no fue encontrado.";
+        } else if (error.status === 500) {
+          console.log('Error interno del servidor.');
+          this.mensajeError = "Error de servidor, valida si el servidor esta funcionando correctamente.";
+        }
+      } else {
+        this.mensajeError = "Error de conexión, valida tu conexión a internet, que tus servicios esten activos" +
+        " o que los protocolos de seguridad sean los correctos.";
+      }
+    });
   }
 
   viewNext(e:any, status:any, name:any, number:any) {

@@ -22,16 +22,16 @@ export class NavComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    let storedState = localStorage.getItem('nav');
-    if (storedState) {
-      document.getElementById(storedState)?.classList.add("active");
-    }
+    //let storedState = localStorage.getItem('nav');
+    //if (storedState) {
+    //  document.getElementById(storedState)?.classList.add("active");
+    //}
   }
   //#endregion
 
   //#region Methods
   OnRouterModule(router:any, e:any){
-    localStorage.setItem('nav', e.target.id);
+    //localStorage.setItem('nav', e.target.id);
     this.app.navDisabled = true;
 
     this.router.navigate([router]);

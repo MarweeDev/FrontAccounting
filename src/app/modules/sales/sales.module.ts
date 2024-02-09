@@ -18,7 +18,13 @@ import { ServicesComponent } from './components/ActiveServices/services/services
 
 import { ServicesPayComponent } from './components/PendingServices/services-pay/services-pay.component'; //servicios pendientes
 
-import { PayorderComponent } from './components/Payment/payorder/payorder.component'; //pagos
+import { PayorderComponent } from './components/Payment/payorder/payorder.component';
+
+//Dialog AssignmentComponent
+import { AddComponent } from './components/NewOrder/assignment/dialog/add/add.component';
+import { EditComponent } from './components/NewOrder/assignment/dialog/edit/edit.component';
+import { DeleteComponent } from './components/NewOrder/assignment/dialog/delete/delete.component';
+import { StatusComponent } from './components/NewOrder/assignment/dialog/status/status.component'; //pagos
 
 @NgModule({
   declarations: [
@@ -33,9 +39,14 @@ import { PayorderComponent } from './components/Payment/payorder/payorder.compon
     ReserveComponent,
     
     ServicesComponent,
+    ServicesPayComponent,
     PayorderComponent,
     
-    ServicesPayComponent
+    //Dialog AssignmentComponent
+    AddComponent,
+    EditComponent,
+    DeleteComponent,
+    StatusComponent
   ],
   imports: [
     CommonModule,

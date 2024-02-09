@@ -1,5 +1,6 @@
 <section class="container" (click)="OnHiddenBar()">
     <div class="col1" (click)="onButtonGroupClick($event)">
+    <!--
         <button type="button" id="nav-1" (click)="OnRouterModule('/sales/neworder', $event)">
             Nueva orden
         </button>
@@ -12,8 +13,21 @@
         <button type="button">
             Parametrizar módulo
         </button>
+    -->
     </div>
     <div class="col2">
+        <button type="button" class="btn btn-info rd-4 button-nuevo">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <button type="button" class="btn btn-info rd-4 button-editar">
+            <i class="fa-solid fa-pencil"></i>
+        </button>
+        <button type="button" class="btn btn-info rd-4 button-reservar">
+            <i class="fa-regular fa-clock"></i>
+        </button>
+        <button type="button" class="btn btn-danger rd-4 button-eliminar">
+            <i class="fa-solid fa-trash-can"></i>
+        </button>
         <label for="searchId">
             <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
             <span>

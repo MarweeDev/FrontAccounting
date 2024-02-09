@@ -51,7 +51,52 @@
     grid-area: col2;
     line-height: 19px;
     max-width: fit-content;
-    border-left: 1px solid var(--color-texto-terciario);
+}
+.col2 button {
+    padding: 8px 10px;
+    margin-left: 5px;
+    letter-spacing: 1px;
+    transition: all .5s;
+    font-weight: 300;
+}
+.col2 button:hover {
+    padding: 5px 20px;
+    background-color: var(--color-info-dark) !important;
+    box-shadow: 2px 2px 3px rgba(12, 0, 56, 0.3);
+}
+.col2 button::before {
+    content: '';
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.col2 .button-nuevo:hover::before {
+    content: 'Nuevo';
+    opacity: 1;
+}
+
+.col2 .button-editar:hover::before {
+    content: 'Editar';
+    opacity: 1;
+}
+
+.col2 .button-reservar:hover::before {
+    content: 'Reservar';
+    opacity: 1;
+}
+
+.col2 .button-eliminar:hover { background-color: var(--color-danger) !important; }
+.col2 .button-eliminar:hover::before {
+    content: 'Eliminar';
+    opacity: 1;
+}
+
+.col2 button i {
+    color: #fff;
+    width: 11px;
+}
+.col2 button:hover i {
+    margin-left: 10px;
 }
 .col2 input {
     padding: 15px 20px;
@@ -74,7 +119,9 @@
     color:  var(--color-texto-terciario);
 }
 .col2 label {
+    margin-left: 10px;
     padding-right: 10px;
+    border-left: 1px solid var(--color-texto-terciario);
 }
 .col2 label span i {
     color:  var(--color-texto-terciario) !important;

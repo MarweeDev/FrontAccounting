@@ -100,7 +100,15 @@
                                     <tr *ngFor="let item of ListProduct">
                                         <td>{{item.nombre}}</td>
                                         <td>{{OnConvertNumberPrice(item.precio)}}</td>
-                                        <td>{{item.id_estado}}</td>
+                                        <td>
+                                            <button type="button" class="prev" (click)="deleteitemOrder(item.id)">
+                                                <i class="fa-solid fa-minus txt-danger"></i>
+                                            </button>
+                                            <strong class="input">{{item.id_estado}}</strong>
+                                            <button type="button" class="next" [id]="item.id" [name]="item.nombre" [value]="item.precio" (click)="additemOrder($event)">
+                                                <i class="fa-solid fa-plus txt-success"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
