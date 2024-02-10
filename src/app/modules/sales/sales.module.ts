@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 
 //Routing
-import { SalesRouting } from './sales.routing'
+import { SalesRouting } from './sales.routing';
 
 //Pages
 import { NeworderComponent } from './pages/neworder/neworder.component';
@@ -50,7 +52,9 @@ import { StatusComponent } from './components/NewOrder/assignment/dialog/status/
   ],
   imports: [
     CommonModule,
-    SalesRouting
+    SalesRouting,
+    ReactiveFormsModule,
+    RouterModule
   ]
 })
 export class SalesModule { }

@@ -1,1 +1,30 @@
-<p>add works!</p>
+<section class="container-component">
+    <div class="card">
+        <h3>Proceso de creación</h3>
+        <form [formGroup]="form" (ngSubmit)="add()">
+            <label for="numero">
+                <input type="text" id="numero" formControlName="Numero" placeholder="Número">
+                <div class="error-message" *ngIf="form.get('Numero')?.hasError('required') && form.get('Numero')?.touched">
+                    Requerido
+                </div>
+            </label>
+          
+            <label for="nombre">
+                <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
+                <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                    Requerido
+                </div>
+            </label>
+          
+            <label for="capacidad">
+                <input type="text" id="capacidad" formControlName="Capacidad" placeholder="Capacidad">
+                <div class="error-message" *ngIf="form.get('Capacidad')?.hasError('required') && form.get('Capacidad')?.touched">
+                    Requerido
+                </div>
+            </label>
+          
+            <button type="submit" class="btn btn-success m-2 rd-4">Agregar</button>
+            <button type="button" class="btn btn-default rd-4">Cancelar</button>
+        </form>
+    </div>
+</section>

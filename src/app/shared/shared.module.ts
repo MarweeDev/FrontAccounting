@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
 
 //Components
 import { NavComponent } from './components/header/nav/nav.component';
@@ -22,7 +23,8 @@ import { StatusComponent } from './components/error/status/status.component';
   imports: [
     CommonModule,
     BrowserModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   exports: [
     //components
