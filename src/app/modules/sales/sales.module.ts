@@ -25,8 +25,7 @@ import { PayorderComponent } from './components/Payment/payorder/payorder.compon
 //Dialog AssignmentComponent
 import { AddComponent } from './components/NewOrder/assignment/dialog/add/add.component';
 import { EditComponent } from './components/NewOrder/assignment/dialog/edit/edit.component';
-import { DeleteComponent } from './components/NewOrder/assignment/dialog/delete/delete.component';
-import { StatusComponent } from './components/NewOrder/assignment/dialog/status/status.component'; //pagos
+import { ReservesComponent } from './components/NewOrder/assignment/dialog/reserves/reserves.component';
 
 @NgModule({
   declarations: [
@@ -47,8 +46,7 @@ import { StatusComponent } from './components/NewOrder/assignment/dialog/status/
     //Dialog AssignmentComponent
     AddComponent,
     EditComponent,
-    DeleteComponent,
-    StatusComponent
+    ReservesComponent
   ],
   imports: [
     CommonModule,

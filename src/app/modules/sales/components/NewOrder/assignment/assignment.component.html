@@ -8,12 +8,12 @@
     <div class="content">
 
         <!--Mensaje de error-->
-        <div>
+        <section class="container-component-error">
             <span>{{mensajeError}}</span>
-        </div>
+        </section>
 
         <!--Success-->
-        <div class="card border-info wth-2" *ngFor="let item of ListMesaData" [id]="'card-assig-' + item.id" (click)="viewNext($event, item.estado_mesa, item.nombre, item.numero)">
+        <div class="card border-info wth-2 " (contextmenu)="mostrarMenu($event)" *ngFor="let item of ListMesaData" [id]="'card-assig-' + item.id" (click)="viewNext($event, item.estado_mesa, item.nombre, item.numero)">
             <div class="card-title">
                 <small class="info" >#{{item.numero}}</small>
             </div>
@@ -37,7 +37,15 @@
                 </small></p>
             </div>
         </div>
-    
+        <!--contextomenu-->
+        <div class="context-menu" id="contextmenu" *ngIf="mostrarContextMenu" style="opacity: 0;">
+            <ul>
+                <li (click)="realizarAccion('sales/neworder/assignment/reserve/')"><i class="fa-regular fa-calendar-days"></i> Reservar</li>
+                <li (click)="realizarAccion('sales/neworder/assignment/edit/')"><i class="fa-solid fa-pencil"></i> Editar</li>
+                <li (click)="descartItem()"><i class="fa-solid fa-ban"></i> Descartar</li>
+                <li (click)="deleteItem()"><i class="fa-solid fa-trash-can"></i> Eliminar</li>
+            </ul>
+        </div>
     </div>
 
     <!--esto tiene que ir en el componente creado en shared-->

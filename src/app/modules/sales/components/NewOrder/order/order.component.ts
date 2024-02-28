@@ -5,7 +5,8 @@ import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProduc
 import { AppComponent } from 'src/app/app.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { Router } from '@angular/router';
-import { PendingservicesComponent } from '../../../pages/pendingservices/pendingservices.component';
+import { CategoryService } from 'src/app/core/services/category/category.service'
+import { ProductService } from 'src/app/core/services/product/product.service';
 
 @Component({
   selector: 'app-order',
@@ -15,6 +16,8 @@ import { PendingservicesComponent } from '../../../pages/pendingservices/pending
 export class OrderComponent implements OnInit {
 
   searchTerm : string = '';
+
+  selectedId: number | string = 0;
 
   btn_pay : boolean = true;
 
@@ -28,6 +31,7 @@ export class OrderComponent implements OnInit {
   heightAuto : string = "container-add container-add-open";
 
   titleBtnPrev : string = "Default";
+  titleOrder ?: string = "Default";
 
   idMesa : number = 0;
   NameClient ?: string = "name";
@@ -42,9 +46,12 @@ export class OrderComponent implements OnInit {
   constructor(private newOrder : NeworderComponent, 
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
-    private router: Router) 
+    private router: Router,
+    private ApiCateg: CategoryService,
+    private ApiProduct: ProductService) 
     {
     this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
+    this.titleOrder = newOrder.mesaModels.nombre;
     this.idMesa = Number(newOrder.mesaModels.numero);
     this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
@@ -52,6 +59,15 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     this.OnSetValueList();
     this.OnReloadSearch();
+  }
+
+  ngAfterContentInit():void {
+    //Opciones para el nav
+    this.app.listNav = [
+      { nombre: 'Nueva', url: 'sales/neworder/add', icon: 'fa-solid fa-plus'},
+      { nombre: 'Descartadas', url: 'sales/neworder/add', icon: 'fa-solid fa-ban'},
+    ];
+    this.DataShared.OnSetNav(this.app.listNav);
   }
 
   OnValidateCheck() {
@@ -97,19 +113,43 @@ export class OrderComponent implements OnInit {
 
   OnSetValueList(){
     //Cargar filtros
-    this.ListFilter = [
-      { id: 1, nombre: 'Entrada' },
-      { id: 2, nombre: 'Platos fuertes' },
-      { id: 3, nombre: 'Bebidas' }
-    ];
+    if(this.selectedId === 0) {
+      this.ApiCateg.get().subscribe(data => {
+        this.ListFilter = data.category
+      },
+      error => {
+        console.log('Error: ', error)
+      });
+    }
 
     //Cargar productos
-    this.ListProductData = [
-      { id: 1, nombre: 'Hamburguesa doble carne 250g', descripcion: 'Carne 100% de res, tocineta y salsa de la casa.', precio : 25500  },
-      { id: 2, nombre: 'Palitos de queso', descripcion: '6 palitos rellenos de queso con salsa agridulce.', precio : 8500  },
-      { id: 3, nombre: 'New Yort premium', descripcion: 'Corte de carne premium 250g de res.', precio : 150000  },
-      { id: 4, nombre: 'Wagu', descripcion: 'Corte de carne premium 250g de res japon.', precio : 500000  },
-    ];
+    if (this.selectedId != 0) {
+      this.ApiProduct.getCateg(this.selectedId).subscribe(data => {
+        this.ListProductData = data.product
+      },
+      error => {
+        console.log('Error: ', error)
+      });
+    }
+    else {
+      this.ApiProduct.get().subscribe(data => {
+        this.ListProductData = data.product
+      },
+      error => {
+        console.log('Error: ', error)
+      });
+    }
+    
+  }
+
+  onSelectChange(event: any) {
+    // Obtén el valor seleccionado y guárdalo en la propiedad selectedId
+    this.selectedId = event.target.value;
+    this.OnSetValueList();
+    
+    setTimeout(() => {
+      this.OnValidateRefresh();
+    }, 100);
   }
 
   OnTotal(){
@@ -120,6 +160,21 @@ export class OrderComponent implements OnInit {
     } 
     this.totalProduct = Number(arrayValue.reduce((acumulador, numero) => acumulador + numero, 0)).toString();
     this.totalProduct = this.OnConvertNumberPrice(this.totalProduct);
+  }
+
+  OnValidateRefresh() {
+    console.log(this.ListProduct);
+    this.ListProduct.forEach(item => {
+      let elementTitle :any = document.getElementById('card-title-' + item.id)?.style;
+      let elementCard :any = document.getElementById('card-order-' + item.id)?.classList;
+      let input :any = document.getElementById('input-' + item.id);
+      if (elementTitle != undefined) {
+        elementTitle.display = "unset";
+        elementCard.add("card-hover");
+        input.value = item.id_estado;
+      }
+    });
+    
   }
 
   OnValidateAddItem(e:any, input:any){

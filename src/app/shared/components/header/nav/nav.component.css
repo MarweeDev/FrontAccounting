@@ -25,27 +25,43 @@
   
 .col1 { 
     grid-area: col1;
-    display: flex;
-    overflow-x: auto;
+    line-height: 19px;
+    max-width: fit-content;
+    padding-top: 10px;
+    padding-left: 5px;
 }
 .col1 button {
-    padding: 10px 20px !important;
+    padding: 5px 15px;
+    margin-left: 5px;
     letter-spacing: 1px;
-    font-weight: 300;
-    border: none;
-    background: none;
     transition: all .5s;
-    color:  var(--color-texto-terciario);
-    cursor: pointer;
-    position: relative;
+    font-weight: 300;
+}
+.col1 button:hover {
+    padding: 5px 20px;
+    /*background-color: var(--color-info-dark) !important;*/
+    box-shadow: 2px 2px 3px rgba(12, 0, 56, 0.3);
+}
+.col1 button::before {
+    content: attr(title);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+.col1 button:hover::before {
+    content: attr(title);
+    opacity: 1;
 }
 
-.col1 .active, .col1 button:hover {
-    background-color: var(--color-info-dark);
-    color: rgba(255, 255, 255, 1);
-    transition: all .5s;
-    cursor: pointer;
+.col1 button i {
+    color: #fff;
+    width: 11px;
+    margin-left: 10px;
 }
+.col1 button:hover i {
+    margin-left: 10px;
+}
+
+
   
 .col2 { 
     grid-area: col2;
@@ -72,22 +88,6 @@
 
 .col2 .button-nuevo:hover::before {
     content: 'Nuevo';
-    opacity: 1;
-}
-
-.col2 .button-editar:hover::before {
-    content: 'Editar';
-    opacity: 1;
-}
-
-.col2 .button-reservar:hover::before {
-    content: 'Reservar';
-    opacity: 1;
-}
-
-.col2 .button-eliminar:hover { background-color: var(--color-danger) !important; }
-.col2 .button-eliminar:hover::before {
-    content: 'Eliminar';
     opacity: 1;
 }
 

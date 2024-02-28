@@ -65,7 +65,12 @@ input {
     background-color: rgba(255, 53, 53, .9);
     color: #fff;
 }
-  
+
+.container-btn {
+    padding-top: 20px;
+    text-align: center;
+}
+
 .btn {
     padding: 7px 20px;
     cursor: pointer;

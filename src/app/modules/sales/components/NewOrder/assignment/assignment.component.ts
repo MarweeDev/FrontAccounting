@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { NeworderComponent } from '../../../pages/neworder/neworder.component';
 import { ProductDTO } from '../../../../../core/models/product';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { EstadoDTO } from 'src/app/core/models/estado';
 import { MesaDTO } from 'src/app/core/models/mesa';
 import { MesaService } from 'src/app/core/services/mesa/mesa.service'
+import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-assignment',
@@ -30,7 +32,7 @@ export class AssignmentComponent implements OnInit {
   //#endregion
 
   constructor(private newOrder : NeworderComponent, private DataShared: DataSharedServicesService, 
-    private apiMesa : MesaService) {
+    private apiMesa : MesaService, private router: Router, private app: AppComponent) {
     const DateTime = new Date();
     this.fecha = DateTime.getDate() + "-" + Number(DateTime.getMonth() + 1) + "-" + DateTime.getFullYear();
   }
@@ -38,6 +40,16 @@ export class AssignmentComponent implements OnInit {
   ngOnInit(): void {
     this.OnSetValueList();
     this.OnReloadSearch();
+  }
+
+  ngAfterContentInit():void {
+    //Opciones para el nav
+    this.app.listNav = [
+      { nombre: 'Nueva', url: 'sales/neworder/assignment/add', icon: 'fa-solid fa-plus'},
+      { nombre: 'Reservas', url: 'sales/neworder/assignment/add', icon: 'fa-regular fa-calendar-days'},
+      { nombre: 'Descartadas', url: 'sales/neworder/assignment/add', icon: 'fa-solid fa-ban'},
+    ];
+    this.DataShared.OnSetNav(this.app.listNav);
   }
 
   OnReloadSearch() {
@@ -72,7 +84,7 @@ export class AssignmentComponent implements OnInit {
     ];
 
     //Cargar mesas
-    this.apiMesa.get().subscribe(data => {
+    this.apiMesa.get("4").subscribe(data => {
       this.ListMesaData = data.result
     },
     error => {
@@ -82,9 +94,8 @@ export class AssignmentComponent implements OnInit {
         } else if (error.status === 403) {
           this.mensajeError = "Error de autorización, valida los permisos asignados para usar el servicio.";
         } else if (error.status === 404) {
-          this.mensajeError = "Error de recutsos, valida el servicio ya que no fue encontrado.";
+          this.mensajeError = "Error de recursos " + error.status + ", valida el servicio ya que no fue encontrado.";
         } else if (error.status === 500) {
-          console.log('Error interno del servidor.');
           this.mensajeError = "Error de servidor, valida si el servidor esta funcionando correctamente.";
         }
       } else {
@@ -232,5 +243,125 @@ export class AssignmentComponent implements OnInit {
       default:
         return "txt-info";
     }
+  }
+
+
+  //Contexto menu
+  mostrarContextMenu = false;
+  x = 0;
+  y = 0;
+  idTarget : any;
+  idElement = 0;
+  status : MesaDTO = { estado_mesa : 6 };
+
+  mostrarMenu(event: MouseEvent): void {
+    event.preventDefault();
+    this.mostrarContextMenu = true;
+
+    // Obtener la posición del clic derecho
+    this.x = event.clientX;
+    this.y = event.clientY / 2;
+    this.idTarget = event.target;
+    this.idElement = this.idTarget.attributes['id'].value.replace('card-assig-', '');
+
+    this.configurarPosicionMenu();
+
+    // Agregar un manejador de clic para cerrar el menú contextual
+    document.addEventListener('click', this.cerrarMenu);
+  }
+
+  private configurarPosicionMenu(): void {
+    setTimeout(() => {
+      let element :any = document.getElementById("contextmenu");
+      if (element) {
+        element.style.left = `${this.x}px`;
+        element.style.top = `${this.y}px`;
+        element.style.opacity = '1';
+      }
+    });
+  }
+
+  cerrarMenu = (): void => {
+    this.mostrarContextMenu = false;
+    document.removeEventListener('click', this.cerrarMenu);
+  };
+
+  realizarAccion(option:string): void {
+    this.router.navigate([option + this.idElement]);
+    this.cerrarMenu();
+  }
+
+  descartItem() {
+
+    if(this.idElement){
+      const confirmacion = window.confirm("¿Seguro quiere descartar este elemento?");
+
+      if(confirmacion){
+        
+        this.apiMesa.putStatus(this.idElement, this.status).subscribe(data => {
+  
+          this.OnSetValueList();
+  
+        },error => {
+  
+          if (error.status !== undefined && error.status !== null && error.status !== 0) {
+            if (error.status === 401) {
+              this.mensajeError = "Error de autorización, valida vericidad de la key en el servicio.";
+            } else if (error.status === 403) {
+              this.mensajeError = "Error de autorización, valida los permisos asignados para usar el servicio.";
+            } else if (error.status === 404) {
+              this.mensajeError = "Error de recutsos, valida el servicio ya que no fue encontrado.";
+            } else if (error.status === 500) {
+              console.log('Error interno del servidor.');
+              this.mensajeError = "Error de servidor, valida si el servidor esta funcionando correctamente.";
+            }
+          } else {
+            this.mensajeError = "Error de conexión, valida tu conexión a internet, que tus servicios esten activos" +
+            " o que los protocolos de seguridad sean los correctos.";
+          }
+  
+        });
+
+      }
+
+    }
+
+  }
+
+  deleteItem() {
+
+    if(this.idElement){
+      const confirmacion = window.confirm("¿Seguro quiere eliminar este elemento?");
+
+      if(confirmacion){
+
+        this.apiMesa.delete(this.idElement, "2").subscribe(data => {
+
+          this.OnSetValueList();
+  
+        },error => {
+  
+          if (error.status !== undefined && error.status !== null && error.status !== 0) {
+            if (error.status === 401) {
+              this.mensajeError = "Error de autorización, valida vericidad de la key en el servicio.";
+            } else if (error.status === 403) {
+              this.mensajeError = "Error de autorización, valida los permisos asignados para usar el servicio.";
+            } else if (error.status === 404) {
+              this.mensajeError = "Error de recutsos, valida el servicio ya que no fue encontrado.";
+            } else if (error.status === 500) {
+              console.log('Error interno del servidor.');
+              this.mensajeError = "Error de servidor, valida si el servidor esta funcionando correctamente.";
+            }
+          } else {
+            this.mensajeError = "Error de conexión, valida tu conexión a internet, que tus servicios esten activos" +
+            " o que los protocolos de seguridad sean los correctos.";
+          }
+  
+        });
+
+      }
+
+    }
+
   }
 }

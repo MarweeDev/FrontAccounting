@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { NavDTO } from 'src/app/core/models/nav';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ export class DataSharedServicesService {
   private listFilterShared = new BehaviorSubject<any[]>([]);
 
   private filter = new BehaviorSubject<any>("");
+
+  private ListaNav = new BehaviorSubject<NavDTO[]>([]);
 
   // Método para obtener un observable de la lista compartida
   OnGetList() {
@@ -28,6 +31,15 @@ export class DataSharedServicesService {
   // Método para actualizar el string
   OnSet(filter_: any) {
     this.filter.next(filter_);
+  }
+
+  //Método para setear las opciones del nav - lista
+  OnSetNav(lista: NavDTO[]) {
+    this.ListaNav.next(lista);
+  }
+  //Método para setear las opciones del nav
+  OnGetNav() {
+    return this.ListaNav.asObservable();
   }
 
   constructor() { }

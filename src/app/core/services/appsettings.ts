@@ -1,13 +1,17 @@
-export enum ServicesMethod {
-    ServicesMesa = 'Mesa'
-}
-
 export enum HttpMethod {
     GET = '/get',
+    GETGLOBAL = '/global/get/',
     GETID = '/get/',
     POST = '/post',
     PUT = '/put/',
+    STATUS = '/status/',
     DELETE = '/delete/'
+}
+
+export enum ServicesMethod {
+    ServicesMesa = 'Mesa',
+    ServicesCategory = 'Category',
+    ServicesProduct = 'Product',
 }
 
 export class ApiConfig {

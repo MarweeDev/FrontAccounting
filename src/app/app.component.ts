@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavDTO } from './core/models/nav';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
 
   //#region properties
+
+  /*Nav options*/
+  listNav : NavDTO[] = [];
 
   /*Cargar*/
   statusLoaderModule : boolean = false;

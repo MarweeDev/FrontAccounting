@@ -4,8 +4,12 @@
     <div class="container-prev">
         <h3 class="title">Orden de productos</h3>
         <button type="button" class="btn btn-info btn-span rd-4" (click)="viewPrev()">
-            Generar reasignación ({{titleBtnPrev}}), (Cliente: {{NameClient}}) <i class="fa-solid fa-pencil"></i>
+            Generar reasignación <i class="fa-solid fa-pencil"></i>
         </button>
+        <select class="rd-4" (change)="onSelectChange($event)">
+            <option value="0">Mostrar todos</option>
+            <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
+        </select>
     </div>
 
     <br>
@@ -18,6 +22,10 @@
 
                 <!--Producto-->
                 <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
+                    <div class="card-title-info">
+                        <i class="fa-solid fa-fire txt-companyTwo"></i>
+                        <div class="container-info">{{item.descripcion}}</div>
+                    </div>
                     <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">
                         <i class="fa-solid fa-circle-check txt-success"></i>
                     </div>
@@ -35,11 +43,11 @@
                     </div>
                     <div class="card-footer">
                         <p class="p"><small class="txt-company">{{OnConvertNumberPrice(item.precio)}}</small></p>
-                        <p>
+                        <!--<p>
                             <small>
                                 {{item.descripcion}}
                             </small> 
-                        </p>
+                        </p>-->
                         <div class="btn-add">
                             <button type="button" class="prev" [id]="item.id" (click)="deleteitem($event)">
                                 <i class="fa-solid fa-minus txt-danger"></i>
@@ -79,7 +87,7 @@
                                 </h5>
                             </div>
                             <div class="col">
-                                <h3>Mesa</h3>
+                                <h3>{{titleOrder}}</h3>
                                 <h5>
                                     <small>#{{idMesa}}</small>
                                 </h5>

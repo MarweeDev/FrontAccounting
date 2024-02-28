@@ -5,6 +5,7 @@
   --color-info: #6C80C1;
   --color-info-dark: #6568c9;
   --color-company: rgba(255, 51, 0, 1);
+  --color-company-two: rgb(253, 128, 96, 1);
 }
 
 
@@ -14,6 +15,7 @@
 .warning { background: var(--color-warning) !important; color: #ffffff !important }
 .info { background: var(--color-info) !important; color: #ffffff !important }
 .company { background: var(--color-company) !important; color: #ffffff !important }
+.companyTwo { background: var(--color-company-two) !important; color: #ffffff !important }
 
 /*texto alert*/
 .txt-success { color: var(--color-success) !important; }
@@ -21,6 +23,7 @@
 .txt-warning { color: var(--color-warning) !important; }
 .txt-info { color: var(--color-info) !important; }
 .txt-company { color: var(--color-company) !important; }
+.txt-companyTwo { color: var(--color-company-two) !important; }
 
 /*Botones global*/
 .btn {
@@ -73,6 +76,14 @@
   transition: all .5s;
 }
 .btn-company:hover { background: rgb(255, 97, 58) !important; cursor: pointer;}
+
+.btn-companyTwo { 
+  background: var(--color-company-two) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-company-two);
+  transition: all .5s;
+}
+.btn-companyTwo:hover { background: rgb(253, 128, 96, .8) !important; cursor: pointer;}
 
 .btn-default { 
   background: var(--color-texto-primario) !important; 
@@ -189,6 +200,8 @@ select {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
+  color: rgb( 97 109 138 );
+  border: 1px solid var(--color-texto-terciario);
 }
 select::-ms-expand {
   display: none;

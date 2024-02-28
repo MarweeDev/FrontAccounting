@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { NavDTO } from 'src/app/core/models/nav';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -8,12 +9,14 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, AfterViewInit {
 
   searchTerm = '';
+  listNav : NavDTO[] = [];
 
   //#region Constructor
-  constructor(private router: Router, private app: AppComponent, private DataShared: DataSharedServicesService) {
+  constructor(private router: Router, private app: AppComponent, private DataShared: DataSharedServicesService,
+    private cdRef: ChangeDetectorRef) {
     
   }
 
@@ -22,10 +25,14 @@ export class NavComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    //let storedState = localStorage.getItem('nav');
-    //if (storedState) {
-    //  document.getElementById(storedState)?.classList.add("active");
-    //}
+    this.listNav = [];
+    this.DataShared.OnGetNav().subscribe(item => {
+      this.listNav = item;
+      this.cdRef.detectChanges();
+    }, error => {
+      console.log('error:', error)
+    }
+    );
   }
   //#endregion
 
