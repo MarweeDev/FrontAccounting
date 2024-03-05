@@ -13,8 +13,11 @@ export class MesaService {
 
   ApiURL = ApiConfig.getUrl(ServicesMethod.ServicesMesa);
 
-  //Id= 4:Disponible - 5:Reservada - 6:Descartada
-  get(id: any): Observable<any> {
+  get(): Observable<any> {
+    return this.http.get(this.ApiURL + HttpMethod.GET);
+  }
+
+  getGlobal(id: any): Observable<any> {
     return this.http.get(this.ApiURL + HttpMethod.GET + "/global/" + id);
   }
 

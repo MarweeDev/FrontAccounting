@@ -12,6 +12,7 @@ export enum ServicesMethod {
     ServicesMesa = 'Mesa',
     ServicesCategory = 'Category',
     ServicesProduct = 'Product',
+    ServicesOrder = 'Order',
 }
 
 export class ApiConfig {

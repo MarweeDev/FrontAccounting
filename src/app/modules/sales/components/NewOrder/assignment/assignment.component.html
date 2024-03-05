@@ -40,9 +40,9 @@
         <!--contextomenu-->
         <div class="context-menu" id="contextmenu" *ngIf="mostrarContextMenu" style="opacity: 0;">
             <ul>
-                <li (click)="realizarAccion('sales/neworder/assignment/reserve/')"><i class="fa-regular fa-calendar-days"></i> Reservar</li>
+                <li (click)="realizarAccion('sales/neworder/assignment/reserve/')" style="display: none;"><i class="fa-regular fa-calendar-days"></i> Reservar</li>
                 <li (click)="realizarAccion('sales/neworder/assignment/edit/')"><i class="fa-solid fa-pencil"></i> Editar</li>
-                <li (click)="descartItem()"><i class="fa-solid fa-ban"></i> Descartar</li>
+                <li (click)="descartItem()" style="display: none;"><i class="fa-solid fa-ban"></i> Descartar</li>
                 <li (click)="deleteItem()"><i class="fa-solid fa-trash-can"></i> Eliminar</li>
             </ul>
         </div>

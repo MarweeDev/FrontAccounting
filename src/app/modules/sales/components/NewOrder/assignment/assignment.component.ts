@@ -46,7 +46,7 @@ export class AssignmentComponent implements OnInit {
     //Opciones para el nav
     this.app.listNav = [
       { nombre: 'Nueva', url: 'sales/neworder/assignment/add', icon: 'fa-solid fa-plus'},
-      { nombre: 'Reservas', url: 'sales/neworder/assignment/add', icon: 'fa-regular fa-calendar-days'},
+      //{ nombre: 'Reservas', url: 'sales/neworder/assignment/add', icon: 'fa-regular fa-calendar-days'},
       { nombre: 'Descartadas', url: 'sales/neworder/assignment/add', icon: 'fa-solid fa-ban'},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
@@ -84,7 +84,7 @@ export class AssignmentComponent implements OnInit {
     ];
 
     //Cargar mesas
-    this.apiMesa.get("4").subscribe(data => {
+    this.apiMesa.get().subscribe(data => {
       this.ListMesaData = data.result
     },
     error => {
@@ -108,7 +108,7 @@ export class AssignmentComponent implements OnInit {
   viewNext(e:any, status:any, name:any, number:any) {
     if(e.target.attributes['id'].value != undefined && status != undefined && name != undefined && number != undefined) {
       
-      this.newOrder.mesaModels.id = e.target.attributes['id'].value.replace("card-", "");
+      this.newOrder.mesaModels.id = e.target.attributes['id'].value.replace("card-assig-", "");
       this.newOrder.mesaModels.numero = number;
       this.newOrder.mesaModels.nombre = name;
       
@@ -224,6 +224,7 @@ export class AssignmentComponent implements OnInit {
     }
   }
   OnGetStatus(estado: any): string {
+    debugger;
     let row = this.ListFilter.filter(item => item.id == estado);
     let result = "";
     if(row != null && row[0].nombre != undefined && row[0].nombre != ""){

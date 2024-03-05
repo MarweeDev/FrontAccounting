@@ -7,6 +7,8 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 import { Router } from '@angular/router';
 import { CategoryService } from 'src/app/core/services/category/category.service'
 import { ProductService } from 'src/app/core/services/product/product.service';
+import { OrderDTO } from 'src/app/core/models/order';
+import { OrderService } from 'src/app/core/services/order/order.service';
 
 @Component({
   selector: 'app-order',
@@ -33,9 +35,12 @@ export class OrderComponent implements OnInit {
   titleBtnPrev : string = "Default";
   titleOrder ?: string = "Default";
 
+  numberMesa : number = 0;
   idMesa : number = 0;
   NameClient ?: string = "name";
   ListProduct: ProductDTO[] = [];
+  ListOrder: OrderDTO[] =[];
+  codeOrder: string = "0";
   totalProduct: string = "0";
 
   //#region propietari
@@ -48,11 +53,13 @@ export class OrderComponent implements OnInit {
     private DataShared: DataSharedServicesService,
     private router: Router,
     private ApiCateg: CategoryService,
-    private ApiProduct: ProductService) 
+    private ApiProduct: ProductService,
+    private ApiOrder: OrderService) 
     {
     this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
     this.titleOrder = newOrder.mesaModels.nombre;
-    this.idMesa = Number(newOrder.mesaModels.numero);
+    this.numberMesa = Number(newOrder.mesaModels.numero);
+    this.idMesa = Number(newOrder.mesaModels.id);
     this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
 
@@ -68,6 +75,10 @@ export class OrderComponent implements OnInit {
       { nombre: 'Descartadas', url: 'sales/neworder/add', icon: 'fa-solid fa-ban'},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+
+    this.ApiOrder.getCodeOrder().subscribe(data => {
+      this.codeOrder = data.status;
+    });
   }
 
   OnValidateCheck() {
@@ -349,13 +360,45 @@ export class OrderComponent implements OnInit {
     this.newOrder.assignmentDisabled = true;
     this.newOrder.orderDisabled = false;
   }
+
   viewOk() {
-    this.viewPrev();
-    this.newOrder.VisibleToask = true;
-    setTimeout(() => {
-      this.newOrder.VisibleToask = false;
-    }, 3000);
+    debugger;
+    if(this.codeOrder != "0") {
+      if(this.ListProduct.length > 0){
+
+        this.ListProduct.forEach(item => {
+          let order = new OrderDTO();
+          order.codigo = this.codeOrder;
+          order.id_mesa = this.idMesa;
+          order.id_usuario = 1;
+          order.id_estadoorden = 7;
+          order.id_tipopago = 1;
+          order.id_producto = item.id;
+          order.cantidad = item.id_estado; //id_estado se uso para guardar la cantidad
+  
+          this.ListOrder.push(order);
+        });
+        
+        if(this.ListOrder.length > 0) {
+
+          this.ApiOrder.post(this.ListOrder).subscribe(data => {
+            console.log("Exito: ", data)
+
+            this.viewPrev();
+            this.newOrder.VisibleToask = true;
+            setTimeout(() => {
+              this.newOrder.VisibleToask = false;
+            }, 3000);
+          },error => {
+            console.log('Error post: ', error)
+          });
+          
+        }
+
+      }
+    }
   }
+
   viewPay() {
     this.router.navigate(['/sales/activeservices']);
     localStorage.setItem("servicesPendingDisabled", "false");

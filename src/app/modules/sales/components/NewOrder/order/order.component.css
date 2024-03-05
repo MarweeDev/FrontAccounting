@@ -95,7 +95,7 @@
 
 .container-add .modal-add {
     position: relative;
-    width: 22em;
+    width: 25em;
     padding: 20px;
     box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.8);
     border: 1px solid var(--color-texto-terciario);
@@ -104,7 +104,7 @@
 }
 @media screen and (min-width: 1270px) and (max-width: 1290px) {
     .container-add .modal-add {
-        width: 29em;
+        width: 26em;
     }
 }
 .container-add .modal-add .header {
@@ -280,7 +280,7 @@
     justify-content: center;
 }
 
-.card { width: 15rem !important; border-radius: 5px 18px 5px 18px; cursor: auto; position: relative; }
+.card { width: 12rem !important; border-radius: 5px 18px 5px 18px; cursor: auto; position: relative; }
 .card-hover .icon-img { filter: grayscale(0%) !important; opacity: 1 !important; }
 .card:hover { box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.8); border-radius: 5px 18px 18px 18px; }
 .card .card-title { position: absolute; right: 12px;}
