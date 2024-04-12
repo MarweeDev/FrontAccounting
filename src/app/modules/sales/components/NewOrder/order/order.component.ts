@@ -59,7 +59,7 @@ export class OrderComponent implements OnInit {
     this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
     this.titleOrder = newOrder.mesaModels.nombre;
     this.numberMesa = Number(newOrder.mesaModels.numero);
-    this.idMesa = Number(newOrder.mesaModels.id);
+    this.idMesa = Number(1); //Number(newOrder.mesaModels.id);
     this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
 
@@ -71,8 +71,7 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nueva', url: 'sales/neworder/add', icon: 'fa-solid fa-plus'},
-      { nombre: 'Descartadas', url: 'sales/neworder/add', icon: 'fa-solid fa-ban'},
+      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus'},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -379,8 +378,8 @@ export class OrderComponent implements OnInit {
           this.ListOrder.push(order);
         });
         
-        if(this.ListOrder.length > 0) {
-
+        if(this.ListOrder.length > 0) 
+        {
           this.ApiOrder.post(this.ListOrder).subscribe(data => {
             console.log("Exito: ", data)
 
@@ -405,7 +404,7 @@ export class OrderComponent implements OnInit {
     localStorage.setItem("PayPendingDisabled", "true");
   }
   viewCancel() {
-    this.VisibleAlert = true;
+    //this.VisibleAlert = true;
   }
 
   //esto tiene que ir en el componente creado en shared
@@ -416,5 +415,68 @@ export class OrderComponent implements OnInit {
   }
   viewCancelModal() {
     this.VisibleAlert = false;
+  }
+
+
+  //Contexto menu
+  mostrarContextMenu = false;
+  x = 0;
+  y = 0;
+  idTarget : any;
+  idElement = 0;
+
+  mostrarMenu(event: MouseEvent): void {
+    debugger;
+    event.preventDefault();
+    this.mostrarContextMenu = true;
+
+    // Obtener la posición del clic derecho
+    this.x = event.clientX - 20;
+    this.y = event.clientY / 3;
+    this.idTarget = event.currentTarget;
+    this.idElement = this.idTarget.attributes['id'].value.replace('card-order-', '');
+
+    this.configurarPosicionMenu();
+
+    // Agregar un manejador de clic para cerrar el menú contextual
+    document.addEventListener('click', this.cerrarMenu);
+  }
+
+  private configurarPosicionMenu(): void {
+    setTimeout(() => {
+      let element :any = document.getElementById("contextmenu");
+      if (element) {
+        element.style.left = `${this.x}px`;
+        element.style.top = `${this.y}px`;
+        element.style.opacity = '1';
+      }
+    });
+  }
+
+  cerrarMenu = (): void => {
+    this.mostrarContextMenu = false;
+    document.removeEventListener('click', this.cerrarMenu);
+  };
+
+  realizarAccion(option:string): void {
+    this.router.navigate([option + this.idElement]);
+    this.cerrarMenu();
+  }
+
+  descartItem() {
+
+    if(this.idElement){
+      const confirmacion = window.confirm("¿Seguro quiere descartar este elemento?");
+
+    }
+
+  }
+
+  deleteItem() {
+
+    if(this.idElement){
+      const confirmacion = window.confirm("¿Seguro quiere eliminar este elemento?");
+    }
+
   }
 }

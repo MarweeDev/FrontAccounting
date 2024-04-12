@@ -25,8 +25,8 @@ export class NeworderComponent implements OnInit  {
   //#endregion
 
   constructor(private route: ActivatedRoute, private app: AppComponent) {
-    this.assignmentDisabled = true;
-    this.orderDisabled = false;
+    this.assignmentDisabled = false;
+    this.orderDisabled = true;
     this.reserveDisabled = false;
     this.app.navDisabled = true;
   }

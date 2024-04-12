@@ -18,6 +18,7 @@ export class OrderService {
   }
 
   post(data: OrderDTO[]): Observable<OrderDTO[]>{
+    debugger;
     return this.http.post<OrderDTO[]>(this.ApiURL + HttpMethod.POST, data);
   }
 
