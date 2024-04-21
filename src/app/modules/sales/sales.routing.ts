@@ -15,11 +15,13 @@ import { ReservesComponent } from './components/NewOrder/assignment/dialog/reser
 //order
 import { AddOrderComponent } from './components/NewOrder/order/dialog/add/add.order.component';
 import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit.order.component';
+import { OrderComponent } from './components/NewOrder/order/order.component';
 
 const routes: Routes = [
     { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
 
     //order
+    { path: 'neworder/order', component: OrderComponent, title: 'Generando orden' },
     { path: 'neworder/order/add', component: AddOrderComponent, title: 'Proceso de creación' },
     { path: 'neworder/order/edit/:id', component: EditOrderComponent, title: 'Proceso de edición' },
 

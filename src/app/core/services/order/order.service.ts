@@ -14,7 +14,7 @@ export class OrderService {
   ApiURL = ApiConfig.getUrl(ServicesMethod.ServicesOrder);
 
   get(): Observable<any> {
-    return this.http.get(this.ApiURL + HttpMethod.GET);
+    return this.http.get(this.ApiURL + HttpMethod.GET + "All");
   }
 
   post(data: OrderDTO[]): Observable<OrderDTO[]>{

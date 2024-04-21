@@ -17,6 +17,7 @@ export class NeworderComponent implements OnInit  {
   //#region Propiedades
   assignmentDisabled : boolean | undefined;
   orderDisabled : boolean | undefined;
+  registerDisabled : boolean | undefined;
   reserveDisabled : boolean | undefined;
   orderModels = models.order;
   mesaModels = models.mesa;
@@ -25,9 +26,12 @@ export class NeworderComponent implements OnInit  {
   //#endregion
 
   constructor(private route: ActivatedRoute, private app: AppComponent) {
+    this.registerDisabled = true;
+    this.orderDisabled = false;
+
     this.assignmentDisabled = false;
-    this.orderDisabled = true;
     this.reserveDisabled = false;
+
     this.app.navDisabled = true;
   }
 

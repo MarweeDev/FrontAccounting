@@ -59,7 +59,7 @@ export class OrderComponent implements OnInit {
     this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
     this.titleOrder = newOrder.mesaModels.nombre;
     this.numberMesa = Number(newOrder.mesaModels.numero);
-    this.idMesa = Number(1); //Number(newOrder.mesaModels.id);
+    this.idMesa = Number(0); //Number(newOrder.mesaModels.id);
     this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
 
@@ -356,7 +356,7 @@ export class OrderComponent implements OnInit {
     this.heightAuto = "container-add container-add-open";
   }
   viewPrev() {
-    this.newOrder.assignmentDisabled = true;
+    this.newOrder.registerDisabled = true;
     this.newOrder.orderDisabled = false;
   }
 
