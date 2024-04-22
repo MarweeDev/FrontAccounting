@@ -83,7 +83,7 @@
   border-color: var(--color-company-two);
   transition: all .5s;
 }
-.btn-companyTwo:hover { background: rgb(253, 128, 96, .8) !important; cursor: pointer;}
+.btn-companyTwo:hover { opacity: .9 !important; cursor: pointer;}
 
 .btn-default { 
   background: var(--color-texto-primario) !important; 

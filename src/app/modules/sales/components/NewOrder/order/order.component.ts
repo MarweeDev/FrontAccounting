@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NeworderComponent } from '../../../pages/neworder/neworder.component';
 import { ProductDTO } from '../../../../../core/models/product';
 import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
 import { AppComponent } from 'src/app/app.component';
@@ -48,7 +47,7 @@ export class OrderComponent implements OnInit {
   ListProductData: ProductDTO[] = [];
   //#endregion
 
-  constructor(private newOrder : NeworderComponent, 
+  constructor( 
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
     private router: Router,
@@ -56,11 +55,7 @@ export class OrderComponent implements OnInit {
     private ApiProduct: ProductService,
     private ApiOrder: OrderService) 
     {
-    this.titleBtnPrev = "#" + newOrder.mesaModels.numero + " - " + newOrder.mesaModels.nombre;
-    this.titleOrder = newOrder.mesaModels.nombre;
-    this.numberMesa = Number(newOrder.mesaModels.numero);
     this.idMesa = Number(0); //Number(newOrder.mesaModels.id);
-    this.NameClient = this.newOrder.orderModels.nombre_cliente;
   }
 
   ngOnInit(): void {
@@ -71,7 +66,8 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus'},
+      { nombre: 'Cancelar orden', url: 'sales/neworder', type: "btn-info"},
+      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -356,8 +352,7 @@ export class OrderComponent implements OnInit {
     this.heightAuto = "container-add container-add-open";
   }
   viewPrev() {
-    this.newOrder.registerDisabled = true;
-    this.newOrder.orderDisabled = false;
+    this.router.navigate(['sales/neworder']);
   }
 
   viewOk() {
@@ -384,9 +379,9 @@ export class OrderComponent implements OnInit {
             console.log("Exito: ", data)
 
             this.viewPrev();
-            this.newOrder.VisibleToask = true;
+            //this.newOrder.VisibleToask = true;
             setTimeout(() => {
-              this.newOrder.VisibleToask = false;
+              //this.newOrder.VisibleToask = false;
             }, 3000);
           },error => {
             console.log('Error post: ', error)
@@ -405,13 +400,12 @@ export class OrderComponent implements OnInit {
   }
   viewCancel() {
     //this.VisibleAlert = true;
+    this.viewPrev();
   }
 
   //esto tiene que ir en el componente creado en shared
   viewOkModal() {
     this.VisibleAlert = false;
-    this.newOrder.assignmentDisabled = true;
-    this.newOrder.orderDisabled = false;
   }
   viewCancelModal() {
     this.VisibleAlert = false;

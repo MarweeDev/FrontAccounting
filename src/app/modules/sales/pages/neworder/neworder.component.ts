@@ -27,7 +27,7 @@ export class NeworderComponent implements OnInit  {
 
   constructor(private route: ActivatedRoute, private app: AppComponent) {
     this.registerDisabled = true;
-    this.orderDisabled = false;
+    this.orderDisabled = true;
 
     this.assignmentDisabled = false;
     this.reserveDisabled = false;

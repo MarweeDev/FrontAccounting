@@ -28,6 +28,7 @@ export class NavComponent implements OnInit, AfterViewInit {
     this.listNav = [];
     this.DataShared.OnGetNav().subscribe(item => {
       this.listNav = item;
+      console.log(item)
       this.cdRef.detectChanges();
     }, error => {
       console.log('error:', error)

@@ -5,17 +5,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { NeworderComponent } from './pages/neworder/neworder.component';
 
 //Components
-import { PayorderComponent } from './components/Payment/payorder/payorder.component';
-
-//assignment
-import { AddComponent } from './components/NewOrder/assignment/dialog/add/add.component';
-import { EditComponent } from './components/NewOrder/assignment/dialog/edit/edit.component';
-import { ReservesComponent } from './components/NewOrder/assignment/dialog/reserves/reserves.component';
+import { PayorderComponent } from './components/NewOrder/payorder/payorder.component';
 
 //order
+import { OrderComponent } from './components/NewOrder/order/order.component';
 import { AddOrderComponent } from './components/NewOrder/order/dialog/add/add.order.component';
 import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit.order.component';
-import { OrderComponent } from './components/NewOrder/order/order.component';
 
 const routes: Routes = [
     { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
@@ -24,14 +19,8 @@ const routes: Routes = [
     { path: 'neworder/order', component: OrderComponent, title: 'Generando orden' },
     { path: 'neworder/order/add', component: AddOrderComponent, title: 'Proceso de creación' },
     { path: 'neworder/order/edit/:id', component: EditOrderComponent, title: 'Proceso de edición' },
-
-    //assignment
-    { path: 'neworder/assignment/add', component: AddComponent, title: 'Proceso de creación' },
-    { path: 'neworder/assignment/edit/:id', component: EditComponent, title: 'Proceso de edición' },
-    { path: 'neworder/assignment/reserve/:id', component: ReservesComponent, title: 'Proceso de reserva' },
-
-    { path: 'payments', component: PayorderComponent, title: 'Realizando pago' },
-    { path: '**', redirectTo: 'activeservices' }
+    { path: 'neworder/payments', component: PayorderComponent, title: 'Realizando pago' },
+    { path: '**', redirectTo: 'neworder' }
 ];
 
 @NgModule({

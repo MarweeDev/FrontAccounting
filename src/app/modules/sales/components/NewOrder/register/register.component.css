@@ -34,7 +34,7 @@
     width: 100%;
     margin-bottom: 15px;
     border-collapse: separate;
-    border-spacing: 0 0px; /*-Horizontal 0px, Vertical 10px */
+    border-spacing: 0 20px; /*-Horizontal 0px, Vertical 10px */
 }
 /*thead*/
 .content .container-table table thead tr th {
@@ -43,25 +43,33 @@
     padding: 10px;
     /*background-color: var(--color-info);*/
     color: var(--color-info);
-    box-shadow: 4px 5px 6px rgba(0, 0, 0, .1);
-    border-top: 1px solid var(--color-texto-terciario);
+    /*box-shadow: 4px 5px 6px rgba(0, 0, 0, .1);*/
+    /*border-top: 1px solid var(--color-texto-terciario);*/
 }
 .content .container-table table thead tr th:first-child {
     border-radius: 00px 0px 0px 0px;
-    border-left: 1px solid var(--color-info);
+    /*border-left: 1px solid var(--color-info);*/
 }
 .content .container-table table thead tr th:last-child {
     border-radius: 0px 10px 0px 0px;
-    border-right: 1px solid var(--color-texto-terciario);
+    /*border-right: 1px solid var(--color-texto-terciario);*/
 }
 /*tbody*/
+.content .container-table table tbody {
+    height: 50px;
+    overflow: auto;
+}
+.content .container-table table tbody tr {
+    width: 100%;
+    table-layout: fixed;
+}
 .content .container-table table tbody tr td {
     text-align: left;
     padding: 10px;
     font-size: 12px;
     background-color: rgb(255, 255, 255);
     color: var(--color-adicional-primario);
-    border-width: 0px;
+    border-width: 1px;
     border-style: solid;
     border-color: var(--color-texto-terciario);
     border-left-width: 0px;
@@ -73,8 +81,34 @@
     border-left: 1px solid var(--color-info);
 }
 .content .container-table table tbody tr td:last-child {
-    border-radius: 0px 0px 10px 0px;
+    border-radius: 0px 10px 10px 0px;
     border-right: 1px solid var(--color-texto-terciario);
+}
+.content .container-table table tbody tr td .circle {
+    padding: 9px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 20px;
+    /*border: 1px solid var(--color-texto-terciario);*/
+    color: rgb(255, 255, 255);
+    position: relative;
+}
+.content .container-table table tbody tr td .circle:hover::before {
+    content: attr(title);
+    position: absolute;
+    left: 10px;
+    background: var(--color-info);
+    padding: 5px 20px;
+    font-size: 12px;
+    top: 5px;
+    margin-left: 2rem;
+    border-radius: 20px;
+}
+.content .container-table table tbody tr td .circle span {
+    color: rgb(255, 255, 255);
 }
 .content .container-table table tbody tr td button {
     margin: 0px 3px;

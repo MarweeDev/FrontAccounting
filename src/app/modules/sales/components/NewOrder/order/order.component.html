@@ -3,9 +3,6 @@
     <!--Titulo componente-->
     <div class="container-prev">
         <h3 class="title">Orden de productos</h3>
-        <button type="button" style="display: none;" class="btn btn-info btn-span rd-4" (click)="viewPrev()">
-            Generar reasignación <i class="fa-solid fa-pencil"></i>
-        </button>
         <select class="rd-4" (change)="onSelectChange($event)">
             <option value="0">Mostrar todos</option>
             <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>

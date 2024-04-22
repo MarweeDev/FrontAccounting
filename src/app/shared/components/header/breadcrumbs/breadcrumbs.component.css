@@ -82,5 +82,7 @@
     line-height: 19px;
     text-align: left;
     color:  var(--color-texto-terciario) !important;
+    padding: 9px 0px !important;
+    justify-self: end;
 }
   

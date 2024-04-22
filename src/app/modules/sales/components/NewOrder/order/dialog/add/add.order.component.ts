@@ -56,7 +56,7 @@ export class AddOrderComponent implements OnInit {
 
   cancel(){
     this.form.reset();
-    this.router.navigate(['sales/neworder']);
+    this.router.navigate(['sales/neworder/order']);
   }
 
 }

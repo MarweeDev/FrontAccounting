@@ -1,0 +1,55 @@
+<section class="container-component">
+    <!--Titulo componente-->
+    <div class="container-prev">
+        <h3 class="title">Gestión de Ordenes</h3>
+    </div>
+
+    <br>
+
+    <!--Contenido productos-->
+    <div class="content">
+        <div class="container-table">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Fecha/Hora</th>
+                        <th>Productos</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ListOrder; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>
+                            <!--{{item.usuario}}-->
+                            <div class="circle" [title]="item.usuario" [style.background-color]="getColor(item.usuario)">
+                                <span>{{item.usuario[0] | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>{{item.codigo}}</td>
+                        <td>{{item.nombre}}</td>
+                        <td>Particular</td>
+                        <td>{{item.fecha}}</td>
+                        <td>{{item.cantidad}}</td>
+                        <td>$0</td>
+                        <td>
+                            <button type="button">Pagar</button>
+                            <button>Editar</button>
+                            <button>Cancelar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+
+    </div>
+
+</section>

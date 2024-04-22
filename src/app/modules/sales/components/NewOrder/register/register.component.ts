@@ -33,9 +33,23 @@ export class RegisterComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus'},
+      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+  }
+
+  // Función para generar un color aleatorio
+  getColor(usuario: string): string {
+    // Calcular un valor hash único basado en el nombre de usuario
+    let hash = 0;
+    for (let i = 0; i < usuario.length; i++) {
+      hash = usuario.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // Convertir el valor hash en un color RGB
+    const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
+    
+    return color;
   }
 
 }
