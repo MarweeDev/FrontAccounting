@@ -19,7 +19,7 @@ const routes: Routes = [
     { path: 'neworder/order', component: OrderComponent, title: 'Generando orden' },
     { path: 'neworder/order/add', component: AddOrderComponent, title: 'Proceso de creación' },
     { path: 'neworder/order/edit/:id', component: EditOrderComponent, title: 'Proceso de edición' },
-    { path: 'neworder/payments', component: PayorderComponent, title: 'Realizando pago' },
+    { path: 'neworder/payments/:id', component: PayorderComponent, title: 'Realizando pago' },
     { path: '**', redirectTo: 'neworder' }
 ];
 

@@ -8,6 +8,9 @@
 
     <!--Contenido productos-->
     <div class="content">
+        <div class="container-head">
+            <p class="count-register">Total <strong>{{ListOrder.length}}</strong></p>
+        </div>
         <div class="container-table">
 
             <table>
@@ -28,8 +31,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of ListOrder; let i = index" 
-                        [class.not-pending-tr]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'"
+                    <tr (click)="getDetailsOrder(item.codigo)" *ngFor="let item of ListOrder; let i = index" 
+                        [class.not-pending-tr]="item.nombre == 'Cancelada'"
                         [class.success-tr]="item.nombre == 'Pagada'">
 
                         <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">{{i + 1}}</td>
@@ -60,7 +63,7 @@
                                 <i class="fa-solid fa-circle-check txt-success"></i>
                             </div>
                             
-                            <button type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
+                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
                                 Pagar
                             </button>
                             <button type="button" class="btn-option" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">

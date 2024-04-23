@@ -12,11 +12,14 @@ import { NeworderComponent } from './pages/neworder/neworder.component';
 //Components
 import { OrderComponent } from './components/NewOrder/order/order.component'; //nueva orden
 import { RegisterComponent } from './components/NewOrder/register/register.component'; //nueva orden
-import { PayorderComponent } from './components/NewOrder/payorder/payorder.component';
+import { PayorderComponent } from './components/NewOrder/payorder/payorder.component'; //nueva orden
 
-//Dialog AssignmentComponent
+//Dialog OrderComponent
 import { AddOrderComponent } from './components/NewOrder/order/dialog/add/add.order.component';
 import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit.order.component';
+
+//Dialog RegisterComponent
+import { DetailsComponent } from './components/NewOrder/register/dialog/details/details.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit
     //Dialog OrderComponent
     AddOrderComponent,
     EditOrderComponent,
+
+    //Dialog RegisterComponent
+    DetailsComponent,
   ],
   imports: [
     CommonModule,

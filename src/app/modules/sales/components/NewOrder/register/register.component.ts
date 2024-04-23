@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { OrderService } from 'src/app/core/services/order/order.service';
-import { NeworderComponent } from 'src/app/modules/sales/pages/neworder/neworder.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -15,7 +14,6 @@ export class RegisterComponent implements OnInit {
   ListOrder: any[] =[];
 
   constructor(
-    private newOrder : NeworderComponent, 
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
     private router: Router,
@@ -57,6 +55,14 @@ export class RegisterComponent implements OnInit {
     const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
     
     return color;
+  }
+
+  getDetailsOrder(code:any){
+    
+  }
+
+  getPayOrder(code:any){
+    this.router.navigate(['/sales/neworder/payments', code]);
   }
 
 }
