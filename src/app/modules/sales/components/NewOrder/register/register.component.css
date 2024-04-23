@@ -6,6 +6,8 @@
 .container-prev {
     text-align: start;
     display: flex;
+    position: sticky;
+    top: 5rem;
 }
 .container-prev .title {
     color: rgb( 97 109 138 );
@@ -29,6 +31,8 @@
     /*border: 1px solid var(--color-texto-terciario);*/
     border-radius: 7px;
     /*background-color: rgba(255, 255, 255, 1);*/
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
 }
 .content .container-table table {
     width: 100%;
@@ -37,21 +41,30 @@
     border-spacing: 0 20px; /*-Horizontal 0px, Vertical 10px */
 }
 /*thead*/
+.content .container-table table thead tr {
+    position: sticky;
+    top: -0.6rem;
+    background-color: var(--background-primario);
+    z-index: 2;
+}
 .content .container-table table thead tr th {
     text-align: left;
     font-size: 12px;
-    padding: 10px;
+    padding: 20px 10px 20px 10px;
     /*background-color: var(--color-info);*/
     color: var(--color-info);
     /*box-shadow: 4px 5px 6px rgba(0, 0, 0, .1);*/
     /*border-top: 1px solid var(--color-texto-terciario);*/
+}
+.content .container-table table thead tr th i {
+    color: var(--color-info);
 }
 .content .container-table table thead tr th:first-child {
     border-radius: 00px 0px 0px 0px;
     /*border-left: 1px solid var(--color-info);*/
 }
 .content .container-table table thead tr th:last-child {
-    border-radius: 0px 10px 0px 0px;
+    border-radius: 0px 0px 0px 0px;
     /*border-right: 1px solid var(--color-texto-terciario);*/
 }
 /*tbody*/
@@ -62,11 +75,18 @@
 .content .container-table table tbody tr {
     width: 100%;
     table-layout: fixed;
+    border-left: 1px solid var(--color-info);
+    cursor: pointer;
+}
+.content .container-table table tbody .not-pending-tr,
+.content .container-table table tbody .success-tr {
+    cursor: unset;
 }
 .content .container-table table tbody tr td {
     text-align: left;
     padding: 10px;
     font-size: 12px;
+    font-weight: 500;
     background-color: rgb(255, 255, 255);
     color: var(--color-adicional-primario);
     border-width: 1px;
@@ -74,11 +94,26 @@
     border-color: var(--color-texto-terciario);
     border-left-width: 0px;
     border-right-width: 0px;
-    box-shadow: 4px 5px 6px rgba(0, 0, 0, .1);
+    box-shadow: 1px 3px 3px rgba(0, 0, 0, .1);
+}
+.content .container-table table tbody tr:hover > td {
+    background-color: rgb(228, 232, 255);
+}
+.content .container-table table tbody .success-tr:hover > td,
+.content .container-table table tbody .not-pending-tr:hover > td {
+    background-color: rgb(255, 255, 255);
 }
 .content .container-table table tbody tr td:first-child {
     border-radius: 0px 0px 0px 0px;
-    border-left: 1px solid var(--color-info);
+    border-left: 2px solid var(--color-info);
+}
+.content .container-table table tbody tr .not-pending-td:first-child {
+    border-radius: 0px 0px 0px 0px;
+    border-left: 2px solid var(--color-danger);
+}
+.content .container-table table tbody tr .success-td:first-child {
+    border-radius: 0px 0px 0px 0px;
+    border-left: 2px solid var(--color-success);
 }
 .content .container-table table tbody tr td:last-child {
     border-radius: 0px 10px 10px 0px;
@@ -86,6 +121,7 @@
 }
 .content .container-table table tbody tr td .circle {
     padding: 9px;
+    margin-left: 20px;
     text-align: center;
     width: 35px;
     height: 35px;
@@ -110,17 +146,30 @@
 .content .container-table table tbody tr td .circle span {
     color: rgb(255, 255, 255);
 }
-.content .container-table table tbody tr td button {
-    margin: 0px 3px;
-    font-size: 12px;
+.content .container-table table tbody tr td .btn-pay {
+    padding: 5px 20px !important;
+    font-size: 10px !important;
+}
+.content .container-table table tbody tr td .btn-option {
+    font-size: 15px !important;
+    margin-left: 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.content .container-table table tbody tr td .td-container-tag {
     position: relative;
 }
-.content .container-table table tbody tr td button::before {
-    content: '';
+.content .container-table table tbody tr td .td-tag {
     position: absolute;
-    top: 0px; bottom: 0px;
-    left: 0px; right: 0px;
+    font-size: smaller;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    /*rotate: -17deg;*/
+    right: 18px;
+    top: 1px;
 }
+
 .content .container-table table tbody tr td:last-child {
-    text-align: center;
+    text-align: end;
 }

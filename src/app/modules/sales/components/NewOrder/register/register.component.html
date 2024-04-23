@@ -13,20 +13,26 @@
             <table>
                 <thead>
                     <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Código</th>
-                        <th>Nombre</th>
+                        <th>
+                            <i class="fa-solid fa-arrow-down-1-9 fa-fw"></i>
+                        </th>
+                        <th>Responsable</th>
+                        <th>Orden</th>
+                        <th>Estado</th>
                         <th>Usuario</th>
                         <th>Fecha/Hora</th>
                         <th>Productos</th>
                         <th>Total</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of ListOrder; let i = index">
-                        <td>{{i + 1}}</td>
+                    <tr *ngFor="let item of ListOrder; let i = index" 
+                        [class.not-pending-tr]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'"
+                        [class.success-tr]="item.nombre == 'Pagada'">
+
+                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">{{i + 1}}</td>
                         <td>
                             <!--{{item.usuario}}-->
                             <div class="circle" [title]="item.usuario" [style.background-color]="getColor(item.usuario)">
@@ -36,13 +42,30 @@
                         <td>{{item.codigo}}</td>
                         <td>{{item.nombre}}</td>
                         <td>Particular</td>
-                        <td>{{item.fecha}}</td>
+                        <td>
+                            <!--{{ item.fecha.split(' ')[0] }}
+                            <br>
+                            {{ item.fecha.split(' ')[1] }}-->
+                            {{item.fecha}}
+                        </td>
                         <td>{{item.cantidad}}</td>
                         <td>$0</td>
                         <td>
-                            <button type="button">Pagar</button>
-                            <button>Editar</button>
-                            <button>Cancelar</button>
+                            <div class="td-container-tag" *ngIf="item.nombre == 'Cancelada'">
+                                <div class="td-tag">{{item.nombre}}</div>
+                                <i class="fa-solid fa-circle-xmark txt-danger"></i>
+                            </div>
+                            <div class="td-container-tag" *ngIf="item.nombre == 'Pagada'">
+                                <div class="td-tag">{{item.nombre}}</div>
+                                <i class="fa-solid fa-circle-check txt-success"></i>
+                            </div>
+                            
+                            <button type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
+                                Pagar
+                            </button>
+                            <button type="button" class="btn-option" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
+                                <i class="fa-solid fa-ellipsis fa-fw"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

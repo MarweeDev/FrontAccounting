@@ -38,6 +38,13 @@ export class RegisterComponent implements OnInit {
     this.DataShared.OnSetNav(this.app.listNav);
   }
 
+  formatDateTime(dateTime: string): { fecha: string, hora: string } {
+    const date = new Date(dateTime);
+    const fecha = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`; // Formato dd-MM-yyyy
+    const hora = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`; // Formato HH:mm:ss
+    return { fecha, hora };
+  }
+
   // Función para generar un color aleatorio
   getColor(usuario: string): string {
     // Calcular un valor hash único basado en el nombre de usuario
