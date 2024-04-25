@@ -58,7 +58,7 @@ export class RegisterComponent implements OnInit {
   }
 
   getDetailsOrder(code:any){
-    
+    this.router.navigate(['/sales/neworder/register/details', code]);
   }
 
   getPayOrder(code:any){

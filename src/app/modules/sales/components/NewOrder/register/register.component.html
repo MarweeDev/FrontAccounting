@@ -36,11 +36,11 @@
                         [class.success-tr]="item.nombre == 'Pagada'">
 
                         <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">{{i + 1}}</td>
-                        <td>
-                            <!--{{item.usuario}}-->
+                        <td class="td">
                             <div class="circle" [title]="item.usuario" [style.background-color]="getColor(item.usuario)">
                                 <span>{{item.usuario[0] | uppercase}}</span>
                             </div>
+                            <p class="circle-name">{{item.usuario}}</p>
                         </td>
                         <td>{{item.codigo}}</td>
                         <td>{{item.nombre}}</td>

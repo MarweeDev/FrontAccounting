@@ -1,1 +1,43 @@
-<p>details works!</p>
+<section class="container-component">
+    <div class="card">
+        <h3>Consultando orden <strong class="txt-info">{{order}}</strong></h3>
+
+        <div class="td-container-tag" *ngIf="estado == 'Pendiente' || estado == 'Debiendo'">
+            <div class="td-tag">{{estado}}</div>
+            <i class="fa-brands fa-product-hunt txt-info"></i>
+        </div>
+        <div class="td-container-tag" *ngIf="estado == 'Cancelada'">
+            <div class="td-tag">{{estado}}</div>
+            <i class="fa-solid fa-circle-xmark txt-danger"></i>
+        </div>
+        <div class="td-container-tag" *ngIf="estado == 'Pagada'">
+            <div class="td-tag">{{estado}}</div>
+            <i class="fa-solid fa-circle-check txt-success"></i>
+        </div>
+
+        <div class="container-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ListOrder; let i = index">
+                        <td>{{item.producto}}</td>
+                        <td>${{getConverPrice(item.precio).toLocaleString()}}</td>
+                        <td>{{item.cantidad}}</td>
+                        <td>${{ (item.precio * item.cantidad).toLocaleString() }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container-btn">
+            <button type="button" class="btn btn-default rd-4" (click)="cancel()">Volver</button>
+        </div>
+    </div>
+</section>
+

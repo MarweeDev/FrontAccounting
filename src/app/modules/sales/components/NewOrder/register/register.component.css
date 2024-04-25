@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 .container-component {
     position: relative;
     /*height: calc(100vh - 111px);*/
@@ -95,6 +98,7 @@
     width: 100%;
     table-layout: fixed;
     border-left: 1px solid var(--color-info);
+    cursor: pointer;
 }
 .content .container-table table tbody .not-pending-tr,
 .content .container-table table tbody .success-tr {
@@ -103,7 +107,8 @@
 .content .container-table table tbody tr td {
     text-align: left;
     padding: 10px;
-    font-size: 12px;
+    font-size: 11px;
+    letter-spacing: 1px;
     font-weight: 500;
     background-color: rgb(255, 255, 255);
     color: var(--color-adicional-primario);
@@ -113,6 +118,7 @@
     border-left-width: 0px;
     border-right-width: 0px;
     box-shadow: 1px 3px 3px rgba(0, 0, 0, .1);
+    box-sizing: border-box;
 }
 .content .container-table table tbody tr:hover > td {
     background-color: rgb(225, 227, 255);
@@ -139,9 +145,13 @@
     border-radius: 0px 10px 10px 0px;
     border-right: 1px solid var(--color-texto-terciario);
 }
+
+.content .container-table table tbody tr .td {
+    display: flex;
+    box-sizing: border-box;
+}
 .content .container-table table tbody tr td .circle {
     padding: 9px;
-    margin-left: 20px;
     text-align: center;
     width: 35px;
     height: 35px;
@@ -166,6 +176,14 @@
 }
 .content .container-table table tbody tr td .circle span {
     color: rgb(255, 255, 255);
+}
+.content .container-table table tbody tr td .circle-name {
+    padding: 10px 0px 10px 10px;
+    margin: 0px;
+    font-size: smaller;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-sizing: border-box;
 }
 .content .container-table table tbody tr td .btn-pay {
     padding: 5px 20px !important;

@@ -13,6 +13,10 @@ export class OrderService {
 
   ApiURL = ApiConfig.getUrl(ServicesMethod.ServicesOrder);
 
+  getID(id: any): Observable<any> {
+    return this.http.get(this.ApiURL + HttpMethod.GETID + id);
+  }
+
   get(): Observable<any> {
     return this.http.get(this.ApiURL + HttpMethod.GET + "All");
   }

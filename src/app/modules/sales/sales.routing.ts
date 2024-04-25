@@ -4,7 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 //Pages
 import { NeworderComponent } from './pages/neworder/neworder.component';
 
-//Components
+//Register
+import { RegisterComponent } from './components/NewOrder/register/register.component';
+import { DetailsComponent } from './components/NewOrder/register/dialog/details/details.component';
+
+//Pay
 import { PayorderComponent } from './components/NewOrder/payorder/payorder.component';
 
 //order
@@ -15,10 +19,16 @@ import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit
 const routes: Routes = [
     { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
 
+    //register
+    { path: 'neworder/register', component: RegisterComponent, title: 'Registros de ordenes' },
+    { path: 'neworder/register/details/:id', component: DetailsComponent, title: 'Consultando orden' },
+
     //order
     { path: 'neworder/order', component: OrderComponent, title: 'Generando orden' },
     { path: 'neworder/order/add', component: AddOrderComponent, title: 'Proceso de creación' },
     { path: 'neworder/order/edit/:id', component: EditOrderComponent, title: 'Proceso de edición' },
+
+    //pay
     { path: 'neworder/payments/:id', component: PayorderComponent, title: 'Realizando pago' },
     { path: '**', redirectTo: 'neworder' }
 ];
