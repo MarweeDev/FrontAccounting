@@ -1,40 +1,38 @@
 <section class="container">
-    <!-- <h3>Filtro</h3>
-    <select >
-        <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
-    </select>
-    <br><br> -->
-    <h3>
-        <i class="fa-solid fa-ellipsis-vertical"></i> 
-        Módulos
-    </h3>
-    <ul (click)="onButtonGroupClick($event)">
-        <li>
-            <button type="button" class="btn" data-title="Ventas" id="option-1">
-                <i class="fa-solid fa-chart-simple"></i> Ventas
-            </button>
+    <div class="parent">
+        <div class="header">
+            <div class="circle" [style.background-color]="getColor(user)">
+                <span>{{user[0] | uppercase}}</span>
+            </div>
+            <p class="circle-name">
+                {{user}}
+                <br>
+                <small class="txt-company">super admin</small>
+            </p>
+        </div>
+        <div class="menu">
+            <ul>
+                <li *ngFor="let item of ListModule; let i = index">
+                    <button type="button" (click)="OnRouterModule(item.ruta)">
+                        <i [className]="item.icono"></i> {{item.modulo}}
+                        <span *ngIf="item.id == 1 && total != 0">{{total}}</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="footer">
             <ul>
                 <li>
-                    <button type="button" id="nav-1" (click)="OnRouterModule('/sales/neworder', $event)">
-                        Nueva orden
-                    </button>
-                </li>
-                <li>
-                    <button type="button" id="nav-2" (click)="OnRouterModule('/sales/activeservices', $event)">
-                        Servicios en curso
-                    </button>
-                </li>
-                <li>
-                    <button type="button" id="nav-3" (click)="OnRouterModule('/sales/pendingservices', $event)">
-                        Servicios pendientes
+                    <button type="button" class="button-close" (click)="OnRouterModule('home/authorization/login')">
+                        <i class="fa-solid fa-right-from-bracket" style="transform: rotate(180deg);"></i> Salir
                     </button>
                 </li>
                 <li>
                     <button type="button">
-                        Parametrizar módulo
+                        <i class="fa-solid fa-gear"></i> Cofiguración
                     </button>
                 </li>
             </ul>
-        </li>
-    </ul>
+        </div>
+    </div>
 </section>

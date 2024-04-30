@@ -17,8 +17,6 @@ import { AddOrderComponent } from './components/NewOrder/order/dialog/add/add.or
 import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit.order.component';
 
 const routes: Routes = [
-    { path: 'neworder', component: NeworderComponent, title: 'Nueva orden' },
-
     //register
     { path: 'neworder/register', component: RegisterComponent, title: 'Registros de ordenes' },
     { path: 'neworder/register/details/:id', component: DetailsComponent, title: 'Consultando orden' },
@@ -30,7 +28,7 @@ const routes: Routes = [
 
     //pay
     { path: 'neworder/payments/:id', component: PayorderComponent, title: 'Realizando pago' },
-    { path: '**', redirectTo: 'neworder' }
+    { path: '**', redirectTo: 'authorization/login' }
 ];
 
 @NgModule({

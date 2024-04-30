@@ -1,13 +1,7 @@
 .slider {
-    height: calc(100vh - 61px);
-    max-width: fit-content;
     position: fixed;
     top: 3rem;
-    background-color: var(--background-primario);
-    border-right: 1px solid var(--color-texto-terciario);
-    z-index: 2;
-    padding: 10px 0px 10px 20px;
-    box-shadow: 2px 2px 9px rgba(0,0,0,.2);
+    bottom: 0px;
     z-index: 3;
     transition: all 0.5s;
 }

@@ -3,6 +3,7 @@ import { MesaDTO } from "./mesa";
 import { ProductDTO } from "./product";
 import { EstadoDTO } from "./estado";
 import { CategoriaProductoDTO } from "./categoriaProducto";
+import { ModuleDTO } from "./module";
 
 export class  GlobalModels {
     public order : OrderDTO = new OrderDTO();
@@ -10,4 +11,5 @@ export class  GlobalModels {
     public product : ProductDTO = new ProductDTO();
     public estado : EstadoDTO = new EstadoDTO();
     public categoriaProduct : CategoriaProductoDTO = new CategoriaProductoDTO();
+    public module : ModuleDTO = new ModuleDTO();
 }

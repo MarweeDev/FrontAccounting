@@ -1,97 +1,130 @@
 .container {
-    margin-right: 10px;
-    padding-right: 20px;
-    width: 15rem;
-    /*border-right: 1px solid var(--color-texto-terciario);*/
-    z-index: 2;
+    position: relative;
+    width: max-content;
 }
 
-h3 {
-    color: rgb( 97 109 138 );
-    font-size: 10px;
-    letter-spacing: 2px;
+.parent {
+    display: grid; 
+    grid-template-columns: 1.8fr; 
+    grid-template-rows: auto 1.5fr auto; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+        "header"
+        "menu"
+        "footer";
+
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+
+    background-color: rgba(255,255,255,1);
+    border-right: 1px solid var(--color-texto-terciario);
+    box-shadow: 2px 2px 9px rgba(0,0,0,.2);
+}
+    
+.header { 
+    grid-area: header; 
+    display: flex; 
+    padding: 25px 10px;
+    border-bottom: 1px solid var(--color-texto-terciario);
+    margin: 0px 15px;
+}
+.menu { grid-area: menu; }
+.footer { grid-area: footer; }
+
+.header .circle {
+    padding: 9px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 20px;
+    color: rgb(255, 255, 255);
+    position: relative;
+    box-sizing: border-box;
+}
+.header .circle span {
+    color: rgb(255, 255, 255);
+}
+.header .circle-name {
+    padding: 1px 1px 1px 10px;
+    margin: 0px;
+    font-size: smaller;
     text-transform: uppercase;
-    margin-top: 2rem;
+    letter-spacing: 2px;
+    box-sizing: border-box;
 }
-
-select {
-    color: rgb( 97 109 138 );
-    border-color: var(--color-texto-terciario);
-    width: 100%;
-}
-select:disabled {
-    cursor: no-drop;
+.header .circle-name small {
+    font-size: xx-small;
 }
 
 ul {
     margin: 0px;
-    padding: 0px;
+    padding: 5px 0px 0px 0px;
 }
 ul li {
-    margin: 0px;
-    margin-bottom: 5px;
+    margin: 5px 15px;
     padding: 0px;
     list-style: none;
 }
-ul li ul {
-    display: none;
-    visibility: hidden;
-    height: 0;
-    overflow: hidden;
-    transition: visibility 0.5s ease, height 0.5s ease;
+ul li:first-child {
+    margin-top: 15px;
 }
-ul li.active ul {
-    display: block;
-    visibility: visible;
-    height: auto;
-}
-ul li:hover ul, ul li:focus ul {
-    display: block;
-    visibility: visible;
-    height: auto;
+ul li:last-child {
+    margin-bottom: 15px;
 }
 ul li button {
-    padding-left: 20px;
-    padding-right: 20px;
-    border-color: transparent;
-    background-color: transparent;
-    transition: all .5s;
-    color: rgb( 97 109 138 );
-    letter-spacing: 1px;
-    font-size: 12px;
+    margin: 0px;
+    padding: 15px 5rem 15px 20px !important;
+    display: flex;
     width: 100%;
-    text-align: start;
-    font-weight: unset;
-    position: relative;
-}
-ul li button::before {
-    position: absolute;
-    content: '';
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-ul li .active {
+
+    background: transparent;
+    border-color: transparent;
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-radius: 5px !important;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 1px;
     cursor: pointer;
-    color: var(--background-primario);
-    border-color: var(--color-texto-terciario);
-    background-color: var(--color-info);
-}
-ul li .active i {
-    color: var(--background-primario);
+    position: relative;
     transition: all .5s;
 }
 ul li button:hover {
-    cursor: pointer;
-    color: var(--background-primario);
-    border-color: var(--color-texto-terciario);
-    background-color: var(--color-info);
-}
-ul li button:hover i {
-    color: var(--background-primario);
+    background: var(--color-info) !important;
+    color: #ffffff !important;
+    border-color: transparent;
+    transition: all .5s;
 }
 ul li button i {
-    color: rgb( 97 109 138 );
+    margin-right: 10px;
+    transition: all .5s;
+}
+ul li button:hover > i {
+    color: rgba(255,255,255,1);
+}
+ul li button span {
+    position: absolute;
+    right: 15px;
+    top: 13px;
+    padding: 3px 10px;
+    font-size: 10px;
+    border-radius: 10px;
+    background-color: var(--background-primario);
+    color: var(--color-info);
+    letter-spacing: 0px;
+    transition: all .5s;
+}
+ul li button:hover > span {
+    background-color: #FF3535;
+    color: rgba(255,255,255,1);
+}
+
+ul li .button-close:hover {
+    background: var(--color-danger) !important;
+    color: #ffffff !important;
+    border-color: transparent;
     transition: all .5s;
 }

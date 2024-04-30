@@ -66,7 +66,7 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar orden', url: 'sales/neworder', type: "btn-info"},
+      { nombre: 'Cancelar orden', url: 'sales/neworder/register', type: "btn-info"},
       { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
@@ -352,7 +352,7 @@ export class OrderComponent implements OnInit {
     this.heightAuto = "container-add container-add-open";
   }
   viewPrev() {
-    this.router.navigate(['sales/neworder']);
+    this.router.navigate(['sales/neworder/register']);
   }
 
   viewOk() {

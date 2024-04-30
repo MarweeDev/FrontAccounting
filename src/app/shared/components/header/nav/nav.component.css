@@ -29,14 +29,14 @@
     padding-right: 5px;
 }
 .col1 button {
-    padding: 5px 15px;
+    padding: 6px 20px;
     margin-left: 5px;
     letter-spacing: 1px;
     transition: all .5s;
-    font-weight: 300;
+    font-weight: 400;
 }
 .col1 button:hover {
-    padding: 5px 15px;
+    padding: 6px 20px;
     /*box-shadow: 2px 2px 3px rgba(12, 0, 56, 0.3);*/
 }
 .col1 button::before {

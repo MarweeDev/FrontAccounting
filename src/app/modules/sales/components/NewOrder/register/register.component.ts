@@ -19,7 +19,6 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private ApiOrder: OrderService) 
   {
-
   }
 
   ngOnInit(): void {

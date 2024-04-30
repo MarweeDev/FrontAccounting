@@ -41,7 +41,7 @@ export class DetailsComponent implements OnInit {
   }
 
   cancel(){
-    this.router.navigate(['sales/neworder']);
+    this.router.navigate(['sales/neworder/register']);
   }
 
 }

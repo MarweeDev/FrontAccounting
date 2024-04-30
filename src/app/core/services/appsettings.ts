@@ -13,6 +13,7 @@ export enum ServicesMethod {
     ServicesCategory = 'Category',
     ServicesProduct = 'Product',
     ServicesOrder = 'Order',
+    ServicesModule = 'Module',
 }
 
 export class ApiConfig {

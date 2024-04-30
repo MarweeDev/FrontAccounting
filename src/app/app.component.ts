@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavDTO } from './core/models/nav';
 
 @Component({
@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 
   /*Estado menu*/
   statusDisabledMain : boolean = false;
+  statusDisabledBtnMain : boolean = false;
   navDisabled : boolean = false;
 
   /*Propiedad para titulo del breadcrumbs*/
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
   //#endregion
   
   //#region Constructor
-  constructor() {
+  constructor(private cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -61,6 +62,11 @@ export class AppComponent implements OnInit {
       elementSlider.className = "slider animate__animated animate__fadeOutLeft";
       setTimeout(()=>{this.statusDisabledMain = false;},1000);
     }
+  }
+
+  OnHiddenBarAsync(){
+    this.statusDisabledMain = true;
+    this.cdRef.detectChanges();
   }
 
   OnLoadingModule() {

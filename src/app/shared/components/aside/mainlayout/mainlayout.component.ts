@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
-import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
+import { ModuleService } from 'src/app/core/services/module/module.service';
+import { OrderService } from 'src/app/core/services/order/order.service';
 
 @Component({
   selector: 'app-mainlayout',
@@ -10,53 +11,47 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 })
 export class MainlayoutComponent implements OnInit, AfterViewInit {
 
-  //#region propietari
-  ListFilter : any[] = [];
-  statusDisabled : boolean = false;
-  //#endregion
+  user : string = "ivagomal";
+  total : number = 0;
+  ListModule: any[] =[];
+  ListOrder: any[] =[];
 
-  //#region Constructor
-  constructor(private DataShared: DataSharedServicesService, private router: Router, private app: AppComponent) {
-    this.ListFilter = [
-      { id: 4, nombre: 'Disponible' },
-      { id: 5, nombre: 'Reservado' },
-      { id: 6, nombre: 'Descatado' }
-    ];
+  constructor(private router: Router, private app: AppComponent, 
+    private ApiModule: ModuleService, private ApiOrder: OrderService) {
   }
 
   ngOnInit(): void {
+    this.ApiModule.get().subscribe(data => {
+      this.ListModule = data.module;
+    });
+    this.ApiOrder.get().subscribe(data => {
+      this.ListOrder = data.result;
+      const filteredOrders = this.ListOrder.filter(x => x.nombre === "Pendiente" || x.nombre === "Debiendo");
+      this.total = filteredOrders.length;
+    });
   }
 
   ngAfterViewInit(): void {
-    let storedState = localStorage.getItem('option');
-    if (storedState) {
-      document.getElementById(storedState)?.classList.add("active");
-    }
+    
   }
-  //#endregion
 
-  //#region Methods
-  OnRouterModule(router:any, e:any){
-    localStorage.setItem('option', e.target.id);
-    this.app.navDisabled = true;
-
+  OnRouterModule(router:any){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
-    this.app.OnLoadingModule();
   }
 
-  onButtonGroupClick(e:any){
-    let clickedElement = e.target || e.srcElement;
-    if(clickedElement.nodeName === "BUTTON" ) {
-      let storedState = localStorage.getItem('option');
-      if(storedState) {
-        document.getElementById(storedState)?.classList.remove("active");
-      }
-  
-      clickedElement.className += " active";
+  // Función para generar un color aleatorio
+  getColor(usuario: string): string {
+    // Calcular un valor hash único basado en el nombre de usuario
+    let hash = 0;
+    for (let i = 0; i < usuario.length; i++) {
+      hash = usuario.charCodeAt(i) + ((hash << 5) - hash);
     }
-  
+    
+    // Convertir el valor hash en un color RGB
+    const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
+    
+    return color;
   }
-  //#endregion
 
 }

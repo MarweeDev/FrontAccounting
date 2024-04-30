@@ -1,0 +1,30 @@
+<section class="container-component">
+    <div class="card">
+        <form [formGroup]="form" (ngSubmit)="login()">
+            <label for="email">
+                <input type="text" id="email" formControlName="Email" placeholder="Usuario / Correo electronico">
+                <div class="error-message txt-danger" *ngIf="form.get('Email')?.hasError('required') && form.get('Email')?.touched">
+                    <i class="fa-solid fa-circle-exclamation txt-danger"></i> Campo requerido
+                </div>
+            </label>
+
+            <label for="password">
+                <input [type]="inputType" id="password" formControlName="Password" placeholder="Contraseña">
+                <button type="button" (click)="onVisiblePass()">
+                    <i class="fa-solid fa-eye" *ngIf="!iconBtnPass"></i>
+                    <i class="fa-regular fa-eye-slash" *ngIf="iconBtnPass"></i>
+                </button>
+                <div class="error-message txt-danger" *ngIf="form.get('Password')?.hasError('required') && form.get('Password')?.touched">
+                    <i class="fa-solid fa-circle-exclamation txt-danger"></i> Campo requerido
+                </div>
+            </label>
+            <div class="reset">
+                <a>Restablecer contraseña</a>
+            </div>
+          
+            <div class="container-btn">
+                <button type="submit" class="btn btn-info rd-1 wth-lr">Iniciar sesión</button>
+            </div>
+        </form>
+    </div>
+</section>

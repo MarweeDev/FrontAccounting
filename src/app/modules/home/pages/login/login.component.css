@@ -1,0 +1,102 @@
+.container-component {
+    position: fixed !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    z-index: 2 !important;
+    display: flex !important;
+    padding: 15rem 10px 3rem 10px !important;
+    /*background: var(--background-primario) !important;*/
+    left: 0 !important;
+    top: 0 !important;
+    justify-content: center;
+    z-index: 1000;
+}
+.container-component::before {
+    content: '';
+    background-color: var(--color-info);
+    position: fixed;
+    top: 0px; left: 0px; right: 0px;
+    height: 35%;
+    z-index: -1;
+}
+.container-component::after {
+    content: '';
+    background-image: url('src/assets/img/5130890.jpg');
+    background-size: 100% auto;
+    background-position: bottom;
+    position: fixed;
+    top: 0px; left: 0px; right: 0px;
+    height: 35%;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+.card { 
+    cursor: unset; 
+    height: fit-content; 
+    /*box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .1);*/
+    width: 20rem !important;
+    padding: 0px;
+    margin: auto;
+    margin-top: 0px;
+    position: relative;
+    background-color: transparent !important;
+    border-width: 0px;
+}
+
+.container-btn {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.reset {
+    padding: 0px 10px 5px 10px;
+    text-align: end;
+}
+.reset a {
+    font-size: 11px;
+    padding-bottom: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.btn {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.5s;
+}
+
+form label, form input {
+    width: 100%;
+}
+
+form label {
+    position: relative;
+}
+
+form label button {
+    position: absolute;
+    right: 10px;
+    top: 1px;
+    background-color: transparent;
+    border-width: 0px;
+    cursor: pointer;
+}
+form label .error-message {
+    font-size: 11px;
+    padding-bottom: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+form input {
+    margin: 10px 0px;
+    padding: 10px;
+    border: 1px solid rgba(198, 214, 234, 1);
+    background-color: rgba(234, 240, 247, 1);
+    border-radius: 5px;
+    outline: none;
+}

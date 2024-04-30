@@ -31,7 +31,7 @@ export class PayorderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar pago', url: 'sales/neworder', type: "btn-info"},
+      { nombre: 'Cancelar pago', url: 'sales/neworder/register', type: "btn-info"},
       { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
