@@ -40,6 +40,10 @@ export class DetailsComponent implements OnInit {
     return price;
   }
 
+  getPayOrder(code:any){
+    this.router.navigate(['/sales/neworder/payments', code]);
+  }
+
   cancel(){
     this.router.navigate(['sales/neworder/register']);
   }

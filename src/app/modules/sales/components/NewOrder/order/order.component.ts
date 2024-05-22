@@ -41,6 +41,8 @@ export class OrderComponent implements OnInit {
   ListOrder: OrderDTO[] =[];
   codeOrder: string = "0";
   totalProduct: string = "0";
+  codeClient: number = 0;
+  ListClient: any[] = []; 
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
@@ -66,8 +68,8 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar orden', url: 'sales/neworder/register', type: "btn-info"},
-      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
+      { nombre: 'Cancelar orden', url: 'sales/neworder/register', type: "btn-info", search: true},
+      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-companyTwo", search: true},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -145,6 +147,13 @@ export class OrderComponent implements OnInit {
         console.log('Error: ', error)
       });
     }
+
+    //Cargar lista clientes
+    this.ListClient = [
+      { id: 1, nombre: "Consumidor final (5555555555)" },
+      { id: 2, nombre: "Proveedor (22222)" }
+    ];
+    this.codeClient = this.ListClient[0].id;
     
   }
 
@@ -339,6 +348,9 @@ export class OrderComponent implements OnInit {
       this.valueCount = arrayValue.reduce((acumulador, numero) => acumulador + numero, 0);
     }
   }
+  onSelectChangeClient(event: any) {
+    this.codeClient = event.target.value;
+  }
   //#endregion
 
   OnClose() {
@@ -346,6 +358,7 @@ export class OrderComponent implements OnInit {
     this._modal_add = false;
     this.heightAuto = "container-add";
   }
+
   OnOpen() {
     this._btn_modal_add = false;
     this._modal_add = true;
@@ -364,10 +377,12 @@ export class OrderComponent implements OnInit {
           let order = new OrderDTO();
           order.codigo = this.codeOrder;
           order.id_mesa = this.idMesa;
-          order.id_usuario = 1;
-          order.id_estadoorden = 7;
-          order.id_tipopago = 1;
+          order.id_usuario = 1; //falta poner el usuario login
+          order.id_estadoorden = 7; //Estado pendiente
+          order.id_tipopago = 1; //1 = no definido
+          order.id_subtipopago = 1; //1 = no definido
           order.id_producto = item.id;
+          order.id_client = this.codeClient;
           order.cantidad = item.id_estado; //id_estado se uso para guardar la cantidad
   
           this.ListOrder.push(order);

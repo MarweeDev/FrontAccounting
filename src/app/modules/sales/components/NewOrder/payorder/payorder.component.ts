@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { OrderService } from 'src/app/core/services/order/order.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -9,18 +11,34 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 })
 export class PayorderComponent implements OnInit {
 
-  totalProduct: number = 0;
-  ListFilter : any[] = [];
+  estado : any;
+  order : any;
+  ListOrder: any[] =[];
+  totalProduct: string = "0";
+  ListTypePay : any[] = [];
+  ListSubTypePay : any[] = [];
 
   constructor(
     private app: AppComponent, 
-    private DataShared: DataSharedServicesService,) {
+    private DataShared: DataSharedServicesService, 
+    private router:Router, 
+    private url: ActivatedRoute, 
+    private ApiOrder: OrderService) {
       
-    this.ListFilter = [
+    this.ListTypePay = [
       { id: 1, nombre: 'Efectivo' },
       { id: 2, nombre: 'Tarjeta' },
       { id: 3, nombre: 'Transferencia' },
       { id: 3, nombre: 'Pendiente' }
+    ];
+
+    this.ListSubTypePay = [
+      { id: 1, nombre: 'Nequi' },
+      { id: 1, nombre: 'Daviplata' },
+      { id: 1, nombre: 'Ahorros' },
+      { id: 1, nombre: 'Corriente' },
+      { id: 1, nombre: 'Debito' },
+      { id: 1, nombre: 'Credito' }
     ];
   }
 
@@ -35,6 +53,37 @@ export class PayorderComponent implements OnInit {
       { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+
+    //Cargar orden
+    const urlSegments = this.url.snapshot.url;
+    this.order = urlSegments[urlSegments.length - 1].path;
+    this.ApiOrder.getID(this.order).subscribe(data => {
+      this.ListOrder = data.result;
+      this.estado = this.ListOrder[0].estado;
+      this.OnTotal();
+    },error => {
+      console.log('Error get: ', error)
+    });
+  }
+
+  getConverPrice(e:any){
+    var price = Number(e);
+    return price;
+  }
+
+  OnTotal(){
+    let arrayValue : number[] = [];
+    for (var i=0; i<this.ListOrder.length; i++) {
+      let price = Number(this.ListOrder[i].precio?.toString().replace('$','').replace('.','')) * Number(this.ListOrder[i]?.cantidad);
+      arrayValue.push(price);
+    } 
+    this.totalProduct = Number(arrayValue.reduce((acumulador, numero) => acumulador + numero, 0)).toString();
+    this.totalProduct = this.OnConvertNumberPrice(this.totalProduct);
+  }
+
+  OnConvertNumberPrice(valor:any): string{
+    let convertTotal = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Number(valor));
+    return convertTotal;
   }
 
   viewPrev() {
@@ -42,6 +91,7 @@ export class PayorderComponent implements OnInit {
 
   viewOk() {
   }
-  viewCancel() {
+  viewCancel(){
+    this.router.navigate(['sales/neworder/register']);
   }
 }

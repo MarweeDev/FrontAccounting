@@ -77,39 +77,42 @@
                     <span class="danger">{{valueCount}}</span>
                     <i class="fa-solid fa-basket-shopping"></i>
                 </button>
-                <div class="modal-add animate__bounceIn" *ngIf="_modal_add">
-                    <button type="button" class="btn btn-info rd-4 btn-mini btn-i" (click)="OnClose()">
-                        <i class="fa-solid fa-minimize"></i>
+                <div class="modal-add animate__animated animate__slideInRight" *ngIf="_modal_add">
+                    <button type="button" class="btn btn-info rd-4 btn-mini btn-i" style="display: none;" (click)="OnClose()">
+                        <i class="fa-solid fa-minus"></i>
                     </button>
                     <div class="header">
                         <div class="row">
                             <div class="col">
-                                
+                                <h5>Código de orden:</h5>
                             </div>
                             <div class="col">
-                                <h3>Orden</h3>
                                 <h5>
                                     <small>{{codeOrder}}</small>
                                 </h5>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col">
-                                <h3>{{titleOrder}}</h3>
-                                <h5>
-                                    <small>#{{numberMesa}}</small>
-                                </h5>
+                                <select (change)="onSelectChangeClient($event)">
+                                    <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre}}</option>
+                                </select>
+                                <button type="button" class="btn btn-info rd-4" title="Nuevo Cliente">
+                                    <span class="fa-solid fa-user-plus"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div class="content">
                         <div class="grid rd-2">
                             <table>
-                                <thead>
+                                <!--<thead>
                                     <tr>
-                                        <th>Producto</th>
-                                        <th>Precio</th>
-                                        <th>Cantidad</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
-                                </thead>
+                                </thead>-->
                                 <tbody>
                                     <tr *ngFor="let item of ListProduct">
                                         <td>{{item.nombre}}</td>
@@ -128,30 +131,31 @@
                             </table>
                         </div>
                     </div>
-                    <div class="footer">
-                        <div class="row">
-                            <div class="col">
-                                Total
-                            </div>
-                            <div class="col">
-                                {{totalProduct}}
-                            </div>
-                        </div>
-                        <div class="action-check">
-                            <label class="btn rd-4" id="label-pay" (click)="OnValidateCheck()" for="input-pay">
-                                <input type="checkbox" id="input-pay">
-                                <i id="icon-pay" class="fa-regular fa-circle-check"></i>
-                                Adelantar pago
-                            </label>
-                        </div>
-                    </div>
                     <div class="action">
-                        <div class="btn-order">
+                        <div class="footer">
                             <div class="row">
                                 <div class="col">
-                                    <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
+                                    Total
                                 </div>
                                 <div class="col">
+                                    {{totalProduct}}
+                                </div>
+                            </div>
+                            <div class="action-check">
+                                <label class="btn rd-4" id="label-pay" (click)="OnValidateCheck()" for="input-pay">
+                                    <input type="checkbox" id="input-pay">
+                                    <i id="icon-pay" class="fa-regular fa-circle-check"></i>
+                                    Adelantar pago
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="btn-order">
+                            <div class="row row2">
+                                <div class="col col2">
+                                    <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
+                                </div>
+                                <div class="col col2">
                                     <button type="button" class="btn btn-success rd-4" *ngIf="btn_pay" (click)="viewOk()">Registrar orden</button>
                                     <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">Pagar orden</button>
                                 </div>

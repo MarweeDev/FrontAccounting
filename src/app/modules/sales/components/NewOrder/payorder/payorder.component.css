@@ -50,24 +50,25 @@
     border-radius: 10px;
     padding: 3rem !important;
     margin: 0px;
-    max-height: calc(53vh - 4rem);
+    /*max-height: calc(53vh - 4rem);*/
     position: relative;
-    overflow: auto;
+    /*overflow: auto;*/
 }
 
 .content .container-header .header-float {
     width: fit-content;
     text-align: center;
+    float: right;
 }
 .content .container-header .header-float h1 {
     padding: 0px;
     margin: 0px;
 }
 .content .container-header .float {
-    float: right;
-    margin-top: -15px;
+    /*float: right;*/
+    /*margin-top: -15px;*/
     font-size: 12px;
-    text-align: end;
+    text-align: start;
 }
 
 .content .container-table {
@@ -130,13 +131,14 @@
     padding: 3rem !important;
     padding-top: 0rem !important;
     margin: 0px;
-    max-width: fit-content;
+    max-width: min-content;
 }
 .content .row-init .col-final select {
     color: rgb( 97 109 138 );
     border-color: var(--color-texto-terciario);
     width: 20rem;
     background-color: rgba(255, 255, 255, 1);
+    margin-top: 10px;
 }
 @media screen and (max-width: 800px ) {
     .content .row-init .col-final {

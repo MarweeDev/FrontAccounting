@@ -9,7 +9,37 @@
     <!--Contenido productos-->
     <div class="content">
         <div class="container-head">
-            <p class="count-register">Total <strong>{{ListOrder.length}}</strong></p>
+            <p class="count-register">Resultados <strong>{{ListOrder.length}}</strong></p>
+            <div class="container-pag">
+                <div class="container-select-filter">
+                    <select id="selectCount" class="select-calendar"  (change)="onSelectInit()">
+                        <option value="10">Hoy</option>
+                        <option value="20">Ultima semana</option>
+                        <option value="50">Ultimo mes</option>
+                    </select>
+                </div>
+
+                <div class="container-select-filter">
+                    <select id="selectCount" class="select-filter"  (change)="onSelectInit()">
+                        <option value="10">Pendiente</option>
+                        <option value="20">Debiendo</option>
+                        <option value="50">Cancelada</option>
+                        <option value="50">Todas</option>
+                    </select>
+                </div>
+
+                <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                <p>{{currentPage}} / {{TotalPag}}</p>
+                <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+                
+                <div>
+                    <select id="selectCount" (change)="onSelectInit()">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="container-table">
 
@@ -31,11 +61,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr (click)="getDetailsOrder(item.codigo)" *ngFor="let item of ListOrder; let i = index" 
+                    <tr (click)="getDetailsOrder(item.codigo)" *ngFor="let item of FilterListOrder; let i = index" 
                         [class.not-pending-tr]="item.nombre == 'Cancelada'"
                         [class.success-tr]="item.nombre == 'Pagada'">
 
-                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">{{i + 1}}</td>
+                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">
+                            {{ (currentPage - 1) * itemsPorPagina + i + 1 }}
+                        </td>
                         <td class="td">
                             <div class="circle" [title]="item.usuario" [style.background-color]="getColor(item.usuario)">
                                 <span>{{item.usuario[0] | uppercase}}</span>
@@ -44,7 +76,7 @@
                         </td>
                         <td>{{item.codigo}}</td>
                         <td>{{item.nombre}}</td>
-                        <td>Particular</td>
+                        <td>{{item.cliente}}</td>
                         <td>
                             <!--{{ item.fecha.split(' ')[0] }}
                             <br>

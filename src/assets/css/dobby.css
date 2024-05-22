@@ -203,6 +203,15 @@ select {
   color: rgb( 97 109 138 );
   border: 1px solid var(--color-texto-terciario);
 }
+.select-filter {
+  background-image: url('../img/dobby/sliders-solid.svg') !important;
+  background-size: 10px 15px;
+}
+.select-calendar {
+  background-image: url('../img/dobby/calendar-days-regular.svg') !important;
+  background-size: 10px 15px;
+  text-align: end;
+}
 select::-ms-expand {
   display: none;
 }

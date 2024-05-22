@@ -9,4 +9,6 @@ export class OrderDTO {
   id_tipopago?: number | null;
   id_producto?: number | null;
   cantidad?: number | null;
+  id_client?: number | null;
+  id_subtipopago?: number | null;
 }

@@ -4,7 +4,7 @@
             <i *ngIf="item.icon" [className]="item.icon"></i>
         </button>
     </div>
-    <div class="col2">
+    <div class="col2" *ngIf="listNav[0]?.search">
         <label for="searchId">
             <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
             <span>

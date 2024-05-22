@@ -12,6 +12,10 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 export class RegisterComponent implements OnInit {
 
   ListOrder: any[] =[];
+  FilterListOrder : any[] = [];
+  currentPage: number = 1;
+  itemsPorPagina: number = 10;
+  TotalPag : number = 0;
 
   constructor(
     private app: AppComponent, 
@@ -24,13 +28,45 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.ApiOrder.get().subscribe(data => {
       this.ListOrder = data.result;
+
+      this.onSelectInit();
     });
+  }
+
+  onSelectInit() {
+    let element :any = document.getElementById('selectCount');
+    this.TotalPag = Math.ceil(this.ListOrder.length / element.value);
+    this.itemsPorPagina = element.value;
+    this.FilterListOrder = this.ListOrder.slice(0, this.itemsPorPagina);
+
+    if (this.currentPage > this.TotalPag) {
+      this.currentPage = 1;
+
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.TotalPag) {
+      this.currentPage++;
+      const startIndex = (this.currentPage - 1) * this.itemsPorPagina;
+      const endIndex = startIndex + this.itemsPorPagina;
+      this.FilterListOrder = this.ListOrder.slice(startIndex, endIndex);
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      const startIndex = (this.currentPage - 1) * this.itemsPorPagina;
+      const endIndex = startIndex + this.itemsPorPagina;
+      this.FilterListOrder = this.ListOrder.slice(startIndex, endIndex);
+    }
   }
 
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
+      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo", search: true},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
   }

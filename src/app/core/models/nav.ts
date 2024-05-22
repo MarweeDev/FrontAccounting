@@ -3,4 +3,5 @@ export class NavDTO {
     url?: string;
     icon?: string;
     type?: string;
+    search?: boolean;
 }

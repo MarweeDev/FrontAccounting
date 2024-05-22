@@ -33,6 +33,7 @@
     border: 1px solid var(--color-texto-terciario);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 1);
+    position: relative;
 }
 .container-head .count-register {
     font-size: 10px;
@@ -47,6 +48,47 @@
     color: var(--color-info);
     letter-spacing: 0px;
 }
+select {
+    padding: 8px 20px !important;
+    padding-right: calc(1rem * 3) !important;
+    border-color: transparent !important;
+}
+.container-select-filter {
+    margin-right: 10px;
+    border-right: 1px solid var(--color-texto-terciario);
+}
+.container-select-filter select {
+    padding: 9.5px 20px !important;
+    padding-right: calc(1rem * 3) !important;
+    font-size: x-small !important;
+    letter-spacing: 1px;
+}
+
+.container-head .container-pag {
+    display: flex;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+.container-head .container-pag button {
+    padding: 0px 7px;
+    border-width: 1px;
+    border-color: transparent;
+    background-color: transparent;
+    margin: 6px 6px;
+    font-size: 10px;
+}
+.container-head .container-pag button:hover {
+    border-style: solid;
+    border-color: var(--color-texto-terciario);
+    background-color: var(--background-primario);
+    cursor: pointer;
+}
+.container-head .container-pag p {
+    font-size: 12px;
+    padding: 10px;
+}
+
 
 .content .container-table {
     padding: 10px;
