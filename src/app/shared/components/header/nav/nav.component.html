@@ -1,6 +1,6 @@
 <section class="container" (click)="OnHiddenBar()">
     <div class="col1">
-        <button type="button" [className]="'btn rd-4 ' + item.type" *ngFor="let item of listNav" [title]="item.nombre" [routerLink]="[item.url]">
+        <button type="button" [className]="'btn rd-2 ' + item.type" *ngFor="let item of listNav" [title]="item.nombre" [routerLink]="[item.url]">
             <i *ngIf="item.icon" [className]="item.icon"></i>
         </button>
     </div>

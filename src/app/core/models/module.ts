@@ -7,4 +7,5 @@ export class ModuleDTO {
     fecha_creacion?: Date;
     fecha_actualizacion?: Date;
     icono?: string;
+    position_module?: number;
   }

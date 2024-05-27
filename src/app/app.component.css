@@ -6,15 +6,6 @@
     transition: all 0.5s;
 }
 
-.content {
-    height: calc(100vh - 150px);
-    position: relative;
-    justify-content: center;
-    padding: 20px 12px 10px 12px;
-    margin-top: -14px;
-}
-
-
 .container-loader-module {
     position: fixed;
     top: 0; bottom: 0;

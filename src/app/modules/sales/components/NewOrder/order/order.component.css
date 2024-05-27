@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    
 }
 
 
@@ -216,7 +217,7 @@
     margin: 5px;
     /*border: 1px solid var(--color-texto-terciario);*/
     border-radius: 5px;
-    width: 46px;
+    width: 50px;
     background-color: rgba(255, 255, 255, 1);
 }
 

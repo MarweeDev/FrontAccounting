@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
@@ -17,27 +18,80 @@ export class RegisterComponent implements OnInit {
   itemsPorPagina: number = 10;
   TotalPag : number = 0;
 
+  todayStr ?: string;
+  weekRange ?: string;
+  monthRange ?: string;
+  yearRange ?: string;
+
+  disabledDateCalendar: boolean = false;
+  DateMaxInput ?: string;
+
   constructor(
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
     private router: Router,
     private ApiOrder: OrderService) 
   {
+    let today = new Date();
+    this.DateMaxInput = this.formatDate(today);
   }
 
   ngOnInit(): void {
-    this.ApiOrder.get().subscribe(data => {
-      this.ListOrder = data.result;
+    this.onLoadSelectDate();
+  }
 
-      this.onSelectInit();
-    });
+  ngAfterContentInit():void {
+    //Opciones para el nav
+    this.app.listNav = [
+      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo", search: true},
+    ];
+    this.DataShared.OnSetNav(this.app.listNav);
+
+    this.onLoadOrder();
+  }
+
+  onLoadOrder() {
+    debugger;
+    let elementDate :any = document.getElementById('selectDate');
+    let elementInputDate :any = document.getElementById('selectDateCalendar');
+    let elementFilter :any = document.getElementById('selectFilter');
+    let DateEle;
+
+    if (elementDate.value == 'Hoy') {
+      let today = new Date();
+      DateEle = this.formatDate(today);
+      this.disabledDateCalendar = false;
+    }
+    else if (elementDate.value == 'personalizada') {
+      DateEle = elementInputDate?.value;
+      this.disabledDateCalendar = true;
+    }
+    else {
+      DateEle = elementDate.value;
+      this.disabledDateCalendar = false;
+    }
+
+    const orderData: OrderDTO = {
+      id_estadoorden: elementFilter.value,
+      fecha: DateEle
+    };
+    
+    if (DateEle != undefined) {
+      this.ApiOrder.getFind(orderData).subscribe(data => {
+        this.ListOrder = data.result;
+  
+        this.onSelectInit();
+      },error => {
+        console.log('Error get: ', error)
+      });
+    }
   }
 
   onSelectInit() {
     let element :any = document.getElementById('selectCount');
-    this.TotalPag = Math.ceil(this.ListOrder.length / element.value);
+    this.TotalPag = Math.ceil(this.ListOrder?.length / element.value);
     this.itemsPorPagina = element.value;
-    this.FilterListOrder = this.ListOrder.slice(0, this.itemsPorPagina);
+    this.FilterListOrder = this.ListOrder?.slice(0, this.itemsPorPagina);
 
     if (this.currentPage > this.TotalPag) {
       this.currentPage = 1;
@@ -61,14 +115,6 @@ export class RegisterComponent implements OnInit {
       const endIndex = startIndex + this.itemsPorPagina;
       this.FilterListOrder = this.ListOrder.slice(startIndex, endIndex);
     }
-  }
-
-  ngAfterContentInit():void {
-    //Opciones para el nav
-    this.app.listNav = [
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo", search: true},
-    ];
-    this.DataShared.OnSetNav(this.app.listNav);
   }
 
   formatDateTime(dateTime: string): { fecha: string, hora: string } {
@@ -98,6 +144,39 @@ export class RegisterComponent implements OnInit {
 
   getPayOrder(code:any){
     this.router.navigate(['/sales/neworder/payments', code]);
+  }
+
+
+  //Select fecha
+  // Función para formatear la fecha en formato YYYY-MM-DD
+  formatDate(date:Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  onLoadSelectDate() {
+    const today = new Date();
+
+    // Fecha de hace una semana
+    const lastWeek = new Date();
+    lastWeek.setDate(today.getDate() - 7);
+    const lastWeekStr = this.formatDate(lastWeek);
+    
+    // Fecha de hace un mes
+    const lastMonth = new Date();
+    lastMonth.setMonth(today.getMonth() - 1);
+    const lastMonthStr = this.formatDate(lastMonth);
+
+    const lastYear = new Date();
+    lastYear.setFullYear(today.getFullYear() - 1);
+    const lastYearStr = this.formatDate(lastYear);
+    
+    this.todayStr = this.formatDate(today);
+    this.weekRange = `${lastWeekStr}`;
+    this.monthRange = `${lastMonthStr}`;
+    this.yearRange = `${lastYearStr}`;
   }
 
 }

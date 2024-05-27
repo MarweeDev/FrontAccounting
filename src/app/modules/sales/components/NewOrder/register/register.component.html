@@ -9,27 +9,31 @@
     <!--Contenido productos-->
     <div class="content">
         <div class="container-head">
-            <p class="count-register">Resultados <strong>{{ListOrder.length}}</strong></p>
+            <p class="count-register">Resultados <strong>{{ListOrder ? ListOrder.length : 0}}</strong></p>
             <div class="container-pag">
                 <div class="container-select-filter">
-                    <select id="selectCount" class="select-calendar"  (change)="onSelectInit()">
-                        <option value="10">Hoy</option>
-                        <option value="20">Ultima semana</option>
-                        <option value="50">Ultimo mes</option>
+                    <select id="selectDate" class="select-calendar" (change)="onLoadOrder()">
+                        <option [value]="todayStr" selected>Hoy</option>
+                        <option [value]="weekRange">Ultima semana</option>
+                        <option [value]="monthRange">Ultimo mes</option>
+                        <option value="personalizada">Personalizada</option>
                     </select>
+                    <div class="container-select-filter-modal" *ngIf="disabledDateCalendar">
+                        <input type="date" [max]="DateMaxInput" name="" id="selectDateCalendar" (change)="onLoadOrder()">
+                    </div>
                 </div>
 
                 <div class="container-select-filter">
-                    <select id="selectCount" class="select-filter"  (change)="onSelectInit()">
-                        <option value="10">Pendiente</option>
-                        <option value="20">Debiendo</option>
-                        <option value="50">Cancelada</option>
-                        <option value="50">Todas</option>
+                    <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
+                        <option value="7" selected>Pendiente</option>
+                        <option value="10">Debiendo</option>
+                        <option value="8">Pagada</option>
+                        <option value="9">Cancelada</option>
                     </select>
                 </div>
 
                 <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
-                <p>{{currentPage}} / {{TotalPag}}</p>
+                <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
                 <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
                 
                 <div>

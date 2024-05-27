@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { ApiConfig, HttpMethod, ServicesMethod } from '../appsettings';
 import { OrderDTO } from '../../models/order';
@@ -19,6 +19,17 @@ export class OrderService {
 
   get(): Observable<any> {
     return this.http.get(this.ApiURL + HttpMethod.GET + "All");
+  }
+
+  getFind(data: any): Observable<any> {
+    let params = new HttpParams();
+    for (const key in data) {
+      if (data.hasOwnProperty(key) && data[key] !== null && data[key] !== undefined) {
+        params = params.append(key, data[key].toString());
+      }
+    }
+    
+    return this.http.get(this.ApiURL + HttpMethod.GET + "Find", {params});
   }
 
   post(data: OrderDTO[]): Observable<OrderDTO[]>{

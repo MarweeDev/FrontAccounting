@@ -30,6 +30,14 @@ body {
     background-color: var(--background-primario);
 }
 
+.content {
+    /*height: calc(100vh - 150px);*/
+    position: relative;
+    justify-content: center;
+    padding: 20px 12px 10px 12px;
+    margin-top: -14px;
+}
+
 .container-component {
     /*padding-left: 5%;*/
 }

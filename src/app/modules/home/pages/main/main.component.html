@@ -1,0 +1,49 @@
+<section class="container-component">
+    <div class="content-header">
+        <h1>
+            <strong class="name-company">Marwee<span class="companyTwo rd-4">Contable</span></strong> 
+            fue diseñado para optimizar la contabilidad de tu negocio
+        </h1>
+        <h2>
+            Gestiona tus finanzas, ventas, inventario y reportes 
+            en un solo lugar, con precisión y eficiencia
+        </h2>
+    </div>
+    <div class="content-body">
+
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" class="shape-fill"></path>
+        </svg>
+        
+        <div class="separator"></div>
+
+        <div class="row">
+            <div class="col col-a">
+                <div class="companyTwo rd-2">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+            </div>
+            <div class="col col-b">
+                <h3 class="txt-companyTwo">
+                    Módulos disponibles
+                </h3>
+                <h4>
+                    Seleccione el módulo requerido
+                </h4>
+            </div>
+        </div>
+
+        <div class="container-card">
+            <div class="card border-info" *ngFor="let item of ListModule; let i = index" (click)="OnRouterModule(item.ruta)">
+                <div class="icon-card">
+                    <i [className]="item.icono"></i>
+                </div>
+                <h1>{{item.modulo}}</h1>
+            </div>
+        </div>
+
+    </div>
+    <div class="content-footer">
+
+    </div>
+</section>
