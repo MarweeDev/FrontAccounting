@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { ModuleService } from 'src/app/core/services/module/module.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
@@ -13,7 +13,9 @@ export class MainComponent implements OnInit {
 
   ListModule: any[] =[];
 
-  constructor(private app: AppComponent,
+  constructor(
+    private route : ActivatedRoute,
+    private app: AppComponent,
     private router: Router,
     private ApiModule: ModuleService, 
     private DataShared: DataSharedServicesService, 
@@ -33,10 +35,18 @@ export class MainComponent implements OnInit {
     this.app.listNav = [
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+
+    //Cargar breadcrumb
+    this.route.data.subscribe(data => {
+      this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
+    });
   }
 
-  OnRouterModule(router:any){
+  OnRouterModule(router:any, id:any=null){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
+    this.app.OnLoadingModule();
+
+    localStorage.setItem("nav_left", id ? id : '');
   }
 }

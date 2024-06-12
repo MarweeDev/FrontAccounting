@@ -99,16 +99,44 @@ body #content {
 }
 .content-body .container-card .card .icon-card {
     margin: auto;
-    width: 50px;
-    height: 50px;
+    /*width: 50px;
+    height: 50px;*/
     padding: 10px 0px;
     margin-bottom: 10px;
     text-align: center;
     font-size: x-large;
 }
 .content-body .container-card .card h1 {
-    font-weight: 300;
+    font-weight: 600;
     letter-spacing: 1px;
     font-size: .8rem;
 }
 
+/*Iconos*/
+.content-body .container-card .card .icon-card .fa-solid::before {
+    content: "" !important;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+}
+.content-body .container-card .card .icon-card .fa-store::before {
+    background-image: url("../../../../../assets/img/dobby/swipe-card.png");
+}
+.content-body .container-card .card .icon-card .fa-bag-shopping::before {
+    background-image: url("../../../../../assets/img/dobby/box.png");
+}
+.content-body .container-card .card .icon-card .fa-clipboard-list::before {
+    background-image: url("../../../../../assets/img/dobby/inventory.png");
+}
+.content-body .container-card .card .icon-card .fa-chart-simple::before {
+    background-image: url("../../../../../assets/img/dobby/reports.png");
+}
+.content-body .container-card .card .icon-card .fa-sliders::before {
+    background-image: url("../../../../../assets/img/dobby/settings.png");
+}
+.content-body .container-card .card .icon-card .fa-code::before {
+    background-image: url("../../../../../assets/img/dobby/dev.png");
+}

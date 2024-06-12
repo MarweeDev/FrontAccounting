@@ -7,6 +7,14 @@
             <option value="0">Mostrar todos</option>
             <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
         </select>
+        <div class="container-search">
+            <label for="searchId">
+                <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+                <span>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </label>
+        </div>
     </div>
 
     <br>
@@ -17,10 +25,10 @@
             <!--Contenido productos-->
             <div class="content">
 
-                <!--Producto-->
-                <div class="card" (contextmenu)="mostrarMenu($event)" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
+                <!--Producto--> <!--(contextmenu)="mostrarMenu($event)"-->
+                <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
                     <div class="card-title-info">
-                        <i class="fa-solid fa-fire txt-companyTwo"></i>
+                        <i class="fa-solid fa-fire txt-warning"></i>
                         <div class="container-info">{{item.descripcion}}</div>
                     </div>
                     <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">

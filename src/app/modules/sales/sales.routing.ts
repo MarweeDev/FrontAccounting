@@ -18,16 +18,16 @@ import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit
 
 const routes: Routes = [
     //register
-    { path: 'neworder/register', component: RegisterComponent, title: 'Registros de ordenes' },
-    { path: 'neworder/register/details/:id', component: DetailsComponent, title: 'Consultando orden' },
+    { path: 'neworder/register', component: RegisterComponent, title: 'Registros de ordenes', data: {breadcrumb: 'Ventas/Ordenes'} },
+    { path: 'neworder/register/details/:id', component: DetailsComponent, title: 'Consultando orden', data: {breadcrumb: ''} },
 
     //order
-    { path: 'neworder/order', component: OrderComponent, title: 'Generando orden' },
-    { path: 'neworder/order/add', component: AddOrderComponent, title: 'Proceso de creación' },
-    { path: 'neworder/order/edit/:id', component: EditOrderComponent, title: 'Proceso de edición' },
+    { path: 'neworder/order', component: OrderComponent, title: 'Generando orden', data: {breadcrumb: 'Ventas/Ordenes/Registro'} },
+    { path: 'neworder/order/add', component: AddOrderComponent, title: 'Proceso de creación', data: {breadcrumb: ''} },
+    { path: 'neworder/order/edit/:id', component: EditOrderComponent, title: 'Proceso de edición', data: {breadcrumb: ''} },
 
     //pay
-    { path: 'neworder/payments/:id', component: PayorderComponent, title: 'Realizando pago' },
+    { path: 'neworder/payments/:id', component: PayorderComponent, title: 'Realizando pago', data: {breadcrumb: 'Ventas/Ordenes/Pago'} },
     { path: '**', redirectTo: 'authorization/login' }
 ];
 

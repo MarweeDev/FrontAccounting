@@ -3,7 +3,7 @@ import { ProductDTO } from '../../../../../core/models/product';
 import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
 import { AppComponent } from 'src/app/app.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from 'src/app/core/services/category/category.service'
 import { ProductService } from 'src/app/core/services/product/product.service';
 import { OrderDTO } from 'src/app/core/models/order';
@@ -50,6 +50,7 @@ export class OrderComponent implements OnInit {
   //#endregion
 
   constructor( 
+    private route : ActivatedRoute,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
     private router: Router,
@@ -68,14 +69,23 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar orden', url: 'sales/neworder/register', type: "btn-info", search: true},
-      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-companyTwo", search: true},
+      { nombre: 'Cancelar orden', url: 'sales/neworder/register', type: "btn-primary"},
+      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+
+    //Cargar breadcrumb
+    this.route.data.subscribe(data => {
+      this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
+    });
 
     this.ApiOrder.getCodeOrder().subscribe(data => {
       this.codeOrder = data.status;
     });
+  }
+
+  OnSearchChange(search: string) {
+    this.DataShared.OnSet(search);
   }
 
   OnValidateCheck() {
@@ -410,8 +420,6 @@ export class OrderComponent implements OnInit {
 
   viewPay() {
     this.router.navigate(['/sales/activeservices']);
-    localStorage.setItem("servicesPendingDisabled", "false");
-    localStorage.setItem("PayPendingDisabled", "true");
   }
   viewCancel() {
     //this.VisibleAlert = true;

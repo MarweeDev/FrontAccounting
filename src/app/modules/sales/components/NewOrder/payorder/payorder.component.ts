@@ -19,6 +19,7 @@ export class PayorderComponent implements OnInit {
   ListSubTypePay : any[] = [];
 
   constructor(
+    private route : ActivatedRoute,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService, 
     private router:Router, 
@@ -49,10 +50,15 @@ export class PayorderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar pago', url: 'sales/neworder/register', type: "btn-info"},
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo"},
+      { nombre: 'Cancelar pago', url: 'sales/neworder/register', type: "btn-primary"},
+      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+
+    //Cargar breadcrumb
+    this.route.data.subscribe(data => {
+      this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
+    });
 
     //Cargar orden
     const urlSegments = this.url.snapshot.url;

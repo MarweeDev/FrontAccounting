@@ -25,7 +25,7 @@
 .header { 
     grid-area: header; 
     display: flex; 
-    padding: 25px 10px;
+    padding: 20px 10px 15px 10px;
     border-bottom: 1px solid var(--color-texto-terciario);
     margin: 0px 15px;
 }
@@ -48,15 +48,16 @@
     color: rgb(255, 255, 255);
 }
 .header .circle-name {
-    padding: 1px 1px 1px 10px;
+    padding: 4px 1px 1px 10px;
     margin: 0px;
-    font-size: smaller;
-    text-transform: uppercase;
+    font-size: 12px;
+    /* text-transform: uppercase; */
     letter-spacing: 2px;
     box-sizing: border-box;
+    text-transform: capitalize;
 }
 .header .circle-name small {
-    font-size: xx-small;
+    font-size: 10px;
 }
 
 ul {
@@ -76,7 +77,7 @@ ul li:last-child {
 }
 ul li button {
     margin: 0px;
-    padding: 15px 5rem 15px 20px !important;
+    padding: 10px 5rem 10px 20px !important;
     display: flex;
     width: 100%;
 
@@ -85,41 +86,70 @@ ul li button {
     border-style: solid !important;
     border-width: 1px !important;
     border-radius: 5px !important;
-    font-weight: 500;
-    font-size: 12px;
-    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 1.5px;
     cursor: pointer;
     position: relative;
-    transition: all .5s;
+    transition: all .6s;
 }
 ul li button:hover {
-    background: var(--color-info) !important;
+    background: var(--color-primary) !important;
     color: #ffffff !important;
     border-color: transparent;
     transition: all .5s;
 }
 ul li button i {
     margin-right: 10px;
+    margin-top: -2px;
     transition: all .5s;
+    font-size: initial;
 }
 ul li button:hover > i {
     color: rgba(255,255,255,1);
+    transform: rotate(18deg) scale(1.5,1.5);
+    transition: all .5s;
+    animation-name: rotateIcon;
+    animation-duration: 1s;
 }
+@keyframes rotateIcon {
+    0%   {transform: rotate(0deg) scale(1,1);}
+    100% {transform: rotate(18deg) scale(1.5,1.5);}
+  }
+
+/*Active*/
+ul li .active {
+    background: var(--color-primary) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    transition: all .5s !important;
+}
+ul li .active > i {
+    color: rgba(255,255,255,1) !important;
+    transform: rotate(18deg) scale(1.5,1.5) !important;
+    transition: all .5s !important;
+    animation-name: rotateIcon !important;
+    animation-duration: 1s !important;
+}
+/*Active end*/
+
+
 ul li button span {
     position: absolute;
     right: 15px;
-    top: 13px;
+    top: 8px;
     padding: 3px 10px;
     font-size: 10px;
     border-radius: 10px;
     background-color: var(--background-primario);
-    color: var(--color-info);
+    color: var(--color-primary);
     letter-spacing: 0px;
     transition: all .5s;
 }
 ul li button:hover > span {
     background-color: #FF3535;
     color: rgba(255,255,255,1);
+    transform: rotate(0deg);
 }
 
 ul li .button-close:hover {
@@ -127,4 +157,45 @@ ul li .button-close:hover {
     color: #ffffff !important;
     border-color: transparent;
     transition: all .5s;
+}
+ul li .button-close i {
+    transform: rotate(180deg);
+}
+ul li .button-close:hover > i {
+    transform: rotate(180deg) !important;
+}
+
+/*Iconos modulos*/
+ul li button .fa-solid::before {
+    content: "" !important;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+}
+ul li button .fa-store::before {
+    background-image: url("../../../../../assets/img/dobby/swipe-card.png");
+}
+ul li button .fa-bag-shopping::before {
+    background-image: url("../../../../../assets/img/dobby/box.png");
+}
+ul li button .fa-clipboard-list::before {
+    background-image: url("../../../../../assets/img/dobby/inventory.png");
+}
+ul li button .fa-chart-simple::before {
+    background-image: url("../../../../../assets/img/dobby/reports.png");
+}
+ul li button .fa-sliders::before {
+    background-image: url("../../../../../assets/img/dobby/settings.png");
+}
+ul li button .fa-code::before {
+    background-image: url("../../../../../assets/img/dobby/dev.png");
+}
+ul li button .fa-right-from-bracket::before {
+    background-image: url("../../../../../assets/img/dobby/logout.png");
+}
+ul li button .fa-gear::before {
+    background-image: url("../../../../../assets/img/dobby/gear.png");
 }

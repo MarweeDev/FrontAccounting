@@ -13,6 +13,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
 
   user : string = "ivagomal";
   total : number = 0;
+  activeButtonId: number | null = null;
   ListModule: any[] =[];
   ListOrder: any[] =[];
 
@@ -24,20 +25,24 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     this.ApiModule.get().subscribe(data => {
       this.ListModule = data.module;
     });
-    this.ApiOrder.get().subscribe(data => {
-      this.ListOrder = data.result;
-      const filteredOrders = this.ListOrder.filter(x => x.nombre === "Pendiente" || x.nombre === "Debiendo");
-      this.total = filteredOrders.length;
-    });
+
+    const savedId = localStorage.getItem("nav_left");
+    if (savedId) {
+      this.activeButtonId = parseInt(savedId, 10);
+    }
   }
 
   ngAfterViewInit(): void {
     
   }
 
-  OnRouterModule(router:any){
+  OnRouterModule(router:any, id:any=null){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
+    this.app.OnLoadingModule();
+
+    this.activeButtonId = id;
+    localStorage.setItem("nav_left", id ? id : '');
   }
 
   // Función para generar un color aleatorio

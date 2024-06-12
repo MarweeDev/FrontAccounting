@@ -1,6 +1,6 @@
 .slider {
     position: fixed;
-    top: 3rem;
+    top: 0rem;
     bottom: 0px;
     z-index: 3;
     transition: all 0.5s;

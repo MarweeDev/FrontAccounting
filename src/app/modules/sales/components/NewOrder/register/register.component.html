@@ -47,7 +47,13 @@
         </div>
         <div class="container-table">
 
-            <table>
+            <div class="message-not-result" *ngIf="ListOrder === undefined || ListOrder.length === 0">
+                <img src="../../../../../../assets/img/dobby/no-results.png" alt="Image not found" />
+                <h3>No se encontraron ordenes</h3>
+                <h5>Reintentar con nuevos filtros para obtener resultados</h5>
+            </div>
+
+            <table *ngIf="ListOrder ? ListOrder.length > 0 : 0">
                 <thead>
                     <tr>
                         <th>
@@ -60,7 +66,6 @@
                         <th>Fecha/Hora</th>
                         <th>Productos</th>
                         <th>Total</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>

@@ -1,11 +1,15 @@
 :root {
+  --color-primary: #6C80C1;
+  --color-secondary: #FF006E;
+
   --color-success: #45E936;
   --color-danger: #FF3535;
   --color-warning: #FFB800;
-  --color-info: #6C80C1;
+  --color-info: #3A86FF;
   --color-info-dark: #6568c9;
   --color-company: rgba(255, 51, 0, 1);
   --color-company-two: #fd8060;
+  --color-company-three: #ffc637;
 }
 
 
@@ -16,6 +20,7 @@
 .info { background: var(--color-info) !important; color: #ffffff !important }
 .company { background: var(--color-company) !important; color: #ffffff !important }
 .companyTwo { background: var(--color-company-two) !important; color: #ffffff !important }
+.companyThree { background: var(--color-company-three) !important; color: #ffffff !important }
 
 /*texto alert*/
 .txt-success { color: var(--color-success) !important; }
@@ -24,6 +29,7 @@
 .txt-info { color: var(--color-info) !important; }
 .txt-company { color: var(--color-company) !important; }
 .txt-companyTwo { color: var(--color-company-two) !important; }
+.txt-companyThree { color: var(--color-company-three) !important; }
 
 /*Botones global*/
 .btn {
@@ -37,6 +43,22 @@
 .btn-span i, .btn-i i { color: #ffffff !important; }
 
 /*Botones alert*/
+.btn-primary { 
+  background: var(--color-primary) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-primary);
+  transition: all .5s;
+}
+.btn-primary:hover { background: #7e91ce !important; cursor: pointer;}
+
+.btn-secondary { 
+  background: var(--color-secondary) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-secondary);
+  transition: all .5s;
+}
+.btn-secondary:hover { background: #ff2d88 !important; cursor: pointer;}
+
 .btn-success { 
   background: var(--color-success) !important; 
   color: #ffffff !important;
@@ -84,6 +106,14 @@
   transition: all .5s;
 }
 .btn-companyTwo:hover { opacity: .9 !important; cursor: pointer;}
+
+.btn-companyThree { 
+  background: var(--color-company-three) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-company-three);
+  transition: all .5s;
+}
+.btn-companyThree:hover { opacity: .9 !important; cursor: pointer;}
 
 .btn-default { 
   background: var(--color-texto-primario) !important; 
@@ -200,19 +230,19 @@ select {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
-  color: rgb( 97 109 138 );
+  color: var(--color-primary);
   border: 1px solid var(--color-texto-terciario);
 }
 .select-filter {
   background-image: url('../img/dobby/sliders-solid.svg') !important;
   background-size: 10px 15px;
-  color: var(--color-info);
+  color: var(--color-primary);
 }
 .select-calendar {
   background-image: url('../img/dobby/calendar-days-regular.svg') !important;
   background-size: 10px 15px;
   text-align: end;
-  color: var(--color-company-two);
+  color: var(--color-primary);
 }
 select::-ms-expand {
   display: none;
@@ -230,15 +260,15 @@ select::-ms-expand {
 }
 /* Estilo del "pulgar" (thumb) del scrollbar */
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-info); /* Color del "pulgar" */
+  background-color: var(--color-primary); /* Color del "pulgar" */
   border-radius: 6px; /* Bordes redondeados del "pulgar" */
 }
 /* Estilo del "pulgar" al pasar el ratón sobre él */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-info); /* Cambiar color al pasar el ratón sobre el "pulgar" */
+  background-color: var(--color-primary); /* Cambiar color al pasar el ratón sobre el "pulgar" */
 }
 /* Estilo del scrollbar para Firefox */
 body {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-info) #f1f1f1;
+  scrollbar-color: var(--color-primary) #f1f1f1;
 }

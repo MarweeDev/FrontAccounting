@@ -1,15 +1,7 @@
 <section class="container" (click)="OnHiddenBar()">
     <div class="col1">
-        <button type="button" [className]="'btn rd-2 ' + item.type" *ngFor="let item of listNav" [title]="item.nombre" [routerLink]="[item.url]">
+        <button type="button" (click)="OnRouterModule()" [className]="'btn rd-4 ' + item.type" *ngFor="let item of listNav" [title]="item.nombre" [routerLink]="[item.url]">
             <i *ngIf="item.icon" [className]="item.icon"></i>
         </button>
-    </div>
-    <div class="col2" *ngIf="listNav[0]?.search">
-        <label for="searchId">
-            <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
-            <span>
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-        </label>
     </div>
 </section>

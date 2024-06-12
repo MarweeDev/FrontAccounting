@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -10,9 +11,13 @@ import { AppComponent } from 'src/app/app.component';
 export class BreadcrumbsComponent implements OnInit, AfterViewInit {
 
   title : string = "NameModule";
+  breadcrumbParts : string[] = [];
 
   //#region constructor
-  constructor(private route : ActivatedRoute, private app: AppComponent, private router: Router) {
+  constructor(private app: AppComponent, private router: Router,
+    private DataShared: DataSharedServicesService,
+    private cdRef: ChangeDetectorRef
+  ) {
 
   }
   ngOnInit(): void {
@@ -20,6 +25,13 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     //this.title = this.app.globalTitle;
+    this.DataShared.OnGetBreadcrumb().subscribe(item => {
+      this.title = item;
+      this.breadcrumbParts = this.title!.split('/');
+      this.cdRef.detectChanges();
+    }, error => {
+      console.log('error:', error)
+    });
   }
   //#endregion
 
@@ -38,12 +50,12 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
   }
 
   OnRouterModule(router:any){
-    localStorage.removeItem('option');
-    this.app.navDisabled = false;
-
     this.router.navigate([router]);  
     this.app.OnHiddenBar();
     this.app.OnLoadingModule();
+
+    //Resetea los active en el menu lateral
+    localStorage.removeItem("nav_left");
   }
   //#endregion
 }

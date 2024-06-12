@@ -13,9 +13,13 @@
         <div class="menu">
             <ul>
                 <li *ngFor="let item of ListModule; let i = index">
-                    <button type="button" (click)="OnRouterModule(item.ruta)">
+                    <button 
+                    type="button" 
+                    [id]="'nav_left_' + item.id"
+                    [class.active]="item.id === activeButtonId" 
+                    (click)="OnRouterModule(item.ruta, item.id)"
+                    >
                         <i [className]="item.icono"></i> {{item.modulo}}
-                        <span *ngIf="item.id == 1 && total != 0">{{total}}</span>
                     </button>
                 </li>
             </ul>
@@ -23,8 +27,8 @@
         <div class="footer">
             <ul>
                 <li>
-                    <button type="button" class="button-close" (click)="OnRouterModule('home/authorization/login')">
-                        <i class="fa-solid fa-right-from-bracket" style="transform: rotate(180deg);"></i> Salir
+                    <button type="button" class="button-close" (click)="OnRouterModule('home/authorization/login', 0)">
+                        <i class="fa-solid fa-right-from-bracket"></i> Salir
                     </button>
                 </li>
                 <li>

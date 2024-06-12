@@ -21,7 +21,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    //Resetea los active en el menu lateral
+    localStorage.removeItem("nav_left");
   }
 
   login () {

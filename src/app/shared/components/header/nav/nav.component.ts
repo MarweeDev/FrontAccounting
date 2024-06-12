@@ -37,12 +37,8 @@ export class NavComponent implements OnInit, AfterViewInit {
   //#endregion
 
   //#region Methods
-  OnRouterModule(router:any, e:any){
-    //localStorage.setItem('nav', e.target.id);
-    this.app.navDisabled = true;
-
-    this.router.navigate([router]);
-    this.app.OnLoadingComponent();
+  OnRouterModule(){
+    //this.app.OnLoadingComponent();
   }
 
   OnSearchChange(search: string) {

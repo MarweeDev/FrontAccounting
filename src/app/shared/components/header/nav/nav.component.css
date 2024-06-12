@@ -75,6 +75,8 @@
     letter-spacing: 1px;
     transition: all .5s;
     font-weight: 300;
+    background-color: transparent;
+    border: none;
 }
 .col2 button:hover {
     padding: 5px 20px;

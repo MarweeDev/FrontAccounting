@@ -34,7 +34,8 @@
         </div>
 
         <div class="container-card">
-            <div class="card border-info" *ngFor="let item of ListModule; let i = index" (click)="OnRouterModule(item.ruta)">
+            <div class="card border-info" *ngFor="let item of ListModule; let i = index" 
+            (click)="OnRouterModule(item.ruta, item.id)">
                 <div class="icon-card">
                     <i [className]="item.icono"></i>
                 </div>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 //Routing
@@ -42,6 +43,7 @@ import { DetailsComponent } from './components/NewOrder/register/dialog/details/
     CommonModule,
     SalesRouting,
     ReactiveFormsModule,
+    FormsModule,
     RouterModule
   ]
 })

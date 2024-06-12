@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
   DateMaxInput ?: string;
 
   constructor(
+    private route : ActivatedRoute,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
     private router: Router,
@@ -43,15 +44,19 @@ export class RegisterComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-companyTwo", search: true},
+      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
+
+    //Cargar breadcrumb
+    this.route.data.subscribe(data => {
+      this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
+    });
 
     this.onLoadOrder();
   }
 
   onLoadOrder() {
-    debugger;
     let elementDate :any = document.getElementById('selectDate');
     let elementInputDate :any = document.getElementById('selectDateCalendar');
     let elementFilter :any = document.getElementById('selectFilter');

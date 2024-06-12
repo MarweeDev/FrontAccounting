@@ -13,7 +13,7 @@
 }
 .container-component::before {
     content: '';
-    background-color: var(--color-info);
+    background-color: var(--color-primary);
     position: fixed;
     top: 0px; left: 0px; right: 0px;
     height: 35%;
@@ -77,10 +77,10 @@
     text-align: left;
     font-size: 12px;
     padding: 20px 10px 20px 10px;
-    color: var(--color-info);
+    color: var(--color-primary);
 }
 .container-table table thead tr th i {
-    color: var(--color-info);
+    color: var(--color-primary);
 }
 .container-table table thead tr th:first-child {
     border-radius: 10px 0px 0px 10px;
