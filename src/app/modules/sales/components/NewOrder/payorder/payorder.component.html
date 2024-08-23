@@ -59,10 +59,10 @@
             </div>
             <div class="col col-final">
                 <h3>Medio de pago</h3>
-                <select>
+                <select (change)="changeType($event)" id="selectType">
                     <option [value]="item.id" *ngFor="let item of ListTypePay">{{item.nombre}}</option>
                 </select>
-                <select>
+                <select *ngIf="visiblesubtype" id="selectSubType">
                     <option [value]="item.id" *ngFor="let item of ListSubTypePay">{{item.nombre}}</option>
                 </select>
 

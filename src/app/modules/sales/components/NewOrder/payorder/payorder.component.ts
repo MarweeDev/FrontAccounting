@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
+import { TypepayService } from 'src/app/core/services/typePay/typepay.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
 @Component({
@@ -17,6 +19,7 @@ export class PayorderComponent implements OnInit {
   totalProduct: string = "0";
   ListTypePay : any[] = [];
   ListSubTypePay : any[] = [];
+  visiblesubtype : boolean = false;
 
   constructor(
     private route : ActivatedRoute,
@@ -24,23 +27,15 @@ export class PayorderComponent implements OnInit {
     private DataShared: DataSharedServicesService, 
     private router:Router, 
     private url: ActivatedRoute, 
-    private ApiOrder: OrderService) {
-      
-    this.ListTypePay = [
-      { id: 1, nombre: 'Efectivo' },
-      { id: 2, nombre: 'Tarjeta' },
-      { id: 3, nombre: 'Transferencia' },
-      { id: 3, nombre: 'Pendiente' }
-    ];
-
-    this.ListSubTypePay = [
-      { id: 1, nombre: 'Nequi' },
-      { id: 1, nombre: 'Daviplata' },
-      { id: 1, nombre: 'Ahorros' },
-      { id: 1, nombre: 'Corriente' },
-      { id: 1, nombre: 'Debito' },
-      { id: 1, nombre: 'Credito' }
-    ];
+    private ApiOrder: OrderService,
+    private ApiTypePay: TypepayService) 
+  {
+    
+    this.ApiTypePay.get().subscribe(data => {
+      this.ListTypePay = data.result;
+    },error => {
+      console.log('Error get: ', error)
+    });
   }
 
   ngOnInit(): void {
@@ -72,6 +67,25 @@ export class PayorderComponent implements OnInit {
     });
   }
 
+  changeType(event: any): void {
+    const selectedId = event.target.value;
+    this.getSubTypePay(selectedId);
+  }
+
+  getSubTypePay(id:any){
+    this.ApiTypePay.getSub(id).subscribe(data => {
+      this.ListSubTypePay = data.result;
+      if(this.ListSubTypePay.length > 0){
+        this.visiblesubtype = true;
+      }
+      else {
+        this.visiblesubtype = false;
+      }
+    },error => {
+      console.log('Error get: ', error)
+    });
+  }
+
   getConverPrice(e:any){
     var price = Number(e);
     return price;
@@ -96,7 +110,22 @@ export class PayorderComponent implements OnInit {
   }
 
   viewOk() {
+    let elementType :any = document.getElementById('selectType');
+    let elementSubType :any = document.getElementById('selectSubType');
+
+    const orderData: OrderDTO = {
+      codigo: this.order,
+      id_tipopago: elementType?.value,
+      id_subtipopago: elementSubType?.value,
+    };
+    this.ApiOrder.putStatus(orderData).subscribe(() => {
+      this.viewCancel();
+    },error => {
+      console.log('Error get: ', error)
+    });
+    
   }
+
   viewCancel(){
     this.router.navigate(['sales/neworder/register']);
   }

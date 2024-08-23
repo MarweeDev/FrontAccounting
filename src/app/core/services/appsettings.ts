@@ -14,6 +14,7 @@ export enum ServicesMethod {
     ServicesProduct = 'Product',
     ServicesOrder = 'Order',
     ServicesModule = 'Module',
+    ServicesTypePay = 'TypePay',
 }
 
 export class ApiConfig {

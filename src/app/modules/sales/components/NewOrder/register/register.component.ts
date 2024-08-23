@@ -161,6 +161,11 @@ export class RegisterComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  getConverPrice(e:any){
+    var price = Number(e);
+    return price;
+  }
+
   onLoadSelectDate() {
     const today = new Date();
 

@@ -25,6 +25,7 @@
 
                 <div class="container-select-filter">
                     <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
+                        <option value="0">Todos</option>
                         <option value="7" selected>Pendiente</option>
                         <option value="10">Debiendo</option>
                         <option value="8">Pagada</option>
@@ -93,7 +94,7 @@
                             {{item.fecha}}
                         </td>
                         <td>{{item.cantidad}}</td>
-                        <td>$0</td>
+                        <td>${{getConverPrice(item.total).toLocaleString()}}</td>
                         <td>
                             <div class="td-container-tag" *ngIf="item.nombre == 'Cancelada'">
                                 <div class="td-tag">{{item.nombre}}</div>
