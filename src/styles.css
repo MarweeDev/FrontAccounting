@@ -15,7 +15,7 @@
 }
 
 * {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-family-company);
     color: var(--color-adicional-primario);
 }
 
@@ -27,7 +27,7 @@ body {
     margin: 0px;
     padding-top: 3.8rem;
     color: var(--color-adicional-primario);
-    background-color: var(--background-primario);
+    background-color: var(--color-secondary);
 }
 
 .content {

@@ -1,4 +1,4 @@
-<section class="container">
+<section class="container animated fadeInLeft" id="slider_left">
     <div class="parent">
         <div class="header">
             <div class="circle" [style.background-color]="getColor(user)">
@@ -17,8 +17,7 @@
                     type="button" 
                     [id]="'nav_left_' + item.id"
                     [class.active]="item.id === activeButtonId" 
-                    (click)="OnRouterModule(item.ruta, item.id)"
-                    >
+                    (click)="OnRouterModule(item.ruta, item.id)">
                         <i [className]="item.icono"></i> {{item.modulo}}
                     </button>
                 </li>

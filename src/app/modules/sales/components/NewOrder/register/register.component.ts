@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
 
     const orderData: OrderDTO = {
       id_estadoorden: elementFilter.value,
-      fecha: DateEle
+      fecha_creacion: DateEle
     };
     
     if (DateEle != undefined) {

@@ -8,12 +8,14 @@ import { ShoppingRouting } from './shopping.routing'
 //Pages
 import { SupplierComponent } from './pages/supplier/supplier.component';
 import { AddShoppingComponent } from './pages/supplier/dialog/add.shopping/add.shopping.component';
+import { NewShoppingComponent } from './pages/new-shopping/new-shopping.component';
 
 @NgModule({
   declarations: [
     //pages
     SupplierComponent,
-    AddShoppingComponent
+    AddShoppingComponent,
+    NewShoppingComponent
   ],
   imports: [
     CommonModule,

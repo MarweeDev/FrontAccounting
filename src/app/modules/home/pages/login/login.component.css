@@ -31,6 +31,22 @@
     opacity: 0.1;
 }
 
+.container-component .banner {
+    position: absolute;
+    top: 36px;
+    display: grid;
+    text-align: center;
+}
+.container-component .banner strong {
+    position: relative;
+    font-family: var(--font-family-company2);
+    text-transform: uppercase;
+}
+.container-component .banner strong small {
+    font-family: var(--font-family-company2);
+    text-transform: uppercase;
+}
+
 .card { 
     cursor: unset; 
     height: fit-content; 

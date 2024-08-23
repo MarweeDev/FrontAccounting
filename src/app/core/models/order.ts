@@ -1,14 +1,13 @@
+import {DetailOrderDTO} from './detailOrder';
+
 export class OrderDTO {
   id?: number;
   codigo?: string;
-  id_mesa?: number;
   id_usuario?: number;
-  nombre_cliente?: string;
-  fecha?: Date;
-  id_estadoorden?: number;
-  id_tipopago?: number | null;
-  id_producto?: number | null;
-  cantidad?: number | null;
   id_client?: number | null;
+  id_tipopago?: number | null;
   id_subtipopago?: number | null;
+  fecha_creacion?: Date;
+  id_estadoorden?: number;
+  detalle?: DetailOrderDTO;
 }

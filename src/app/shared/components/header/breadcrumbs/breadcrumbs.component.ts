@@ -44,7 +44,11 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
       }
       else{
         this.app.statusDisabledMain = true;
-        element.className = "fa-solid fa-bars-staggered";
+        let elementSlider :any = document.getElementById('slider_left');
+        if (elementSlider != undefined) {
+          element.className = "fa-solid fa-bars-staggered";
+          elementSlider.className = "animate__animated animate__fadeInRight";
+        }
       }
     }
   }

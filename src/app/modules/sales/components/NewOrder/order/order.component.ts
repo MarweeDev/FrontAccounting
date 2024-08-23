@@ -80,6 +80,7 @@ export class OrderComponent implements OnInit {
     });
 
     this.ApiOrder.getCodeOrder().subscribe(data => {
+      console.log("consecutivo:",data);
       this.codeOrder = data.status;
     });
   }
@@ -386,14 +387,16 @@ export class OrderComponent implements OnInit {
         this.ListProduct.forEach(item => {
           let order = new OrderDTO();
           order.codigo = this.codeOrder;
-          order.id_mesa = this.idMesa;
           order.id_usuario = 1; //falta poner el usuario login
           order.id_estadoorden = 7; //Estado pendiente
           order.id_tipopago = 1; //1 = no definido
           order.id_subtipopago = 1; //1 = no definido
-          order.id_producto = item.id;
           order.id_client = this.codeClient;
-          order.cantidad = item.id_estado; //id_estado se uso para guardar la cantidad
+          order.detalle = {
+            codigo_orden : this.codeOrder,
+            id_producto : item.id,
+            cantidad : item.id_estado
+          }
   
           this.ListOrder.push(order);
         });

@@ -15,6 +15,19 @@
     top: 0;left: 0;right: 0;
     z-index: 2;
 }
+.container::after {
+    content: '';
+    background-image: url('src/assets/img/5130890.jpg');
+    background-size: 100% auto;
+    background-position: top;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 8%;
+    z-index: -1;
+    opacity: 0.1;
+}
 
 .container div {
     padding: 14px 20px;

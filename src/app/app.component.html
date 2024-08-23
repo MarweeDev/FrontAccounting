@@ -1,8 +1,6 @@
 <app-breadcrumbs></app-breadcrumbs>
 
-<div id="slider_left" class="slider" *ngIf="statusDisabledMain"> <!--statusDisabledMain-->
-    <app-mainlayout></app-mainlayout>
-</div>
+<app-mainlayout *ngIf="statusDisabledMain"></app-mainlayout>
 
 <div class="content" id="content" (click)="OnHiddenBar()">
     <router-outlet></router-outlet>

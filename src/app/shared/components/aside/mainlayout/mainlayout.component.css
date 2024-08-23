@@ -1,6 +1,8 @@
 .container {
     position: relative;
     width: max-content;
+
+    transition: all 0.5s;
 }
 
 .parent {
@@ -16,6 +18,9 @@
     position: fixed;
     top: 0px;
     bottom: 0px;
+
+    z-index: 3 !important;
+    transition: all 0.5s;
 
     background-color: rgba(255,255,255,1);
     border-right: 1px solid var(--color-texto-terciario);

@@ -130,4 +130,12 @@
     color:  var(--color-texto-terciario) !important;
     cursor: text;
 }
+.col2 .container-img {
+    height: 24px;
+    max-height: 24px;
+}
+.col2 .container-img img {
+    height: 100%;
+    transform: scale(1.5, 1.5);
+}
   

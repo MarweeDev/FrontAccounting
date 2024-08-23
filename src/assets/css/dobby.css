@@ -1,17 +1,32 @@
 :root {
   --color-primary: #6C80C1;
-  --color-secondary: #FF006E;
+  --color-secondary: #f5f5f5;
 
   --color-success: #45E936;
   --color-danger: #FF3535;
   --color-warning: #FFB800;
   --color-info: #3A86FF;
   --color-info-dark: #6568c9;
+
   --color-company: rgba(255, 51, 0, 1);
   --color-company-two: #fd8060;
   --color-company-three: #ffc637;
+
+  --font-family-company: 'Roboto', sans-serif;
+  --font-family-company1: "Outfit", sans-serif;/*font-optical-sizing: auto;*/
+  --font-family-company2: "Chathura", sans-serif;
+  --font-family-company3: "Viga", sans-serif;
+  --font-family-company4: "MuseoModerno", sans-serif; /*font-optical-sizing: auto;*/
+  --font-family-company5: "Poppins", sans-serif;
 }
 
+.gradient-company {
+  background: linear-gradient(0deg, rgba(255,51,0,1) 0%, rgba(255,119,0,1) 100%);
+  background-clip: text;
+  background: -webkit-linear-gradient(0deg, rgba(255,51,0,1) 0%, rgba(255,119,0,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 /*Colores alert*/
 .success { background: var(--color-success) !important; color: #ffffff !important; }

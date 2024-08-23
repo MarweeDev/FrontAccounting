@@ -41,16 +41,17 @@ export class AppComponent implements OnInit {
   //#region methods
   OnExpandBar(){
     let element :any = document.getElementById('icon_btn_open');
-    if(element != undefined){
+    let elementSlider :any = document.getElementById('slider_left');
+    if(element != undefined && elementSlider != undefined){
       if (this.statusDisabledMain) {
         this.statusDisabledMain = false;
         element.className = "fa-solid fa-bars";
-        console.log("Close bar: ", this.statusDisabledMain);
+        elementSlider.className = "animate__animated animate__fadeOutLeft";
       }
       else{
         this.statusDisabledMain = true;
         element.className = "fa-solid fa-bars-staggered";
-        console.log("Open bar: ", this.statusDisabledMain);
+        elementSlider.className = "animate__animated animate__fadeInRight";
       }
     }
   }
@@ -59,7 +60,7 @@ export class AppComponent implements OnInit {
     let elementSlider :any = document.getElementById('slider_left');
     if(element != undefined && elementSlider != undefined){
       element.className = "fa-solid fa-bars";
-      elementSlider.className = "slider animate__animated animate__fadeOutLeft";
+      elementSlider.className = "animate__animated animate__fadeOutLeft";
       setTimeout(()=>{this.statusDisabledMain = false;},1000);
     }
   }
