@@ -23,7 +23,7 @@ body #content {
     position: relative;
     font-family: var(--font-family-company1);
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--color-info-dark);
     /*text-transform: uppercase;*/
 }
 .content-header .name-companyi::before {

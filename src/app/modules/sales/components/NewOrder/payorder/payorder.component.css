@@ -121,7 +121,7 @@
 .content .footer .row .col:nth-child(2) {
     color: rgb(255, 255, 255);
     padding: 10px 20px;
-    background-color: var(--color-adicional-secundario);
+    background-color: var(--color-info-dark);
     border-radius: 0px 10px 10px 0px;
     text-align: center;
 }
@@ -170,7 +170,7 @@
     max-width: fit-content;
 }
 .content .row-init .col-final .action .row .col:nth-child(1) button  {
-    padding: 10px 20px;
+    padding: 8px 20px;
 }
 .content .row-init .col-final .action .row .col:nth-child(2) button  {
     width: 96%;

@@ -49,7 +49,7 @@
         <div class="container-table">
 
             <div class="message-not-result" *ngIf="ListOrder === undefined || ListOrder.length === 0">
-                <img src="../../../../../../assets/img/dobby/no-results.png" alt="Image not found" />
+                <img src="../../../../../../assets/img/dobby/not_results_IA.png" alt="Image not found" />
                 <h3>No se encontraron ordenes</h3>
                 <h5>Reintentar con nuevos filtros para obtener resultados</h5>
             </div>
@@ -73,7 +73,8 @@
                 <tbody>
                     <tr (click)="getDetailsOrder(item.codigo)" *ngFor="let item of FilterListOrder; let i = index" 
                         [class.not-pending-tr]="item.nombre == 'Cancelada'"
-                        [class.success-tr]="item.nombre == 'Pagada'">
+                        [class.success-tr]="item.nombre == 'Pagada'"
+                        [class.pending-tr]="item.nombre == 'Debiendo'">
 
                         <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">
                             {{ (currentPage - 1) * itemsPorPagina + i + 1 }}
@@ -108,9 +109,6 @@
                             <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
                                 Pagar
                             </button>
-                            <button type="button" class="btn-option" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
-                                <i class="fa-solid fa-ellipsis fa-fw"></i>
-                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -121,3 +119,5 @@
     </div>
 
 </section>
+
+<app-details [orderCode]="orderCode" *ngIf="visibleDetails"></app-details>

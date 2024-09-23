@@ -183,6 +183,20 @@ select {
 .content .container-table table tbody .success-tr {
     cursor: unset;
 }
+.content .container-table table tbody .pending-tr {
+    position: relative;
+}
+.content .container-table table tbody .pending-tr::after {
+    content: '⚠️';
+    position: absolute;
+    right: 0px;
+    top: -10px;
+    background-color: #ffffff;
+    border: 1px solid var(--color-texto-terciario);
+    padding: 0px 5px 5px 5px;
+    font-size: 12px;
+    border-radius: 8px 8px 0px 8px;
+}
 .content .container-table table tbody tr td {
     text-align: left;
     padding: 10px;

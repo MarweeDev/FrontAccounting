@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from 'src/app/core/services/order/order.service';
+import { RegisterComponent } from '../../register.component';
 
 @Component({
   selector: 'app-details',
@@ -9,16 +10,24 @@ import { OrderService } from 'src/app/core/services/order/order.service';
 })
 export class DetailsComponent implements OnInit {
 
+  @Input() orderCode?: any;
   estado : any;
   order : any;
   ListOrder: any[] =[];
 
-  constructor(private router:Router, private url: ActivatedRoute, private ApiOrder: OrderService) {
-    this.getUrl();
+  constructor(private router:Router, 
+    private url: ActivatedRoute, 
+    private ApiOrder: OrderService,
+    private registercomponent: RegisterComponent) {
+    //this.getUrl();
   }
 
   ngOnInit(): void {
     
+  }
+
+  ngOnChanges() : void {
+    this.order = this.orderCode;
   }
 
   ngAfterContentInit():void {
@@ -45,7 +54,8 @@ export class DetailsComponent implements OnInit {
   }
 
   cancel(){
-    this.router.navigate(['sales/neworder/register']);
+    //this.router.navigate(['sales/neworder/register']);
+    this.registercomponent.visibleDetails = false;
   }
 
 }

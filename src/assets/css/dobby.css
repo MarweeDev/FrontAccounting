@@ -1,12 +1,14 @@
 :root {
-  --color-primary: #6C80C1;
+  /*--color-primary: #6C80C1;*/
+  --color-primary: rgb(23,25,33);
   --color-secondary: #f5f5f5;
 
   --color-success: #45E936;
   --color-danger: #FF3535;
   --color-warning: #FFB800;
   --color-info: #3A86FF;
-  --color-info-dark: #6568c9;
+  /*--color-info-dark: #6568c9;*/
+  --color-info-dark: rgba(55,146,141,1);
 
   --color-company: rgba(255, 51, 0, 1);
   --color-company-two: #fd8060;
@@ -138,12 +140,21 @@
 }
 .btn-default:hover { background: var(--color-texto-terciario) !important; cursor: pointer;}
 
+.btn-origin { 
+  background: transparent !important; 
+  color: #ffffff !important;
+  border-color: transparent;
+  transition: all .5s;
+}
+.btn-origin:hover { background: rgba(55,146,141,1) !important; cursor: pointer;}
+
 /*Bordes*/
 .border-success:hover { border-color: var(--color-success); }
 .border-danger:hover { border-color: var(--color-danger); }
 .border-warning:hover { border-color: var(--color-warning); }
 .border-info:hover { border-color: var(--color-info); }
 .border-company:hover { border-color: var(--color-company); }
+.border-primary:hover { border-color: var(--color-info-dark); }
 
 /*Row - Col*/
 .row {

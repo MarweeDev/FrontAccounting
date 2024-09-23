@@ -69,7 +69,7 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar orden', url: 'sales/neworder/register', type: "btn-primary"},
+      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
       { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
@@ -364,6 +364,10 @@ export class OrderComponent implements OnInit {
   }
   //#endregion
 
+  onCreateClient() {
+    
+  }
+
   OnClose() {
     this._btn_modal_add = true;
     this._modal_add = false;
@@ -380,7 +384,6 @@ export class OrderComponent implements OnInit {
   }
 
   viewOk() {
-    debugger;
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
 
@@ -422,7 +425,38 @@ export class OrderComponent implements OnInit {
   }
 
   viewPay() {
-    this.router.navigate(['/sales/activeservices']);
+    if(this.codeOrder != "0") {
+      if(this.ListProduct.length > 0){
+
+        this.ListProduct.forEach(item => {
+          let order = new OrderDTO();
+          order.codigo = this.codeOrder;
+          order.id_usuario = 1; //falta poner el usuario login
+          order.id_estadoorden = 7; //Estado pendiente
+          order.id_tipopago = 1; //1 = no definido
+          order.id_subtipopago = 1; //1 = no definido
+          order.id_client = this.codeClient;
+          order.detalle = {
+            codigo_orden : this.codeOrder,
+            id_producto : item.id,
+            cantidad : item.id_estado
+          }
+  
+          this.ListOrder.push(order);
+        });
+        
+        if(this.ListOrder.length > 0) 
+        {
+          this.ApiOrder.post(this.ListOrder).subscribe(data => {
+            this.router.navigate(['/sales/neworder/payments', this.codeOrder]);
+          },error => {
+            console.log('Error post: ', error)
+          });
+          
+        }
+
+      }
+    }
   }
   viewCancel() {
     //this.VisibleAlert = true;

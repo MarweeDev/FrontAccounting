@@ -45,7 +45,7 @@ export class PayorderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Cancelar pago', url: 'sales/neworder/register', type: "btn-primary"},
+      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
       { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
@@ -110,13 +110,19 @@ export class PayorderComponent implements OnInit {
   }
 
   viewOk() {
+    debugger;
     let elementType :any = document.getElementById('selectType');
     let elementSubType :any = document.getElementById('selectSubType');
+    let subtype = 1; //1: no definido
+
+    if (elementSubType?.value != undefined) {
+      subtype = elementSubType?.value;
+    }
 
     const orderData: OrderDTO = {
       codigo: this.order,
       id_tipopago: elementType?.value,
-      id_subtipopago: elementSubType?.value,
+      id_subtipopago: subtype,
     };
     this.ApiOrder.putStatus(orderData).subscribe(() => {
       this.viewCancel();

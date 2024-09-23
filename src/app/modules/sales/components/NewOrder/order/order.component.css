@@ -249,7 +249,7 @@
 .container-add .modal-add .footer .row .col:nth-child(2) {
     color: rgb(255, 255, 255);
     padding: 10px 20px;
-    background-color: var(--color-adicional-secundario);
+    background-color: var(--color-info-dark);
     border-radius: 0px 10px 10px 0px;
     text-align: center;
 }

@@ -12,6 +12,9 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 })
 export class RegisterComponent implements OnInit {
 
+  orderCode: any;
+  visibleDetails : boolean = false;
+
   ListOrder: any[] =[];
   FilterListOrder : any[] = [];
   currentPage: number = 1;
@@ -40,10 +43,11 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.onLoadSelectDate();
   }
-
+  
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
+      { nombre: 'Exportar', url: 'sales/neworder/order', icon: 'fa-solid fa-file-arrow-down', type: "btn-origin"},
       { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
@@ -144,7 +148,10 @@ export class RegisterComponent implements OnInit {
   }
 
   getDetailsOrder(code:any){
-    this.router.navigate(['/sales/neworder/register/details', code]);
+    //this.router.navigate(['/sales/neworder/register/details', code]);
+    this.orderCode = code;
+    this.visibleDetails = true;
+
   }
 
   getPayOrder(code:any){

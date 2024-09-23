@@ -28,7 +28,7 @@
                 <!--Producto--> <!--(contextmenu)="mostrarMenu($event)"-->
                 <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
                     <div class="card-title-info">
-                        <i class="fa-solid fa-fire txt-warning"></i>
+                        <i class="fa-solid fa-ellipsis"></i>
                         <div class="container-info">{{item.descripcion}}</div>
                     </div>
                     <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">
@@ -105,7 +105,7 @@
                                 <select (change)="onSelectChangeClient($event)">
                                     <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre}}</option>
                                 </select>
-                                <button type="button" class="btn btn-info rd-4" title="Nuevo Cliente">
+                                <button type="button" class="btn btn-info rd-4" title="Nuevo Cliente" (click)="onCreateClient()">
                                     <span class="fa-solid fa-user-plus"></span>
                                 </button>
                             </div>
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="col col2">
                                     <button type="button" class="btn btn-success rd-4" *ngIf="btn_pay" (click)="viewOk()">Registrar orden</button>
-                                    <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">Pagar orden</button>
+                                    <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">💳 Pagar orden</button>
                                 </div>
                             </div>
                         </div>
