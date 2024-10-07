@@ -32,6 +32,17 @@ export class OrderService {
     return this.http.get(this.ApiURL + HttpMethod.GET + "Find", {params});
   }
 
+  getFinExport(data: any): Observable<any> {
+    let params = new HttpParams();
+    for (const key in data) {
+      if (data.hasOwnProperty(key) && data[key] !== null && data[key] !== undefined) {
+        params = params.append(key, data[key].toString());
+      }
+    }
+    
+    return this.http.get(this.ApiURL + HttpMethod.GET + "Export", {params});
+  }
+
   post(data: OrderDTO[]): Observable<OrderDTO[]>{
     debugger;
     return this.http.post<OrderDTO[]>(this.ApiURL + HttpMethod.POST, data);

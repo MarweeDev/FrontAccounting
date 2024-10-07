@@ -38,6 +38,7 @@
 .company { background: var(--color-company) !important; color: #ffffff !important }
 .companyTwo { background: var(--color-company-two) !important; color: #ffffff !important }
 .companyThree { background: var(--color-company-three) !important; color: #ffffff !important }
+.origin { background: var(--color-info-dark) !important; color: #ffffff !important }
 
 /*texto alert*/
 .txt-success { color: var(--color-success) !important; }

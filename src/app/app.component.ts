@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavDTO } from './core/models/nav';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -31,10 +32,11 @@ export class AppComponent implements OnInit {
   //#endregion
   
   //#region Constructor
-  constructor(private cdRef: ChangeDetectorRef) {
+  constructor(private cdRef: ChangeDetectorRef, private router: Router) {
   }
 
   ngOnInit(): void {
+    
   }
   //#endregion
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { ModuleService } from 'src/app/core/services/module/module.service';
 import { OrderService } from 'src/app/core/services/order/order.service';
+import { UserService } from 'src/app/core/services/user/user.service';
 
 @Component({
   selector: 'app-mainlayout',
@@ -12,19 +13,33 @@ import { OrderService } from 'src/app/core/services/order/order.service';
 export class MainlayoutComponent implements OnInit, AfterViewInit {
 
   user : string = "ivagomal";
+  rol : string = "super admin";
   total : number = 0;
   activeButtonId: number | null = null;
   ListModule: any[] =[];
   ListOrder: any[] =[];
 
   constructor(private router: Router, private app: AppComponent, 
-    private ApiModule: ModuleService, private ApiOrder: OrderService) {
+    private ApiModule: ModuleService, private ApiOrder: OrderService, private ApiUser: UserService) {
   }
 
   ngOnInit(): void {
-    this.ApiModule.get().subscribe(data => {
+    /*this.ApiModule.get().subscribe(data => {
       this.ListModule = data.module;
-    });
+    });*/
+
+    const auth = sessionStorage.getItem('authenticator');
+
+    if (auth != undefined && auth != "") {
+      let t = new token();
+      t.token = auth;
+      this.ApiUser.getInfoUser(t).subscribe(data => {
+        this.ListModule = data.result;
+        this.user  = this.ListModule[0].usuario;
+        this.rol  = this.ListModule[0].rol;
+        console.log(this.ListModule)
+      });
+    }
 
     const savedId = localStorage.getItem("nav_left");
     if (savedId) {
@@ -43,6 +58,10 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
 
     this.activeButtonId = id;
     localStorage.setItem("nav_left", id ? id : '');
+
+    if (id == 0) {
+      sessionStorage.clear();
+    }
   }
 
   // Función para generar un color aleatorio
@@ -59,4 +78,9 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     return color;
   }
 
+}
+
+
+export class token {
+  token? : string
 }

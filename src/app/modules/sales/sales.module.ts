@@ -21,6 +21,7 @@ import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit
 
 //Dialog RegisterComponent
 import { DetailsComponent } from './components/NewOrder/register/dialog/details/details.component';
+import { ExportOrderComponent } from './components/NewOrder/register/dialog/export/export-order.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { DetailsComponent } from './components/NewOrder/register/dialog/details/
 
     //Dialog RegisterComponent
     DetailsComponent,
+     ExportOrderComponent,
   ],
   imports: [
     CommonModule,

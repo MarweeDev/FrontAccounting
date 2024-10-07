@@ -1,32 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
-@Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
-})
-export class RegisterComponent implements OnInit {
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
-  orderCode: any;
-  visibleDetails : boolean = false;
+@Component({
+  selector: 'app-export-order',
+  templateUrl: './export-order.component.html',
+  styleUrls: ['./export-order.component.css']
+})
+export class ExportOrderComponent {
 
   ListOrder: any[] =[];
   FilterListOrder : any[] = [];
   currentPage: number = 1;
   itemsPorPagina: number = 10;
   TotalPag : number = 0;
-
   todayStr ?: string;
   weekRange ?: string;
   monthRange ?: string;
   yearRange ?: string;
-
-  disabledDateCalendar: boolean = false;
   DateMaxInput ?: string;
 
   constructor(
@@ -36,19 +33,12 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private ApiOrder: OrderService) 
   {
-    let today = new Date();
-    this.DateMaxInput = this.formatDate(today);
   }
 
-  ngOnInit(): void {
-    this.onLoadSelectDate();
-  }
-  
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Exportar', url: 'sales/neworder/register/export', icon: 'fa-solid fa-file-arrow-down', type: "btn-origin"},
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -56,45 +46,64 @@ export class RegisterComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
     });
+  }
 
-    this.onLoadOrder();
+  onExportExcel(): void {
+    // Convertir los datos en una hoja de Excel
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ListOrder);
+    // Obtener el rango de la hoja de trabajo
+    const range = XLSX.utils.decode_range(worksheet['!ref']!);
+    // Aplicar formato a los títulos (primera fila)
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!worksheet[cellAddress]) continue;
+
+      worksheet[cellAddress].s = {
+        font: { bold: true, color: { rgb: 'FFFFFF' } }, // Texto en blanco y negrita
+        fill: { fgColor: { rgb: '4CAF50' } } // Fondo verde
+      };
+    }
+    // Crear un libro de trabajo y agregar la hoja
+    const workbook: XLSX.WorkBook = { Sheets: { 'Datos': worksheet }, SheetNames: ['Datos'] };
+    // Generar el archivo Excel
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // Llamar a la función para guardar el archivo
+    this.onSaveExcel(excelBuffer, 'Reporte ordenes');
+  }
+
+  onSaveExcel(buffer: any, nombreArchivo: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(data, `${nombreArchivo}.xlsx`);
+  }
+
+  onRemoveEmojis(text: string): string {
+    return text.replace(/[^\w\s]/gi, '');
   }
 
   onLoadOrder() {
-    let elementDate :any = document.getElementById('selectDate');
-    let elementInputDate :any = document.getElementById('selectDateCalendar');
-    let elementFilter :any = document.getElementById('selectFilter');
-    let DateEle;
+    let elementDateInit :any = document.getElementById('selectDateCalendarInit');
+    let elementDateFin :any = document.getElementById('selectDateCalendarFinish');
 
-    if (elementDate.value == 'Hoy') {
-      let today = new Date();
-      DateEle = this.formatDate(today);
-      this.disabledDateCalendar = false;
-    }
-    else if (elementDate.value == 'personalizada') {
-      DateEle = elementInputDate?.value;
-      this.disabledDateCalendar = true;
-    }
-    else {
-      DateEle = elementDate.value;
-      this.disabledDateCalendar = false;
-    }
-
-    const orderData: OrderDTO = {
-      id_estadoorden: elementFilter.value,
-      fecha_creacion: DateEle
-    };
-    
-    if (DateEle != undefined) {
-      this.ApiOrder.getFind(orderData).subscribe(data => {
+    if (elementDateInit != undefined && elementDateInit.value != undefined && elementDateInit.value != "" &&
+        elementDateFin != undefined && elementDateFin.value != undefined && elementDateFin.value != ""
+    ) {
+      const orderData: ExportDTO = {
+        fecha_init: elementDateInit.value,
+        fecha_fin: elementDateFin.value
+      };
+      
+      this.ApiOrder.getFinExport(orderData).subscribe(data => {
         this.ListOrder = data.result;
+        console.log(this.ListOrder);
   
         this.onSelectInit();
       },error => {
         console.log('Error get: ', error)
       });
     }
+
   }
+
 
   onSelectInit() {
     let element :any = document.getElementById('selectCount');
@@ -133,34 +142,6 @@ export class RegisterComponent implements OnInit {
     return { fecha, hora };
   }
 
-  // Función para generar un color aleatorio
-  getColor(usuario: string): string {
-    // Calcular un valor hash único basado en el nombre de usuario
-    let hash = 0;
-    for (let i = 0; i < usuario.length; i++) {
-      hash = usuario.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    
-    // Convertir el valor hash en un color RGB
-    const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
-    
-    return color;
-  }
-
-  getDetailsOrder(code:any){
-    //this.router.navigate(['/sales/neworder/register/details', code]);
-    this.orderCode = code;
-    this.visibleDetails = true;
-
-  }
-
-  getPayOrder(code:any){
-    this.router.navigate(['/sales/neworder/payments', code]);
-  }
-
-
-  //Select fecha
-  // Función para formatear la fecha en formato YYYY-MM-DD
   formatDate(date:Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -195,5 +176,10 @@ export class RegisterComponent implements OnInit {
     this.monthRange = `${lastMonthStr}`;
     this.yearRange = `${lastYearStr}`;
   }
+}
 
+
+export class ExportDTO {
+  fecha_init?: Date;
+  fecha_fin?: Date;
 }

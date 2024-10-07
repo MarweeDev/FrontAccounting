@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/core/services/user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,15 @@ export class LoginComponent implements OnInit {
   form!: FormGroup;
   iconBtnPass = true;
   inputType = "password";
+  currentYear: number;
 
-  constructor(private router:Router, private formBuilder: FormBuilder) {
+  constructor(private router:Router, private formBuilder: FormBuilder, private api:UserService) {
     this.form = this.formBuilder.group({
       Email: ['', [Validators.required]],
       Password: ['', [Validators.required]],
     });
+
+    this.currentYear = new Date().getFullYear();
   }
 
   ngOnInit(): void {
@@ -33,13 +37,20 @@ export class LoginComponent implements OnInit {
     this.form.updateValueAndValidity();
 
     if(!this.form.status.includes('INVALID')) {
-      /*this.apimesa.post(t).subscribe(data => {
+      const email = this.form.get('Email');
+      const pass = this.form.get('Password');
+
+      let t = new login();
+      t.email = email?.value;
+      t.pass = pass?.value;
+
+      this.api.getLogin(t).subscribe(data => {
         this.form.reset();
-        this.router.navigate(['sales/neworder']);
+        sessionStorage.setItem('authenticator', data?.result[0]?.token);
+        this.router.navigate(['home/main']);
       }), (error: any) => {
         console.log(error);
-      }*/
-      this.router.navigate(['home/main']);
+      }
     }
   }
 
@@ -47,4 +58,9 @@ export class LoginComponent implements OnInit {
     this.iconBtnPass = !this.iconBtnPass;
     this.inputType = !this.iconBtnPass ? 'text' : 'password';
   }
+}
+
+export class login {
+  email?: string;
+  pass?: string;
 }
