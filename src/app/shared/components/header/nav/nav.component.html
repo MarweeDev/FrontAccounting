@@ -1,21 +1,7 @@
-<section class="container">
+<section class="container" (click)="OnHiddenBar()">
     <div class="col1">
-        <button type="button" class="active">
-            Nueva orden
+        <button type="button" (click)="OnRouterModule()" [className]="'btn rd-4 ' + item.type" *ngFor="let item of listNav" [title]="item.nombre" [routerLink]="[item.url]">
+            <i *ngIf="item.icon" [className]="item.icon"></i>
         </button>
-        <button type="button">
-            Servicios en curso
-        </button>
-        <button type="button">
-            Servicios pendientes
-        </button>
-    </div>
-    <div class="col2">
-        <label for="searchId">
-            <input type="search" placeholder="Buscador" id="searchId">
-            <span>
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-        </label>
     </div>
 </section>

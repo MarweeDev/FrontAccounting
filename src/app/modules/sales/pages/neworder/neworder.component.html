@@ -1,0 +1,19 @@
+<!--<div *ngIf="false; then thenBlock; else elseBlock"></div>-->
+
+<app-register></app-register>
+
+<div class="toask-success animate__bounceIn" *ngIf="VisibleToask">
+    <div class="row">
+        <div class="col">
+            <div class="icon-modal icon icon-success">
+                <span class="fa-solid fa-circle-check rd-4"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="body">
+                <h3>Completado</h3>
+                <p>Orden se guardo correctamente</p>
+            </div>
+        </div>
+    </div>
+</div>

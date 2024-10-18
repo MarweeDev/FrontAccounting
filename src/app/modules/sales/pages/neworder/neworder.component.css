@@ -1,0 +1,36 @@
+/**Toask*/
+.toask-success {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    border-left-width: 5px !important;
+    border-left-color: var(--color-success) !important;
+}
+.toask-success {
+    width: fit-content;
+    height: fit-content;
+    padding: 5px;
+    box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+}
+.toask-success h3, .toask-success p {
+    margin: 0px;
+}
+.toask-success .body p {
+    color: rgb( 97, 109, 138);
+    font-weight: 400;
+    margin-top: 5px;
+}
+.toask-success .row, .toask-success .row .col {
+    padding: 0px;
+    margin: 0px;
+}
+.toask-success .row .col:nth-child(1) {
+    max-width: fit-content;
+}
+.toask-success .body {
+    padding: 14px 14px 0px 14px;
+}

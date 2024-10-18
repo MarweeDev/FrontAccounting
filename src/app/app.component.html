@@ -1,4 +1,20 @@
-<!--<router-outlet></router-outlet>-->
+<app-breadcrumbs id="nav"></app-breadcrumbs>
 
-<app-breadcrumbs></app-breadcrumbs>
-<app-nav></app-nav>
+<app-mainlayout *ngIf="statusDisabledMain"></app-mainlayout>
+
+<div class="content" id="content" (click)="OnHiddenBar()">
+    <router-outlet></router-outlet>
+</div>
+
+<section class="container-loader-module" *ngIf="statusLoaderModule">
+    <div class="container-loader-margin">
+        <div class="custom-loader"></div>
+        <p class="info">Cargando componentes</p>
+    </div>
+</section>
+
+<section class="container-loader-component" *ngIf="statusLoaderComponent">
+    <div class="container-loader-margin">
+        <div class="custom-loader"></div>
+    </div>
+</section>

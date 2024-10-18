@@ -1,0 +1,84 @@
+.container-component {
+    position: fixed !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    z-index: 2 !important;
+    display: flex !important;
+    padding: 3rem 10px 3rem 10px !important;
+    background: var(--background-primario) !important;
+    left: 0 !important;
+    top: 0 !important;
+    justify-content: center;
+    z-index: 1000;
+}
+.container-component::before {
+    content: '';
+    background-color: var(--color-primary);
+    position: fixed;
+    top: 0px; left: 0px; right: 0px;
+    height: 35%;
+    z-index: -1;
+}
+.container-component::after {
+    content: '';
+    background-image: url('src/assets/img/5130890.jpg');
+    background-size: 100% auto;
+    background-position: bottom;
+    position: fixed;
+    top: 0px; left: 0px; right: 0px;
+    height: 35%;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+.card { 
+    cursor: unset; 
+    height: fit-content; 
+    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .1);
+    width: 30em !important;
+    padding: 30px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+}
+
+label strong {
+    width: 6rem;
+    padding: 5px;
+}
+  
+input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+  
+.error-message {
+    text-align: center;
+    font-size: 12px;
+    padding: 7px 20px;
+    width: fit-content;
+    margin: auto;
+    margin-left: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 53, 53, .9);
+    color: #fff;
+}
+ 
+.container-btn {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.btn {
+    padding: 7px 20px;
+    cursor: pointer;
+    margin: 3px;
+}
+

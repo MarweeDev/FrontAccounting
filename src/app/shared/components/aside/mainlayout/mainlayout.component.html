@@ -1,0 +1,41 @@
+<section class="container animated fadeInTopLeft" id="slider_left">
+    <div class="parent">
+        <div class="header">
+            <div class="circle" [style.background-color]="getColor(user)">
+                <span>{{user[0] | uppercase}}</span>
+            </div>
+            <p class="circle-name">
+                {{user}}
+                <br>
+                <small class="txt-company">{{rol}}</small>
+            </p>
+        </div>
+        <div class="menu">
+            <ul>
+                <li *ngFor="let item of ListModule; let i = index">
+                    <button 
+                    type="button" 
+                    [id]="'nav_left_' + item.id_modulo"
+                    [class.active]="item.id_modulo === activeButtonId" 
+                    (click)="OnRouterModule(item.ruta, item.id_modulo)">
+                        <i [className]="item.icono"></i> {{item.modulo}}
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="footer">
+            <ul>
+                <li>
+                    <button type="button" class="button-close" (click)="OnRouterModule('login', 0)">
+                        <i class="fa-solid fa-right-from-bracket"></i> Salir
+                    </button>
+                </li>
+                <!--<li>
+                    <button type="button">
+                        <i class="fa-solid fa-gear"></i> Cofiguración
+                    </button>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+</section>

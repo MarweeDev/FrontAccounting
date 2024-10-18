@@ -7,67 +7,135 @@
       "col1 col2"
       ". ."
       ". .";
+    font-size: 12px;
+    margin: 0px 20px;
+    /*box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);*/
+    overflow: hidden;
 
-    border-bottom: 1px solid var(--color-texto-terciario);
-    font-size: 13px;
+    /*position: sticky;
+    top: 4rem;
+    right: 0;
+    left: 0;
+    z-index: 2;*/
+    width: max-content;
 }
   
 .col1 { 
     grid-area: col1;
-    display: flex;
+    line-height: 19px;
+    max-width: fit-content;
+    padding-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 .col1 button {
-    padding: 20px 20px;
+    padding: 6px 20px;
+    margin-left: 5px;
     letter-spacing: 1px;
-    font-weight: 300;
-    border: none;
-    background: none;
     transition: all .5s;
-    color:  var(--color-texto-terciario);
-    position: relative;
+    font-weight: 400;
+    font-size: 11px !important;
 }
-.col1 .active, .col1 button:hover {
-    background-color: var(--color-primario);
-    color: rgba(255, 255, 255, 1);
-    transition: all .5s;
-    cursor: pointer;
+.col1 button:hover {
+    padding: 6px 20px;
+    /*box-shadow: 2px 2px 3px rgba(12, 0, 56, 0.3);*/
 }
-.col1 .active::before {
-    content: '';
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-top: 10px solid var(--color-primario);
-    bottom: -10px;
-    z-index: 2;
-    left: calc(50% - 12px);
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;   
+.col1 button::before {
+    content: attr(title);
+    opacity: 1;
+    transition: opacity 0.5s ease;
 }
+.col1 button:hover::before {
+    content: attr(title);
+    opacity: 1;
+}
+
+.col1 button i {
+    color: #fff;
+    width: 11px;
+    margin-left: 10px;
+}
+.col1 button:hover i {
+    margin-left: 10px;
+}
+
+
   
 .col2 { 
     grid-area: col2;
     line-height: 19px;
     max-width: fit-content;
-    border-left: 1px solid var(--color-texto-terciario);
+    background-color: rgba(255, 255, 255, 1) !important;
+    border-radius: 20px;
+    border: 1px solid var(--color-texto-terciario);
+}
+.col2 button {
+    padding: 8px 10px;
+    margin-left: 5px;
+    letter-spacing: 1px;
+    transition: all .5s;
+    font-weight: 300;
+    background-color: transparent;
+    border: none;
+}
+.col2 button:hover {
+    padding: 5px 20px;
+    background-color: var(--color-info-dark) !important;
+    box-shadow: 2px 2px 3px rgba(12, 0, 56, 0.3);
+}
+.col2 button::before {
+    content: '';
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.col2 .button-nuevo:hover::before {
+    content: 'Nuevo';
+    opacity: 1;
+}
+
+.col2 button i {
+    color: #fff;
+    width: 11px;
+}
+.col2 button:hover i {
+    margin-left: 10px;
 }
 .col2 input {
-    padding: 20px 20px;
+    padding: 6px 20px;
     border: none;
     outline: none;
     text-align: center;
     letter-spacing: 1px;
     color: var(--color-adicional-primario);
 }
+/* Para desactivar la "X" en navegadores basados en WebKit (como Chrome y Safari) */
+.col2 input[type="search"]::-webkit-search-cancel-button,
+.col2 input[type="search"]::-webkit-search-clear-button {
+  -webkit-appearance: none;
+}
+/* Para desactivar la "X" en Firefox */
+.col2 input[type="search"] {
+  -moz-appearance: none;
+}
 .col2 input::placeholder {
     color:  var(--color-texto-terciario);
 }
 .col2 label {
+    margin-left: 10px;
     padding-right: 10px;
+    /*border-left: 1px solid var(--color-texto-terciario);*/
 }
 .col2 label span i {
     color:  var(--color-texto-terciario) !important;
     cursor: text;
+}
+.col2 .container-img {
+    height: 24px;
+    max-height: 24px;
+}
+.col2 .container-img img {
+    height: 100%;
+    transform: scale(1.5, 1.5);
 }
   

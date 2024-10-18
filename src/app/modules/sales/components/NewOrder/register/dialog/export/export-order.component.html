@@ -1,0 +1,99 @@
+<section class="container-component">
+    <!--Titulo componente-->
+    <div class="container-prev">
+        <h3 class="title">Gestión de exportación</h3>
+    </div>
+
+    <br>
+
+    <!--Contenido productos-->
+    <div class="content">
+        <div class="container-head">
+            <p class="count-register">Resultados <strong>{{ListOrder ? ListOrder.length : 0}}</strong></p>
+            <div class="container-pag">
+                <div class="container-select-filter" *ngIf="ListOrder != undefined && ListOrder.length > 0">
+                    <div class="container-select-filter-modal">
+                        <button type="button" class="btn rd-4" (click)="onExportExcel()">
+                            Descargar <i class="fa-solid fa-file-arrow-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="container-select-filter">
+                    <p><i class="fa-solid fa-arrow-down"></i> Reporte desde: </p>
+                    <div class="container-select-filter-modal">
+                        <input type="date" [max]="DateMaxInput" name="" id="selectDateCalendarInit" (change)="onLoadOrder()">
+                    </div>
+                </div>
+
+                <div class="container-select-filter">
+                    <p><i class="fa-solid fa-arrow-up"></i> hasta: </p>
+                    <div class="container-select-filter-modal">
+                        <input type="date" [max]="DateMaxInput" name="" id="selectDateCalendarFinish" (change)="onLoadOrder()">
+                    </div>
+                </div>
+
+                <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
+                <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+                
+                <div>
+                    <select id="selectCount" (change)="onSelectInit()">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="container-table">
+
+            <div class="message-not-result" *ngIf="ListOrder === undefined || ListOrder.length === 0">
+                <img src="../../../../../../assets/img/dobby/not_results_IA.png" alt="Image not found" />
+                <h3>No se encontraron registros</h3>
+                <h5>Reintentar con nuevos filtros para obtener resultados</h5>
+            </div>
+
+            <table *ngIf="ListOrder ? ListOrder.length > 0 : 0">
+                <thead>
+                    <tr>
+                        <th>Consecutivo</th>
+                        <th>Identificación Tercero</th>
+                        <th>Razón Social</th>
+                        <th>Correo Electronico</th>
+                        <th>Identificación Vendedor</th>
+                        <th>Código Producto</th>
+                        <th>Descripción Producto</th>
+                        <th>Cantidad Producto</th>
+                        <th>Valor Unitario</th>
+                        <th>Valor Forma Pago</th>
+                        <th>Código Forma Pago</th>
+                        <th>Descripción Forma Pago</th>
+                        <th>Fecha Elaboración</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of FilterListOrder; let i = index">
+                        <td>{{item.consecutivo}}</td>
+                        <td>{{item.identificacion_tercero}}</td>
+                        <td>{{item.nombre_o_razon_social}}</td>
+                        <td>{{item.correo_electronico}}</td>
+                        <td>{{item.identificacion_vendedor}}</td>
+                        <td>{{item.codigo_producto}}</td>
+                        <td>{{item.descripcion_producto}}</td>
+                        <td>{{item.cantidad_producto}}</td>
+                        <td>{{item.valor_unitario}}</td>
+                        <td>{{item.valor_forma_de_pago}}</td>
+                        <td>{{item.codigo_forma_de_pago}}</td>
+                        <td>{{onRemoveEmojis(item.descripcion_forma_de_pago)}}</td>
+                        <td>{{item.fecha_de_elaboracion}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+
+    </div>
+
+</section>
+

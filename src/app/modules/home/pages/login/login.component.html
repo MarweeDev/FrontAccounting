@@ -1,0 +1,43 @@
+<section class="container-component">
+    <div class="banner">
+        <img width="380px" src="../../../../../assets/img/marw_02.png" alt="">
+        <div class="custom-shape-divider-bottom-1727235104">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="card">
+        <form [formGroup]="form" (ngSubmit)="login()">
+            <label for="email">
+                <input type="text" id="email" formControlName="Email" placeholder="Usuario / Correo electronico">
+                <div class="error-message txt-danger" *ngIf="form.get('Email')?.hasError('required') && form.get('Email')?.touched">
+                    <i class="fa-solid fa-circle-exclamation txt-danger"></i> Campo requerido
+                </div>
+            </label>
+
+            <label for="password">
+                <input [type]="inputType" id="password" formControlName="Password" placeholder="Contraseña">
+                <button type="button" (click)="onVisiblePass()">
+                    <i class="fa-solid fa-eye" *ngIf="!iconBtnPass"></i>
+                    <i class="fa-regular fa-eye-slash" *ngIf="iconBtnPass"></i>
+                </button>
+                <div class="error-message txt-danger" *ngIf="form.get('Password')?.hasError('required') && form.get('Password')?.touched">
+                    <i class="fa-solid fa-circle-exclamation txt-danger"></i> Campo requerido
+                </div>
+            </label>
+            <div class="reset">
+                <a class="txt-companyTwo">Restablecer contraseña</a>
+            </div>
+          
+            <div class="container-btn">
+                <button type="submit" class="btn btn-company rd-1 wth-lr">Iniciar sesión</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <p>
+            Marwee <i class="fa-regular fa-copyright"></i> {{currentYear}}
+        </p>
+    </footer>
+</section>

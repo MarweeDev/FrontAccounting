@@ -1,0 +1,301 @@
+:root {
+  /*--color-primary: #6C80C1;*/
+  --color-primary: rgb(23,25,33);
+  --color-secondary: #f5f5f5;
+
+  --color-success: #45E936;
+  --color-danger: #FF3535;
+  --color-warning: #FFB800;
+  --color-info: #3A86FF;
+  /*--color-info-dark: #6568c9;*/
+  --color-info-dark: rgba(55,146,141,1);
+
+  --color-company: rgba(255, 51, 0, 1);
+  --color-company-two: #fd8060;
+  --color-company-three: #ffc637;
+
+  --font-family-company: 'Roboto', sans-serif;
+  --font-family-company1: "Outfit", sans-serif;/*font-optical-sizing: auto;*/
+  --font-family-company2: "Chathura", sans-serif;
+  --font-family-company3: "Viga", sans-serif;
+  --font-family-company4: "MuseoModerno", sans-serif; /*font-optical-sizing: auto;*/
+  --font-family-company5: "Poppins", sans-serif;
+}
+
+.gradient-company {
+  background: linear-gradient(0deg, rgba(255,51,0,1) 0%, rgba(255,119,0,1) 100%);
+  background-clip: text;
+  background: -webkit-linear-gradient(0deg, rgba(255,51,0,1) 0%, rgba(255,119,0,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/*Colores alert*/
+.success { background: var(--color-success) !important; color: #ffffff !important; }
+.danger { background: var(--color-danger) !important; color: #ffffff !important }
+.warning { background: var(--color-warning) !important; color: #ffffff !important }
+.info { background: var(--color-info) !important; color: #ffffff !important }
+.company { background: var(--color-company) !important; color: #ffffff !important }
+.companyTwo { background: var(--color-company-two) !important; color: #ffffff !important }
+.companyThree { background: var(--color-company-three) !important; color: #ffffff !important }
+.origin { background: var(--color-info-dark) !important; color: #ffffff !important }
+
+/*texto alert*/
+.txt-success { color: var(--color-success) !important; }
+.txt-danger { color: var(--color-danger) !important; }
+.txt-warning { color: var(--color-warning) !important; }
+.txt-info { color: var(--color-info) !important; }
+.txt-company { color: var(--color-company) !important; }
+.txt-companyTwo { color: var(--color-company-two) !important; }
+.txt-companyThree { color: var(--color-company-three) !important; }
+
+/*Botones global*/
+.btn {
+  padding: 8px 20px;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-radius: 5px !important;
+  font-weight: 500;
+  font-size: 12px;
+}
+.btn-span i, .btn-i i { color: #ffffff !important; }
+
+/*Botones alert*/
+.btn-primary { 
+  background: var(--color-primary) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-primary);
+  transition: all .5s;
+}
+.btn-primary:hover { background: #7e91ce !important; cursor: pointer;}
+
+.btn-secondary { 
+  background: var(--color-secondary) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-secondary);
+  transition: all .5s;
+}
+.btn-secondary:hover { background: #ff2d88 !important; cursor: pointer;}
+
+.btn-success { 
+  background: var(--color-success) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-success);
+  transition: all .5s;
+}
+.btn-success:hover { background: #71f462 !important; cursor: pointer;}
+
+.btn-danger { 
+  background: var(--color-danger) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-danger);
+  transition: all .5s;
+}
+.btn-danger:hover { background: #ff4e4e !important; cursor: pointer;}
+
+.btn-warning { 
+  background: var(--color-warning) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-warning);
+  transition: all .5s;
+}
+.btn-warning:hover { background: #f7c445 !important; cursor: pointer;}
+
+.btn-info { 
+  background: var(--color-info) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-info);
+  transition: all .5s;
+}
+.btn-info:hover { background: #93a6e2 !important; cursor: pointer;}
+
+.btn-company { 
+  background: var(--color-company) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-company);
+  transition: all .5s;
+}
+.btn-company:hover { background: rgb(255, 97, 58) !important; cursor: pointer;}
+
+.btn-companyTwo { 
+  background: var(--color-company-two) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-company-two);
+  transition: all .5s;
+}
+.btn-companyTwo:hover { opacity: .9 !important; cursor: pointer;}
+
+.btn-companyThree { 
+  background: var(--color-company-three) !important; 
+  color: #ffffff !important;
+  border-color: var(--color-company-three);
+  transition: all .5s;
+}
+.btn-companyThree:hover { opacity: .9 !important; cursor: pointer;}
+
+.btn-default { 
+  background: var(--color-texto-primario) !important; 
+  color: var(--color-adicional-secundario) !important;
+  border-color: var(--color-texto-terciario);
+  transition: all .5s;
+}
+.btn-default:hover { background: var(--color-texto-terciario) !important; cursor: pointer;}
+
+.btn-origin { 
+  background: transparent !important; 
+  color: #ffffff !important;
+  border-color: transparent;
+  transition: all .5s;
+}
+.btn-origin:hover { background: rgba(55,146,141,1) !important; cursor: pointer;}
+
+/*Bordes*/
+.border-success:hover { border-color: var(--color-success); }
+.border-danger:hover { border-color: var(--color-danger); }
+.border-warning:hover { border-color: var(--color-warning); }
+.border-info:hover { border-color: var(--color-info); }
+.border-company:hover { border-color: var(--color-company); }
+.border-primary:hover { border-color: var(--color-info-dark); }
+
+/*Row - Col*/
+.row {
+  display: flex;
+  margin: 5px;
+  padding: 5px;
+}
+.row .col {
+  margin: 5px;
+  padding: 5px;
+  flex: 1 0 0%;
+}
+
+/*Card*/
+.card {
+  width: 22em;
+  padding: 10px;
+  margin: 10px;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 5px;
+  cursor: pointer; 
+  transition: all .8s;
+}
+.card-hover { box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.8); border-radius: 5px 18px 18px 18px !important; }
+
+/*Icon*/
+.icon {
+  padding: 10px !important;
+  width: fit-content !important;
+}
+/*icon status*/
+.icon-success span {
+  color: var(--color-success) !important;
+  background-color: #cdffc8 !important;
+  padding: 20px;
+}
+.icon-danger span {
+  color: var(--color-danger) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+.icon-warning span {
+  color: var(--color-warning) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+.icon-info span {
+  color: var(--color-info) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+.icon-company span {
+  color: var(--color-company) !important;
+  background-color: #fff3d4 !important;
+  padding: 20px;
+}
+
+/*Width*/
+.wth-f { width: auto !important; }
+.wth-lr { width: 100% !important; }
+.wth-1 { width: 16em !important; }
+.wth-2 { width: 22em !important; }
+.wth-3 { width: 42em !important; }
+
+/*Padding*/
+.p-1 { padding: 5px !important; }
+.p-2 { padding: 10px !important; }
+.p-3 { padding: 30px !important; }
+.p-4 { padding: 50px !important; }
+.p-5 { padding: 80px !important; }
+
+.p-x { padding-left: 10px !important; padding-right: 10px !important; }
+.p-z { padding-top: 10px !important; padding-bottom: 10px !important; }
+
+/*float*/
+.f-n { float: none !important; }
+.f-l { float: left !important; }
+.f-r { float: right !important; }
+.f-i { float: inherit !important; }
+
+/*Radius*/
+.rd-1 { border-radius: 5px !important; }
+.rd-2 { border-radius: 10px !important; }
+.rd-3 { border-radius: 30px !important; }
+.rd-4 { border-radius: 50px !important; }
+.rd-5 { border-radius: 80px !important; }
+
+/*Select*/
+select {
+  background-image: url('../img/dobby/caret-down-solid.svg');
+  background-position: right calc((1em * 1.5) * 0.75) center;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  appearance: none;
+  padding: 10px 20px;
+  padding-right: calc(1rem * 3);
+  background-color: transparent;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  border: 1px solid var(--color-texto-terciario);
+}
+.select-filter {
+  background-image: url('../img/dobby/sliders-solid.svg') !important;
+  background-size: 10px 15px;
+  color: var(--color-primary);
+}
+.select-calendar {
+  background-image: url('../img/dobby/calendar-days-regular.svg') !important;
+  background-size: 10px 15px;
+  text-align: end;
+  color: var(--color-primary);
+}
+select::-ms-expand {
+  display: none;
+}
+
+
+/* Estilo del scrollbar principal */
+::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+  scrollbar-width: thin; /* Para Firefox */
+}
+/* Estilo de la pista (track) del scrollbar */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color de fondo de la pista */
+}
+/* Estilo del "pulgar" (thumb) del scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary); /* Color del "pulgar" */
+  border-radius: 6px; /* Bordes redondeados del "pulgar" */
+}
+/* Estilo del "pulgar" al pasar el ratón sobre él */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary); /* Cambiar color al pasar el ratón sobre el "pulgar" */
+}
+/* Estilo del scrollbar para Firefox */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) #f1f1f1;
+}

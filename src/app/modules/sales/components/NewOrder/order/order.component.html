@@ -1,0 +1,243 @@
+<section class="container-component">
+
+    <!--Titulo componente-->
+    <div class="container-prev">
+        <h3 class="title">Orden de productos</h3>
+        <select class="rd-4" (change)="onSelectChange($event)">
+            <option value="0">Mostrar todos</option>
+            <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
+        </select>
+        <div class="container-search">
+            <label for="searchId">
+                <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+                <span>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col col-product">
+            
+            <!--Contenido productos-->
+            <div class="content">
+
+                <!--Producto--> <!--(contextmenu)="mostrarMenu($event)"-->
+                <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
+                    <div class="card-title-info">
+                        <i class="fa-solid fa-ellipsis"></i>
+                        <div class="container-info">{{item.descripcion}}</div>
+                    </div>
+                    <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">
+                        <i class="fa-solid fa-circle-check txt-success"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-body">
+                            <div class="col">
+                                <div class="icon rd-4">
+                                    <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p><strong>{{item.nombre}}</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <p class="p"><small class="txt-company">{{OnConvertNumberPrice(item.precio)}}</small></p>
+                        <!--<p>
+                            <small>
+                                {{item.descripcion}}
+                            </small> 
+                        </p>-->
+                        <div class="btn-add">
+                            <button type="button" class="prev" [id]="item.id" (click)="deleteitem($event)">
+                                <i class="fa-solid fa-minus txt-danger"></i>
+                            </button>
+
+                            <input type="number" class="input-count" [id]="'input-' + item.id" value="0" readonly>
+
+                            <button type="button" class="next" [id]="item.id" [name]="item.nombre" [value]="item.precio" (click)="additem($event)">
+                                <i class="fa-solid fa-plus txt-success"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--contextomenu-->
+                <div class="context-menu" id="contextmenu" *ngIf="mostrarContextMenu" style="opacity: 0;">
+                    <ul>
+                        <li (click)="realizarAccion('sales/neworder/order/edit/')"><i class="fa-solid fa-pencil"></i> Editar</li>
+                        <li (click)="deleteItem()"><i class="fa-solid fa-trash-can"></i> Eliminar</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col col-order" *ngIf="valueCount !== 0">
+            <!--Lista de productos seleccionados-->
+            <div [class]="heightAuto" *ngIf="valueCount !== 0">
+                <button type="button" class="button animate__bounceIn" (click)="OnOpen()" *ngIf="_btn_modal_add">
+                    <span class="danger">{{valueCount}}</span>
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </button>
+                <div class="modal-add animate__animated animate__slideInRight" *ngIf="_modal_add">
+                    <button type="button" class="btn btn-info rd-4 btn-mini btn-i" style="display: none;" (click)="OnClose()">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <div class="header">
+                        <div class="row">
+                            <div class="col">
+                                <h5>Código de orden:</h5>
+                            </div>
+                            <div class="col">
+                                <h4>
+                                    <small class="txt-info">{{codeOrder}}</small>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <select (change)="onSelectChangeClient($event)" id="select_client">
+                                    <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre + " (" + item.nit + ")"}}</option>
+                                </select>
+                                <button type="button" class="btn btn-info rd-4" title="Nuevo Cliente" (click)="onCreateClient()">
+                                    <span class="fa-solid fa-user-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="grid rd-2">
+                            <table>
+                                <!--<thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>-->
+                                <tbody>
+                                    <tr *ngFor="let item of ListProduct">
+                                        <td>{{item.nombre}}</td>
+                                        <td>{{OnConvertNumberPrice(item.precio)}}</td>
+                                        <td>
+                                            <button type="button" class="prev" (click)="deleteitemOrder(item.id)">
+                                                <i class="fa-solid fa-minus txt-danger"></i>
+                                            </button>
+                                            <strong class="input">{{item.id_estado}}</strong>
+                                            <button type="button" class="next" [id]="item.id" [name]="item.nombre" [value]="item.precio" (click)="additemOrder($event)">
+                                                <i class="fa-solid fa-plus txt-success"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="action">
+                        <div class="footer">
+                            <div class="row">
+                                <div class="col">
+                                    Total
+                                </div>
+                                <div class="col">
+                                    {{totalProduct}}
+                                </div>
+                            </div>
+                            <div class="action-check">
+                                <label class="btn rd-4" id="label-pay" (click)="OnValidateCheck()" for="input-pay">
+                                    <input type="checkbox" id="input-pay">
+                                    <i id="icon-pay" class="fa-solid fa-circle-check m-r"></i>
+                                </label>
+                                <div class="content-check">
+                                    <strong>Pagar orden</strong>
+                                    <p>Desea generar el pago de la orden automaticamente.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-order">
+                            <div class="row row2">
+                                <div class="col col2">
+                                    <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
+                                </div>
+                                <div class="col col2">
+                                    <button type="button" class="btn btn-success rd-4" *ngIf="btn_pay" (click)="viewOk()">Registrar orden</button>
+                                    <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">Pagar orden</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-add-client" *ngIf="_modal_add_client">
+        <div class="container-content">
+            <div class="row">
+                <div class="col">
+                    <h3>Proceso de creación</h3>
+                    <h5>Creando nuevo cliente para generar orden.</h5>
+                    <br>
+                    <form [formGroup]="form" (ngSubmit)="addNewClient()">
+                        <label for="nombre">
+                            <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
+                            <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                                Requerido
+                            </div>
+                        </label>
+                      
+                        <label for="nit">
+                            <input type="text" id="nit" formControlName="Nit" placeholder="Nit">
+                            <div class="error-message" *ngIf="form.get('Nit')?.hasError('required') && form.get('Nit')?.touched">
+                                Requerido
+                            </div>
+                        </label>
+                      
+                        <label for="correo">
+                            <input type="text" id="correo" formControlName="Correo" placeholder="Correo">
+                        </label>
+                      
+                        <div class="container-btn">
+                            <button type="submit" class="btn btn-success m-2 rd-4">Crear</button>
+                            <button type="button" class="btn btn-default rd-4" (click)="cancelNewClient()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+
+    <!--esto tiene que ir en el componente creado en shared-->
+    <div class="alert-modal" *ngIf="VisibleAlert">
+        <div class="container-modal">
+            <div class="row">
+                <div class="col">
+                    <div class="icon-modal icon icon-warning">
+                        <span class="fa-solid fa-triangle-exclamation rd-4"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="header-modal">
+                        <h3>Cancelando orden</h3>
+                    </div>
+                    <div class="body-modal">
+                        <p>¿Seguro desea cancelar la orden, no se podra recuperar lo cargado?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-modal">
+                <button type="button" class="btn btn-default rd-4" (click)="viewCancelModal()">Volver</button>
+                <button type="button" class="btn btn-warning rd-4" (click)="viewOkModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+</section>

@@ -1,11 +1,28 @@
 <section class="container">
     <div class="col1">
-        <p>Ventas</p>
+        <button type="button" (click)="OnExpandBar()">
+            <i id="icon_btn_open" class="fa-solid fa-bars"></i>
+            <!--fa-bars-staggered-->
+        </button>
     </div>
     <div class="col2">
-        <i class="fa-solid fa-house"></i>
+        <button type="button" (click)="OnRouterModule('home/main')">
+            <i class="fa-solid fa-house-chimney"></i>
+        </button>
+        <div class="breadcrumb rd-4">
+            <div class="list" *ngFor="let part of breadcrumbParts; let i = index">
+                <span [ngClass]="{'breadcrumb-last': i === breadcrumbParts.length - 1}">{{part}}</span>
+                <span *ngIf="i < breadcrumbParts.length - 1" class="breadcrumb-separator"> 
+                    <i class="fa-solid fa-chevron-right"></i> 
+                </span>
+            </div>
+        </div>
+        <div class="container-info">
+            <span>Último ingreso:</span>
+            <p>10/06/2024 01:00:12</p>
+        </div>
     </div>
     <div class="col3">
-        Opción 1 / Opción 2 / Opción 3
+        <app-nav></app-nav>
     </div>
 </section>

@@ -1,0 +1,309 @@
+* {
+    box-sizing: border-box;
+}
+.container-component {
+    position: relative;
+    /*height: calc(100vh - 111px);*/
+}
+
+.container-prev {
+    text-align: start;
+    display: flex;
+}
+.container-prev .title {
+    color: rgb( 97 109 138 );
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.container-head {
+    margin-top: 10px;
+    padding: 10px 20px 10px 20px;
+    width: 100%;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 1);
+    position: relative;
+}
+.container-head .count-register {
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin: 0px;
+}
+.container-head .count-register strong {
+    padding: 3px 10px;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 10px;
+    background-color: var(--background-primario);
+    color: var(--color-primary);
+    letter-spacing: 0px;
+}
+select {
+    padding: 8px 20px !important;
+    padding-right: calc(1rem * 3) !important;
+    border-color: transparent !important;
+}
+.container-select-filter {
+    margin-right: 10px;
+    border-right: 1px solid var(--color-texto-terciario);
+    position: relative;
+}
+.container-select-filter select {
+    padding: 9.5px 20px !important;
+    padding-right: calc(1rem * 3) !important;
+    font-size: x-small !important;
+    letter-spacing: 1px;
+}
+.container-select-filter-modal {
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 10px 10px 0px 0px;
+    z-index: 3;
+    position: absolute;
+    left: 0;
+    right: -1px;
+    top: -36px;
+}
+.container-select-filter-modal input {
+    border: none;
+    padding: 8px;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+}
+
+.container-head .container-pag {
+    display: flex;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+.container-head .container-pag button {
+    padding: 4px 7px;
+    border-width: 1px;
+    border-color: transparent;
+    background-color: transparent;
+    margin: 6px 6px;
+    font-size: 10px;
+    height: fit-content;
+}
+.container-head .container-pag button:hover {
+    border-style: solid;
+    border-color: var(--color-texto-terciario);
+    background-color: var(--background-primario);
+    cursor: pointer;
+}
+.container-head .container-pag p {
+    font-size: 12px;
+    padding: 10px;
+    margin: 0px;
+}
+
+
+.content .container-table {
+    padding: 10px;
+    width: 100%;
+    /*border: 1px solid var(--color-texto-terciario);*/
+    border-radius: 7px;
+    /*background-color: rgba(255, 255, 255, 1);*/
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+}
+.content .container-table .message-not-result {
+    margin-top: 3rem;
+    text-align: center;
+}
+.content .container-table .message-not-result img {
+    width: 7rem;
+}
+.content .container-table .message-not-result h3 {
+    color: rgb( 97 109 138 );
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+.content .container-table .message-not-result h5 {
+    color: rgb(161, 161, 161);
+    letter-spacing: 1px;
+    font-weight: 300;
+}
+.content .container-table table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px; /*-Horizontal 0px, Vertical 10px */
+}
+/*thead*/
+.content .container-table table thead tr {
+    position: sticky;
+    top: -0.6rem;
+    background-color: var(--background-primario);
+    z-index: 2;
+}
+.content .container-table table thead tr th {
+    text-align: left;
+    font-size: 12px;
+    padding: 20px 10px 20px 10px;
+    /*background-color: var(--color-info);*/
+    color: var(--color-primary);
+    /*box-shadow: 4px 5px 6px rgba(0, 0, 0, .1);*/
+    /*border-top: 1px solid var(--color-texto-terciario);*/
+}
+.content .container-table table thead tr th i {
+    color: var(--color-primary);
+}
+.content .container-table table thead tr th:first-child {
+    border-radius: 00px 0px 0px 0px;
+    /*border-left: 1px solid var(--color-info);*/
+}
+.content .container-table table thead tr th:last-child {
+    border-radius: 0px 0px 0px 0px;
+    /*border-right: 1px solid var(--color-texto-terciario);*/
+}
+/*tbody*/
+.content .container-table table tbody {
+    height: 50px;
+    overflow: auto;
+}
+.content .container-table table tbody tr {
+    width: 100%;
+    table-layout: fixed;
+    border-left: 1px solid var(--color-info);
+    cursor: pointer;
+}
+.content .container-table table tbody .not-pending-tr,
+.content .container-table table tbody .success-tr {
+    cursor: unset;
+}
+.content .container-table table tbody .pending-tr {
+    position: relative;
+}
+.content .container-table table tbody .pending-tr::after {
+    content: '⚠️';
+    position: absolute;
+    right: 0px;
+    top: -10px;
+    background-color: #ffffff;
+    border: 1px solid var(--color-texto-terciario);
+    padding: 0px 5px 5px 5px;
+    font-size: 12px;
+    border-radius: 8px 8px 0px 8px;
+}
+.content .container-table table tbody tr td {
+    text-align: left;
+    padding: 10px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    background-color: rgb(255, 255, 255);
+    color: var(--color-adicional-primario);
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-texto-terciario);
+    border-left-width: 0px;
+    border-right-width: 0px;
+    box-shadow: 1px 3px 3px rgba(0, 0, 0, .1);
+    box-sizing: border-box;
+}
+.content .container-table table tbody tr:hover > td {
+    background-color: rgb(225, 227, 255);
+}
+.content .container-table table tbody .success-tr:hover > td {
+    background-color: rgb(206, 255, 202);
+}
+.content .container-table table tbody .not-pending-tr:hover > td {
+    background-color: rgb(255, 230, 230);
+}
+.content .container-table table tbody tr td:first-child {
+    border-radius: 0px 0px 0px 0px;
+    border-left: 2px solid var(--color-info);
+}
+.content .container-table table tbody tr .not-pending-td:first-child {
+    border-radius: 0px 0px 0px 0px;
+    border-left: 2px solid var(--color-danger);
+}
+.content .container-table table tbody tr .success-td:first-child {
+    border-radius: 0px 0px 0px 0px;
+    border-left: 2px solid var(--color-success);
+}
+.content .container-table table tbody tr td:last-child {
+    border-radius: 0px 10px 10px 0px;
+    border-right: 1px solid var(--color-texto-terciario);
+}
+
+.content .container-table table tbody tr .td {
+    display: flex;
+    box-sizing: border-box;
+}
+.content .container-table table tbody tr td .circle {
+    padding: 9px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 20px;
+    /*border: 1px solid var(--color-texto-terciario);*/
+    color: rgb(255, 255, 255);
+    position: relative;
+    box-sizing: border-box;
+}
+.content .container-table table tbody tr td .circle:hover::before {
+    content: attr(title);
+    position: absolute;
+    left: 10px;
+    background: var(--color-primary);
+    padding: 5px 20px;
+    font-size: 12px;
+    top: 5px;
+    margin-left: 2rem;
+    border-radius: 20px;
+}
+.content .container-table table tbody tr td .circle span {
+    color: rgb(255, 255, 255);
+}
+.content .container-table table tbody tr td .circle-name {
+    padding: 10px 0px 10px 10px;
+    margin: 0px;
+    font-size: smaller;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-sizing: border-box;
+}
+.content .container-table table tbody tr td .btn-pay {
+    padding: 5px 20px !important;
+    font-size: 10px !important;
+}
+.content .container-table table tbody tr td .btn-option {
+    font-size: 15px !important;
+    margin-left: 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.content .container-table table tbody tr td .td-container-tag {
+    position: relative;
+    display: flex;
+}
+.content .container-table table tbody tr td .td-tag {
+    /*position: absolute;*/
+    font-size: smaller;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    /*rotate: -17deg;*/
+    right: 18px;
+    top: 1px;
+    margin-right: 5px;
+}
+
+.content .container-table table tbody tr td:last-child {
+    text-align: end;
+}
