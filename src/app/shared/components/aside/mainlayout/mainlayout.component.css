@@ -16,14 +16,16 @@
         "footer";
 
     position: fixed;
-    top: 0px;
-    bottom: 0px;
+    top: 4rem;
+    bottom:1rem;
+    left: 1rem;
 
     z-index: 3 !important;
     transition: all 0.5s;
 
     background-color: rgba(255,255,255,1);
     border-right: 1px solid var(--color-texto-terciario);
+    border-radius: 10px;
     box-shadow: 2px 2px 9px rgba(0,0,0,.2);
 }
     
@@ -90,7 +92,7 @@ ul li button {
     border-color: transparent;
     border-style: solid !important;
     border-width: 1px !important;
-    border-radius: 5px !important;
+    border-radius: 10px !important;
     font-weight: 400;
     font-size: 11px;
     letter-spacing: 1.5px;
@@ -99,7 +101,8 @@ ul li button {
     transition: all .6s;
 }
 ul li button:hover {
-    background: var(--color-primary) !important;
+    background-color: rgb(23,25,33);
+    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
     color: #ffffff !important;
     border-color: transparent;
     transition: all .5s;
@@ -124,7 +127,8 @@ ul li button:hover > i {
 
 /*Active*/
 ul li .active {
-    background: var(--color-primary) !important;
+    background-color: rgb(23,25,33);
+    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
     color: #ffffff !important;
     border-color: transparent !important;
     transition: all .5s !important;

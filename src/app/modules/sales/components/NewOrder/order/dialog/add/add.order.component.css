@@ -13,7 +13,8 @@
 }
 .container-component::before {
     content: '';
-    background-color: var(--color-primary);
+    background-color: rgb(23,25,33);
+    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
     position: fixed;
     top: 0px; left: 0px; right: 0px;
     height: 35%;
@@ -21,7 +22,7 @@
 }
 .container-component::after {
     content: '';
-    background-image: url('src/assets/img/5130890.jpg');
+    background-image: url('src/assets/img/5130890.png');
     background-size: 100% auto;
     background-position: bottom;
     position: fixed;

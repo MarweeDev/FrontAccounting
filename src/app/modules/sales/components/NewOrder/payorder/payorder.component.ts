@@ -5,6 +5,7 @@ import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
 import { TypepayService } from 'src/app/core/services/typePay/typepay.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
+import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
   selector: 'app-payorder',
@@ -22,6 +23,7 @@ export class PayorderComponent implements OnInit {
   visiblesubtype : boolean = false;
 
   constructor(
+    private toastService: ToastService,
     private route : ActivatedRoute,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService, 
@@ -109,27 +111,72 @@ export class PayorderComponent implements OnInit {
   viewPrev() {
   }
 
+  closeBefore() {
+    let elementBefore :any = document.getElementById('col_final');
+    if (elementBefore != undefined) {
+
+    }
+  }
+
   viewOk() {
-    debugger;
     let elementType :any = document.getElementById('selectType');
     let elementSubType :any = document.getElementById('selectSubType');
+    let elementBefore :any = document.getElementById('col_final')?.classList;
     let subtype = 1; //1: no definido
 
-    if (elementSubType?.value != undefined) {
-      subtype = elementSubType?.value;
-    }
+    if (elementBefore != undefined) {
+      elementBefore.remove('completed');
+      elementBefore.remove('notcompleted');
+      elementBefore.add('process');
 
-    const orderData: OrderDTO = {
-      codigo: this.order,
-      id_tipopago: elementType?.value,
-      id_subtipopago: subtype,
-    };
-    this.ApiOrder.putStatus(orderData).subscribe(() => {
-      this.viewCancel();
-    },error => {
-      console.log('Error get: ', error)
-    });
-    
+      if (elementSubType?.value != undefined) {
+        subtype = elementSubType?.value;
+      }
+  
+      const orderData: OrderDTO = {
+        codigo: this.order,
+        id_tipopago: elementType?.value,
+        id_subtipopago: subtype,
+      };
+      
+      this.ApiOrder.putStatus(orderData).subscribe(() => {
+        setTimeout(() => {
+          elementBefore.remove('process');
+          elementBefore.remove('notcompleted');
+          elementBefore.add('completed');
+        }, 3000);
+
+        setTimeout(() => {
+          elementBefore.remove('process');
+          elementBefore.remove('notcompleted');
+          elementBefore.add('completed');
+
+          this.viewCancel();
+
+          this.toastService.showToast({
+            title: 'Proceso exitoso',
+            message: 'Pago de la orden se completo.',
+            type: 'success',
+            timeout: 5000,
+          });
+        }, 5000);
+      },error => {
+        elementBefore.remove('process');
+        elementBefore.remove('completed');
+        elementBefore.add('notcompleted');
+
+        setTimeout(() => {
+          elementBefore.remove('notcompleted');
+        }, 3000);
+
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      });
+    }
   }
 
   viewCancel(){

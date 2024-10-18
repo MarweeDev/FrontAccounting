@@ -38,12 +38,92 @@ body {
     margin-top: -14px;
 }
 
-.container-component {
-    /*padding-left: 5%;*/
-}
-
 @media screen and (max-width: 800px) {
     .container-component {
         padding-left: 3%;
     }
 }
+
+
+
+/* styles.css */
+.toast {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #ffffff;
+    padding: 15px;
+    border: 1px solid #e1e1e1;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    width: 20rem;
+    min-width: 200px;
+    max-width: 22rem;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s;
+
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .toast .content-icon {
+    height: fit-content;
+    padding: 10px 11.5px;
+    margin: 7px;
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  .toast .content-icon span {
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .toast .content-body {
+    padding: 10px;
+  }
+
+  .toast .content-body p {
+    font-size: 12px;
+  }
+  
+  .toast.success-toast { border-color: rgba(76, 175, 80, .5); }
+  .success-toast > .content-icon { background-color: rgba(76, 175, 80, .5); }
+  
+  .toast.error-toast { border-color: rgba(244, 67, 54, .3); }
+  .error-toast > .content-icon { background-color: rgba(244, 67, 54, .8); }
+  
+  .toast.warning-toast { border-color: rgba(255, 152, 0, .3); }
+  .warning-toast > .content-icon { background-color: rgba(255, 152, 0, .5); }
+  
+  .toast.info-toast { border-color: rgba(33, 150, 243, .3); }
+  .info-toast > .content-icon { background-color: rgba(33, 150, 243, .5); }
+  
+  @keyframes fadein {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeout {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+  

@@ -7,13 +7,11 @@ import { HomeRouting } from './home.routing'
 
 //Pages
 import { MainComponent } from './pages/main/main.component';
-import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
   declarations: [
     //pages
-    MainComponent,
-    LoginComponent
+    MainComponent
   ],
   imports: [
     CommonModule,

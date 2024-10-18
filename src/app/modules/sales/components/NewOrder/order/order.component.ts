@@ -8,6 +8,10 @@ import { CategoryService } from 'src/app/core/services/category/category.service
 import { ProductService } from 'src/app/core/services/product/product.service';
 import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
+import { ClientService } from 'src/app/core/services/client/client.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ClientDTO } from 'src/app/core/models/client';
+import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
   selector: 'app-order',
@@ -28,6 +32,7 @@ export class OrderComponent implements OnInit {
 
   _btn_modal_add : boolean = false;
   _modal_add : boolean = true;
+  _modal_add_client : boolean = false;
 
   heightAuto : string = "container-add container-add-open";
 
@@ -49,16 +54,28 @@ export class OrderComponent implements OnInit {
   ListProductData: ProductDTO[] = [];
   //#endregion
 
+  //Form
+  form!: FormGroup;
+
   constructor( 
     private route : ActivatedRoute,
+    private toastService: ToastService,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
     private router: Router,
     private ApiCateg: CategoryService,
     private ApiProduct: ProductService,
-    private ApiOrder: OrderService) 
+    private ApiOrder: OrderService,
+    private ApiClient: ClientService,
+    private formBuilder: FormBuilder) 
     {
     this.idMesa = Number(0); //Number(newOrder.mesaModels.id);
+
+    this.form = this.formBuilder.group({
+      Nombre: ['', [Validators.required]],
+      Nit: ['', [Validators.required]],
+      Correo: ['']
+    });
   }
 
   ngOnInit(): void {
@@ -70,7 +87,7 @@ export class OrderComponent implements OnInit {
     //Opciones para el nav
     this.app.listNav = [
       { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
-      { nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
+      //{ nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -80,7 +97,6 @@ export class OrderComponent implements OnInit {
     });
 
     this.ApiOrder.getCodeOrder().subscribe(data => {
-      console.log("consecutivo:",data);
       this.codeOrder = data.status;
     });
   }
@@ -95,14 +111,14 @@ export class OrderComponent implements OnInit {
     let elementIcon: any = document.getElementById('icon-pay')?.classList;
     if(element.checked){
       elementLabel.add("label-active");
-      elementIcon.remove("fa-regular");
-      elementIcon.add("fa-solid");
+      elementIcon.remove("m-r");
+      elementIcon.add("m-l");
       this.btn_pay = false;
     }
     else {
       elementLabel.remove("label-active");
-      elementIcon.remove("fa-solid");
-      elementIcon.add("fa-regular");
+      elementIcon.remove("m-l");
+      elementIcon.add("m-r");
       this.btn_pay = true;
     }
   }
@@ -160,12 +176,17 @@ export class OrderComponent implements OnInit {
     }
 
     //Cargar lista clientes
-    this.ListClient = [
-      { id: 1, nombre: "Consumidor final (5555555555)" },
-      { id: 2, nombre: "Proveedor (22222)" }
-    ];
-    this.codeClient = this.ListClient[0].id;
-    
+    this.onSetValueListClient();
+  }
+
+  onSetValueListClient() {
+    this.ApiClient.get().subscribe(data => {
+      this.ListClient = data.result
+      this.codeClient = this.ListClient[0]?.id;
+    },
+    error => {
+      console.log('Error: ', error)
+    });
   }
 
   onSelectChange(event: any) {
@@ -364,10 +385,6 @@ export class OrderComponent implements OnInit {
   }
   //#endregion
 
-  onCreateClient() {
-    
-  }
-
   OnClose() {
     this._btn_modal_add = true;
     this._modal_add = false;
@@ -379,6 +396,7 @@ export class OrderComponent implements OnInit {
     this._modal_add = true;
     this.heightAuto = "container-add container-add-open";
   }
+
   viewPrev() {
     this.router.navigate(['sales/neworder/register']);
   }
@@ -410,12 +428,19 @@ export class OrderComponent implements OnInit {
             console.log("Exito: ", data)
 
             this.viewPrev();
-            //this.newOrder.VisibleToask = true;
-            setTimeout(() => {
-              //this.newOrder.VisibleToask = false;
-            }, 3000);
+            this.toastService.showToast({
+              title: 'Proceso exitoso',
+              message: 'Registro de nueva orden exitoso.',
+              type: 'success',
+              timeout: 3000,
+            });
           },error => {
-            console.log('Error post: ', error)
+            this.toastService.showToast({
+              title: 'Error ' + error.status,
+              message: error.message,
+              type: 'error',
+              timeout: 3000
+            });
           });
           
         }
@@ -449,8 +474,19 @@ export class OrderComponent implements OnInit {
         {
           this.ApiOrder.post(this.ListOrder).subscribe(data => {
             this.router.navigate(['/sales/neworder/payments', this.codeOrder]);
+            this.toastService.showToast({
+              title: 'Proceso exitoso',
+              message: 'Registro de nueva orden exitoso.',
+              type: 'success',
+              timeout: 3000,
+            });
           },error => {
-            console.log('Error post: ', error)
+            this.toastService.showToast({
+              title: 'Error ' + error.status,
+              message: error.message,
+              type: 'error',
+              timeout: 300000
+            });
           });
           
         }
@@ -469,6 +505,52 @@ export class OrderComponent implements OnInit {
   }
   viewCancelModal() {
     this.VisibleAlert = false;
+  }
+
+  //Method Form
+  onCreateClient(){
+    this._modal_add_client = true;
+  }
+
+  addNewClient() {
+    // Validar todos los campos del formulario
+    this.form.markAllAsTouched();
+
+    // Actualizar la validez del formulario
+    this.form.updateValueAndValidity();
+
+    // Si el formulario es válido, continuar con la lógica de envío
+    const t : ClientDTO = {
+      nombre: this.form.get('Nombre')?.value,
+      nit: this.form.get('Nit')?.value,
+      correo: this.form.get('Correo')?.value,
+      id_estado: 1
+    }
+
+    let elementClient :any = document.getElementById("select_client");
+    
+    if(!this.form.status.includes('INVALID')) {
+      this.ApiClient.post(t).subscribe(data => {
+        this.ListClient.push(data.obj);
+        this.codeClient = data.obj.id;
+        setTimeout(() => {
+          this._modal_add_client = false;
+          elementClient.value = data.obj.id;
+          this.form.reset();
+        }, 200);
+
+      }), (error: any) => {
+        console.log(error);
+      }
+    }
+    else {
+      console.log(false)
+    }
+  }
+
+  cancelNewClient(){
+    this.form.reset();
+    this._modal_add_client = false;
   }
 
 

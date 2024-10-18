@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col col-final">
+            <div class="col col-final" id="col_final">
                 <h3>Medio de pago</h3>
                 <select (change)="changeType($event)" id="selectType">
                     <option [value]="item.id" *ngFor="let item of ListTypePay">{{item.nombre}}</option>

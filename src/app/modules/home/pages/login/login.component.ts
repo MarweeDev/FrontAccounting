@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user/user.service';
+import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,10 @@ export class LoginComponent implements OnInit {
   inputType = "password";
   currentYear: number;
 
-  constructor(private router:Router, private formBuilder: FormBuilder, private api:UserService) {
+  constructor(private router:Router, 
+    private toastService: ToastService,
+    private formBuilder: FormBuilder, 
+    private api:UserService) {
     this.form = this.formBuilder.group({
       Email: ['', [Validators.required]],
       Password: ['', [Validators.required]],
@@ -46,11 +50,44 @@ export class LoginComponent implements OnInit {
 
       this.api.getLogin(t).subscribe(data => {
         this.form.reset();
-        sessionStorage.setItem('authenticator', data?.result[0]?.token);
-        this.router.navigate(['home/main']);
+        console.log(data);
+
+        if (data?.status != 204) {
+          sessionStorage.setItem('authenticator', data?.result[0]?.token);
+          this.router.navigate(['home/main']);
+
+          this.toastService.showToast({
+            title: 'Proceso exitoso',
+            message: 'Inicio de sessión autorizado.',
+            type: 'success',
+            timeout: 5000,
+          });
+        }
+        else {
+          this.toastService.showToast({
+            title: 'Proceso advertencia',
+            message: data?.message,
+            type: 'error',
+            timeout: 5000,
+          });
+        }
+        
       }), (error: any) => {
-        console.log(error);
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.message,
+          type: 'error',
+          timeout: 3000
+        });
       }
+    }
+    else {
+      this.toastService.showToast({
+        title: 'Proceso incompleto',
+        message: 'Completar credenciales.',
+        type: 'warning',
+        timeout: 5000,
+      });
     }
   }
 

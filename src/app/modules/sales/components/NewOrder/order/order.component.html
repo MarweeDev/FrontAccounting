@@ -95,15 +95,15 @@
                                 <h5>Código de orden:</h5>
                             </div>
                             <div class="col">
-                                <h5>
-                                    <small>{{codeOrder}}</small>
-                                </h5>
+                                <h4>
+                                    <small class="txt-info">{{codeOrder}}</small>
+                                </h4>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <select (change)="onSelectChangeClient($event)">
-                                    <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre}}</option>
+                                <select (change)="onSelectChangeClient($event)" id="select_client">
+                                    <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre + " (" + item.nit + ")"}}</option>
                                 </select>
                                 <button type="button" class="btn btn-info rd-4" title="Nuevo Cliente" (click)="onCreateClient()">
                                     <span class="fa-solid fa-user-plus"></span>
@@ -152,9 +152,12 @@
                             <div class="action-check">
                                 <label class="btn rd-4" id="label-pay" (click)="OnValidateCheck()" for="input-pay">
                                     <input type="checkbox" id="input-pay">
-                                    <i id="icon-pay" class="fa-regular fa-circle-check"></i>
-                                    Adelantar pago
+                                    <i id="icon-pay" class="fa-solid fa-circle-check m-r"></i>
                                 </label>
+                                <div class="content-check">
+                                    <strong>Pagar orden</strong>
+                                    <p>Desea generar el pago de la orden automaticamente.</p>
+                                </div>
                             </div>
                         </div>
 
@@ -165,7 +168,7 @@
                                 </div>
                                 <div class="col col2">
                                     <button type="button" class="btn btn-success rd-4" *ngIf="btn_pay" (click)="viewOk()">Registrar orden</button>
-                                    <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">💳 Pagar orden</button>
+                                    <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">Pagar orden</button>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +178,42 @@
         </div>
     </div>
 
-    
+    <div class="modal-add-client" *ngIf="_modal_add_client">
+        <div class="container-content">
+            <div class="row">
+                <div class="col">
+                    <h3>Proceso de creación</h3>
+                    <h5>Creando nuevo cliente para generar orden.</h5>
+                    <br>
+                    <form [formGroup]="form" (ngSubmit)="addNewClient()">
+                        <label for="nombre">
+                            <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
+                            <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                                Requerido
+                            </div>
+                        </label>
+                      
+                        <label for="nit">
+                            <input type="text" id="nit" formControlName="Nit" placeholder="Nit">
+                            <div class="error-message" *ngIf="form.get('Nit')?.hasError('required') && form.get('Nit')?.touched">
+                                Requerido
+                            </div>
+                        </label>
+                      
+                        <label for="correo">
+                            <input type="text" id="correo" formControlName="Correo" placeholder="Correo">
+                        </label>
+                      
+                        <div class="container-btn">
+                            <button type="submit" class="btn btn-success m-2 rd-4">Crear</button>
+                            <button type="button" class="btn btn-default rd-4" (click)="cancelNewClient()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
 
     <!--esto tiene que ir en el componente creado en shared-->
     <div class="alert-modal" *ngIf="VisibleAlert">

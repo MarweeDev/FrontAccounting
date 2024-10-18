@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavDTO } from './core/models/nav';
 import { Router } from '@angular/router';
+import { InactivityService } from './shared/directives/inactivity.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,10 @@ export class AppComponent implements OnInit {
   //#endregion
   
   //#region Constructor
-  constructor(private cdRef: ChangeDetectorRef, private router: Router) {
+  constructor(
+    private cdRef: ChangeDetectorRef, 
+    private router: Router,
+    private inactivityService: InactivityService) {
   }
 
   ngOnInit(): void {
@@ -48,12 +52,12 @@ export class AppComponent implements OnInit {
       if (this.statusDisabledMain) {
         this.statusDisabledMain = false;
         element.className = "fa-solid fa-bars";
-        elementSlider.className = "animate__animated animate__fadeOutLeft";
+        elementSlider.className = "animate__animated animate__fadeOutTopLeft";
       }
       else{
         this.statusDisabledMain = true;
         element.className = "fa-solid fa-bars-staggered";
-        elementSlider.className = "animate__animated animate__fadeInRight";
+        elementSlider.className = "animate__animated animate__fadeInTopLeft";
       }
     }
   }
@@ -62,7 +66,7 @@ export class AppComponent implements OnInit {
     let elementSlider :any = document.getElementById('slider_left');
     if(element != undefined && elementSlider != undefined){
       element.className = "fa-solid fa-bars";
-      elementSlider.className = "animate__animated animate__fadeOutLeft";
+      elementSlider.className = "animate__animated animate__fadeOutTopLeft";
       setTimeout(()=>{this.statusDisabledMain = false;},1000);
     }
   }

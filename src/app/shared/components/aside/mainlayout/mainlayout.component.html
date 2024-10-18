@@ -1,4 +1,4 @@
-<section class="container animated fadeInLeft" id="slider_left">
+<section class="container animated fadeInTopLeft" id="slider_left">
     <div class="parent">
         <div class="header">
             <div class="circle" [style.background-color]="getColor(user)">
@@ -15,9 +15,9 @@
                 <li *ngFor="let item of ListModule; let i = index">
                     <button 
                     type="button" 
-                    [id]="'nav_left_' + item.id"
-                    [class.active]="item.id === activeButtonId" 
-                    (click)="OnRouterModule(item.ruta, item.id)">
+                    [id]="'nav_left_' + item.id_modulo"
+                    [class.active]="item.id_modulo === activeButtonId" 
+                    (click)="OnRouterModule(item.ruta, item.id_modulo)">
                         <i [className]="item.icono"></i> {{item.modulo}}
                     </button>
                 </li>
@@ -26,7 +26,7 @@
         <div class="footer">
             <ul>
                 <li>
-                    <button type="button" class="button-close" (click)="OnRouterModule('home/authorization/login', 0)">
+                    <button type="button" class="button-close" (click)="OnRouterModule('login', 0)">
                         <i class="fa-solid fa-right-from-bracket"></i> Salir
                     </button>
                 </li>

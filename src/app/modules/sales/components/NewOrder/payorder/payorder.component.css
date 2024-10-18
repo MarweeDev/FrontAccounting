@@ -132,7 +132,50 @@
     padding-top: 0rem !important;
     margin: 0px;
     max-width: min-content;
+    position: relative;
+    height: 200px;
 }
+.content .row-init .col-final.process::before,
+.content .row-init .col-final.completed::before,
+.content .row-init .col-final.notcompleted::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    background-color: var(--background-primario);
+    text-align: center;
+    padding-top: 22vh;
+    font-weight: 700;
+}
+.content .row-init .col-final.process::before {
+    content: 'Procesando pago';
+}
+.content .row-init .col-final.completed::before {
+    content: 'Pago exitoso';
+}
+.content .row-init .col-final.notcompleted::before {
+    content: 'Pago no exitoso';
+}
+
+.content .row-init .col-final.process::after,
+.content .row-init .col-final.completed::after,
+.content .row-init .col-final.notcompleted::after {
+    content: '';
+    background-position: center;
+    background-size: 50px;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+}
+.content .col-final.process::after {
+    background-image: url('../../../../../../assets/img/dobby/system-regular-14-article-hover-article.gif');
+}
+.content .col-final.completed::after {
+    background-image: url('../../../../../../assets/img/dobby/system-regular-31-check-hover-check.gif');
+}
+.content .col-final.notcompleted::after {
+    background-image: url('../../../../../../assets/img/dobby/system-regular-29-cross-hover-cross-1.gif');
+}
+
 .content .row-init .col-final select {
     color: rgb( 97 109 138 );
     border-color: var(--color-texto-terciario);
