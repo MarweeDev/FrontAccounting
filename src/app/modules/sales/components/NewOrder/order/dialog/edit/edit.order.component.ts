@@ -58,7 +58,7 @@ export class EditOrderComponent implements OnInit {
       const id = this.activated.snapshot.params['id'];
       this.apimesa.put(id, t).subscribe(data => {
         this.form.reset();
-        this.router.navigate(['sales/neworder']);
+        this.router.navigate(['sales']);
       }), (error: any) => {
         console.log(error);
       }
@@ -70,6 +70,6 @@ export class EditOrderComponent implements OnInit {
 
   cancel(){
     this.form.reset();
-    this.router.navigate(['sales/neworder']);
+    this.router.navigate(['sales']);
   }
 }

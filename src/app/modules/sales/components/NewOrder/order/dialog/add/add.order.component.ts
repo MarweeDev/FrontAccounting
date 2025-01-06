@@ -44,7 +44,7 @@ export class AddOrderComponent implements OnInit {
     if(!this.form.status.includes('INVALID')) {
       this.apimesa.post(t).subscribe(data => {
         this.form.reset();
-        this.router.navigate(['sales/neworder']);
+        this.router.navigate(['sales']);
       }), (error: any) => {
         console.log(error);
       }
@@ -56,7 +56,7 @@ export class AddOrderComponent implements OnInit {
 
   cancel(){
     this.form.reset();
-    this.router.navigate(['sales/neworder/order']);
+    this.router.navigate(['sales/order']);
   }
 
 }

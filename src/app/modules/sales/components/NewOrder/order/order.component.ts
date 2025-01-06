@@ -86,8 +86,8 @@ export class OrderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
-      //{ nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Volver', url: 'sales/register', type: "btn-origin"},
+      //{ nombre: 'Nuevo producto', url: 'sales/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -398,7 +398,7 @@ export class OrderComponent implements OnInit {
   }
 
   viewPrev() {
-    this.router.navigate(['sales/neworder/register']);
+    this.router.navigate(['sales/register']);
   }
 
   viewOk() {
@@ -473,7 +473,7 @@ export class OrderComponent implements OnInit {
         if(this.ListOrder.length > 0) 
         {
           this.ApiOrder.post(this.ListOrder).subscribe(data => {
-            this.router.navigate(['/sales/neworder/payments', this.codeOrder]);
+            this.router.navigate(['/sales/payments', this.codeOrder]);
             this.toastService.showToast({
               title: 'Proceso exitoso',
               message: 'Registro de nueva orden exitoso.',

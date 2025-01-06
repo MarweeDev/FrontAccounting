@@ -2,7 +2,7 @@
     position: fixed !important;
     right: 0px !important;
     bottom: 0px !important;
-    z-index: 2 !important;
+    z-index: 3 !important;
     display: flex !important;
     padding: 3rem 10px 3rem 10px !important;
     background: var(--background-primario) !important;

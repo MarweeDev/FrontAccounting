@@ -2,11 +2,11 @@
     <div class="card">
         <h3>Consultando orden <strong class="txt-info">{{order}}</strong></h3>
 
-        <div class="td-container-tag" *ngIf="estado == 'Pendiente' || estado == 'Debiendo'">
+        <div class="td-container-tag" *ngIf="estado == 'Pendiente' || estado == 'Credito'">
             <div class="td-tag">{{estado}}</div>
             <i class="fa-brands fa-product-hunt txt-info"></i>
         </div>
-        <div class="td-container-tag" *ngIf="estado == 'Cancelada'">
+        <div class="td-container-tag" *ngIf="estado == 'Anulada'">
             <div class="td-tag">{{estado}}</div>
             <i class="fa-solid fa-circle-xmark txt-danger"></i>
         </div>
@@ -37,7 +37,7 @@
         </div>
         <div class="container-btn">
             <button type="button" class="btn btn-default rd-4" (click)="cancel()">Volver</button>
-            <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Debiendo'" type="button" class="btn btn-success rd-4 btn-pay">
+            <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-4 btn-pay">
                 Pagar
             </button>
         </div>

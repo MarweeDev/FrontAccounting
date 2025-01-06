@@ -47,8 +47,8 @@ export class RegisterComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Exportar', url: 'sales/neworder/register/export', icon: 'fa-solid fa-file-arrow-down', type: "btn-origin"},
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Reportes', url: 'sales/register/export', icon: 'fa-solid fa-file-arrow-down', type: "btn-origin"},
+      { nombre: 'Nueva orden', url: 'sales/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -88,7 +88,7 @@ export class RegisterComponent implements OnInit {
     if (DateEle != undefined) {
       this.ApiOrder.getFind(orderData).subscribe(data => {
         this.ListOrder = data.result;
-  
+        console.log(this.ListOrder)
         this.onSelectInit();
       },error => {
         console.log('Error get: ', error)
@@ -148,14 +148,14 @@ export class RegisterComponent implements OnInit {
   }
 
   getDetailsOrder(code:any){
-    //this.router.navigate(['/sales/neworder/register/details', code]);
+    //this.router.navigate(['/sales/register/details', code]);
     this.orderCode = code;
     this.visibleDetails = true;
 
   }
 
   getPayOrder(code:any){
-    this.router.navigate(['/sales/neworder/payments', code]);
+    this.router.navigate(['/sales/payments', code]);
   }
 
 

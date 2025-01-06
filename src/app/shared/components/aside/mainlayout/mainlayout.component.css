@@ -101,8 +101,8 @@ ul li button {
     transition: all .6s;
 }
 ul li button:hover {
-    background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    background-color: var(--color-info-dark);
+    background: linear-gradient(100deg, var(--color-info-dark) 0%, var(--color-info-dark) 50%, var(--color-info-dark) 100%);
     color: #ffffff !important;
     border-color: transparent;
     transition: all .5s;
@@ -127,8 +127,8 @@ ul li button:hover > i {
 
 /*Active*/
 ul li .active {
-    background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    background-color: var(--color-info-dark);
+    background: linear-gradient(100deg, var(--color-info-dark) 0%, var(--color-info-dark) 50%, var(--color-info-dark) 100%);
     color: #ffffff !important;
     border-color: transparent !important;
     transition: all .5s !important;

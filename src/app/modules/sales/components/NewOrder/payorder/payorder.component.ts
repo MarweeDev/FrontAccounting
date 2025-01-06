@@ -47,8 +47,8 @@ export class PayorderComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Volver', url: 'sales/register', type: "btn-origin"},
+      { nombre: 'Nueva orden', url: 'sales/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -180,6 +180,6 @@ export class PayorderComponent implements OnInit {
   }
 
   viewCancel(){
-    this.router.navigate(['sales/neworder/register']);
+    this.router.navigate(['sales/register']);
   }
 }

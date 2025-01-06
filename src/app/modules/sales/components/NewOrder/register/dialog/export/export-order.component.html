@@ -2,6 +2,11 @@
     <!--Titulo componente-->
     <div class="container-prev">
         <h3 class="title">Gestión de exportación</h3>
+        <select class="rd-4" (change)="onSelectChange($event)">
+            <option value="VE">Reporte de ventas</option>
+            <option value="RC">Reporte de recibos de caja</option>
+            <!--<option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>-->
+        </select>
     </div>
 
     <br>
@@ -69,6 +74,7 @@
                         <th>Valor Forma Pago</th>
                         <th>Código Forma Pago</th>
                         <th>Descripción Forma Pago</th>
+                        <th>Estado Orden</th>
                         <th>Fecha Elaboración</th>
                     </tr>
                 </thead>
@@ -86,6 +92,7 @@
                         <td>{{item.valor_forma_de_pago}}</td>
                         <td>{{item.codigo_forma_de_pago}}</td>
                         <td>{{onRemoveEmojis(item.descripcion_forma_de_pago)}}</td>
+                        <td>{{item.estado_orden}}</td>
                         <td>{{item.fecha_de_elaboracion}}</td>
                     </tr>
                 </tbody>

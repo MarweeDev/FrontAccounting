@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
     this.form.updateValueAndValidity();
 
     if(!this.form.status.includes('INVALID')) {
+      
       const email = this.form.get('Email');
       const pass = this.form.get('Password');
 
@@ -54,7 +55,8 @@ export class LoginComponent implements OnInit {
 
         if (data?.status != 204) {
           sessionStorage.setItem('authenticator', data?.result[0]?.token);
-          this.router.navigate(['home/main']);
+          //this.router.navigate(['home/main']);
+          this.router.navigate(['sales/register']);
 
           this.toastService.showToast({
             title: 'Proceso exitoso',

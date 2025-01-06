@@ -27,9 +27,9 @@
                     <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
                         <option value="0">Todos</option>
                         <option value="7" selected>Pendiente</option>
-                        <option value="10">Debiendo</option>
+                        <option value="10">Crédito</option>
                         <option value="8">Pagada</option>
-                        <option value="9">Cancelada</option>
+                        <option value="9">Anulada</option>
                     </select>
                 </div>
 
@@ -72,11 +72,11 @@
                 </thead>
                 <tbody>
                     <tr (click)="getDetailsOrder(item.codigo)" *ngFor="let item of FilterListOrder; let i = index" 
-                        [class.not-pending-tr]="item.nombre == 'Cancelada'"
+                        [class.not-pending-tr]="item.nombre == 'Anulada'"
                         [class.success-tr]="item.nombre == 'Pagada'"
-                        [class.pending-tr]="item.nombre == 'Debiendo'">
+                        [class.pending-tr]="item.nombre == 'Credito'">
 
-                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">
+                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Credito'">
                             {{ (currentPage - 1) * itemsPorPagina + i + 1 }}
                         </td>
                         <td class="td">
@@ -97,7 +97,7 @@
                         <td>{{item.cantidad}}</td>
                         <td>${{getConverPrice(item.total).toLocaleString()}}</td>
                         <td>
-                            <div class="td-container-tag" *ngIf="item.nombre == 'Cancelada'">
+                            <div class="td-container-tag" *ngIf="item.nombre == 'Anulada'">
                                 <div class="td-tag">{{item.nombre}}</div>
                                 <i class="fa-solid fa-circle-xmark txt-danger"></i>
                             </div>
@@ -106,7 +106,7 @@
                                 <i class="fa-solid fa-circle-check txt-success"></i>
                             </div>
                             
-                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
+                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Credito'">
                                 Pagar
                             </button>
                         </td>

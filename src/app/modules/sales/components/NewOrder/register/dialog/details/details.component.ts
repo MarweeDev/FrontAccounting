@@ -50,11 +50,11 @@ export class DetailsComponent implements OnInit {
   }
 
   getPayOrder(code:any){
-    this.router.navigate(['/sales/neworder/payments', code]);
+    this.router.navigate(['/sales/payments', code]);
   }
 
   cancel(){
-    //this.router.navigate(['sales/neworder/register']);
+    //this.router.navigate(['sales/register']);
     this.registercomponent.visibleDetails = false;
   }
 

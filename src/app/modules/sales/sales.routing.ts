@@ -20,17 +20,17 @@ import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
     //register
-    { path: 'neworder/register', component: RegisterComponent, canActivate: [AuthGuard], title: 'Registros de ordenes', data: {breadcrumb: 'Ventas/Ordenes'} },
-    { path: 'neworder/register/export', component: ExportOrderComponent, canActivate: [AuthGuard], title: 'Registros de ordenes exportar', data: {breadcrumb: 'Ventas/Ordenes/Exportar'} },
-    { path: 'neworder/register/details/:id', component: DetailsComponent, canActivate: [AuthGuard], title: 'Consultando orden', data: {breadcrumb: ''} },
+    { path: 'register', component: RegisterComponent, canActivate: [AuthGuard], title: 'Registros de ordenes', data: {breadcrumb: 'Ventas/Ordenes'} },
+    { path: 'register/export', component: ExportOrderComponent, canActivate: [AuthGuard], title: 'Registros de ordenes exportar', data: {breadcrumb: 'Ventas/Ordenes/Exportar'} },
+    { path: 'register/details/:id', component: DetailsComponent, canActivate: [AuthGuard], title: 'Consultando orden', data: {breadcrumb: ''} },
 
     //order
-    { path: 'neworder/order', component: OrderComponent, canActivate: [AuthGuard], title: 'Generando orden', data: {breadcrumb: 'Ventas/Ordenes/Registro'} },
-    { path: 'neworder/order/add', component: AddOrderComponent, canActivate: [AuthGuard], title: 'Proceso de creación', data: {breadcrumb: ''} },
-    { path: 'neworder/order/edit/:id', component: EditOrderComponent, canActivate: [AuthGuard], title: 'Proceso de edición', data: {breadcrumb: ''} },
+    { path: 'order', component: OrderComponent, canActivate: [AuthGuard], title: 'Generando orden', data: {breadcrumb: 'Ventas/Ordenes/Registro'} },
+    { path: 'order/add', component: AddOrderComponent, canActivate: [AuthGuard], title: 'Proceso de creación', data: {breadcrumb: ''} },
+    { path: 'order/edit/:id', component: EditOrderComponent, canActivate: [AuthGuard], title: 'Proceso de edición', data: {breadcrumb: ''} },
 
     //pay
-    { path: 'neworder/payments/:id', component: PayorderComponent, canActivate: [AuthGuard], title: 'Realizando pago', data: {breadcrumb: 'Ventas/Ordenes/Pago'} },
+    { path: 'payments/:id', component: PayorderComponent, canActivate: [AuthGuard], title: 'Realizando pago', data: {breadcrumb: 'Ventas/Ordenes/Pago'} },
     { path: '**', redirectTo: 'authorization/login' }
 ];
 
