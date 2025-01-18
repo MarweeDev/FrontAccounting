@@ -12,6 +12,7 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 })
 export class RegisterComponent implements OnInit {
 
+  searchTerm : string = '';
   orderCode: any;
   visibleDetails : boolean = false;
 
@@ -196,4 +197,7 @@ export class RegisterComponent implements OnInit {
     this.yearRange = `${lastYearStr}`;
   }
 
+  OnSearchChange(search: string) {
+    this.DataShared.OnSet(search);
+  }
 }

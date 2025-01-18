@@ -2,6 +2,14 @@
     <!--Titulo componente-->
     <div class="container-prev">
         <h3 class="title">Gestión de Ordenes</h3>
+        <div class="container-search">
+            <label for="searchId">
+                <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+                <span>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </label>
+        </div>
     </div>
 
     <br>

@@ -36,8 +36,8 @@ export class AppComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef, 
     private router: Router,
-    private inactivityService: InactivityService) {
-  }
+    //private inactivityService: InactivityService
+  ) {}
 
   ngOnInit(): void {
     

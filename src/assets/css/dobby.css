@@ -147,7 +147,17 @@
   border-color: transparent;
   transition: all .5s;
 }
-.btn-origin:hover { background: rgba(55,146,141,1) !important; cursor: pointer;}
+.btn-origin:hover { 
+  background: rgb(255, 255, 255) !important; 
+  color: rgba(55,146,141,1) !important; 
+  cursor: pointer;
+}
+.btn-origin i {
+  transition: all 0.5s;
+}
+.btn-origin:hover > i {
+  color: #37928d !important;
+}
 
 /*Bordes*/
 .border-success:hover { border-color: var(--color-success); }
