@@ -9,6 +9,10 @@
 .container-prev {
     text-align: start;
     display: flex;
+    /*position: sticky;
+    top: 4.2rem;
+    z-index: 1;
+    background-color: var(--color-secondary);*/
 }
 .container-prev .title {
     color: rgb( 97 109 138 );
@@ -16,7 +20,7 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     padding-left: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
 }
 
@@ -67,21 +71,31 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding-top: 4px;
 }
 
 .container-head {
-    margin-top: 10px;
-    padding: 10px 20px 10px 20px;
+    width: 100%;
+    position: sticky;
+    top: 3rem;
+    z-index: 1;
+    padding: 1rem 0px .4rem 0px;
+    background-color: var(--color-secondary);
+}
+.container-head .banner {
+    margin-top: 0px;
+    padding: 0px 20px 0px 20px;
     width: 100%;
     border: 1px solid var(--color-texto-terciario);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 1);
-    position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 .container-head .count-register {
     font-size: 10px;
     letter-spacing: 1px;
-    margin: 0px;
+    margin: 11px 0px;
 }
 .container-head .count-register strong {
     padding: 3px 10px;
@@ -110,12 +124,13 @@ select {
 .container-select-filter-modal {
     background-color: rgba(255, 255, 255, 1);
     border: 1px solid var(--color-texto-terciario);
-    border-radius: 10px 10px 0px 0px;
-    z-index: 3;
+    border-radius: 10px 10px 10px 10px;
+    z-index: 1;
     position: absolute;
-    left: 0;
     right: -1px;
-    top: -36px;
+    bottom: -43px;
+    display: flex;
+    box-shadow: 0px 4px 10px 0px rgba(0,0,0,.1);
 }
 .container-select-filter-modal input {
     border: none;
@@ -127,9 +142,9 @@ select {
 
 .container-head .container-pag {
     display: flex;
-    position: absolute;
+    /*position: absolute;
     right: 0px;
-    top: 0px;
+    top: 0px;*/
 }
 .container-head .container-pag button {
     padding: 4px 7px;
@@ -154,13 +169,14 @@ select {
 
 
 .content .container-table {
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     width: 100%;
     /*border: 1px solid var(--color-texto-terciario);*/
     border-radius: 7px;
     /*background-color: rgba(255, 255, 255, 1);*/
-    max-height: calc(100vh - 180px);
+    /*max-height: calc(100vh - 180px);*/
     overflow-y: auto;
+    z-index: 0;
 }
 .content .container-table .message-not-result {
     margin-top: 3rem;

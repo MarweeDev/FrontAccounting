@@ -53,6 +53,8 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
 }
   
 .error-message {
@@ -76,5 +78,10 @@ input {
     padding: 7px 20px;
     cursor: pointer;
     margin: 3px;
+}
+
+select {
+    width: 100%;
+    border: 1px solid #ccc;
 }
 

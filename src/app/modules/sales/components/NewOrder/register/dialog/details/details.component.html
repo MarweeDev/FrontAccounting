@@ -36,10 +36,33 @@
             </table>
         </div>
         <div class="container-btn">
-            <button type="button" class="btn btn-default rd-4" (click)="cancel()">Volver</button>
-            <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-4 btn-pay">
-                Pagar
-            </button>
+            <div class="col1-btn">
+                <button type="button" class="btn btn-default rd-4" (click)="cancel()">Volver</button>
+            </div>
+            <div class="col2-btn">
+                <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-4 btn-pay">
+                    Anular
+                </button>
+                <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-4 btn-pay">
+                    Pagar
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="modal-description" *ngIf="modal">
+    <div class="modal-card rd-2">
+        <div class="modal-header">
+            <h1><i class="fa-solid fa-circle-xmark txt-danger"></i></h1>
+            <h3>¿Por qué motivo desea anular la orden?</h3>
+        </div>
+        <div class="modal-body">
+            <textarea placeholder="Motivo de anulación" id="input_description"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default rd-4" (click)="cancelModalOrder()">Volver</button>
+            <button type="button" class="btn btn-success rd-4" (click)="okModalOrder()">Anular</button>
         </div>
     </div>
 </section>

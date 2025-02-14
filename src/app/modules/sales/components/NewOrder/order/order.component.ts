@@ -87,7 +87,7 @@ export class OrderComponent implements OnInit {
     //Opciones para el nav
     this.app.listNav = [
       { nombre: 'Volver', url: 'sales/register', type: "btn-origin"},
-      //{ nombre: 'Nuevo producto', url: 'sales/order/add', icon: 'fa-solid fa-plus', type: "btn-success"}
+      { nombre: 'Nuevo producto', url: 'sales/order/add', icon: 'fa-solid fa-plus', type: "btn-success"}
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 

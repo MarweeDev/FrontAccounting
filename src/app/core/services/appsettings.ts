@@ -4,6 +4,7 @@ export enum HttpMethod {
     GETID = '/get/',
     POST = '/post',
     PUT = '/put/',
+    PUT2 = '/put',
     STATUS = '/status/',
     DELETE = '/delete/'
 }

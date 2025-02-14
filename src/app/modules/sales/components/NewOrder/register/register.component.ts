@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
 
   ListOrder: any[] =[];
   FilterListOrder : any[] = [];
+  FilterListOrderSearch : any[] = [];
   currentPage: number = 1;
   itemsPorPagina: number = 10;
   TotalPag : number = 0;
@@ -43,6 +44,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.onLoadSelectDate();
+    this.OnReloadSearch();
   }
   
   ngAfterContentInit():void {
@@ -89,7 +91,6 @@ export class RegisterComponent implements OnInit {
     if (DateEle != undefined) {
       this.ApiOrder.getFind(orderData).subscribe(data => {
         this.ListOrder = data.result;
-        console.log(this.ListOrder)
         this.onSelectInit();
       },error => {
         console.log('Error get: ', error)
@@ -102,6 +103,7 @@ export class RegisterComponent implements OnInit {
     this.TotalPag = Math.ceil(this.ListOrder?.length / element.value);
     this.itemsPorPagina = element.value;
     this.FilterListOrder = this.ListOrder?.slice(0, this.itemsPorPagina);
+    this.FilterListOrderSearch = this.FilterListOrder;
 
     if (this.currentPage > this.TotalPag) {
       this.currentPage = 1;
@@ -199,5 +201,24 @@ export class RegisterComponent implements OnInit {
 
   OnSearchChange(search: string) {
     this.DataShared.OnSet(search);
+  }
+
+  OnReloadSearch() {
+    this.DataShared.OnGet().subscribe((list: any) => {
+      this.searchTerm = list
+
+      if (list == undefined || list == null || list == "") {
+        this.FilterListOrder = this.FilterListOrderSearch;
+      }
+      else {
+        this.FilterListOrder = this.FilterListOrder.filter(item => {
+          return Object.values(item).some(value =>
+            value?.toString().toLowerCase().includes(list.toLowerCase())
+          );
+        });
+      }
+    });
+
+    this.onLoadOrder();
   }
 }

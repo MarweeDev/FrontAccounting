@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from 'src/app/core/services/order/order.service';
 import { RegisterComponent } from '../../register.component';
+import { ToastService } from 'src/app/shared/directives/toast.service';
+import { OrderDTO } from 'src/app/core/models/order';
 
 @Component({
   selector: 'app-details',
@@ -14,8 +16,10 @@ export class DetailsComponent implements OnInit {
   estado : any;
   order : any;
   ListOrder: any[] =[];
+  modal: boolean = false;
 
   constructor(private router:Router, 
+    private toastService: ToastService,
     private url: ActivatedRoute, 
     private ApiOrder: OrderService,
     private registercomponent: RegisterComponent) {
@@ -56,6 +60,48 @@ export class DetailsComponent implements OnInit {
   cancel(){
     //this.router.navigate(['sales/register']);
     this.registercomponent.visibleDetails = false;
+  }
+
+  getNullOrder(){
+    this.modal = true;
+  }
+
+  okModalOrder(){
+    let input : any = document.getElementById('input_description');
+
+    const orderData: OrderDTO = {
+      codigo: this.order,
+      observacion: input.value
+    };
+
+    if(input != undefined && input.value != "") {
+      this.ApiOrder.put(orderData).subscribe(data => {
+
+        let code = this.ListOrder[0]?.codigo;
+        this.registercomponent.onLoadOrder();
+        this.modal = false;
+        this.cancel();
+
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: 'Orden ' + code + ' anulada.',
+          type: 'success',
+          timeout: 5000,
+        });
+
+      },error => {
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      });      
+    }
+  }
+
+  cancelModalOrder(){
+    this.modal = false;
   }
 
 }

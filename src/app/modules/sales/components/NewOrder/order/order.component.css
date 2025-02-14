@@ -201,10 +201,12 @@
 .container-add .modal-add .content .grid {
     width: 100%;
     padding: 10px;
+    padding-right: 0px;
+    padding-bottom: 20px;
     /*margin-top: 10px;
     margin-bottom: 10px;
     border: 1px solid var(--color-texto-terciario);*/
-    height: calc(77vh - 150px);
+    height: calc(77vh - 208px);
     overflow: auto;
 }
 .container-add .modal-add .content .grid table {
@@ -354,11 +356,11 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     padding-left: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
 }
 
-.card { width: 11.5rem !important; margin: 5px !important; border-radius: 5px 18px 5px 18px; cursor: auto; position: relative; }
+.card { width: 11rem !important; margin: 5px !important; border-radius: 5px 18px 5px 18px; cursor: auto; position: relative; }
 .card-hover .icon-img { filter: grayscale(0%) !important; opacity: 1 !important; }
 .card:hover { box-shadow: 1px 1px 9px -4px rgba(0, 0, 0, 0.8); border-radius: 5px 18px 18px 18px; }
 .card .card-title { position: absolute; right: 12px;}

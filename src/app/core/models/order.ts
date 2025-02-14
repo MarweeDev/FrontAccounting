@@ -9,5 +9,6 @@ export class OrderDTO {
   id_subtipopago?: number | null;
   fecha_creacion?: Date;
   id_estadoorden?: number;
+  observacion?: string;
   detalle?: DetailOrderDTO;
 }

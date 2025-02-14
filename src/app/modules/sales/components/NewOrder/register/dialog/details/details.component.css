@@ -48,6 +48,8 @@
 .container-btn {
     padding-top: 20px;
     text-align: center;
+    justify-content: space-between;
+    display: flex;
 }
 
 .btn {
@@ -63,7 +65,7 @@
     /*border: 1px solid var(--color-texto-terciario);*/
     border-radius: 7px;
     /*background-color: rgba(255, 255, 255, 1);*/
-    max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 260px);
     overflow-y: auto;
 }
 .container-table table {
@@ -142,3 +144,33 @@
     margin-right: 10px;
 }
 
+
+
+.modal-description {
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    background-color: rgba(0,0,0,.8);
+    z-index: 3;
+    padding-top: 4rem;
+}
+.modal-card {
+    margin: auto;
+    width: 25rem;
+    padding: 30px;
+    background-color: var(--color-secondary);
+    text-align: center;
+}
+.modal-body textarea {
+    width: 437px;
+    max-width: 340px;
+    min-width: 340px;
+    height: 8rem;
+    max-height: 9rem;
+    min-height: 8rem;
+    padding: 10px;
+    margin: 20px 0px;
+    border: 1px solid rgb(225, 225, 225);
+    border-radius: 5px;
+    outline: none;
+}

@@ -51,10 +51,11 @@ export class LoginComponent implements OnInit {
 
       this.api.getLogin(t).subscribe(data => {
         this.form.reset();
-        console.log(data);
 
         if (data?.status != 204) {
           sessionStorage.setItem('authenticator', data?.result[0]?.token);
+          sessionStorage.setItem('idCountry', data?.result[0]?.id_pais);
+
           //this.router.navigate(['home/main']);
           this.router.navigate(['sales/register']);
 
