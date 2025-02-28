@@ -24,5 +24,19 @@
     </div>
     <div class="col3">
         <app-nav></app-nav>
+        <div class="header" id="nav_user">
+            <div class="circle" [style.background-color]="getColor(user)">
+                <span>{{user[0] | uppercase}}</span>
+            </div>
+            <div class="text">
+                <p class="circle-name">
+                    {{user}}
+                </p>
+                <p class="circle-position">
+                    {{rol}}
+                </p>
+            </div>
+            
+        </div>
     </div>
 </section>

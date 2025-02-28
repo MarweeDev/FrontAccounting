@@ -31,6 +31,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     //Resetea los active en el menu lateral
     localStorage.removeItem("nav_left");
+    let elementNav : any = document.getElementById('nav')?.style;
+    let elementNavUser : any = document.getElementById('nav_user')?.style;
+    elementNav.display = "none";
+    elementNavUser.opacity = "0";
   }
 
   login () {
@@ -58,6 +62,9 @@ export class LoginComponent implements OnInit {
 
           //this.router.navigate(['home/main']);
           this.router.navigate(['sales/register']);
+
+          let elementNav : any = document.getElementById('nav')?.style;
+          elementNav.display = "unset";
 
           this.toastService.showToast({
             title: 'Proceso exitoso',

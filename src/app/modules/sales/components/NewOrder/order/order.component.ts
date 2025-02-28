@@ -405,10 +405,12 @@ export class OrderComponent implements OnInit {
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
 
+        var idUser = sessionStorage.getItem('idUser');
+
         this.ListProduct.forEach(item => {
           let order = new OrderDTO();
           order.codigo = this.codeOrder;
-          order.id_usuario = 1; //falta poner el usuario login
+          order.id_usuario = idUser ? Number(idUser) : 1; //falta poner el usuario login
           order.id_estadoorden = 7; //Estado pendiente
           order.id_tipopago = 1; //1 = no definido
           order.id_subtipopago = 1; //1 = no definido
@@ -425,8 +427,6 @@ export class OrderComponent implements OnInit {
         if(this.ListOrder.length > 0) 
         {
           this.ApiOrder.post(this.ListOrder).subscribe(data => {
-            console.log("Exito: ", data)
-
             this.viewPrev();
             this.toastService.showToast({
               title: 'Proceso exitoso',
@@ -453,10 +453,12 @@ export class OrderComponent implements OnInit {
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
 
+        var idUser = sessionStorage.getItem('idUser');
+
         this.ListProduct.forEach(item => {
           let order = new OrderDTO();
           order.codigo = this.codeOrder;
-          order.id_usuario = 1; //falta poner el usuario login
+          order.id_usuario = idUser ? Number(idUser) : 1; //falta poner el usuario login
           order.id_estadoorden = 7; //Estado pendiente
           order.id_tipopago = 1; //1 = no definido
           order.id_subtipopago = 1; //1 = no definido

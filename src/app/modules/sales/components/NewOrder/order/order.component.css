@@ -30,7 +30,7 @@
     text-align: start;
     display: flex;
     position: sticky;
-    top: 3rem;
+    top: 4.2rem;
     z-index: 1;
     background-color: var(--background-primario);
     padding: 20px 0px 20px 0px;
@@ -62,7 +62,7 @@
     justify-content: center;*/
 
     position: fixed !important;
-    top: 50px !important;
+    top: 64px !important;
     right: 0px !important;
     bottom: 0px !important;
     z-index: 2 !important;

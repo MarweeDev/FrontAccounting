@@ -37,7 +37,6 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
         this.ListModule = data.result;
         this.user  = this.ListModule[0].usuario;
         this.rol  = this.ListModule[0].rol;
-        console.log(this.ListModule)
       });
     }
 
