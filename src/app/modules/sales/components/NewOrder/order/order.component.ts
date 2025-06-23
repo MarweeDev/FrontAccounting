@@ -33,6 +33,7 @@ export class OrderComponent implements OnInit {
   _btn_modal_add : boolean = false;
   _modal_add : boolean = true;
   _modal_add_client : boolean = false;
+  visibleAddProduct : boolean = false;
 
   heightAuto : string = "container-add container-add-open";
 

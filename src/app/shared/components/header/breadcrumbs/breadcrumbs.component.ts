@@ -44,7 +44,6 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
 
   //#region method
   onLoadUser() {
-    console.log(this.isProcessingDataUser)
     if (this.isProcessingDataUser) {
       const auth = sessionStorage.getItem('authenticator');
       if (auth != undefined && auth != "") {

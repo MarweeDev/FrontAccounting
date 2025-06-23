@@ -1,14 +1,7 @@
 <section class="container animated fadeInTopLeft" id="slider_left">
     <div class="parent">
         <div class="header">
-            <div class="circle" [style.background-color]="getColor(user)">
-                <span>{{user[0] | uppercase}}</span>
-            </div>
-            <p class="circle-name">
-                {{user}}
-                <br>
-                <small class="txt-company">{{rol}}</small>
-            </p>
+            <img [src]="imagenBase64" alt="logo compañia">
         </div>
         <div class="menu">
             <ul>

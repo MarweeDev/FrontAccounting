@@ -15,6 +15,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   user : string = "ivagomal";
   rol : string = "super admin";
   total : number = 0;
+  imagenBase64: string = '';
   activeButtonId: number | null = null;
   ListModule: any[] =[];
   ListOrder: any[] =[];
@@ -37,6 +38,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
         this.ListModule = data.result;
         this.user  = this.ListModule[0].usuario;
         this.rol  = this.ListModule[0].rol;
+        this.imagenBase64 = `${this.ListModule[0].imagen}`;
       });
     }
 
@@ -75,6 +77,13 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
     
     return color;
+  }
+
+  getBase64FromBuffer(buffer: number[]): string {
+    const uint8Array = new Uint8Array(buffer);
+    let binary = '';
+    uint8Array.forEach(byte => binary += String.fromCharCode(byte));
+    return window.btoa(binary);
   }
 
 }

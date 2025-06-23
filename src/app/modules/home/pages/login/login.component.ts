@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
 
           this.toastService.showToast({
             title: 'Proceso exitoso',
-            message: 'Inicio de sessión autorizado.',
+            message: 'Inicio de sesión autorizado.',
             type: 'success',
             timeout: 5000,
           });

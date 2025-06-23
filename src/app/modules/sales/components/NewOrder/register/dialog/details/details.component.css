@@ -4,25 +4,29 @@
     bottom: 0px !important;
     z-index: 3 !important;
     display: flex !important;
-    padding: 3rem 10px 3rem 10px !important;
-    background: var(--background-primario) !important;
+    /*padding: 3rem 10px 3rem 10px !important;*/
+    /*background: var(--background-primario) !important;*/
+    background-color: rgba(0, 0, 0, .5);
     left: 0 !important;
     top: 0 !important;
     justify-content: center;
+    align-items: center;
     z-index: 1000;
 }
 .container-component::before {
     content: '';
-    background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    /*background-color: rgb(23,25,33);*/
+    /*background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);*/
     position: fixed;
     top: 0px; left: 0px; right: 0px;
-    height: 35%;
+    height: 100%;
     z-index: -1;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 .container-component::after {
     content: '';
-    background-image: url('src/assets/img/5130890.png');
+    /*background-image: url('src/assets/img/5130890.png');*/
     background-size: 100% auto;
     background-position: bottom;
     position: fixed;
@@ -37,8 +41,12 @@
 }
 
 .card { 
-    cursor: unset; 
-    height: fit-content; 
+    cursor: unset;
+    height: fit-content;
+    max-height: 90vh;
+    flex-direction: column;
+    display: flex;
+    overflow: hidden;
     box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .1);
     width: 60% !important;
     padding: 30px;
@@ -50,6 +58,7 @@
     text-align: center;
     justify-content: space-between;
     display: flex;
+    flex-shrink: 0;
 }
 
 .btn {
@@ -65,8 +74,10 @@
     /*border: 1px solid var(--color-texto-terciario);*/
     border-radius: 7px;
     /*background-color: rgba(255, 255, 255, 1);*/
-    max-height: calc(100vh - 260px);
+    /*max-height: calm calc(100vh - 260px);*/
+    max-height: clamp(200px, 50vh, 500px);
     overflow-y: auto;
+    flex-shrink: 1;
 }
 .container-table table {
     width: 100%;
@@ -77,7 +88,7 @@
 .container-table table thead tr {
     position: sticky;
     top: -0.6rem;
-    /*background-color: var(--background-primario);*/
+    background-color: #fff;
     z-index: 2;
 }
 .container-table table thead tr th {
@@ -98,7 +109,8 @@
 /*tbody*/
 .container-table table tbody {
     height: 50px;
-    overflow: auto;
+    max-height: 300px;
+    overflow-y: auto;
 }
 .container-table table tbody tr {
     width: 100%;

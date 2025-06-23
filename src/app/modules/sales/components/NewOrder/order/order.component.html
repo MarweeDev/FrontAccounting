@@ -95,9 +95,7 @@
                                 <h5>Código de orden:</h5>
                             </div>
                             <div class="col">
-                                <h4>
-                                    <small class="txt-info">{{codeOrder}}</small>
-                                </h4>
+                                <h5 class="txt-info">{{codeOrder}}</h5>
                             </div>
                         </div>
                         <div class="row">
@@ -114,13 +112,6 @@
                     <div class="content">
                         <div class="grid rd-2">
                             <table>
-                                <!--<thead>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>-->
                                 <tbody>
                                     <tr *ngFor="let item of ListProduct">
                                         <td>{{item.nombre}}</td>
@@ -177,6 +168,8 @@
             </div>
         </div>
     </div>
+
+    <app-add *ngIf="visibleAddProduct"></app-add>
 
     <div class="modal-add-client" *ngIf="_modal_add_client">
         <div class="container-content">

@@ -15,7 +15,8 @@
 }
 
 * {
-    font-family: var(--font-family-company);
+    font-family: var(--font-family-company5);
+    /*font-family: var(--font-family-company1);*/
     color: var(--color-adicional-primario);
 }
 
@@ -24,7 +25,7 @@ html {
 }
 
 body {
-    margin: 0px;
+    margin: 10px;
     padding-top: 5rem;
     color: var(--color-adicional-primario);
     background-color: var(--color-secondary);
@@ -49,8 +50,8 @@ body {
 /* styles.css */
 .toast {
     position: fixed;
-    top: 4rem;
-    right: 10px;
+    bottom: 0rem;
+    right: 1rem;
     background-color: #ffffff;
     padding: 15px;
     border: 1px solid #e1e1e1;
@@ -71,10 +72,36 @@ body {
     
   }
 
+  .toast .btn-close {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.5s;
+  }
+  .toast .success-close {
+    background-color: rgba(76, 175, 80, .5);
+  }
+  .toast.error-close {
+    background-color: rgba(244, 67, 54, .8);
+  }
+  .toast.warning-close {
+    background-color: rgba(255, 152, 0, .5);
+  }
+  .toast.info-close {
+    background-color: rgba(33, 150, 243, .5);
+  }
+
   .toast .content-icon {
     height: fit-content;
     padding: 10px 11.5px;
-    margin: 7px;
+    /*margin: 7px;*/
     background-color: transparent;
     border-radius: 10px;
   }
@@ -87,11 +114,12 @@ body {
   }
 
   .toast .content-body {
-    padding: 10px;
+    padding: 0 0 0 10px;
   }
 
   .toast .content-body p {
     font-size: 12px;
+    margin: 5px 0px 0px 0px;
   }
   
   .toast.success-toast { border-color: rgba(76, 175, 80, .5); }
