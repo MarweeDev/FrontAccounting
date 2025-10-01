@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
-import { OrderDTO } from 'src/app/core/models/order';
-import { OrderService } from 'src/app/core/services/order/order.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 
+// Interfaz para definir la estructura de una compra
+export interface Purchase {
+  id: number;
+  provider: string;
+  invoiceNumber: string;
+  creationDate: string;
+  total: number;
+  status: 'Pagada' | 'Pendiente' | 'Vencida';
+}
+
 @Component({
-  selector: 'app-supplier',
-  templateUrl: './supplier.component.html',
-  styleUrls: ['./supplier.component.css']
+  selector: 'app-view-shopping',
+  templateUrl: './view-shopping.component.html',
+  styleUrls: ['./view-shopping.component.css']
 })
-export class SupplierComponent implements OnInit {
+export class ViewShoppingComponent {
 
   searchTerm : string = '';
   ListOrder: any[] =[];
@@ -31,8 +39,7 @@ export class SupplierComponent implements OnInit {
     private route : ActivatedRoute,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
-    private router: Router,
-    private ApiOrder: OrderService) 
+    private router: Router) 
   {
     let today = new Date();
     this.DateMaxInput = this.formatDate(today);
@@ -45,7 +52,7 @@ export class SupplierComponent implements OnInit {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nueva compra', url: 'shopping/register/add', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Nueva compra', url: 'shopping/register/NewShopping', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -57,10 +64,10 @@ export class SupplierComponent implements OnInit {
     this.onLoadOrder();
   }
 
-  OnSearchChange(search: string) {
+ OnSearchChange(search: string) {
     this.DataShared.OnSet(search);
   }
-
+ 
   onLoadOrder() {
     let elementDate :any = document.getElementById('selectDate');
     let elementInputDate :any = document.getElementById('selectDateCalendar');
@@ -80,23 +87,8 @@ export class SupplierComponent implements OnInit {
       DateEle = elementDate?.value;
       this.disabledDateCalendar = false;
     }
-
-    const orderData: OrderDTO = {
-      id_estadoorden: elementFilter?.value,
-      fecha_creacion: DateEle
-    };
-    
-    if (DateEle != undefined) {
-      this.ApiOrder.getFind(orderData).subscribe(data => {
-        this.ListOrder = data.result;
-  
-        this.onSelectInit();
-      },error => {
-        console.log('Error get: ', error)
-      });
-    }
   }
-
+ 
   onSelectInit() {
     let element :any = document.getElementById('selectCount');
     this.TotalPag = Math.ceil(this.ListOrder?.length / element.value);
@@ -188,5 +180,4 @@ export class SupplierComponent implements OnInit {
     this.monthRange = `${lastMonthStr}`;
     this.yearRange = `${lastYearStr}`;
   }
-
 }

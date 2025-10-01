@@ -1,0 +1,170 @@
+/* Estilos generales del formulario */
+.form-container {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f7fa;
+  padding: 2rem;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Estilos para los botones */
+.btn {
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background-color: #27ae60;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #2ecc71;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: #ecf0f1;
+  color: #7f8c8d;
+}
+.btn-secondary:hover {
+  background-color: #bdc3c7;
+}
+
+.btn-link {
+  background: none;
+  color: #3498db;
+  font-weight: bold;
+  padding: 0.5rem 0;
+  border-radius: 0;
+}
+
+.btn-icon.btn-danger {
+  color: #e74c3c;
+  font-size: 1.2rem;
+}
+
+/* Estilos de las tarjetas y campos del formulario */
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-col-span-2 {
+  grid-column: span 2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #dfe4ea;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-control[readonly] {
+  background-color: #f4f7fa;
+  cursor: not-allowed;
+}
+
+/* Tabla de items */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.items-table th {
+  text-align: left;
+  padding-bottom: 1rem;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #ecf0f1;
+}
+.items-table td {
+  padding-top: 0.5rem;
+  padding-right: 0.5rem;
+}
+.items-table .form-control {
+  padding: 0.5rem;
+}
+
+/* Sección de resumen (observaciones y totales) */
+.summary-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.totals {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  color: #34495e;
+}
+.total-row.subtotal {
+  font-weight: bold;
+}
+.total-row.grand-total {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.totals hr {
+  border: none;
+  border-top: 1px solid #ecf0f1;
+  margin: 0.5rem 0;
+}

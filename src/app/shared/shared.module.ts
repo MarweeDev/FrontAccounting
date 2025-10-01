@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 //Components
@@ -24,7 +24,8 @@ import { StatusComponent } from './components/error/status/status.component';
     CommonModule,
     BrowserModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    NgOptimizedImage
   ],
   exports: [
     //components

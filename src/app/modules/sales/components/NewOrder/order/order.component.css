@@ -186,13 +186,20 @@
     margin-left: 0px !important;
     padding: 10px 40px 10px 20px !important;
     background-color: #f9f9f9 !important;
-    border-radius: 5px 0px 0px 5px;
+    border-radius: 10px;
+    font-size: 11px;
 }
 .container-add .modal-add .header .row .col button {
-    margin-left: 0px;
+    margin-left: 5px;
     padding: 10px 10px !important;
-    border-radius: 0px 20px 20px 0px !important;
-    font-size: 12px !important;
+    border-radius: 10px !important;
+    text-transform: none;
+    background-color: var(--color-info-dark) !important;
+    border-color: transparent !important;
+    transition: all 0.5s;
+}
+.container-add .modal-add .header .row .col button:hover {
+    opacity: .8;
 }
 .container-add .modal-add .header .row .col button span {
     margin-right: 0px !important;
@@ -216,6 +223,14 @@
     margin-bottom: 10px;
     border: 1px solid var(--color-texto-terciario);*/
 }
+.container-add .modal-add .content .grid .message-not-result {
+    text-align: center;
+}
+.container-add .modal-add .content .grid .message-not-result h4,
+.container-add .modal-add .content .grid .message-not-result h5 {font-weight: 500; margin: 0px; margin-top: 5px;}
+
+.container-add .modal-add .content .grid .message-not-result h4 {font-weight: 700;}
+
 .container-add .modal-add .content .grid table {
     width: 100%;
     border-collapse: collapse;
@@ -250,12 +265,14 @@
     padding: 10px;
     text-align: left;
     font-size: 12px;
-    font-weight: 900;
+    font-weight: 500;
 }
 .container-add .modal-add .footer .row .col:nth-child(1) {
     padding-left: 20px;
+    padding-right: 20px;
     background: var(--background-primario);
     border-radius: 10px 0 0 10px;
+    max-width: fit-content;
 }
 .container-add .modal-add .footer .row .col:nth-child(2) {
     color: rgb(255, 255, 255);
@@ -263,10 +280,15 @@
     background-color: var(--color-info-dark);
     border-radius: 0px 10px 10px 0px;
     text-align: center;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+.container-add .modal-add .footer .row .col:nth-child(2):hover {
+    opacity: .8;
 }
 
 .container-add .modal-add .footer .action-check {
-    padding: 20px 10px 20px 0px;
+    padding: 10px 0px 0px 0px;
     text-align: left;
     display: flex;
 }
@@ -280,11 +302,10 @@
     background-color: rgb(245 245 245);
     border: 1px solid rgba(139, 139, 139, 0.3);
     color: #adadad;
-    font-size: 1.2rem;
+    font-size: 1rem;
     transition: all .5s;
     padding: 1px 3px !important;
     height: fit-content;
-    margin-top: 7px;
 }
 .container-add .modal-add .footer .action-check label i {
     color: #f8b64b;
@@ -322,6 +343,7 @@
 }
 .container-add .modal-add .footer .action-check .content-check p {
     font-size: 12px;
+    margin: 0px;
 }
 
 .container-add .modal-add .action {
@@ -450,8 +472,8 @@
     box-shadow: none !important;
 }
 .card .card-footer .btn-add button:hover { box-shadow: 2px 2px 5px inset rgba(0, 0, 0, 0.2); cursor: pointer; }
-.card .card-footer .btn-add .prev { border-radius: 20px 0 0 20px; margin-right: -1px; }
-.card .card-footer .btn-add .next { border-radius: 0 20px 20px 0; margin-left: -1px; }
+.card .card-footer .btn-add .prev { border-radius: 10px 0 0 10px; margin-right: -1px; }
+.card .card-footer .btn-add .next { border-radius: 0 10px 10px 0; margin-left: -1px; }
 .card .card-footer .btn-add input 
 { 
     width: 40px; 
@@ -565,7 +587,7 @@ select {
     line-height: 19px;
     max-width: fit-content;
     background-color: rgba(255, 255, 255, 1) !important;
-    border-radius: 20px;
+    border-radius: 10px;
     border: 1px solid var(--color-texto-terciario);
     margin-left: 10px;
 }
@@ -689,7 +711,7 @@ select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     box-sizing: border-box;
 }
   
@@ -700,7 +722,7 @@ select {
     width: fit-content;
     margin: auto;
     margin-left: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: rgba(255, 53, 53, .9);
     color: #fff;
 }

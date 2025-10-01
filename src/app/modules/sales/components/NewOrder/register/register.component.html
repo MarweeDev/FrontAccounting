@@ -1,7 +1,7 @@
 <section class="container-component">
     <!--Titulo componente-->
     <div class="container-prev">
-        <h3 class="title">Gestión de Ordenes</h3>
+        <!--<h3 class="title">Gestión de Ordenes</h3>-->
         <div class="container-search">
             <label for="searchId">
                 <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
@@ -116,7 +116,7 @@
                                 <i class="fa-solid fa-circle-check txt-success"></i>
                             </div>
                             
-                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Credito'">
+                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-2 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Credito'">
                                 Pagar
                             </button>
                         </td>

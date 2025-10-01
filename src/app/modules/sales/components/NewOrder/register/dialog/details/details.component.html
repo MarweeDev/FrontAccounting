@@ -37,16 +37,16 @@
         </div>
         <div class="container-btn">
             <div class="col1-btn">
-                <button type="button" class="btn btn-default rd-4" (click)="cancel()">Volver</button>
+                <button type="button" class="btn btn-default rd-2" (click)="cancel()">Volver</button>
             </div>
             <div class="col2-btn">
-                <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-4 btn-pay">
+                <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-2 btn-pay">
                     Anular
                 </button>
-                <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-4 btn-pay">
+                <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-2 btn-pay">
                     Editar
                 </button>
-                <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-4 btn-pay">
+                <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-2 btn-pay">
                     Pagar
                 </button>
             </div>
@@ -64,8 +64,8 @@
             <textarea placeholder="Motivo de anulación" id="input_description"></textarea>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default rd-4" (click)="cancelModalOrder()">Volver</button>
-            <button type="button" class="btn btn-success rd-4" (click)="okModalOrder()">Anular</button>
+            <button type="button" class="btn btn-default rd-2" (click)="cancelModalOrder()">Volver</button>
+            <button type="button" class="btn btn-success rd-2" (click)="okModalOrder()">Anular</button>
         </div>
     </div>
 </section>

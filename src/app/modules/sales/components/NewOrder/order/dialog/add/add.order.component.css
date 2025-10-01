@@ -54,7 +54,7 @@ input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     box-sizing: border-box;
     appearance: none;
     -webkit-appearance: none;
@@ -67,7 +67,7 @@ input {
     width: fit-content;
     margin: auto;
     margin-left: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: rgba(255, 53, 53, .9);
     color: #fff;
 }

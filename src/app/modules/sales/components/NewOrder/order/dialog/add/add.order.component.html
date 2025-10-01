@@ -25,14 +25,14 @@
                 </div>
             </label>
 
-            <select class="rd-1" id="select_categ">
+            <select class="rd-2" id="select_categ">
                 <option value="0">-Seleccione categoria-</option>
                 <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
             </select>
           
             <div class="container-btn">
-                <button type="submit" class="btn btn-success m-2 rd-4">Crear</button>
-                <button type="button" class="btn btn-default rd-4" (click)="cancel()">Cancelar</button>
+                <button type="submit" class="btn btn-success m-2 rd-2">Crear</button>
+                <button type="button" class="btn btn-default rd-2" (click)="cancel()">Cancelar</button>
             </div>
         </form>
     </div>

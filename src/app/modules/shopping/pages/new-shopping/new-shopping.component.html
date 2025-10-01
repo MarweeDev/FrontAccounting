@@ -1,1 +1,113 @@
-<p>new-shopping works!</p>
+<div class="form-container">
+  <div class="form-header">
+    <h2>Nueva factura de compra</h2>
+    <div class="header-actions">
+      <button type="button" class="btn btn-secondary">Cancelar</button>
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Guardar</button>
+    </div>
+  </div>
+
+  <form [formGroup]="purchaseForm" (ngSubmit)="onSubmit()">
+    <!-- Sección de datos generales de la factura -->
+    <div class="card">
+      <div class="grid-container">
+        <!-- Tipo de documento -->
+        <div class="form-group">
+          <label for="type">Tipo</label>
+          <select id="type" formControlName="type" class="form-control">
+            <option value="FC-1 - Compra">FC-1 - Compra</option>
+            <option value="FC-2 - Gasto">FC-2 - Gasto</option>
+          </select>
+        </div>
+        <!-- Número (Automático) -->
+        <div class="form-group">
+          <label for="invoiceNumber">Número</label>
+          <input type="text" id="invoiceNumber" formControlName="invoiceNumber" class="form-control" readonly>
+        </div>
+        <!-- Fecha de elaboración -->
+        <div class="form-group">
+          <label for="elaborationDate">Fecha de elaboración</label>
+          <input type="date" id="elaborationDate" formControlName="elaborationDate" class="form-control">
+        </div>
+        <!-- Factura del proveedor -->
+        <div class="form-group">
+          <label for="providerInvoice">No. factura proveedor</label>
+          <input type="text" id="providerInvoice" formControlName="providerInvoice" class="form-control">
+        </div>
+        <!-- Proveedor -->
+        <div class="form-group grid-col-span-2">
+          <label for="provider">Proveedores</label>
+          <select id="provider" formControlName="provider" class="form-control">
+            <option [ngValue]="null" disabled>Buscar</option>
+            <option *ngFor="let p of providers" [ngValue]="p.id">{{ p.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de items de la factura -->
+    <div class="card items-card">
+      <div class="table-responsive">
+        <table class="table items-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Producto/Servicio</th>
+              <th style="width: 25%;">Descripción</th>
+              <th style="width: 10%;">Cant.</th>
+              <th style="width: 15%;">Valor Unit.</th>
+              <th style="width: 10%;">Descuento</th>
+              <th style="width: 15%;">Valor Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody formArrayName="items">
+            <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
+              <td>
+                <select formControlName="product" class="form-control" (change)="onProductSelect(i)">
+                  <option [ngValue]="null" disabled>Seleccionar</option>
+                  <option *ngFor="let p of products" [ngValue]="p.id">{{ p.name }}</option>
+                </select>
+              </td>
+              <td><input type="text" formControlName="description" class="form-control"></td>
+              <td><input type="number" formControlName="quantity" class="form-control" (input)="calculateItemTotal(i)"></td>
+              <td><input type="number" formControlName="unitValue" class="form-control" (input)="calculateItemTotal(i)"></td>
+              <td><input type="number" formControlName="discount" class="form-control" (input)="calculateItemTotal(i)"></td>
+              <td><input type="text" formControlName="totalValue" class="form-control" readonly></td>
+              <td>
+                <button type="button" class="btn-icon btn-danger" (click)="removeItem(i)" title="Eliminar fila">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-link" (click)="addItem()">+ Agregar línea</button>
+    </div>
+
+    <!-- Sección de totales y observaciones -->
+    <div class="summary-section">
+      <div class="observations">
+        <label for="observations">Observaciones</label>
+        <textarea id="observations" formControlName="observations" class="form-control" rows="4"></textarea>
+      </div>
+      <div class="totals">
+        <div class="total-row">
+          <span>Total Bruto:</span>
+          <strong>{{ purchaseForm.get('totalBruto')?.value | currency }}</strong>
+        </div>
+        <div class="total-row">
+          <span>Descuentos:</span>
+          <span>- {{ purchaseForm.get('descuentos')?.value | currency }}</span>
+        </div>
+        <div class="total-row subtotal">
+          <span>Subtotal:</span>
+          <strong>{{ purchaseForm.get('subtotal')?.value | currency }}</strong>
+        </div>
+        <hr>
+        <div class="total-row grand-total">
+          <span>TOTAL NETO:</span>
+          <strong>{{ purchaseForm.get('totalNeto')?.value | currency }}</strong>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -2,8 +2,8 @@
 
     <!--Titulo componente-->
     <div class="container-prev">
-        <h3 class="title">Orden de productos</h3>
-        <select class="rd-4" (change)="onSelectChange($event)">
+        <!--<h3 class="title">Orden de productos</h3>-->
+        <select class="rd-2" (change)="onSelectChange($event)">
             <option value="0">Mostrar todos</option>
             <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
         </select>
@@ -17,13 +17,11 @@
         </div>
     </div>
 
-    <br>
-
     <div class="row">
         <div class="col col-product" style="margin: 0px; padding: 0px">
             
             <!--Contenido productos-->
-            <div class="content" style="padding: 20px 0 0 0">
+            <div class="content" style="padding: 10px 0 0 0; justify-content: start;">
 
                 <!--Producto--> <!--(contextmenu)="mostrarMenu($event)"-->
                 <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
@@ -78,9 +76,10 @@
             </div>
         </div>
 
-        <div class="col col-order" *ngIf="valueCount !== 0">
+        <!--<div class="col col-order" *ngIf="valueCount !== 0">-->
+        <div class="col col-order">
             <!--Lista de productos seleccionados-->
-            <div [class]="heightAuto" *ngIf="valueCount !== 0">
+            <div [class]="heightAuto">
                 <button type="button" class="button animate__bounceIn" (click)="OnOpen()" *ngIf="_btn_modal_add">
                     <span class="danger">{{valueCount}}</span>
                     <i class="fa-solid fa-basket-shopping"></i>
@@ -103,15 +102,19 @@
                                 <select (change)="onSelectChangeClient($event)" id="select_client">
                                     <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre + " (" + item.nit + ")"}}</option>
                                 </select>
-                                <button type="button" class="btn btn-info rd-4" title="Nuevo Cliente" (click)="onCreateClient()">
-                                    <span class="fa-solid fa-user-plus"></span>
+                                <button type="button" class="btn btn-info" title="Nuevo Cliente" (click)="onCreateClient()">
+                                    <span class="fa-solid fa-user-plus"></span> Cliente
                                 </button>
                             </div>
                         </div>
                     </div>
                     <div class="content">
                         <div class="grid rd-2">
-                            <table>
+                            <div class="message-not-result" *ngIf="ListProduct === undefined || ListProduct.length === 0">
+                                <h4>No se a registrado ningún producto</h4>
+                                <h5>Seleccione para completar la orden</h5>
+                            </div>
+                            <table *ngIf="ListProduct ? ListProduct.length > 0 : 0">
                                 <tbody>
                                     <tr *ngFor="let item of ListProduct">
                                         <td>{{item.nombre}}</td>
@@ -133,11 +136,14 @@
                     <div class="action">
                         <div class="footer">
                             <div class="row">
-                                <div class="col">
+                                <div class="col" style="width: fit-content;">
                                     Total
                                 </div>
-                                <div class="col">
-                                    {{totalProduct}}
+                                <div class="col" *ngIf="btn_pay" (click)="viewOk()">
+                                    A registrar: {{totalProduct}}
+                                </div>
+                                <div class="col" *ngIf="!btn_pay" (click)="viewPay()">
+                                    Ir a pagar: {{ totalProduct }}
                                 </div>
                             </div>
                             <div class="action-check">
@@ -154,13 +160,13 @@
 
                         <div class="btn-order">
                             <div class="row row2">
-                                <div class="col col2">
+                                <!--<div class="col col2">
                                     <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar orden</button>
                                 </div>
                                 <div class="col col2">
                                     <button type="button" class="btn btn-success rd-4" *ngIf="btn_pay" (click)="viewOk()">Registrar orden</button>
                                     <button type="button" class="btn btn-success rd-4" *ngIf="!btn_pay" (click)="viewPay()">Pagar orden</button>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -198,8 +204,8 @@
                         </label>
                       
                         <div class="container-btn">
-                            <button type="submit" class="btn btn-success m-2 rd-4">Crear</button>
-                            <button type="button" class="btn btn-default rd-4" (click)="cancelNewClient()">Cancelar</button>
+                            <button type="submit" class="btn btn-success m-2 rd-2">Crear</button>
+                            <button type="button" class="btn btn-default rd-2" (click)="cancelNewClient()">Cancelar</button>
                         </div>
                     </form>
                 </div>

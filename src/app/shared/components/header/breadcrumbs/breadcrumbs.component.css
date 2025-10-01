@@ -60,7 +60,7 @@
     border-radius: 50px;
 }
 .col1 button:hover {
-    background-color: var(--color-info-dark);
+    background-color: rgb(55 146 141 / 14%);
     box-shadow: 0px 2px 3px rgba(0,0,0,.1);
 }
 .col1 button i { 
