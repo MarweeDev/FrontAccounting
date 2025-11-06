@@ -15,17 +15,14 @@
         <!-- Tipo de documento -->
         <div class="form-group">
           <label for="type">Tipo</label>
-          <select id="type" formControlName="type" class="form-control">
-            <option value="FC-1 - Compra">FC-1 - Compra</option>
-            <option value="FC-2 - Gasto">FC-2 - Gasto</option>
-          </select>
-
           <app-select
-            [items]="['Angular', 'React', 'Vue']"
+            formControlName="type"
+            [items]="typeShopping"
             [searchable]="true"
-            placeholder="Selecciona framework"
-            (selectionChange)="onFrameworkSelected($event)"></app-select>
-
+            [selectFirst]="true"
+            [disabled]="false"
+            placeholder="Seleccione tipo">
+          </app-select>
         </div>
         <!-- Número (Automático) -->
         <div class="form-group">
@@ -45,10 +42,14 @@
         <!-- Proveedor -->
         <div class="form-group grid-col-span-2">
           <label for="provider">Proveedores</label>
-          <select id="provider" formControlName="provider" class="form-control">
-            <option [ngValue]="null" disabled>Buscar</option>
-            <option *ngFor="let p of providers" [ngValue]="p.id">{{ p.name }}</option>
-          </select>
+          <app-select
+            formControlName="provider"
+            [items]="providers"
+            [searchable]="true"
+            [selectFirst]="true"
+            [disabled]="false"
+            placeholder="Seleccione proveedor">
+          </app-select>
         </div>
       </div>
     </div>
@@ -71,10 +72,16 @@
           <tbody formArrayName="items">
             <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
               <td>
-                <select formControlName="product" class="form-control" (change)="onProductSelect(i)">
-                  <option [ngValue]="null" disabled>Seleccionar</option>
-                  <option *ngFor="let p of products" [ngValue]="p.id">{{ p.name }}</option>
-                </select>
+                <app-select
+                  formControlName="product"
+                  [items]="products"
+                  [searchable]="true"
+                  [selectFirst]="false"
+                  [disabled]="false"
+                  placeholder="Seleccionar producto" 
+                  (change)="onProductSelect(i)"
+                  class="form-control-select">
+                </app-select>
               </td>
               <td>
                 <input type="text" formControlName="description" class="form-control">
@@ -106,12 +113,11 @@
     </div>
 
     <!-- Sección de totales y observaciones -->
-    <div class="summary-section">
-      <div class="observations">
-        <label for="observations">Observaciones</label>
-        <textarea id="observations" formControlName="observations" class="form-control" rows="4"></textarea>
+    <div class="row">
+      <div class="col observations">
+        <textarea id="observations" formControlName="observations" class="form-control description" rows="4" placeholder="Observaciones"></textarea>
       </div>
-      <div class="totals">
+      <div class="col totals">
         <div class="total-row">
           <span>Total Bruto:</span>
           <strong>{{ purchaseForm.get('totalBruto')?.value | currency }}</strong>

@@ -1,34 +1,28 @@
-<div class="select-container relative inline-block w-64">
-  <div
-    class="border rounded-md p-2 bg-white cursor-pointer flex justify-between items-center"
-    (click)="toggleDropdown()"
-  >
-    <span>{{ selectedItem || placeholder }}</span>
-    <span class="text-gray-500">&#x25BC;</span>
+<div class="select-container form-group" [class.disabled]="disabled">
+  <div class="custom-select" (click)="toggleDropdown()">
+    <span class="selected-text">
+      {{ selectedItem?.name || placeholder }}
+    </span>
+    <span class="arrow"><i class="fa-solid fa-caret-down"></i></span>
   </div>
 
-  <div
-    *ngIf="isOpen"
-    class="absolute w-full bg-white border rounded-md mt-1 shadow-md z-10"
-  >
+  <div class="dropdown" *ngIf="isOpen">
     <input
-      *ngIf="searchable"
+      *ngIf="searchable && !disabled"
       type="text"
-      class="w-full p-2 border-b outline-none"
+      class="search-input"
       placeholder="Buscar..."
       [(ngModel)]="searchTerm"
-      (input)="onSearchChange()"
-    />
+      (input)="onSearchChange()" />
 
     <div
       *ngFor="let item of filteredItems"
-      class="p-2 hover:bg-gray-100 cursor-pointer"
-      (click)="selectItem(item)"
-    >
-      {{ item }}
+      class="dropdown-item"
+      (click)="selectItem(item)">
+      {{ item.name }}
     </div>
 
-    <div *ngIf="filteredItems.length === 0" class="p-2 text-gray-400 text-sm">
+    <div *ngIf="filteredItems.length === 0" class="no-results">
       No hay resultados
     </div>
   </div>

@@ -25,16 +25,21 @@ export class NewShoppingComponent implements OnInit {
 purchaseForm: FormGroup;
   
   // Datos de ejemplo para los selectores
-  providers: Provider[] = [
+  providers = [
     { id: 1, name: 'Proveedor A S.A.S' },
     { id: 2, name: 'Importaciones B Ltda.' },
     { id: 3, name: 'Suministros C & Cia.' },
   ];
   
-  products: Product[] = [
+  products = [
     { id: 101, name: 'Producto X-100', price: 50.00 },
     { id: 102, name: 'Servicio de Mantenimiento', price: 120.00 },
     { id: 103, name: 'Insumo Y-20', price: 15.75 },
+  ];
+
+  typeShopping = [
+    { id: 1, name: 'Compra' },
+    { id: 2, name: 'Gasto' }
   ];
 
   constructor(private fb: FormBuilder,
@@ -44,11 +49,11 @@ purchaseForm: FormGroup;
   ) {
     // Inicialización del formulario reactivo
     this.purchaseForm = this.fb.group({
-      type: ['FC-1 - Compra', Validators.required],
+      type: [Validators.required],
       elaborationDate: [new Date().toISOString().substring(0, 10), Validators.required],
       invoiceNumber: [{ value: 177, disabled: true }],
       providerInvoice: ['', Validators.required],
-      provider: [null, Validators.required],
+      provider: [Validators.required],
       items: this.fb.array([]),
       observations: [''],
       totalBruto: [0],
@@ -188,9 +193,5 @@ purchaseForm: FormGroup;
       // Marcar campos como tocados para mostrar errores
       this.purchaseForm.markAllAsTouched();
     }
-  }
-
-  onFrameworkSelected(value: string) {
-    console.log('Seleccionado:', value);
   }
 }
