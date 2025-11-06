@@ -1,15 +1,16 @@
 <div class="form-container">
+  <!--
   <div class="form-header">
     <h2>Nueva factura de compra</h2>
     <div class="header-actions">
-      <button type="button" class="btn btn-secondary">Cancelar</button>
-      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Guardar</button>
+      <button type="submit" class="btn btn-primary rd-2" (click)="onSubmit()">Guardar</button>
     </div>
   </div>
+  -->
 
   <form [formGroup]="purchaseForm" (ngSubmit)="onSubmit()">
     <!-- Sección de datos generales de la factura -->
-    <div class="card">
+    <div class="card-header-content">
       <div class="grid-container">
         <!-- Tipo de documento -->
         <div class="form-group">
@@ -18,6 +19,13 @@
             <option value="FC-1 - Compra">FC-1 - Compra</option>
             <option value="FC-2 - Gasto">FC-2 - Gasto</option>
           </select>
+
+          <app-select
+            [items]="['Angular', 'React', 'Vue']"
+            [searchable]="true"
+            placeholder="Selecciona framework"
+            (selectionChange)="onFrameworkSelected($event)"></app-select>
+
         </div>
         <!-- Número (Automático) -->
         <div class="form-group">
@@ -46,7 +54,7 @@
     </div>
 
     <!-- Sección de items de la factura -->
-    <div class="card items-card">
+    <div class="card-header-content items-card">
       <div class="table-responsive">
         <table class="table items-table">
           <thead>
@@ -68,19 +76,33 @@
                   <option *ngFor="let p of products" [ngValue]="p.id">{{ p.name }}</option>
                 </select>
               </td>
-              <td><input type="text" formControlName="description" class="form-control"></td>
-              <td><input type="number" formControlName="quantity" class="form-control" (input)="calculateItemTotal(i)"></td>
-              <td><input type="number" formControlName="unitValue" class="form-control" (input)="calculateItemTotal(i)"></td>
-              <td><input type="number" formControlName="discount" class="form-control" (input)="calculateItemTotal(i)"></td>
-              <td><input type="text" formControlName="totalValue" class="form-control" readonly></td>
               <td>
-                <button type="button" class="btn-icon btn-danger" (click)="removeItem(i)" title="Eliminar fila">🗑️</button>
+                <input type="text" formControlName="description" class="form-control">
+              </td>
+              <td>
+                <input type="number" min="1" formControlName="quantity" class="form-control form-control-td-quantity" (input)="calculateItemTotal(i)">
+              </td>
+              <td>
+                <input type="number" formControlName="unitValue" class="form-control form-control-td-value" (input)="calculateItemTotal(i)">
+              </td>
+              <td>
+                <input type="number" formControlName="discount" class="form-control form-control-td-value" (input)="calculateItemTotal(i)">
+              </td>
+              <td>
+                <input type="text" formControlName="totalValue" class="form-control form-control-td-value" readonly>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger btn-span rd-3 delete" (click)="removeItem(i)" title="Eliminar fila">
+                  <i class="fa-regular fa-circle-xmark"></i>
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <button type="button" class="btn btn-link" (click)="addItem()">+ Agregar línea</button>
+      <button type="button" class="btn btn-primary rd-2 add btn-span" (click)="addItem()">
+        Agregar línea <i class="fa-solid fa-plus"></i>
+      </button>
     </div>
 
     <!-- Sección de totales y observaciones -->
@@ -106,6 +128,10 @@
         <div class="total-row grand-total">
           <span>TOTAL NETO:</span>
           <strong>{{ purchaseForm.get('totalNeto')?.value | currency }}</strong>
+        </div>
+        <hr>
+        <div class="btn-save-shop">
+          <button type="submit" class="btn btn-success rd-2" (click)="onSubmit()">Guardar</button>
         </div>
       </div>
     </div>

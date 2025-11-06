@@ -1,6 +1,5 @@
 /* Estilos generales del formulario */
 .form-container {
-  font-family: 'Inter', sans-serif;
   background-color: #f4f7fa;
   padding: 2rem;
 }
@@ -63,12 +62,27 @@
 }
 
 /* Estilos de las tarjetas y campos del formulario */
-.card {
+.card-header-content {
   background-color: white;
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   margin-bottom: 2rem;
+}
+
+.card-header-content .add {
+  margin: 10px 0px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+.card-header-content .add i {
+  margin-left: 5px;
+}
+.card-header-content .delete {
+  padding: 6px 10px;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
 }
 
 .grid-container {
@@ -94,12 +108,20 @@
 }
 
 .form-control {
-  width: 100%;
+  width: auto;
   padding: 0.75rem;
   border: 1px solid #dfe4ea;
   border-radius: 6px;
   font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control-td-quantity {
+  width: 50px !important;
+}
+
+.form-control-td-value {
+  width: 100px !important;
 }
 
 .form-control:focus {
@@ -113,6 +135,13 @@
   cursor: not-allowed;
 }
 
+/* Table container */
+.table-responsive {
+  position: relative;
+  width: 100%;
+  overflow-y: auto;
+}
+
 /* Tabla de items */
 .items-table {
   width: 100%;
@@ -123,7 +152,6 @@
   padding-bottom: 1rem;
   color: #7f8c8d;
   font-size: 0.9rem;
-  border-bottom: 2px solid #ecf0f1;
 }
 .items-table td {
   padding-top: 0.5rem;
@@ -161,6 +189,10 @@
   font-size: 1.2rem;
   color: #2c3e50;
   font-weight: bold;
+}
+.btn-save-shop {
+  padding: 0.75rem 0 0 0;
+  text-align: center;
 }
 
 .totals hr {

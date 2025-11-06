@@ -189,4 +189,8 @@ purchaseForm: FormGroup;
       this.purchaseForm.markAllAsTouched();
     }
   }
+
+  onFrameworkSelected(value: string) {
+    console.log('Seleccionado:', value);
+  }
 }

@@ -11,6 +11,7 @@ import { MainlayoutComponent } from './components/aside/mainlayout/mainlayout.co
 import { FooterComponent } from './components/footer/footer/footer.component';
 import { FilterSearchPipe } from './pipes/search/filter-search.pipe';
 import { StatusComponent } from './components/error/status/status.component';
+import { SelectComponent } from './components/form-items/select/select.component';
 
 @NgModule({
   declarations: [
@@ -19,10 +20,11 @@ import { StatusComponent } from './components/error/status/status.component';
     MainlayoutComponent,
     FooterComponent,
     StatusComponent,
+    SelectComponent
   ],
   imports: [
     CommonModule,
-    BrowserModule,
+    //BrowserModule,
     FormsModule,
     RouterModule,
     NgOptimizedImage
@@ -33,7 +35,8 @@ import { StatusComponent } from './components/error/status/status.component';
     BreadcrumbsComponent,
     MainlayoutComponent,
     FooterComponent,
-    StatusComponent
+    StatusComponent,
+    SelectComponent
   ]
 })
 export class SharedModule { }

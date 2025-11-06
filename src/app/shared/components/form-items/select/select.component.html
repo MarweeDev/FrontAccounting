@@ -1,0 +1,35 @@
+<div class="select-container relative inline-block w-64">
+  <div
+    class="border rounded-md p-2 bg-white cursor-pointer flex justify-between items-center"
+    (click)="toggleDropdown()"
+  >
+    <span>{{ selectedItem || placeholder }}</span>
+    <span class="text-gray-500">&#x25BC;</span>
+  </div>
+
+  <div
+    *ngIf="isOpen"
+    class="absolute w-full bg-white border rounded-md mt-1 shadow-md z-10"
+  >
+    <input
+      *ngIf="searchable"
+      type="text"
+      class="w-full p-2 border-b outline-none"
+      placeholder="Buscar..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+    />
+
+    <div
+      *ngFor="let item of filteredItems"
+      class="p-2 hover:bg-gray-100 cursor-pointer"
+      (click)="selectItem(item)"
+    >
+      {{ item }}
+    </div>
+
+    <div *ngIf="filteredItems.length === 0" class="p-2 text-gray-400 text-sm">
+      No hay resultados
+    </div>
+  </div>
+</div>

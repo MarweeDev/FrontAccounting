@@ -1,0 +1,7 @@
+.select-container {
+  position: relative;
+}
+
+.select-container input {
+  border-bottom: 1px solid #ddd;
+}
