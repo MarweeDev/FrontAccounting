@@ -15,6 +15,12 @@
       [(ngModel)]="searchTerm"
       (input)="onSearchChange()" />
 
+    <div *ngIf="selectAction" class="action-container">
+      <button type="button" class="btn btn-action btn-origin btn-span" (click)="triggerAction()">
+        {{selectActionName}}<i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+
     <div
       *ngFor="let item of filteredItems"
       class="dropdown-item"

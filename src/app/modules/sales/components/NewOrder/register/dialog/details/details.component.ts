@@ -13,6 +13,7 @@ import { OrderDTO } from 'src/app/core/models/order';
 export class DetailsComponent implements OnInit {
 
   @Input() orderCode?: any;
+  
   estado : any;
   order : any;
   ListOrder: any[] =[];
@@ -57,6 +58,10 @@ export class DetailsComponent implements OnInit {
     this.router.navigate(['/sales/payments', code]);
   }
 
+   getUpdateOrder(code:any){
+    this.router.navigate(['/sales/order/edit', code]);
+  }
+
   cancel(){
     //this.router.navigate(['sales/register']);
     this.registercomponent.visibleDetails = false;
@@ -75,7 +80,7 @@ export class DetailsComponent implements OnInit {
     };
 
     if(input != undefined && input.value != "") {
-      this.ApiOrder.put(orderData).subscribe(data => {
+      this.ApiOrder.putNull(orderData).subscribe(data => {
 
         let code = this.ListOrder[0]?.codigo;
         this.registercomponent.onLoadOrder();

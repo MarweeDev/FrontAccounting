@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductDTO } from '../../../../../core/models/product';
 import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
 import { AppComponent } from 'src/app/app.component';
@@ -19,6 +19,9 @@ import { ToastService } from 'src/app/shared/directives/toast.service';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
+
+  @Input() CodeOrderInput = 0;
+  @Input() ProcessOrderInput = "Insert";
 
   searchTerm : string = '';
 
@@ -45,10 +48,12 @@ export class OrderComponent implements OnInit {
   NameClient ?: string = "name";
   ListProduct: ProductDTO[] = [];
   ListOrder: OrderDTO[] =[];
+  ListProductDB: any[] =[];
   codeOrder: string = "0";
   totalProduct: string = "0";
   codeClient: number = 0;
-  ListClient: any[] = []; 
+  ListClient: any[] = [];
+  visibleNavNewProduct ?: boolean;
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
@@ -82,13 +87,14 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     this.OnSetValueList();
     this.OnReloadSearch();
+    this.OnLoadProductEdit();
   }
 
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
       { nombre: 'Volver', url: 'sales/register', type: "btn-origin"},
-      { nombre: 'Nuevo producto', url: 'sales/order/add', icon: 'fa-solid fa-plus', type: "btn-success"}
+      { nombre: 'Nuevo producto', url: 'sales/order/add', icon: 'fa-solid fa-plus', type: "btn-success", visible: this.visibleNavNewProduct }
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -97,9 +103,56 @@ export class OrderComponent implements OnInit {
       this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
     });
 
-    this.ApiOrder.getCodeOrder().subscribe(data => {
-      this.codeOrder = data.status;
-    });
+    console.log('CodeOrderInput: ', this.CodeOrderInput);
+    console.log('ProcessOrderInput: ', this.ProcessOrderInput);
+  }
+
+  //Metodo para cargar productos para editar
+  OnLoadProductEdit(){
+    //Validar si esta editando o creando nueva orden
+    if(this.CodeOrderInput == 0) {
+      //Obtener codigo orden
+      this.ApiOrder.getCodeOrder().subscribe(data => {
+        this.codeOrder = data.status;
+      });
+      //Mostrar btn newProduct
+      this.visibleNavNewProduct = true;
+    }
+    else {
+      //Ocultar btn newProduct
+      this.visibleNavNewProduct = false;
+      //Cargar codigo de la orden
+      this.codeOrder = this.CodeOrderInput.toString();
+
+      //Cargar productos de la orden
+      this.ApiOrder.getID(this.codeOrder).subscribe(data => {
+        this.ListProductDB = data.result;
+        this.ListProductDB.forEach((item: any) => {
+          const product = new ProductDTO();
+          product.id = item.id_producto;
+          product.nombre = item.producto;
+          product.precio = item.precio;
+          product.id_estado = item.cantidad;
+          this.ListProduct?.push(product);
+        });
+        
+        //Selección del cliente
+        this.codeClient = this.ListProductDB[0]?.id_cliente;
+        setTimeout(() => {
+          let elementClient :any = document.getElementById("select_client");
+          elementClient.value = this.ListProductDB[0]?.id_cliente;
+        }, 1000);
+
+        //Calcular total
+        this.OnTotal();
+        //Refrescar selección de productos
+        setTimeout(() => {
+          this.OnValidateRefresh();
+        }, 1000);
+      },error => {
+        console.log('Error get: ', error)
+      });
+    }
   }
 
   OnSearchChange(search: string) {
@@ -211,7 +264,6 @@ export class OrderComponent implements OnInit {
   }
 
   OnValidateRefresh() {
-    console.log(this.ListProduct);
     this.ListProduct.forEach(item => {
       let elementTitle :any = document.getElementById('card-title-' + item.id)?.style;
       let elementCard :any = document.getElementById('card-order-' + item.id)?.classList;
@@ -402,7 +454,7 @@ export class OrderComponent implements OnInit {
     this.router.navigate(['sales/register']);
   }
 
-  viewOk() {
+  viewRegister() {
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
 
@@ -427,30 +479,80 @@ export class OrderComponent implements OnInit {
         
         if(this.ListOrder.length > 0) 
         {
-          this.ApiOrder.post(this.ListOrder).subscribe(data => {
-            this.viewPrev();
-            this.toastService.showToast({
-              title: 'Proceso exitoso',
-              message: 'Registro de nueva orden exitoso.',
-              type: 'success',
-              timeout: 3000,
+          if (this.ProcessOrderInput === "Insert") 
+          {
+            this.ApiOrder.post(this.ListOrder).subscribe(data => {
+
+              this.toastService.showToast({
+                title: 'Proceso exitoso',
+                message: 'Registro de nueva orden exitoso.',
+                type: 'success',
+                timeout: 3000,
+              });
+            },error => {
+              this.toastService.showToast({
+                title: 'Error ' + error.status,
+                message: error.message,
+                type: 'error',
+                timeout: 3000
+              });
+
+              throw new Error('Error en la creación de la orden');
             });
-          },error => {
-            this.toastService.showToast({
-              title: 'Error ' + error.status,
-              message: error.message,
-              type: 'error',
-              timeout: 3000
+          }
+          else if (this.ProcessOrderInput === "Update")
+          {
+            this.ApiOrder.put(this.ListOrder).subscribe(data => {
+              
+              this.toastService.showToast({
+                title: 'Proceso exitoso',
+                message: 'Actualización de orden exitosa.',
+                type: 'success',
+                timeout: 3000,
+              });
+            },error => {
+              this.toastService.showToast({
+                title: 'Error ' + error.status,
+                message: error.message,
+                type: 'error',
+                timeout: 3000
+              });
+
+              throw new Error('Error en la actualización de la orden');
             });
-          });
-          
+          }
         }
 
       }
     }
   }
 
+  viewOk() {
+    try {
+      this.viewRegister();
+      this.viewPrev();
+    }
+    catch (error) {
+      console.log('Error viewOk: ', error);
+    }
+  }
+
   viewPay() {
+    try {
+      this.viewRegister();
+      if (this.btn_pay) {
+        this.viewPrev();
+      }
+      else {
+        this.router.navigate(['/sales/payments', this.codeOrder]);
+      }
+    }
+    catch (error) {
+      console.log('Error viewPay: ', error);
+    }
+  }
+
+  /*viewPay() {
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
 
@@ -496,7 +598,8 @@ export class OrderComponent implements OnInit {
 
       }
     }
-  }
+  }*/
+  
   viewCancel() {
     //this.VisibleAlert = true;
     this.viewPrev();

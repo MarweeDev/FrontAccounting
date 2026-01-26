@@ -4,4 +4,5 @@ export class NavDTO {
     icon?: string;
     type?: string;
     search?: boolean;
+    visible?: boolean;
 }

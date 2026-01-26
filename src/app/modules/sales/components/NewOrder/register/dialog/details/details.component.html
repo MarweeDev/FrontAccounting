@@ -43,7 +43,7 @@
                 <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-2 btn-pay">
                     Anular
                 </button>
-                <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-2 btn-pay">
+                <button (click)="getUpdateOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-2 btn-pay">
                     Editar
                 </button>
                 <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-2 btn-pay">

@@ -33,7 +33,7 @@
 .container-head {
     width: 100%;
     position: sticky;
-    top: 4rem;
+    top: 6rem;
     z-index: 1;
     background-color: var(--color-secondary);
 }

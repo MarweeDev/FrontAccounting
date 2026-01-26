@@ -13,7 +13,7 @@
     <div class="card-header-content">
       <div class="grid-container">
         <!-- Tipo de documento -->
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="type">Tipo</label>
           <app-select
             formControlName="type"
@@ -21,9 +21,10 @@
             [searchable]="true"
             [selectFirst]="true"
             [disabled]="false"
-            placeholder="Seleccione tipo">
+            placeholder="Seleccione tipo"
+            class="form-control-select">
           </app-select>
-        </div>
+        </div>-->
         <!-- Número (Automático) -->
         <div class="form-group">
           <label for="invoiceNumber">Número</label>
@@ -40,15 +41,16 @@
           <input type="text" id="providerInvoice" formControlName="providerInvoice" class="form-control">
         </div>
         <!-- Proveedor -->
-        <div class="form-group grid-col-span-2">
+        <div class="form-group">
           <label for="provider">Proveedores</label>
           <app-select
             formControlName="provider"
             [items]="providers"
             [searchable]="true"
-            [selectFirst]="true"
+            [selectFirst]="false"
             [disabled]="false"
-            placeholder="Seleccione proveedor">
+            placeholder="Seleccione proveedor"
+            class="form-control-select">
           </app-select>
         </div>
       </div>
@@ -60,11 +62,12 @@
         <table class="table items-table">
           <thead>
             <tr>
+              <th style="width: 25%;">Tipo</th>
               <th style="width: 25%;">Producto/Servicio</th>
               <th style="width: 25%;">Descripción</th>
               <th style="width: 10%;">Cant.</th>
               <th style="width: 15%;">Valor Unit.</th>
-              <th style="width: 10%;">Descuento</th>
+              <th style="width: 10%;">Impuesto</th>
               <th style="width: 15%;">Valor Total</th>
               <th></th>
             </tr>
@@ -73,13 +76,27 @@
             <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
               <td>
                 <app-select
+                  formControlName="type"
+                  [items]="typeShopping"
+                  [searchable]="true"
+                  [selectFirst]="false"
+                  [disabled]="false"
+                  [selectAction]="true"
+                  selectActionName="Agregar tipo"
+                  placeholder="Seleccione tipo"
+                  class="form-control-select"
+                  (actionClick)="onTypeSelect(i)">
+                </app-select>
+              </td>
+              <td>
+                <app-select
                   formControlName="product"
                   [items]="products"
                   [searchable]="true"
                   [selectFirst]="false"
                   [disabled]="false"
                   placeholder="Seleccionar producto" 
-                  (change)="onProductSelect(i)"
+                  (actionChange)="onProductSelect(i)"
                   class="form-control-select">
                 </app-select>
               </td>
@@ -99,8 +116,12 @@
                 <input type="text" formControlName="totalValue" class="form-control form-control-td-value" readonly>
               </td>
               <td>
-                <button type="button" class="btn btn-danger btn-span rd-3 delete" (click)="removeItem(i)" title="Eliminar fila">
-                  <i class="fa-regular fa-circle-xmark"></i>
+                <button type="button" 
+                *ngIf="items.controls.length > 1"
+                class="btn rd-3 delete" 
+                (click)="removeItem(i)" 
+                title="Eliminar fila">
+                  <i class="fa-solid fa-minus txt-danger"></i>
                 </button>
               </td>
             </tr>
@@ -113,32 +134,27 @@
     </div>
 
     <!-- Sección de totales y observaciones -->
-    <div class="row">
-      <div class="col observations">
-        <textarea id="observations" formControlName="observations" class="form-control description" rows="4" placeholder="Observaciones"></textarea>
+    <div class="totals">
+      <div class="total-row">
+        <span>Total Bruto:</span>
+        <strong>{{ purchaseForm.get('totalBruto')?.value | currency }}</strong>
       </div>
-      <div class="col totals">
-        <div class="total-row">
-          <span>Total Bruto:</span>
-          <strong>{{ purchaseForm.get('totalBruto')?.value | currency }}</strong>
-        </div>
-        <div class="total-row">
-          <span>Descuentos:</span>
-          <span>- {{ purchaseForm.get('descuentos')?.value | currency }}</span>
-        </div>
-        <div class="total-row subtotal">
-          <span>Subtotal:</span>
-          <strong>{{ purchaseForm.get('subtotal')?.value | currency }}</strong>
-        </div>
-        <hr>
-        <div class="total-row grand-total">
-          <span>TOTAL NETO:</span>
-          <strong>{{ purchaseForm.get('totalNeto')?.value | currency }}</strong>
-        </div>
-        <hr>
-        <div class="btn-save-shop">
-          <button type="submit" class="btn btn-success rd-2" (click)="onSubmit()">Guardar</button>
-        </div>
+      <div class="total-row">
+        <span>Descuentos:</span>
+        <span>- {{ purchaseForm.get('descuentos')?.value | currency }}</span>
+      </div>
+      <div class="total-row subtotal">
+        <span>Subtotal:</span>
+        <strong>{{ purchaseForm.get('subtotal')?.value | currency }}</strong>
+      </div>
+      <hr>
+      <div class="total-row grand-total">
+        <span>TOTAL NETO:</span>
+        <strong>{{ purchaseForm.get('totalNeto')?.value | currency }}</strong>
+      </div>
+      <hr>
+      <div class="btn-save-shop">
+        <button type="submit" class="btn btn-success rd-2" (click)="onSubmit()">Guardar</button>
       </div>
     </div>
   </form>

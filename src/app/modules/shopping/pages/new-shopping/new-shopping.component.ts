@@ -49,7 +49,7 @@ purchaseForm: FormGroup;
   ) {
     // Inicialización del formulario reactivo
     this.purchaseForm = this.fb.group({
-      type: [Validators.required],
+      //type: [Validators.required],
       elaborationDate: [new Date().toISOString().substring(0, 10), Validators.required],
       invoiceNumber: [{ value: 177, disabled: true }],
       providerInvoice: ['', Validators.required],
@@ -92,6 +92,7 @@ purchaseForm: FormGroup;
    */
   newItem(): FormGroup {
     return this.fb.group({
+      type: [null, Validators.required],
       product: [null, Validators.required],
       description: [''],
       quantity: [1, [Validators.required, Validators.min(1)]],
@@ -134,6 +135,12 @@ purchaseForm: FormGroup;
       });
     }
     this.calculateItemTotal(index);
+  }
+
+  onTypeSelect(index: number): void {
+    const item = this.items.at(index);
+    const typeId = item.get('type')?.value;
+    alert('Tipo seleccionado: ' + typeId);
   }
 
   /**

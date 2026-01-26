@@ -32,9 +32,11 @@ export class SelectComponent implements ControlValueAccessor {
   @Input() searchable = false;
   @Input() selectFirst = false;
   @Input() disabled = false;
+  @Input() selectAction = false;
+  @Input() selectActionName = 'Nombre botón';
 
-  @Output() change = new EventEmitter<SelectItem>();
-  @Output() click = new EventEmitter<void>();
+  @Output() actionChange = new EventEmitter<SelectItem>();
+  @Output() actionClick = new EventEmitter<any>();
 
   isOpen = false;
   searchTerm = '';
@@ -85,7 +87,7 @@ export class SelectComponent implements ControlValueAccessor {
     this.isOpen = false;
     this.onChange(item.id);
     this.onTouched();
-    this.change.emit(item);
+    this.actionChange.emit(item);
     this.searchTerm = '';
     this.filteredItems = [...this.items];
   }
@@ -95,6 +97,10 @@ export class SelectComponent implements ControlValueAccessor {
     this.filteredItems = this.items.filter(item =>
       item.name.toLowerCase().includes(term)
     );
+  }
+
+  triggerAction() {
+    this.actionClick.emit();
   }
 
   @HostListener('document:click', ['$event'])
