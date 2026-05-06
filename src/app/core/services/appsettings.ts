@@ -10,6 +10,7 @@ export enum HttpMethod {
 }
 
 export enum ServicesMethod {
+    ServicesAuth = 'Auth',
     ServicesMesa = 'Mesa',
     ServicesCategory = 'Category',
     ServicesProduct = 'Product',

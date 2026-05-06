@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/core/services/user/user.service';
+import { LoginRequest } from 'src/app/core/models/auth';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private router:Router, 
     private toastService: ToastService,
     private formBuilder: FormBuilder, 
-    private api:UserService) {
+    private authService: AuthService) {
     this.form = this.formBuilder.group({
       Email: ['', [Validators.required]],
       Password: ['', [Validators.required]],
@@ -49,16 +50,16 @@ export class LoginComponent implements OnInit {
       const email = this.form.get('Email');
       const pass = this.form.get('Password');
 
-      let t = new login();
-      t.email = email?.value;
-      t.pass = pass?.value;
+      const t: LoginRequest = {
+        email: email?.value,
+        pass: pass?.value
+      };
 
-      this.api.getLogin(t).subscribe(data => {
+      this.authService.login(t).subscribe(data => {
         this.form.reset();
 
-        if (data?.status != 204) {
-          sessionStorage.setItem('authenticator', data?.result[0]?.token);
-          sessionStorage.setItem('idCountry', data?.result[0]?.id_pais);
+        if (data?.token) {
+          this.authService.setSession(data);
 
           //this.router.navigate(['home/main']);
           this.router.navigate(['sales/register']);
@@ -76,7 +77,7 @@ export class LoginComponent implements OnInit {
         else {
           this.toastService.showToast({
             title: 'Proceso advertencia',
-            message: data?.message,
+            message: 'Credenciales inválidas.',
             type: 'error',
             timeout: 5000,
           });
@@ -85,7 +86,7 @@ export class LoginComponent implements OnInit {
       }), (error: any) => {
         this.toastService.showToast({
           title: 'Error ' + error.status,
-          message: error.message,
+          message: error.error?.message || error.message,
           type: 'error',
           timeout: 3000
         });
