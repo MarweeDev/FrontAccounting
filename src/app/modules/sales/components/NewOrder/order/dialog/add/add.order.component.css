@@ -37,10 +37,12 @@
 
 .card { 
     cursor: unset; 
-    height: fit-content; 
+    height: inherit !important; 
     box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .1);
     width: 30em !important;
     padding: 30px;
+    position: relative;
+    overflow: auto;
 }
 
 label {
@@ -86,5 +88,96 @@ input {
 select {
     width: 100%;
     border: 1px solid #ccc;
+}
+
+/*Subir imagen*/
+.image-upload {
+  margin-bottom: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.image-upload input {
+  display: none;
+}
+
+.preview-container {
+  position: relative;
+  height: 170px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f4f6f8;
+  border: 1px solid #e0e0e0;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* acciones flotantes */
+.image-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* botón eliminar */
+.action-btn.remove {
+  background: rgba(255, 40, 40, 0.85);
+}
+
+.action-btn.remove:hover {
+  background: rgb(255, 22, 22);
+}
+
+/* badge estado */
+.status-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+.status-badge.loaded {
+  background: rgba(56, 142, 60, 0.85);
+}
+.status-badge.error {
+  background: rgba(211, 47, 47, 0.85);
+}
+
+.upload i {
+  cursor: pointer;
+  color: #ffffff;
+}
+.remove i {
+  cursor: pointer;
+  color: #ffffff;
 }
 

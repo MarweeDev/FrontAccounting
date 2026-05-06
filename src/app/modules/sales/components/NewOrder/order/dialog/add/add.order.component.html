@@ -1,9 +1,47 @@
 <section class="container-component">
     <div class="card">
         <h3>Proceso de creación</h3>
-        <br>
         <form [formGroup]="form" (ngSubmit)="add()">
-            
+
+            <!-- IMAGEN -->
+            <div class="image-upload">
+
+                <input
+                    type="file"
+                    id="productImage"
+                    accept="image/png, image/jpeg"
+                    (change)="onImageSelected($event)"
+                />
+
+                <div class="preview-container">
+
+                    <img [src]="previewImage" class="preview-image" />
+
+                    <!-- acciones -->
+                    <div class="image-actions">
+
+                    <label for="productImage" class="action-btn upload">
+                        <i class="fa-solid fa-upload"></i>
+                    </label>
+
+                    <button
+                        type="button"
+                        class="action-btn remove"
+                        *ngIf="imageLoaded"
+                        (click)="removeImage()">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+
+                    </div>
+
+                    <span class="status-badge">
+                    {{ imageLoaded ? 'Imagen cargada' : 'Imagen por defecto' }}
+                    </span>
+
+                </div>
+
+            </div>
+
             <label for="nombre">
                 <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
                 <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">

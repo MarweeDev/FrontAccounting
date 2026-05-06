@@ -36,7 +36,7 @@
                         <div class="row row-body">
                             <div class="col">
                                 <div class="icon rd-4">
-                                    <img class="icon-img" src="../../../../../assets/img/marwee.png">
+                                    <img class="icon-img" src="{{item.image || 'assets/img/product/default.png'}}">
                                 </div>
                             </div>
                             <div class="col">
@@ -242,3 +242,5 @@
     </div>
     
 </section>
+
+<app-add *ngIf="visibleComponentNewProduct"></app-add>

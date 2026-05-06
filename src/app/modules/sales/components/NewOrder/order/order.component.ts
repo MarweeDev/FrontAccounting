@@ -54,6 +54,7 @@ export class OrderComponent implements OnInit {
   codeClient: number = 0;
   ListClient: any[] = [];
   visibleNavNewProduct ?: boolean;
+  visibleComponentNewProduct ?: boolean = false;
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
@@ -524,13 +525,22 @@ export class OrderComponent implements OnInit {
         }
 
       }
+      else {
+        this.toastService.showToast({
+          title: 'Advertencia',
+          message: 'La orden debe tener al menos un producto.',
+          type: 'warning',
+          timeout: 3000
+        });
+      }
     }
   }
 
   viewOk() {
     try {
       this.viewRegister();
-      this.viewPrev();
+      if (this.ListProduct.length > 0)
+        this.viewPrev();
     }
     catch (error) {
       console.log('Error viewOk: ', error);
@@ -544,7 +554,8 @@ export class OrderComponent implements OnInit {
         this.viewPrev();
       }
       else {
-        this.router.navigate(['/sales/payments', this.codeOrder]);
+        if (this.ListProduct.length > 0)
+          this.router.navigate(['/sales/payments', this.codeOrder]);
       }
     }
     catch (error) {

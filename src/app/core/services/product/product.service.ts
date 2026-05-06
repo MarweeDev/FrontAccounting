@@ -26,7 +26,7 @@ export class ProductService {
     return this.http.get(this.ApiURL + HttpMethod.GETID + id);
   }
 
-  post(data: ProductDTO): Observable<ProductDTO>{
+  post(data: FormData): Observable<ProductDTO>{
     return this.http.post<ProductDTO>(this.ApiURL + HttpMethod.POST, data);
   }
 

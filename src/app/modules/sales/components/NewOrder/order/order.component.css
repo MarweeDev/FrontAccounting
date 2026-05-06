@@ -442,7 +442,7 @@
 .card .card-body .row .col { margin-bottom: 0%; }
 .card .card-body .row .col:nth-child(1) { padding: 0% !important; }
 .card .card-body .row .col .icon { padding: 0px !important; margin: auto; }
-.card .card-body .row .col .icon img { width: 60px; height: auto; opacity: .5; filter: grayscale(100%); transition: all .8s; }
+.card .card-body .row .col .icon img { width: 8rem; height: auto; opacity: .5; filter: grayscale(100%); transition: all .8s; }
 .card:hover .card-body .row .col .icon img { filter: grayscale(0%); opacity: .8; }
 .card .card-body .row .col:nth-child(2) { margin-top: 10px; margin-right: 0px; padding-right: 0px; }
 .card .card-body .row .col p { padding: 0px; margin: 0px; font-size: 13px; letter-spacing: 1.5px; color: rgb( 97, 109, 138) !important; }
