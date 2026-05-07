@@ -15,16 +15,21 @@
                 </span>
             </label>
         </div>
+        <div class="product-counter">
+            <strong>{{FilterProductData.length}}</strong>
+            <span>productos</span>
+            <small>{{VisibleProductData.length}} visibles</small>
+        </div>
     </div>
 
     <div class="row">
         <div class="col col-product" style="margin: 0px; padding: 0px">
             
             <!--Contenido productos-->
-            <div class="content" style="padding: 10px 0 0 0; justify-content: start;">
+            <div class="content product-scroll" style="padding: 10px 0 0 0; justify-content: start;" (scroll)="onProductScroll($event)">
 
                 <!--Producto--> <!--(contextmenu)="mostrarMenu($event)"-->
-                <div class="card" *ngFor="let item of ListProductData" [id]="'card-order-' + item.id">
+                <div class="card" *ngFor="let item of VisibleProductData" [id]="'card-order-' + item.id">
                     <div class="card-title-info">
                         <i class="fa-solid fa-ellipsis"></i>
                         <div class="container-info">{{item.descripcion}}</div>
@@ -68,6 +73,14 @@
                     </div>
                 </div>
 
+                <div class="product-loading-hint" *ngIf="hasMoreProducts">
+                    Desplázate para cargar más productos
+                </div>
+
+                <div class="product-loading-hint" *ngIf="!hasMoreProducts && FilterProductData.length > 0">
+                    Todos los productos visibles
+                </div>
+
                 <!--contextomenu-->
                 <div class="context-menu" id="contextmenu" *ngIf="mostrarContextMenu" style="opacity: 0;">
                     <ul>
@@ -102,7 +115,7 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <select (change)="onSelectChangeClient($event)" id="select_client">
+                                <select (change)="onSelectChangeClient($event)" id="select_client" [(ngModel)]="codeClient" [ngModelOptions]="{standalone: true}">
                                     <option [value]="item.id" *ngFor="let item of ListClient">{{item.nombre + " (" + item.nit + ")"}}</option>
                                 </select>
                                 <button type="button" class="btn btn-info" title="Nuevo Cliente" (click)="onCreateClient()">
@@ -182,37 +195,54 @@
 
     <div class="modal-add-client" *ngIf="_modal_add_client">
         <div class="container-content">
-            <div class="row">
-                <div class="col">
-                    <h3>Proceso de creación</h3>
-                    <h5>Creando nuevo cliente para generar orden.</h5>
-                    <br>
+            <button type="button" class="modal-close" title="Cerrar" (click)="cancelNewClient()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="client-modal-grid">
+                <div class="client-form">
+                    <div class="client-modal-header">
+                        <div class="client-icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <div>
+                            <h3>Nuevo cliente</h3>
+                            <p>Se seleccionará automáticamente para esta orden.</p>
+                        </div>
+                    </div>
                     <form [formGroup]="form" (ngSubmit)="addNewClient()">
-                        <label for="nombre">
+                        <label for="nombre" class="field">
+                            <span>Nombre</span>
                             <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
-                            <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            <div class="error-message" *ngIf="hasClientError('Nombre', 'required')">
                                 Requerido
                             </div>
                         </label>
                       
-                        <label for="nit">
-                            <input type="text" id="nit" formControlName="Nit" placeholder="Nit">
-                            <div class="error-message" *ngIf="form.get('Nit')?.hasError('required') && form.get('Nit')?.touched">
+                        <label for="nit" class="field">
+                            <span>NIT o documento</span>
+                            <input type="text" id="nit" formControlName="Nit" placeholder="Identificación">
+                            <div class="error-message" *ngIf="hasClientError('Nit', 'required')">
                                 Requerido
                             </div>
                         </label>
                       
-                        <label for="correo">
-                            <input type="text" id="correo" formControlName="Correo" placeholder="Correo">
+                        <label for="correo" class="field">
+                            <span>Correo</span>
+                            <input type="email" id="correo" formControlName="Correo" placeholder="correo@dominio.com">
+                            <div class="error-message" *ngIf="hasClientError('Correo', 'email')">
+                                Correo inválido
+                            </div>
                         </label>
                       
                         <div class="container-btn">
-                            <button type="submit" class="btn btn-success m-2 rd-2">Crear</button>
-                            <button type="button" class="btn btn-default rd-2" (click)="cancelNewClient()">Cancelar</button>
+                            <button type="button" class="btn btn-default rd-2" (click)="cancelNewClient()" [disabled]="isSavingClient">Cancelar</button>
+                            <button type="submit" class="btn btn-success m-2 rd-2" [disabled]="isSavingClient">
+                                {{ isSavingClient ? 'Creando...' : 'Crear cliente' }}
+                            </button>
                         </div>
                     </form>
                 </div>
-                <div class="col">
+                <div class="client-visual">
                     <img src="./../../../../../../assets/img/dobby/design-new-client.png" alt="img create"/>
                 </div>
             </div>

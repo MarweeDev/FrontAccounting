@@ -55,10 +55,14 @@ export class OrderComponent implements OnInit {
   ListClient: any[] = [];
   visibleNavNewProduct ?: boolean;
   visibleComponentNewProduct ?: boolean = false;
+  isSavingClient = false;
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
   ListProductData: ProductDTO[] = [];
+  FilterProductData: ProductDTO[] = [];
+  productPageSize = 24;
+  productVisibleCount = 24;
   //#endregion
 
   //Form
@@ -81,7 +85,7 @@ export class OrderComponent implements OnInit {
     this.form = this.formBuilder.group({
       Nombre: ['', [Validators.required]],
       Nit: ['', [Validators.required]],
-      Correo: ['']
+      Correo: ['', [Validators.email]]
     });
   }
 
@@ -180,24 +184,8 @@ export class OrderComponent implements OnInit {
 
   OnReloadSearch() {
     this.DataShared.OnGet().subscribe((list: any) => {
-      this.searchTerm = list;
-
-      if (list == undefined || list == null || list == "") {
-        this.ListProductData.forEach(item => {
-          let element :any = document.getElementById('card-order-' + item.id);
-          if(element != null)
-            element.removeAttribute("style");
-        });
-      }
-      else {
-        let rows = this.ListProductData.filter(item => !item.nombre?.toLowerCase().includes(list.toLowerCase()));
-        if(rows.length > 0) {
-          rows.forEach(item => {
-            let element :any = document.getElementById('card-order-' + item.id);
-            element.style = "display: none;"
-          });
-        }
-      }
+      this.searchTerm = list || '';
+      this.refreshProductView();
     });
   }
 
@@ -215,7 +203,8 @@ export class OrderComponent implements OnInit {
     //Cargar productos
     if (this.selectedId != 0) {
       this.ApiProduct.getCateg(this.selectedId).subscribe(data => {
-        this.ListProductData = data.product
+        this.ListProductData = data.product;
+        this.refreshProductView();
       },
       error => {
         console.log('Error: ', error)
@@ -223,7 +212,8 @@ export class OrderComponent implements OnInit {
     }
     else {
       this.ApiProduct.get().subscribe(data => {
-        this.ListProductData = data.product
+        this.ListProductData = data.product;
+        this.refreshProductView();
       },
       error => {
         console.log('Error: ', error)
@@ -248,10 +238,45 @@ export class OrderComponent implements OnInit {
     // Obtén el valor seleccionado y guárdalo en la propiedad selectedId
     this.selectedId = event.target.value;
     this.OnSetValueList();
-    
-    setTimeout(() => {
-      this.OnValidateRefresh();
-    }, 100);
+  }
+
+  get VisibleProductData(): ProductDTO[] {
+    return this.FilterProductData.slice(0, this.productVisibleCount);
+  }
+
+  get hasMoreProducts(): boolean {
+    return this.productVisibleCount < this.FilterProductData.length;
+  }
+
+  refreshProductView(resetScroll: boolean = true) {
+    const term = this.searchTerm?.trim().toLowerCase();
+    this.FilterProductData = !term
+      ? [...this.ListProductData]
+      : this.ListProductData.filter(item =>
+        item.nombre?.toLowerCase().includes(term) ||
+        item.descripcion?.toLowerCase().includes(term) ||
+        item.referencia?.toLowerCase().includes(term)
+      );
+
+    if (resetScroll) {
+      this.productVisibleCount = this.productPageSize;
+    }
+
+    setTimeout(() => this.OnValidateRefresh(), 0);
+  }
+
+  onProductScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const threshold = 120;
+    const isNearBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - threshold;
+
+    if (isNearBottom && this.hasMoreProducts) {
+      this.productVisibleCount = Math.min(
+        this.productVisibleCount + this.productPageSize,
+        this.FilterProductData.length
+      );
+      setTimeout(() => this.OnValidateRefresh(), 0);
+    }
   }
 
   OnTotal(){
@@ -637,42 +662,63 @@ export class OrderComponent implements OnInit {
   }
 
   addNewClient() {
-    // Validar todos los campos del formulario
     this.form.markAllAsTouched();
-
-    // Actualizar la validez del formulario
     this.form.updateValueAndValidity();
 
-    // Si el formulario es válido, continuar con la lógica de envío
+    if(this.form.invalid) {
+      this.toastService.showToast({
+        title: 'Proceso incompleto',
+        message: 'Completa los datos requeridos del cliente.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
     const t : ClientDTO = {
-      nombre: this.form.get('Nombre')?.value,
-      nit: this.form.get('Nit')?.value,
-      correo: this.form.get('Correo')?.value,
+      nombre: this.form.get('Nombre')?.value?.trim(),
+      nit: this.form.get('Nit')?.value?.trim(),
+      correo: this.form.get('Correo')?.value?.trim(),
       id_estado: 1
     }
-
-    let elementClient :any = document.getElementById("select_client");
     
-    if(!this.form.status.includes('INVALID')) {
-      this.ApiClient.post(t).subscribe(data => {
-        this.ListClient.push(data.obj);
+    this.isSavingClient = true;
+    this.ApiClient.post(t).subscribe({
+      next: data => {
+        this.ListClient = [...this.ListClient, data.obj];
         this.codeClient = data.obj.id;
-        setTimeout(() => {
-          this._modal_add_client = false;
-          elementClient.value = data.obj.id;
-          this.form.reset();
-        }, 200);
+        this._modal_add_client = false;
+        this.form.reset();
+        this.isSavingClient = false;
 
-      }), (error: any) => {
-        console.log(error);
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: 'Cliente creado y seleccionado.',
+          type: 'success',
+          timeout: 3000
+        });
+      },
+      error: error => {
+        this.isSavingClient = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
       }
-    }
-    else {
-      console.log(false)
-    }
+    });
+  }
+
+  hasClientError(controlName: string, errorName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!control?.hasError(errorName) && !!control?.touched;
   }
 
   cancelNewClient(){
+    if (this.isSavingClient) {
+      return;
+    }
     this.form.reset();
     this._modal_add_client = false;
   }

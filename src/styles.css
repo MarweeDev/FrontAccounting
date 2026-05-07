@@ -47,29 +47,45 @@ body {
 
 
 
-/* styles.css */
-.toast {
+.toast-container {
     position: fixed;
-    bottom: 0rem;
     right: 1rem;
+    bottom: 1rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    pointer-events: none;
+}
+
+.toast {
+    position: relative;
     background-color: #ffffff;
-    padding: 15px;
+    padding: 14px 42px 14px 14px;
     border: 1px solid #e1e1e1;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
     display: flex;
     width: 20rem;
     min-width: 200px;
     max-width: 22rem;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.5s;
-
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
     white-space: normal;
     word-break: break-word;
     overflow-wrap: anywhere;
-    
+    pointer-events: auto;
+  }
+
+  .toast-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .toast-hidden {
+    opacity: 0;
+    transform: translateY(10px);
   }
 
   .toast .btn-close {
@@ -77,10 +93,12 @@ body {
     right: 0.5rem;
     top: 0.5rem;
     font-weight: 500;
-    font-size: 12px;
-    padding: 5px 10px;
+    font-size: 16px;
+    width: 26px;
+    height: 26px;
+    padding: 0;
     border: 1px solid #e1e1e1;
-    border-radius: 10px;
+    border-radius: 50%;
     cursor: pointer;
     color: #fff;
     transition: all 0.5s;
@@ -88,13 +106,13 @@ body {
   .toast .success-close {
     background-color: rgba(76, 175, 80, .5);
   }
-  .toast.error-close {
+  .toast .error-close {
     background-color: rgba(244, 67, 54, .8);
   }
-  .toast.warning-close {
+  .toast .warning-close {
     background-color: rgba(255, 152, 0, .5);
   }
-  .toast.info-close {
+  .toast .info-close {
     background-color: rgba(33, 150, 243, .5);
   }
 

@@ -1,4 +1,3 @@
-// src/app/services/toast.service.ts
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 
 export interface ToastOptions {
@@ -8,43 +7,54 @@ export interface ToastOptions {
   timeout?: number;
 }
 
+interface ToastRef {
+  element: HTMLElement;
+  timeoutId?: ReturnType<typeof setTimeout>;
+  removeTimeoutId?: ReturnType<typeof setTimeout>;
+  startedAt: number;
+  remaining: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
   private renderer: Renderer2;
+  private container?: HTMLElement;
+  private toasts = new Map<HTMLElement, ToastRef>();
 
   constructor(rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
-  private toast_open? : HTMLElement;
-  private toastTimeout: any;
-  private timeoutDelay = 5000; // duración del toast
-  private remainingTime: number = 0;
-  private startTime: number = 0;
-  public action_close : boolean = true;
-
   public showToast(options: ToastOptions): void {
+    const timeout = options.timeout ?? 3500;
     const toast = this.createToastElement(options);
-    this.toast_open = toast;
-    this.renderer.appendChild(document.body, toast);
-    this.action_close = true;
+    const ref: ToastRef = {
+      element: toast,
+      startedAt: Date.now(),
+      remaining: timeout
+    };
 
-    // Controlamos el tiempo del toast
-    this.timeoutDelay = options.timeout ?? 3000;
+    this.ensureContainer();
+    this.renderer.appendChild(this.container, toast);
+    this.toasts.set(toast, ref);
 
-    // Aplicar el fadeout justo antes de que expire el tiempo
-    /*this.toastTimeout = setTimeout(() => this.fadeOutToast(toast), this.timeoutDelay - 300); // Fade out 300ms antes del timeout
-    this.toastTimeout = setTimeout(() => this.removeToast(toast), this.timeoutDelay); // Eliminar después del timeout completo
-    */
-   
-    this.toastTimeout = setTimeout(() => this.hideToast(), this.timeoutDelay)
+    requestAnimationFrame(() => this.renderer.addClass(toast, 'toast-visible'));
+    this.startTimer(ref);
+  }
+
+  private ensureContainer(): void {
+    if (this.container) return;
+
+    this.container = this.renderer.createElement('div');
+    this.renderer.addClass(this.container, 'toast-container');
+    this.renderer.appendChild(document.body, this.container);
   }
 
   private createToastElement(options: ToastOptions): HTMLElement {
     const toast = this.renderer.createElement('div');
-    const btnClose = this.renderer.createElement('span');
+    const btnClose = this.renderer.createElement('button');
     const col1 = this.renderer.createElement('div');
     const icon = this.renderer.createElement('span');
     const col2 = this.renderer.createElement('div');
@@ -52,25 +62,22 @@ export class ToastService {
     const message = this.renderer.createElement('p');
 
     this.renderer.addClass(toast, 'toast');
-    this.renderer.addClass(toast, options.type + "-toast"); // Agregar tipo de toast (success, error, etc.)
+    this.renderer.addClass(toast, `${options.type}-toast`);
+    this.renderer.listen(toast, 'mouseenter', () => this.pauseTimer(toast));
+    this.renderer.listen(toast, 'mouseleave', () => this.resumeTimer(toast));
 
-    // Eventos mouseenter / mouseleave para pausar y reanudar
-    this.renderer.listen(toast, 'mouseenter', () => this.pauseToastTimer());
-    this.renderer.listen(toast, 'mouseleave', () => this.resumeToastTimer());
-
-    //Boton cerrar
     this.renderer.addClass(btnClose, 'btn-close');
-    this.renderer.addClass(btnClose, options.type + '-close');
-    this.renderer.setProperty(btnClose, 'innerText', 'X');
-    this.renderer.listen(btnClose, 'click', () => this.hideToast());
+    this.renderer.addClass(btnClose, `${options.type}-close`);
+    this.renderer.setAttribute(btnClose, 'type', 'button');
+    this.renderer.setAttribute(btnClose, 'aria-label', 'Cerrar notificación');
+    this.renderer.setProperty(btnClose, 'innerText', '×');
+    this.renderer.listen(btnClose, 'click', () => this.hideToast(toast));
     this.renderer.appendChild(toast, btnClose);
 
-    //Col1
     this.renderer.setAttribute(col1, 'class', 'content-icon');
     this.renderer.setAttribute(icon, 'class', this.renderIconToast(options.type));
     this.renderer.appendChild(col1, icon);
 
-    //Col2
     this.renderer.setAttribute(col2, 'class', 'content-body');
     if (options.title) {
       this.renderer.setProperty(title, 'innerText', options.title);
@@ -82,64 +89,62 @@ export class ToastService {
     this.renderer.appendChild(toast, col1);
     this.renderer.appendChild(toast, col2);
 
-    // Iniciar con la animación de entrada (fadein)
-    this.renderer.setStyle(toast, 'opacity', '0');
-    setTimeout(() => this.renderer.setStyle(toast, 'opacity', '1'), 100); // Trigger de fadein
-
     return toast;
   }
 
-  private fadeOutToast(toast: HTMLElement): void {
-    if (this.action_close)
-      this.renderer.setStyle(toast, 'opacity', '0'); // Iniciar el fadeout
+  private startTimer(ref: ToastRef): void {
+    ref.startedAt = Date.now();
+    ref.timeoutId = setTimeout(() => this.hideToast(ref.element), ref.remaining);
   }
 
-  private removeToast(toast: HTMLElement): void {
-    if (this.action_close)
-      this.renderer.removeChild(document.body, toast);
+  private pauseTimer(toast: HTMLElement): void {
+    const ref = this.toasts.get(toast);
+    if (!ref?.timeoutId) return;
+
+    clearTimeout(ref.timeoutId);
+    ref.timeoutId = undefined;
+    ref.remaining = Math.max(800, ref.remaining - (Date.now() - ref.startedAt));
   }
 
-  public hideToast(){
-    if (this.toast_open) {
-      this.renderer.setStyle(this.toast_open, 'opacity', '0');
-      this.renderer.removeChild(document.body, this.toast_open);
-      this.action_close = false;
-    }
+  private resumeTimer(toast: HTMLElement): void {
+    const ref = this.toasts.get(toast);
+    if (!ref || ref.timeoutId) return;
+    this.startTimer(ref);
   }
 
-  // Pausar
-  private pauseToastTimer() {
-    clearTimeout(this.toastTimeout);
-    const elapsed = Date.now() - this.startTime;
-    this.remainingTime -= elapsed;
+  public hideToast(toast?: HTMLElement): void {
+    const target = toast || Array.from(this.toasts.keys())[0];
+    if (!target) return;
+
+    const ref = this.toasts.get(target);
+    if (!ref) return;
+
+    if (ref.timeoutId) clearTimeout(ref.timeoutId);
+    if (ref.removeTimeoutId) clearTimeout(ref.removeTimeoutId);
+
+    this.renderer.removeClass(target, 'toast-visible');
+    this.renderer.addClass(target, 'toast-hidden');
+
+    ref.removeTimeoutId = setTimeout(() => {
+      if (target.parentNode) {
+        this.renderer.removeChild(target.parentNode, target);
+      }
+      this.toasts.delete(target);
+    }, 220);
   }
 
-  // Reanudar
-  private resumeToastTimer() {
-    this.startTime = Date.now();
-    this.toastTimeout = setTimeout(() => {
-      this.hideToast();
-    }, this.remainingTime);
-  }
-
-  private renderIconToast(type: any) {
-    let classIcon = '';
+  private renderIconToast(type: ToastOptions['type']): string {
     switch (type) {
       case 'success':
-        classIcon = 'fa-solid fa-check';
-        break;
+        return 'fa-solid fa-check';
       case 'warning':
-        classIcon = 'fa-solid fa-exclamation';
-        break;
+        return 'fa-solid fa-exclamation';
       case 'info':
-        classIcon = 'fa-solid fa-info';
-        break;
+        return 'fa-solid fa-info';
       case 'error':
-        classIcon = 'fa-solid fa-xmark';
-        break;
+        return 'fa-solid fa-xmark';
       default:
-        break;
+        return '';
     }
-    return classIcon;
   }
 }
