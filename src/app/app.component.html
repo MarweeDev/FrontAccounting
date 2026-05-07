@@ -9,16 +9,24 @@
 
 <section class="app-loading-overlay" *ngIf="loadingState$ | async as loading" [class.active]="loading.active">
     <div class="app-loading-panel" *ngIf="loading.active">
-        <div class="loading-orbit" aria-hidden="true">
-            <span></span>
-            <span></span>
+        <div class="lava-loader" aria-hidden="true">
+            <div class="lava-glass">
+                <span class="lava-blob blob-a"></span>
+                <span class="lava-blob blob-b"></span>
+                <span class="lava-blob blob-c"></span>
+                <span class="lava-blob blob-d"></span>
+                <span class="lava-shine"></span>
+            </div>
+            <div class="lava-base"></div>
         </div>
         <div class="loading-copy">
             <strong>{{loading.message}}</strong>
             <p>{{loading.mode === 'route' ? 'Preparando navegacion y permisos.' : 'Estamos consultando la informacion.'}}</p>
         </div>
-        <div class="loading-bars" aria-hidden="true">
-            <i></i><i></i><i></i>
+        <div class="loading-ripple" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
         </div>
     </div>
 </section>
