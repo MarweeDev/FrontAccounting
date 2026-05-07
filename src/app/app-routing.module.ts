@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'sales', loadChildren: () => import('./modules/sales/sales.module').then(m => m.SalesModule) },
   { path: 'home', redirectTo: 'sales/register' },
   { path: 'shopping', loadChildren: () => import('./modules/shopping/shopping.module').then(m => m.ShoppingModule) },
+  { path: 'inventory', loadChildren: () => import('./modules/inventory/inventory.module').then(m => m.InventoryModule) },
   { path: 'reports', loadChildren: () => import('./modules/reports/reports.module').then(m => m.ReportsModule) },
   { path: '**', redirectTo: 'login' }
 ];
