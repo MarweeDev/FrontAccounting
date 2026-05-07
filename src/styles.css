@@ -75,6 +75,7 @@ body {
     white-space: normal;
     word-break: break-word;
     overflow-wrap: anywhere;
+    overflow: hidden;
     pointer-events: auto;
   }
 
@@ -151,6 +152,26 @@ body {
   
   .toast.info-toast { border-color: rgba(33, 150, 243, .3); }
   .info-toast > .content-icon { background-color: rgba(33, 150, 243, .5); }
+
+  .toast-progress {
+    position: absolute;
+    left: 0;
+    right: auto;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .08);
+  }
+
+  .toast-progress-bar {
+    height: 100%;
+    width: 100%;
+  }
+
+  .success-progress { background-color: rgba(76, 175, 80, .9); }
+  .error-progress { background-color: rgba(244, 67, 54, .9); }
+  .warning-progress { background-color: rgba(255, 152, 0, .9); }
+  .info-progress { background-color: rgba(33, 150, 243, .9); }
   
   @keyframes fadein {
     from {

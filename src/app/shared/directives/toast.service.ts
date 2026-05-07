@@ -9,10 +9,12 @@ export interface ToastOptions {
 
 interface ToastRef {
   element: HTMLElement;
+  progress: HTMLElement;
   timeoutId?: ReturnType<typeof setTimeout>;
   removeTimeoutId?: ReturnType<typeof setTimeout>;
   startedAt: number;
   remaining: number;
+  duration: number;
 }
 
 @Injectable({
@@ -30,17 +32,23 @@ export class ToastService {
   public showToast(options: ToastOptions): void {
     const timeout = options.timeout ?? 3500;
     const toast = this.createToastElement(options);
+    const progress = toast.querySelector('.toast-progress-bar') as HTMLElement;
     const ref: ToastRef = {
       element: toast,
+      progress,
       startedAt: Date.now(),
-      remaining: timeout
+      remaining: timeout,
+      duration: timeout
     };
 
     this.ensureContainer();
     this.renderer.appendChild(this.container, toast);
     this.toasts.set(toast, ref);
 
-    requestAnimationFrame(() => this.renderer.addClass(toast, 'toast-visible'));
+    requestAnimationFrame(() => {
+      this.renderer.addClass(toast, 'toast-visible');
+      this.animateProgress(ref);
+    });
     this.startTimer(ref);
   }
 
@@ -60,6 +68,8 @@ export class ToastService {
     const col2 = this.renderer.createElement('div');
     const title = this.renderer.createElement('strong');
     const message = this.renderer.createElement('p');
+    const progress = this.renderer.createElement('div');
+    const progressBar = this.renderer.createElement('div');
 
     this.renderer.addClass(toast, 'toast');
     this.renderer.addClass(toast, `${options.type}-toast`);
@@ -89,12 +99,29 @@ export class ToastService {
     this.renderer.appendChild(toast, col1);
     this.renderer.appendChild(toast, col2);
 
+    this.renderer.addClass(progress, 'toast-progress');
+    this.renderer.addClass(progressBar, 'toast-progress-bar');
+    this.renderer.addClass(progressBar, `${options.type}-progress`);
+    this.renderer.appendChild(progress, progressBar);
+    this.renderer.appendChild(toast, progress);
+
     return toast;
   }
 
   private startTimer(ref: ToastRef): void {
     ref.startedAt = Date.now();
+    this.animateProgress(ref);
     ref.timeoutId = setTimeout(() => this.hideToast(ref.element), ref.remaining);
+  }
+
+  private animateProgress(ref: ToastRef): void {
+    this.renderer.setStyle(ref.progress, 'transition', 'none');
+    this.renderer.setStyle(ref.progress, 'width', `${(ref.remaining / ref.duration) * 100}%`);
+
+    requestAnimationFrame(() => {
+      this.renderer.setStyle(ref.progress, 'transition', `width ${ref.remaining}ms linear`);
+      this.renderer.setStyle(ref.progress, 'width', '0%');
+    });
   }
 
   private pauseTimer(toast: HTMLElement): void {
@@ -104,6 +131,10 @@ export class ToastService {
     clearTimeout(ref.timeoutId);
     ref.timeoutId = undefined;
     ref.remaining = Math.max(800, ref.remaining - (Date.now() - ref.startedAt));
+    const width = ref.progress.getBoundingClientRect().width;
+    const parentWidth = ref.progress.parentElement?.getBoundingClientRect().width || width;
+    this.renderer.setStyle(ref.progress, 'transition', 'none');
+    this.renderer.setStyle(ref.progress, 'width', `${(width / parentWidth) * 100}%`);
   }
 
   private resumeTimer(toast: HTMLElement): void {

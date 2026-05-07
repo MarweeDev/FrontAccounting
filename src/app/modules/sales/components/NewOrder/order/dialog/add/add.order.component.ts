@@ -21,6 +21,7 @@ export class AddOrderComponent implements OnInit {
   imageLoaded = false;
   isEditMode = false;
   productId?: string;
+  currentProduct?: ProductDTO;
 
   constructor(
     private toastService: ToastService,
@@ -61,6 +62,7 @@ export class AddOrderComponent implements OnInit {
     this.ApiProduct.getID(id).subscribe({
       next: data => {
         const product: ProductDTO = data.product;
+        this.currentProduct = product;
         this.form.patchValue({
           Nombre: product.nombre,
           Descripcion: product.descripcion,
@@ -110,21 +112,19 @@ export class AddOrderComponent implements OnInit {
       return;
     }
 
-    const categoryId = this.form.get('Categoria')?.value;
-    const formData = new FormData();
-    formData.append('nombre', this.form.get('Nombre')?.value);
-    formData.append('descripcion', this.form.get('Descripcion')?.value);
-    formData.append('precio', this.form.get('Precio')?.value);
-    formData.append('id_categoria', categoryId);
-    formData.append('referencia', this.generateCodeproduct(categoryId));
+    const categoryId = Number(this.form.get('Categoria')?.value);
+    const productPayload: ProductDTO = {
+      nombre: this.form.get('Nombre')?.value,
+      descripcion: this.form.get('Descripcion')?.value,
+      precio: Number(this.form.get('Precio')?.value),
+      id_categoria: categoryId,
+      referencia: this.currentProduct?.referencia || this.generateCodeproduct(categoryId)
+    };
 
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
-
+    const body = this.buildProductBody(productPayload);
     const request = this.isEditMode && this.productId
-      ? this.ApiProduct.put(this.productId, formData)
-      : this.ApiProduct.post(formData);
+      ? this.ApiProduct.put(this.productId, body)
+      : this.ApiProduct.post(body as FormData);
 
     request.subscribe({
       next: () => {
@@ -150,6 +150,21 @@ export class AddOrderComponent implements OnInit {
     const country = sessionStorage.getItem('idCountry');
     const year = new Date().getFullYear();
     return `${country}-${id_categ}-${this.ListProductData?.length}${year}`;
+  }
+
+  private buildProductBody(product: ProductDTO): ProductDTO | FormData {
+    if (!this.selectedFile) {
+      return product;
+    }
+
+    const formData = new FormData();
+    formData.append('nombre', product.nombre || '');
+    formData.append('descripcion', product.descripcion || '');
+    formData.append('precio', product.precio?.toString() || '0');
+    formData.append('id_categoria', product.id_categoria?.toString() || '0');
+    formData.append('referencia', product.referencia || '');
+    formData.append('image', this.selectedFile);
+    return formData;
   }
 
   showError(error: any): void {
