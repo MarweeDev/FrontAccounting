@@ -15,4 +15,16 @@ export class ModuleService {
   get(): Observable<any> {
     return this.http.get(this.ApiURL + HttpMethod.GET);
   }
+
+  post(data: any): Observable<any> {
+    return this.http.post(this.ApiURL + HttpMethod.POST, data);
+  }
+
+  put(id: number | string, data: any): Observable<any> {
+    return this.http.put(this.ApiURL + HttpMethod.PUT + id, data);
+  }
+
+  delete(id: number | string): Observable<any> {
+    return this.http.put(this.ApiURL + HttpMethod.DELETE + id, {});
+  }
 }

@@ -117,8 +117,14 @@ body #content {
     font-size: .8rem;
 }
 
-/*Iconos*/
-.content-body .container-card .card .icon-card .fa-solid::before {
+/*Iconos con asset local. Si no hay asset, se usa el icono Font Awesome de DB. */
+.content-body .container-card .card .icon-card .fa-store::before,
+.content-body .container-card .card .icon-card .fa-bag-shopping::before,
+.content-body .container-card .card .icon-card .fa-clipboard-list::before,
+.content-body .container-card .card .icon-card .fa-chart-simple::before,
+.content-body .container-card .card .icon-card .fa-sliders::before,
+.content-body .container-card .card .icon-card .fa-code::before,
+.content-body .container-card .card .icon-card .fa-user-shield::before {
     content: "" !important;
     display: inline-block;
     background-size: contain;
@@ -144,4 +150,7 @@ body #content {
 }
 .content-body .container-card .card .icon-card .fa-code::before {
     background-image: url("../../../../../assets/img/dobby/dev.png");
+}
+.content-body .container-card .card .icon-card .fa-user-shield::before {
+    background-image: url("../../../../../assets/img/dobby/access-control.svg");
 }

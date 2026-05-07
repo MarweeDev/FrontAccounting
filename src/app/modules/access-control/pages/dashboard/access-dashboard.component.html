@@ -138,6 +138,50 @@
       </div>
     </div>
 
+    <div class="admin-shell" *ngIf="activeTab === 'modulos'">
+      <form class="admin-form" (ngSubmit)="saveModule()">
+        <h2>{{editingModuleId ? 'Editar modulo' : 'Nuevo modulo'}}</h2>
+        <label>Nombre<input name="modulo" [(ngModel)]="moduleForm.modulo" required></label>
+        <label>Ruta<input name="rutaModulo" [(ngModel)]="moduleForm.ruta" placeholder="access-control/dashboard" required></label>
+        <label>Icono
+          <select name="iconoModulo" [(ngModel)]="moduleForm.icono">
+            <option value="fa-solid fa-store">Ventas</option>
+            <option value="fa-solid fa-bag-shopping">Compras</option>
+            <option value="fa-solid fa-clipboard-list">Inventario</option>
+            <option value="fa-solid fa-chart-simple">Reportes</option>
+            <option value="fa-solid fa-sliders">Ajustes</option>
+            <option value="fa-solid fa-code">Desarrollo</option>
+            <option value="fa-solid fa-user-shield">Control de Acceso</option>
+            <option value="fa-solid fa-cube">Generico</option>
+          </select>
+        </label>
+        <label>Posicion<input name="positionModule" type="number" [(ngModel)]="moduleForm.position_module"></label>
+        <label>Descripcion<textarea name="descripcionModulo" rows="4" [(ngModel)]="moduleForm.descripcion"></textarea></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
+          <button type="button" class="btn rd-4" (click)="cancelModule()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Modulo</th><th>Ruta</th><th>Icono</th><th>Orden</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let module of catalogs.modules">
+              <td><strong>{{module.modulo}}</strong><p>{{module.descripcion || '-'}}</p></td>
+              <td>{{module.ruta}}</td>
+              <td><i [className]="module.icono || 'fa-solid fa-cube'"></i> {{module.icono}}</td>
+              <td>{{module.position_module}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editModule(module)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableModule(module)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="permissions-shell" *ngIf="activeTab === 'permisos'">
       <aside class="role-list">
         <button type="button" *ngFor="let role of catalogs.roles" [class.active-role]="role.id === selectedRoleId" (click)="selectRole(role)">

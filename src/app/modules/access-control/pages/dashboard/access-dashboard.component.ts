@@ -3,10 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { AccessCatalogsDTO, AccessModuleDTO, AccessSummaryDTO, AccessUserDTO, RoleDTO, SubscriberDTO } from 'src/app/core/models/accessControl';
 import { AccessControlService } from 'src/app/core/services/access-control/access-control.service';
+import { ModuleService } from 'src/app/core/services/module/module.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
-type AccessTab = 'empresas' | 'usuarios' | 'roles' | 'permisos';
+type AccessTab = 'empresas' | 'usuarios' | 'roles' | 'modulos' | 'permisos';
 
 @Component({
   selector: 'app-access-dashboard',
@@ -23,9 +24,11 @@ export class AccessDashboardComponent implements OnInit {
   subscriberForm: SubscriberDTO = this.emptySubscriber();
   userForm: AccessUserDTO = this.emptyUser();
   roleForm: RoleDTO = this.emptyRole();
+  moduleForm: AccessModuleDTO = this.emptyModule();
   editingSubscriberId: number | null = null;
   editingUserId: number | null = null;
   editingRoleId: number | null = null;
+  editingModuleId: number | null = null;
   selectedRoleId: number | null = null;
   selectedModules: Record<number, boolean> = {};
   isSaving = false;
@@ -34,6 +37,7 @@ export class AccessDashboardComponent implements OnInit {
     { id: 'empresas' as AccessTab, label: 'Empresas', icon: 'fa-solid fa-building-user' },
     { id: 'usuarios' as AccessTab, label: 'Usuarios', icon: 'fa-solid fa-users' },
     { id: 'roles' as AccessTab, label: 'Roles', icon: 'fa-solid fa-user-tag' },
+    { id: 'modulos' as AccessTab, label: 'Modulos', icon: 'fa-solid fa-table-cells-large' },
     { id: 'permisos' as AccessTab, label: 'Permisos', icon: 'fa-solid fa-table-cells' }
   ];
 
@@ -42,6 +46,7 @@ export class AccessDashboardComponent implements OnInit {
     private app: AppComponent,
     private dataShared: DataSharedServicesService,
     private accessService: AccessControlService,
+    private moduleService: ModuleService,
     private toastService: ToastService
   ) { }
 
@@ -216,6 +221,48 @@ export class AccessDashboardComponent implements OnInit {
     });
   }
 
+  saveModule(): void {
+    if (!this.moduleForm.modulo || !this.moduleForm.ruta || this.isSaving) return;
+
+    this.isSaving = true;
+    const payload = {
+      ...this.moduleForm,
+      icono: this.moduleForm.icono || 'fa-solid fa-cube',
+      position_module: Number(this.moduleForm.position_module || 99)
+    };
+    const request = this.editingModuleId
+      ? this.moduleService.put(this.editingModuleId, payload)
+      : this.moduleService.post(payload);
+
+    request.subscribe({
+      next: () => {
+        this.notify('Modulo guardado', 'El modulo fue actualizado correctamente.');
+        this.cancelModule();
+        this.loadAll();
+        this.isSaving = false;
+      },
+      error: error => this.fail(error, 'Error al guardar modulo')
+    });
+  }
+
+  editModule(item: AccessModuleDTO): void {
+    this.editingModuleId = item.id || null;
+    this.moduleForm = { ...item };
+  }
+
+  disableModule(item: AccessModuleDTO): void {
+    if (!item.id || this.isSaving) return;
+    this.isSaving = true;
+    this.moduleService.delete(item.id).subscribe({
+      next: () => {
+        this.notify('Modulo deshabilitado', 'El modulo queda inactivo sin eliminarse.');
+        this.loadAll();
+        this.isSaving = false;
+      },
+      error: error => this.fail(error, 'Error al deshabilitar modulo')
+    });
+  }
+
   selectRole(role: RoleDTO): void {
     this.selectedRoleId = role.id || null;
     this.selectedModules = {};
@@ -267,8 +314,13 @@ export class AccessDashboardComponent implements OnInit {
     this.roleForm = this.emptyRole();
   }
 
+  cancelModule(): void {
+    this.editingModuleId = null;
+    this.moduleForm = this.emptyModule();
+  }
+
   private emptySubscriber(): SubscriberDTO {
-    return { responsable: '', contacto_n: '', correo: '', nit: '', id_plan: undefined, fecha_finalizacion: new Date().toISOString().slice(0, 10) };
+    return { responsable: '', contacto_n: '', correo: '', nit: '', imagen: '', id_plan: undefined, fecha_finalizacion: new Date().toISOString().slice(0, 10) };
   }
 
   private emptyUser(): AccessUserDTO {
@@ -277,6 +329,16 @@ export class AccessDashboardComponent implements OnInit {
 
   private emptyRole(): RoleDTO {
     return { rol: '', descripcion: '' };
+  }
+
+  private emptyModule(): AccessModuleDTO {
+    return {
+      modulo: '',
+      descripcion: '',
+      ruta: '',
+      icono: 'fa-solid fa-cube',
+      position_module: (this.catalogs.modules.length || 0) + 1
+    };
   }
 
   private notify(title: string, message: string): void {

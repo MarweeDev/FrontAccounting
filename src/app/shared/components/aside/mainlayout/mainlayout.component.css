@@ -177,8 +177,16 @@ ul li .button-close:hover > i {
     transform: rotate(180deg) !important;
 }
 
-/*Iconos modulos*/
-ul li button .fa-solid::before {
+/*Iconos modulos con asset local. Si no hay asset, se usa el icono Font Awesome de DB. */
+ul li button .fa-store::before,
+ul li button .fa-bag-shopping::before,
+ul li button .fa-clipboard-list::before,
+ul li button .fa-chart-simple::before,
+ul li button .fa-sliders::before,
+ul li button .fa-code::before,
+ul li button .fa-user-shield::before,
+ul li button .fa-right-from-bracket::before,
+ul li button .fa-gear::before {
     content: "" !important;
     display: inline-block;
     background-size: contain;
@@ -204,6 +212,9 @@ ul li button .fa-sliders::before {
 }
 ul li button .fa-code::before {
     background-image: url("../../../../../assets/img/dobby/dev.png");
+}
+ul li button .fa-user-shield::before {
+    background-image: url("../../../../../assets/img/dobby/access-control.svg");
 }
 ul li button .fa-right-from-bracket::before {
     background-image: url("../../../../../assets/img/dobby/logout.png");

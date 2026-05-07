@@ -60,7 +60,8 @@ export class LoginComponent implements OnInit {
         pass: pass?.value
       };
 
-      this.authService.login(t).subscribe(data => {
+      this.authService.login(t).subscribe({
+        next: data => {
         this.form.reset();
 
         if (data?.token) {
@@ -87,15 +88,16 @@ export class LoginComponent implements OnInit {
             timeout: 5000,
           });
         }
-        
-      }), (error: any) => {
-        this.toastService.showToast({
-          title: 'Error ' + error.status,
-          message: error.error?.message || error.message,
-          type: 'error',
-          timeout: 3000
-        });
-      }
+        },
+        error: (error: any) => {
+          this.toastService.showToast({
+            title: 'Error ' + error.status,
+            message: error.error?.message || error.message,
+            type: 'error',
+            timeout: 3000
+          });
+        }
+      });
     }
     else {
       this.toastService.showToast({
