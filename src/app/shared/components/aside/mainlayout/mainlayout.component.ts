@@ -34,7 +34,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     if (auth != undefined && auth != "") {
       let t = new token();
       t.token = auth;
-      this.ApiUser.getInfoUser(t).subscribe(data => {
+      this.ApiUser.getInfoUserCached(t).subscribe(data => {
         this.ListModule = data.result;
         this.user  = this.ListModule[0].usuario;
         this.rol  = this.ListModule[0].rol;
@@ -60,6 +60,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     localStorage.setItem("nav_left", id ? id : '');
 
     if (id == 0) {
+      this.ApiUser.clearInfoUserCache();
       sessionStorage.clear();
     }
   }

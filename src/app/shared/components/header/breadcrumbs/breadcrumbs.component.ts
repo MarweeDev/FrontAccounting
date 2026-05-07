@@ -49,7 +49,7 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
       if (auth != undefined && auth != "") {
         let t = new token();
         t.token = auth;
-        this.ApiUser.getInfoUser(t).subscribe(data => {
+        this.ApiUser.getInfoUserCached(t).subscribe(data => {
           this.user  = data.result[0]?.usuario;
           this.rol  = data.result[0]?.rol;
           let elementNavUser : any = document.getElementById('nav_user')?.style;

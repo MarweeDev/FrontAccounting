@@ -36,7 +36,7 @@ export class MainComponent implements OnInit {
     if (auth != undefined && auth != "") {
       let t = new token();
       t.token = auth;
-      this.ApiUser.getInfoUser(t).subscribe(data => {
+      this.ApiUser.getInfoUserCached(t).subscribe(data => {
         this.ListModule = data.result;
       });
     }
