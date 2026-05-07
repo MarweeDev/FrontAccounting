@@ -204,5 +204,37 @@
         </div>
       </div>
     </div>
+
+    <div class="audit-shell" *ngIf="activeTab === 'auditoria'">
+      <div class="container-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Usuario</th>
+              <th>Empresa</th>
+              <th>Modulo</th>
+              <th>Accion</th>
+              <th>Entidad</th>
+              <th>Descripcion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of auditEvents">
+              <td>{{item.fecha_creacion | date:'yyyy-MM-dd HH:mm'}}</td>
+              <td>{{getUserLabel(item.id_usuario)}}</td>
+              <td>{{getSubscriberLabel(item.id_suscrito)}}</td>
+              <td>{{getModuleLabel(item.id_modulo)}}</td>
+              <td><span class="audit-action">{{item.accion}}</span></td>
+              <td><strong>{{item.entidad}}</strong><p>{{item.id_entidad || '-'}}</p></td>
+              <td>{{item.descripcion || '-'}}</td>
+            </tr>
+            <tr *ngIf="auditEvents.length === 0">
+              <td colspan="7">No hay eventos de auditoria activos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </section>

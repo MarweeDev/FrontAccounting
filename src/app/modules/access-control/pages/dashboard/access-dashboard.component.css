@@ -116,6 +116,24 @@ td p { margin: 4px 0 0; color: var(--color-adicional-secundario); font-size: 11p
 .module-toggle small { display: block; margin-top: 5px; color: var(--color-adicional-secundario); word-break: break-word; }
 .permission-actions { align-self: start; }
 
+.audit-shell {
+  width: 100%;
+  padding-top: 12px;
+}
+
+.audit-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background-color: var(--background-primario);
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 @media (max-width: 860px) {
   .access-hero, .container-head .banner, .admin-shell, .permissions-shell { display: flex; flex-direction: column; }
   table { min-width: 760px; }

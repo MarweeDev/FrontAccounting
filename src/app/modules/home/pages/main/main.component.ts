@@ -57,7 +57,6 @@ export class MainComponent implements OnInit {
   OnRouterModule(router:any, id:any=null){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
-    this.app.OnLoadingModule();
 
     localStorage.setItem("nav_left", id ? id : '');
   }

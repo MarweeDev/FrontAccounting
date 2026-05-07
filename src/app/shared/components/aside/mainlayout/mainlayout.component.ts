@@ -55,7 +55,6 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   OnRouterModule(router:any, id:any=null){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
-    this.app.OnLoadingModule();
 
     this.activeButtonId = id;
     localStorage.setItem("nav_left", id ? id : '');

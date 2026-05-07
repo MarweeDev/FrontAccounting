@@ -81,7 +81,6 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
   OnRouterModule(router:any){
     this.router.navigate([router]);  
     this.app.OnHiddenBar();
-    this.app.OnLoadingModule();
 
     //Resetea los active en el menu lateral
     localStorage.removeItem("nav_left");

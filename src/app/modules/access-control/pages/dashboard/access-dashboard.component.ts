@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
-import { AccessCatalogsDTO, AccessModuleDTO, AccessSummaryDTO, AccessUserDTO, RoleDTO, SubscriberDTO } from 'src/app/core/models/accessControl';
+import { AccessCatalogsDTO, AccessModuleDTO, AccessSummaryDTO, AccessUserDTO, AuditEventDTO, RoleDTO, SubscriberDTO } from 'src/app/core/models/accessControl';
 import { AccessControlService } from 'src/app/core/services/access-control/access-control.service';
 import { ModuleService } from 'src/app/core/services/module/module.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
-type AccessTab = 'empresas' | 'usuarios' | 'roles' | 'modulos' | 'permisos';
+type AccessTab = 'empresas' | 'usuarios' | 'roles' | 'modulos' | 'permisos' | 'auditoria';
 
 @Component({
   selector: 'app-access-dashboard',
@@ -20,6 +20,7 @@ export class AccessDashboardComponent implements OnInit {
   catalogs: AccessCatalogsDTO = { plans: [], roles: [], modules: [], subscribers: [], roleModules: [] };
   subscribers: SubscriberDTO[] = [];
   users: AccessUserDTO[] = [];
+  auditEvents: AuditEventDTO[] = [];
 
   subscriberForm: SubscriberDTO = this.emptySubscriber();
   userForm: AccessUserDTO = this.emptyUser();
@@ -38,7 +39,8 @@ export class AccessDashboardComponent implements OnInit {
     { id: 'usuarios' as AccessTab, label: 'Usuarios', icon: 'fa-solid fa-users' },
     { id: 'roles' as AccessTab, label: 'Roles', icon: 'fa-solid fa-user-tag' },
     { id: 'modulos' as AccessTab, label: 'Modulos', icon: 'fa-solid fa-table-cells-large' },
-    { id: 'permisos' as AccessTab, label: 'Permisos', icon: 'fa-solid fa-table-cells' }
+    { id: 'permisos' as AccessTab, label: 'Permisos', icon: 'fa-solid fa-table-cells' },
+    { id: 'auditoria' as AccessTab, label: 'Auditoria', icon: 'fa-solid fa-clock-rotate-left' }
   ];
 
   constructor(
@@ -68,6 +70,7 @@ export class AccessDashboardComponent implements OnInit {
     this.loadCatalogs();
     this.loadSubscribers();
     this.loadUsers();
+    this.loadAuditEvents();
   }
 
   setTab(tab: AccessTab): void {
@@ -104,6 +107,13 @@ export class AccessDashboardComponent implements OnInit {
     this.accessService.getUsers().subscribe({
       next: data => this.users = data.result || [],
       error: error => this.showError(error, 'Error al cargar usuarios')
+    });
+  }
+
+  loadAuditEvents(): void {
+    this.accessService.getAuditEvents().subscribe({
+      next: data => this.auditEvents = data.result || [],
+      error: error => this.showError(error, 'Error al cargar auditoria')
     });
   }
 
@@ -297,6 +307,24 @@ export class AccessDashboardComponent implements OnInit {
   toggleModule(module: AccessModuleDTO, event: Event): void {
     if (!module.id) return;
     this.selectedModules[module.id] = (event.target as HTMLInputElement).checked;
+  }
+
+  getUserLabel(userId?: number): string {
+    if (!userId) return 'Sistema';
+    const user = this.users.find(item => item.id === userId);
+    return user?.usuario || `Usuario ${userId}`;
+  }
+
+  getSubscriberLabel(subscriberId?: number): string {
+    if (!subscriberId) return '-';
+    const subscriber = this.catalogs.subscribers.find(item => item.id === subscriberId);
+    return subscriber?.responsable || `Empresa ${subscriberId}`;
+  }
+
+  getModuleLabel(moduleId?: number): string {
+    if (!moduleId) return '-';
+    const module = this.catalogs.modules.find(item => item.id === moduleId);
+    return module?.modulo || `Modulo ${moduleId}`;
   }
 
   cancelSubscriber(): void {

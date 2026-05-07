@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiConfig, HttpMethod, ServicesMethod } from '../appsettings';
-import { AccessCatalogsDTO, AccessSummaryDTO, AccessUserDTO, RoleDTO, RoleModuleDTO, SubscriberDTO } from '../../models/accessControl';
+import { AccessCatalogsDTO, AccessSummaryDTO, AccessUserDTO, AuditEventDTO, RoleDTO, RoleModuleDTO, SubscriberDTO } from '../../models/accessControl';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +39,10 @@ export class AccessControlService {
 
   getUsers(): Observable<{ result: AccessUserDTO[] }> {
     return this.http.get<{ result: AccessUserDTO[] }>(`${this.ApiURL}/users${HttpMethod.GET}`);
+  }
+
+  getAuditEvents(): Observable<{ result: AuditEventDTO[] }> {
+    return this.http.get<{ result: AuditEventDTO[] }>(`${this.ApiURL}/audit${HttpMethod.GET}`);
   }
 
   postUser(data: AccessUserDTO): Observable<{ message: string; result: AccessUserDTO }> {

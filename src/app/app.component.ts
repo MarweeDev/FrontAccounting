@@ -45,7 +45,9 @@ export class AppComponent implements OnInit {
     this.loadingState$ = this.loadingService.state$;
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.loadingService.show('Abriendo modulo', 'route');
+        if (this.shouldShowRouteLoader(event.url)) {
+          this.loadingService.show('Abriendo modulo', 'route');
+        }
       }
 
       if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
@@ -81,6 +83,10 @@ export class AppComponent implements OnInit {
   }
   OnLoadingComponent() {
     this.loadingService.pulse('Actualizando vista', 'manual');
+  }
+
+  private shouldShowRouteLoader(url: string): boolean {
+    return !url.startsWith('/login') && !url.startsWith('/status');
   }
   //#endregion  
 }

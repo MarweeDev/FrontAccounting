@@ -65,6 +65,23 @@ export interface RoleModuleDTO {
   id_estado?: number;
 }
 
+export interface AuditEventDTO {
+  id?: number;
+  id_usuario?: number;
+  id_suscrito?: number;
+  id_modulo?: number;
+  entidad?: string;
+  id_entidad?: string;
+  accion?: string;
+  descripcion?: string;
+  valor_anterior?: any;
+  valor_nuevo?: any;
+  ip?: string;
+  user_agent?: string;
+  id_estado?: number;
+  fecha_creacion?: string;
+}
+
 export interface AccessCatalogsDTO {
   plans: PlanDTO[];
   roles: RoleDTO[];
