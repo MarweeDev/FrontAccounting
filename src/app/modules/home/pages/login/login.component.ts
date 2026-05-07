@@ -30,12 +30,17 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['sales/register']);
+      return;
+    }
+
     //Resetea los active en el menu lateral
     localStorage.removeItem("nav_left");
     let elementNav : any = document.getElementById('nav')?.style;
     let elementNavUser : any = document.getElementById('nav_user')?.style;
-    elementNav.display = "none";
-    elementNavUser.opacity = "0";
+    if (elementNav) elementNav.display = "none";
+    if (elementNavUser) elementNavUser.opacity = "0";
   }
 
   login () {

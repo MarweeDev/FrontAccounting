@@ -1,11 +1,8 @@
 <section class="container-component">
     <div class="card">
-        <h3>Proceso de creación</h3>
+        <h3>{{ isEditMode ? 'Editar producto' : 'Crear producto' }}</h3>
         <form [formGroup]="form" (ngSubmit)="add()">
-
-            <!-- IMAGEN -->
             <div class="image-upload">
-
                 <input
                     type="file"
                     id="productImage"
@@ -14,32 +11,26 @@
                 />
 
                 <div class="preview-container">
-
                     <img [src]="previewImage" class="preview-image" />
 
-                    <!-- acciones -->
                     <div class="image-actions">
+                        <label for="productImage" class="action-btn upload">
+                            <i class="fa-solid fa-upload"></i>
+                        </label>
 
-                    <label for="productImage" class="action-btn upload">
-                        <i class="fa-solid fa-upload"></i>
-                    </label>
-
-                    <button
-                        type="button"
-                        class="action-btn remove"
-                        *ngIf="imageLoaded"
-                        (click)="removeImage()">
-                        <i class="fa-solid fa-rotate-right"></i>
-                    </button>
-
+                        <button
+                            type="button"
+                            class="action-btn remove"
+                            *ngIf="imageLoaded"
+                            (click)="removeImage()">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
                     </div>
 
                     <span class="status-badge">
-                    {{ imageLoaded ? 'Imagen cargada' : 'Imagen por defecto' }}
+                        {{ imageLoaded ? 'Imagen cargada' : 'Imagen por defecto' }}
                     </span>
-
                 </div>
-
             </div>
 
             <label for="nombre">
@@ -55,7 +46,7 @@
                     Requerido
                 </div>
             </label>
-          
+
             <label for="precio">
                 <input type="number" min="0" id="precio" formControlName="Precio" placeholder="Precio">
                 <div class="error-message" *ngIf="form.get('Precio')?.hasError('required') && form.get('Precio')?.touched">
@@ -63,13 +54,13 @@
                 </div>
             </label>
 
-            <select class="rd-2" id="select_categ">
-                <option value="0">-Seleccione categoria-</option>
+            <select class="rd-2" id="select_categ" formControlName="Categoria">
+                <option value="0">-Seleccione categoría-</option>
                 <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
             </select>
-          
+
             <div class="container-btn">
-                <button type="submit" class="btn btn-success m-2 rd-2">Crear</button>
+                <button type="submit" class="btn btn-success m-2 rd-2">{{ isEditMode ? 'Actualizar' : 'Crear' }}</button>
                 <button type="button" class="btn btn-default rd-2" (click)="cancel()">Cancelar</button>
             </div>
         </form>

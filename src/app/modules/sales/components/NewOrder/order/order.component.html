@@ -29,6 +29,9 @@
                         <i class="fa-solid fa-ellipsis"></i>
                         <div class="container-info">{{item.descripcion}}</div>
                     </div>
+                    <button type="button" class="card-edit" title="Editar producto" (click)="editProduct($event, item.id)">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
                     <div class="card-title" [id]="'card-title-' + item.id" style="display: none;">
                         <i class="fa-solid fa-circle-check txt-success"></i>
                     </div>

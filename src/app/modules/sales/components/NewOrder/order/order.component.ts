@@ -437,6 +437,13 @@ export class OrderComponent implements OnInit {
   onSelectChangeClient(event: any) {
     this.codeClient = event.target.value;
   }
+
+  editProduct(event: MouseEvent, id?: number) {
+    event.stopPropagation();
+    if (id) {
+      this.router.navigate(['/sales/product/edit', id]);
+    }
+  }
   //#endregion
 
   OnClose() {

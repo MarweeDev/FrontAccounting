@@ -398,6 +398,25 @@
     font-weight: bold;
 }
 .card .card-title-info { position: absolute; left: 12px;}
+.card .card-edit {
+    position: absolute;
+    right: 10px;
+    top: 34px;
+    z-index: 1;
+    border: 1px solid var(--color-texto-terciario);
+    background: rgba(255, 255, 255, .9);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+.card .card-edit i {
+    font-size: 11px;
+    color: var(--color-primary);
+}
+.card .card-edit:hover {
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .2);
+}
 .card .card-title-info i {
     font-size: larger;
     font-weight: bold;

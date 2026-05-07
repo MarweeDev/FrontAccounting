@@ -1,0 +1,41 @@
+<section class="shopping-detail">
+  <div class="summary" *ngIf="shopping">
+    <div>
+      <span>Compra</span>
+      <strong>{{shopping.codigo}}</strong>
+    </div>
+    <div>
+      <span>Proveedor</span>
+      <strong>{{shopping.proveedor}}</strong>
+    </div>
+    <div>
+      <span>Items</span>
+      <strong>{{totalItems}}</strong>
+    </div>
+    <div>
+      <span>Total</span>
+      <strong>{{shopping.total_compra | currency}}</strong>
+    </div>
+  </div>
+
+  <div class="detail-card" *ngIf="shopping">
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Valor unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of shopping.items">
+          <td>{{item.producto || item.id_producto}}</td>
+          <td>{{item.cantidad}}</td>
+          <td>{{item.valor_unitario | currency}}</td>
+          <td>{{item.total | currency}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -13,6 +13,8 @@ import { AddShoppingComponent } from './pages/supplier/dialog/add.shopping/add.s
 import { NewShoppingComponent } from './pages/new-shopping/new-shopping.component';
 import { ViewShoppingComponent } from './pages/view-shopping/view-shopping.component';
 import { SharedModule } from "src/app/shared/shared.module";
+import { DetailShoppingComponent } from './pages/detail-shopping/detail-shopping.component';
+import { EditShoppingComponent } from './pages/edit-shopping/edit-shopping.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { SharedModule } from "src/app/shared/shared.module";
     SupplierComponent,
     AddShoppingComponent,
     NewShoppingComponent,
-    ViewShoppingComponent
+    ViewShoppingComponent,
+    DetailShoppingComponent,
+    EditShoppingComponent
     
   ],
   imports: [

@@ -1,20 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { ProductDTO } from 'src/app/core/models/product';
+import { ShoppingDTO } from 'src/app/core/models/shopping';
+import { ProductService } from 'src/app/core/services/product/product.service';
+import { ShoppingService } from 'src/app/core/services/shopping/shopping.service';
+import { SupplierService } from 'src/app/core/services/supplier/supplier.service';
+import { SelectItem } from 'src/app/shared/components/form-items/select/select.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
-
-// Interfaces para tipado de datos
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
-
-interface Provider {
-  id: number;
-  name: string;
-}
+import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
   selector: 'app-new-shopping',
@@ -22,38 +17,34 @@ interface Provider {
   styleUrls: ['./new-shopping.component.css']
 })
 export class NewShoppingComponent implements OnInit {
-purchaseForm: FormGroup;
-  
-  // Datos de ejemplo para los selectores
-  providers = [
-    { id: 1, name: 'Proveedor A S.A.S' },
-    { id: 2, name: 'Importaciones B Ltda.' },
-    { id: 3, name: 'Suministros C & Cia.' },
-  ];
-  
-  products = [
-    { id: 101, name: 'Producto X-100', price: 50.00 },
-    { id: 102, name: 'Servicio de Mantenimiento', price: 120.00 },
-    { id: 103, name: 'Insumo Y-20', price: 15.75 },
-  ];
+  purchaseForm: FormGroup;
+  providers: SelectItem[] = [];
+  products: SelectItem[] = [];
+  productRows: ProductDTO[] = [];
+  isEditMode = false;
+  shoppingId?: string | null;
 
   typeShopping = [
     { id: 1, name: 'Compra' },
     { id: 2, name: 'Gasto' }
   ];
 
-  constructor(private fb: FormBuilder,
-        private route : ActivatedRoute,
-        private app: AppComponent, 
-        private DataShared: DataSharedServicesService
+  constructor(
+    protected fb: FormBuilder,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected app: AppComponent,
+    protected dataShared: DataSharedServicesService,
+    protected shoppingService: ShoppingService,
+    protected supplierService: SupplierService,
+    protected productService: ProductService,
+    protected toastService: ToastService
   ) {
-    // Inicialización del formulario reactivo
     this.purchaseForm = this.fb.group({
-      //type: [Validators.required],
       elaborationDate: [new Date().toISOString().substring(0, 10), Validators.required],
-      invoiceNumber: [{ value: 177, disabled: true }],
-      providerInvoice: ['', Validators.required],
-      provider: [Validators.required],
+      invoiceNumber: [{ value: this.generateCode(), disabled: true }],
+      providerInvoice: [''],
+      provider: [null, Validators.required],
       items: this.fb.array([]),
       observations: [''],
       totalBruto: [0],
@@ -64,74 +55,109 @@ purchaseForm: FormGroup;
   }
 
   ngOnInit(): void {
-    // Añadir una fila de item por defecto al cargar el componente
-    this.addItem();
+    this.shoppingId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.shoppingId;
+    this.configureNav();
+    this.loadData();
   }
 
-  ngAfterContentInit():void {
-    //Opciones para el nav
+  configureNav(): void {
     this.app.listNav = [
-      { nombre: 'Volver', url: 'shopping/register', type: "btn-origin"},
-      { nombre: 'Nuevo proveedor', url: 'sales/order', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Volver', url: 'shopping/register', type: 'btn-origin' },
+      { nombre: 'Nuevo proveedor', url: 'shopping/suppliers/add', icon: 'fa-solid fa-plus', type: 'btn-success' }
     ];
-    this.DataShared.OnSetNav(this.app.listNav);
+    this.dataShared.OnSetNav(this.app.listNav);
+    this.dataShared.OnSetBreadcrumb(this.isEditMode ? 'Compras/Edición' : 'Compras/Registro');
+  }
 
-    //Cargar breadcrumb
-    this.route.data.subscribe(data => {
-      this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
+  loadData(): void {
+    this.supplierService.get().subscribe(data => {
+      this.providers = data.result.map(item => ({
+        id: item.id,
+        name: `${item.proveedor} (${item.nit})`
+      }));
+    });
+
+    this.productService.get().subscribe(data => {
+      this.productRows = data.product;
+      this.products = this.productRows.map(item => ({
+        id: item.id,
+        name: item.nombre || '',
+        value: item.precio
+      }));
+
+      if (this.isEditMode) {
+        this.loadShopping();
+      } else {
+        this.addItem();
+      }
     });
   }
 
-  // Getter para acceder fácilmente al FormArray de items
+  loadShopping(): void {
+    if (!this.shoppingId) return;
+
+    this.shoppingService.getID(this.shoppingId).subscribe({
+      next: data => {
+        const shopping = data.result;
+        this.purchaseForm.patchValue({
+          invoiceNumber: shopping.codigo,
+          provider: shopping.id_proveedor,
+          totalBruto: shopping.total_compra,
+          subtotal: shopping.total_compra,
+          totalNeto: shopping.total_compra
+        });
+
+        this.items.clear();
+        shopping.items.forEach(item => {
+          this.items.push(this.newItem({
+            product: item.id_producto,
+            description: item.producto || '',
+            quantity: item.cantidad,
+            unitValue: item.valor_unitario,
+            totalValue: item.total || 0
+          }));
+        });
+        this.calculateTotals();
+      },
+      error: error => this.showError(error)
+    });
+  }
+
   get items(): FormArray {
     return this.purchaseForm.get('items') as FormArray;
   }
 
-  /**
-   * Crea un nuevo FormGroup para un item de la factura.
-   */
-  newItem(): FormGroup {
+  newItem(value?: any): FormGroup {
     return this.fb.group({
-      type: [null, Validators.required],
-      product: [null, Validators.required],
-      description: [''],
-      quantity: [1, [Validators.required, Validators.min(1)]],
-      unitValue: [0, Validators.required],
-      discount: [0],
-      totalValue: [0]
+      type: [value?.type || 1, Validators.required],
+      product: [value?.product || null, Validators.required],
+      description: [value?.description || ''],
+      quantity: [value?.quantity || 1, [Validators.required, Validators.min(1)]],
+      unitValue: [value?.unitValue || 0, Validators.required],
+      discount: [value?.discount || 0],
+      totalValue: [value?.totalValue || 0]
     });
   }
 
-  /**
-   * Añade un nuevo item al FormArray.
-   */
   addItem(): void {
     this.items.push(this.newItem());
   }
 
-  /**
-   * Elimina un item del FormArray en una posición específica.
-   * @param index - El índice del item a eliminar.
-   */
   removeItem(index: number): void {
     this.items.removeAt(index);
     this.calculateTotals();
   }
 
-  /**
-   * Se ejecuta cuando un usuario selecciona un producto en una fila.
-   * Rellena automáticamente la descripción y el valor unitario.
-   * @param index - El índice de la fila del item.
-   */
   onProductSelect(index: number): void {
     const item = this.items.at(index);
     const productId = item.get('product')?.value;
-    const selectedProduct = this.products.find(p => p.id == productId);
+    const selectedProduct = this.productRows.find(p => p.id == productId);
 
     if (selectedProduct) {
       item.patchValue({
-        description: selectedProduct.name,
-        unitValue: selectedProduct.price
+        description: selectedProduct.nombre,
+        unitValue: Number(selectedProduct.precio)
       });
     }
     this.calculateItemTotal(index);
@@ -139,66 +165,90 @@ purchaseForm: FormGroup;
 
   onTypeSelect(index: number): void {
     const item = this.items.at(index);
-    const typeId = item.get('type')?.value;
-    alert('Tipo seleccionado: ' + typeId);
+    item.patchValue({ type: item.get('type')?.value || 1 });
   }
 
-  /**
-   * Calcula el valor total para un item específico basándose en
-   * la cantidad, valor unitario y descuento.
-   * @param index - El índice de la fila del item.
-   */
   calculateItemTotal(index: number): void {
     const item = this.items.at(index);
-    const quantity = item.get('quantity')?.value || 0;
-    const unitValue = item.get('unitValue')?.value || 0;
-    const discount = item.get('discount')?.value || 0;
-
+    const quantity = Number(item.get('quantity')?.value || 0);
+    const unitValue = Number(item.get('unitValue')?.value || 0);
+    const discount = Number(item.get('discount')?.value || 0);
     const total = (quantity * unitValue) - discount;
-    item.patchValue({ totalValue: total }, { emitEvent: false }); // emitEvent: false para evitar bucles
-    
+    item.patchValue({ totalValue: total }, { emitEvent: false });
     this.calculateTotals();
   }
 
-  /**
-   * Calcula los totales generales de la factura (bruto, descuentos, neto).
-   */
   calculateTotals(): void {
     let totalBruto = 0;
     let descuentos = 0;
 
     this.items.controls.forEach(control => {
-      const quantity = control.get('quantity')?.value || 0;
-      const unitValue = control.get('unitValue')?.value || 0;
-      const discount = control.get('discount')?.value || 0;
-      
-      totalBruto += quantity * unitValue;
-      descuentos += discount;
+      totalBruto += Number(control.get('quantity')?.value || 0) * Number(control.get('unitValue')?.value || 0);
+      descuentos += Number(control.get('discount')?.value || 0);
     });
 
     const subtotal = totalBruto - descuentos;
-    const totalNeto = subtotal; // Aquí irían cálculos de impuestos
-
     this.purchaseForm.patchValue({
-      totalBruto: totalBruto,
-      descuentos: descuentos,
-      subtotal: subtotal,
-      totalNeto: totalNeto
+      totalBruto,
+      descuentos,
+      subtotal,
+      totalNeto: subtotal
+    }, { emitEvent: false });
+  }
+
+  onSubmit(): void {
+    this.purchaseForm.markAllAsTouched();
+    this.purchaseForm.updateValueAndValidity();
+
+    if (this.purchaseForm.invalid || this.items.length === 0) {
+      this.toastService.showToast({
+        title: 'Proceso incompleto',
+        message: 'Completa proveedor y al menos una línea.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
+    const raw = this.purchaseForm.getRawValue();
+    const payload: ShoppingDTO = {
+      codigo: raw.invoiceNumber,
+      id_proveedor: raw.provider,
+      items: raw.items.map((item: any) => ({
+        id_producto: item.product,
+        cantidad: Number(item.quantity),
+        valor_unitario: Number(item.unitValue)
+      }))
+    };
+
+    const request = this.isEditMode && this.shoppingId
+      ? this.shoppingService.put(this.shoppingId, payload)
+      : this.shoppingService.post(payload);
+
+    request.subscribe({
+      next: () => {
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: this.isEditMode ? 'Compra actualizada correctamente.' : 'Compra creada correctamente.',
+          type: 'success',
+          timeout: 3000
+        });
+        this.router.navigate(['shopping/register']);
+      },
+      error: error => this.showError(error)
     });
   }
 
-  /**
-   * Procesa el envío del formulario.
-   */
-  onSubmit(): void {
-    if (this.purchaseForm.valid) {
-      console.log('Formulario Enviado:', this.purchaseForm.getRawValue());
-      // Aquí iría la lógica para enviar los datos al backend
-      alert('Compra creada exitosamente!');
-    } else {
-      console.error('El formulario no es válido.');
-      // Marcar campos como tocados para mostrar errores
-      this.purchaseForm.markAllAsTouched();
-    }
+  generateCode(): string {
+    return `FC-${Date.now()}`;
+  }
+
+  showError(error: any): void {
+    this.toastService.showToast({
+      title: 'Error ' + error.status,
+      message: error.error?.message || error.message,
+      type: 'error',
+      timeout: 3000
+    });
   }
 }

@@ -1,183 +1,131 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { ShoppingDTO } from 'src/app/core/models/shopping';
+import { ShoppingService } from 'src/app/core/services/shopping/shopping.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
-
-// Interfaz para definir la estructura de una compra
-export interface Purchase {
-  id: number;
-  provider: string;
-  invoiceNumber: string;
-  creationDate: string;
-  total: number;
-  status: 'Pagada' | 'Pendiente' | 'Vencida';
-}
+import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
   selector: 'app-view-shopping',
   templateUrl: './view-shopping.component.html',
   styleUrls: ['./view-shopping.component.css']
 })
-export class ViewShoppingComponent {
-
-  searchTerm : string = '';
-  ListOrder: any[] =[];
-  FilterListOrder : any[] = [];
-  currentPage: number = 1;
-  itemsPorPagina: number = 10;
-  TotalPag : number = 0;
-
-  todayStr ?: string;
-  weekRange ?: string;
-  monthRange ?: string;
-  yearRange ?: string;
-
-  disabledDateCalendar: boolean = false;
-  DateMaxInput ?: string;
+export class ViewShoppingComponent implements OnInit {
+  searchTerm = '';
+  ListOrder: ShoppingDTO[] = [];
+  FilterListOrder: ShoppingDTO[] = [];
+  currentPage = 1;
+  itemsPorPagina = 10;
+  TotalPag = 0;
 
   constructor(
-    private route : ActivatedRoute,
-    private app: AppComponent, 
-    private DataShared: DataSharedServicesService,
-    private router: Router) 
-  {
-    let today = new Date();
-    this.DateMaxInput = this.formatDate(today);
-  }
+    private route: ActivatedRoute,
+    private app: AppComponent,
+    private dataShared: DataSharedServicesService,
+    private router: Router,
+    private shoppingService: ShoppingService,
+    private toastService: ToastService
+  ) { }
 
   ngOnInit(): void {
-    this.onLoadSelectDate();
-  }
-
-  ngAfterContentInit():void {
-    //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Nueva compra', url: 'shopping/register/NewShopping', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Nueva compra', url: 'shopping/register/add', icon: 'fa-solid fa-plus', type: 'btn-success' }
     ];
-    this.DataShared.OnSetNav(this.app.listNav);
+    this.dataShared.OnSetNav(this.app.listNav);
 
-    //Cargar breadcrumb
     this.route.data.subscribe(data => {
-      this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
+      this.dataShared.OnSetBreadcrumb(data['breadcrumb']);
     });
 
     this.onLoadOrder();
   }
 
- OnSearchChange(search: string) {
-    this.DataShared.OnSet(search);
-  }
- 
-  onLoadOrder() {
-    let elementDate :any = document.getElementById('selectDate');
-    let elementInputDate :any = document.getElementById('selectDateCalendar');
-    let elementFilter :any = document.getElementById('selectFilter');
-    let DateEle;
-
-    if (elementDate != undefined && elementDate.value == 'Hoy') {
-      let today = new Date();
-      DateEle = this.formatDate(today);
-      this.disabledDateCalendar = false;
-    }
-    else if (elementDate != undefined && elementDate.value == 'personalizada') {
-      DateEle = elementInputDate?.value;
-      this.disabledDateCalendar = true;
-    }
-    else {
-      DateEle = elementDate?.value;
-      this.disabledDateCalendar = false;
-    }
-  }
- 
-  onSelectInit() {
-    let element :any = document.getElementById('selectCount');
-    this.TotalPag = Math.ceil(this.ListOrder?.length / element.value);
-    this.itemsPorPagina = element.value;
-    this.FilterListOrder = this.ListOrder?.slice(0, this.itemsPorPagina);
-
-    if (this.currentPage > this.TotalPag) {
-      this.currentPage = 1;
-
-    }
+  OnSearchChange(search: string): void {
+    this.searchTerm = search;
+    this.currentPage = 1;
+    this.applyFilters();
   }
 
-  nextPage() {
+  onLoadOrder(): void {
+    this.shoppingService.get().subscribe({
+      next: data => {
+        this.ListOrder = data.result || [];
+        this.applyFilters();
+      },
+      error: error => this.toastService.showToast({
+        title: 'Error ' + error.status,
+        message: error.error?.message || error.message,
+        type: 'error',
+        timeout: 3000
+      })
+    });
+  }
+
+  applyFilters(): void {
+    const term = this.searchTerm.toLowerCase();
+    const list = !term
+      ? this.ListOrder
+      : this.ListOrder.filter(item => {
+        return [
+          item.codigo,
+          item.proveedor,
+          item.nit,
+          item.total_compra?.toString()
+        ].some(value => value?.toLowerCase().includes(term));
+      });
+
+    this.TotalPag = Math.ceil(list.length / this.itemsPorPagina);
+    const startIndex = (this.currentPage - 1) * this.itemsPorPagina;
+    this.FilterListOrder = list.slice(startIndex, startIndex + this.itemsPorPagina);
+  }
+
+  onSelectInit(event?: Event): void {
+    const value = (event?.target as HTMLSelectElement)?.value;
+    this.itemsPorPagina = Number(value || this.itemsPorPagina);
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  nextPage(): void {
     if (this.currentPage < this.TotalPag) {
       this.currentPage++;
-      const startIndex = (this.currentPage - 1) * this.itemsPorPagina;
-      const endIndex = startIndex + this.itemsPorPagina;
-      this.FilterListOrder = this.ListOrder.slice(startIndex, endIndex);
+      this.applyFilters();
     }
   }
 
-  prevPage() {
+  prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      const startIndex = (this.currentPage - 1) * this.itemsPorPagina;
-      const endIndex = startIndex + this.itemsPorPagina;
-      this.FilterListOrder = this.ListOrder.slice(startIndex, endIndex);
+      this.applyFilters();
     }
   }
 
-  formatDateTime(dateTime: string): { fecha: string, hora: string } {
-    const date = new Date(dateTime);
-    const fecha = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`; // Formato dd-MM-yyyy
-    const hora = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`; // Formato HH:mm:ss
-    return { fecha, hora };
-  }
-
-  // Función para generar un color aleatorio
-  getColor(usuario: string): string {
-    // Calcular un valor hash único basado en el nombre de usuario
-    let hash = 0;
-    for (let i = 0; i < usuario.length; i++) {
-      hash = usuario.charCodeAt(i) + ((hash << 5) - hash);
+  getDetailsOrder(id?: number): void {
+    if (id) {
+      this.router.navigate(['/shopping/register/detail', id]);
     }
-    
-    // Convertir el valor hash en un color RGB
-    const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
-    
-    return color;
   }
 
-  getDetailsOrder(code:any){
-    this.router.navigate(['/sales/neworder/register/details', code]);
+  editShopping(event: MouseEvent, id?: number): void {
+    event.stopPropagation();
+    if (id) {
+      this.router.navigate(['/shopping/register/edit', id]);
+    }
   }
 
-  getPayOrder(code:any){
-    this.router.navigate(['/sales/neworder/payments', code]);
-  }
+  deleteShopping(event: MouseEvent, id?: number): void {
+    event.stopPropagation();
+    if (!id || !window.confirm('¿Seguro desea anular esta compra?')) return;
 
-
-  //Select fecha
-  // Función para formatear la fecha en formato YYYY-MM-DD
-  formatDate(date:Date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  onLoadSelectDate() {
-    const today = new Date();
-
-    // Fecha de hace una semana
-    const lastWeek = new Date();
-    lastWeek.setDate(today.getDate() - 7);
-    const lastWeekStr = this.formatDate(lastWeek);
-    
-    // Fecha de hace un mes
-    const lastMonth = new Date();
-    lastMonth.setMonth(today.getMonth() - 1);
-    const lastMonthStr = this.formatDate(lastMonth);
-
-    const lastYear = new Date();
-    lastYear.setFullYear(today.getFullYear() - 1);
-    const lastYearStr = this.formatDate(lastYear);
-    
-    this.todayStr = this.formatDate(today);
-    this.weekRange = `${lastWeekStr}`;
-    this.monthRange = `${lastMonthStr}`;
-    this.yearRange = `${lastYearStr}`;
+    this.shoppingService.delete(id).subscribe({
+      next: () => this.onLoadOrder(),
+      error: error => this.toastService.showToast({
+        title: 'Error ' + error.status,
+        message: error.error?.message || error.message,
+        type: 'error',
+        timeout: 3000
+      })
+    });
   }
 }
