@@ -1,0 +1,164 @@
+<section class="container-component">
+  <div class="access-hero">
+    <div>
+      <p>Super admin</p>
+      <h1>Control de Acceso</h1>
+    </div>
+    <div class="metric-row">
+      <span>Empresas <strong>{{summary.subscribers}}</strong></span>
+      <span>Usuarios <strong>{{summary.users}}</strong></span>
+      <span>Roles <strong>{{summary.roles}}</strong></span>
+      <span>Modulos <strong>{{summary.modules}}</strong></span>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">{{activeTab | uppercase}}</p>
+        <div class="container-pag">
+          <button type="button" class="rd-4" *ngFor="let tab of tabs" [class.active-filter]="tab.id === activeTab" (click)="setTab(tab.id)">
+            <i [className]="tab.icon"></i>
+            <span>{{tab.label}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'empresas'">
+      <form class="admin-form" (ngSubmit)="saveSubscriber()">
+        <h2>{{editingSubscriberId ? 'Editar empresa' : 'Nueva empresa'}}</h2>
+        <label>Responsable<input name="responsable" [(ngModel)]="subscriberForm.responsable" required></label>
+        <label>NIT<input name="nit" [(ngModel)]="subscriberForm.nit"></label>
+        <label>Contacto<input name="contacto" [(ngModel)]="subscriberForm.contacto_n" required></label>
+        <label>Correo<input name="correo" type="email" [(ngModel)]="subscriberForm.correo" required></label>
+        <label>Plan
+          <select name="plan" [(ngModel)]="subscriberForm.id_plan" required>
+            <option [ngValue]="undefined">Seleccione</option>
+            <option *ngFor="let plan of catalogs.plans" [ngValue]="plan.id">{{plan.tipo}} - {{plan.precio | currency}}</option>
+          </select>
+        </label>
+        <label>Finaliza<input name="fechaFinalizacion" type="date" [(ngModel)]="subscriberForm.fecha_finalizacion"></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
+          <button type="button" class="btn rd-4" (click)="cancelSubscriber()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Empresa</th><th>Codigo</th><th>Correo</th><th>Plan</th><th>Finaliza</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let item of subscribers">
+              <td><strong>{{item.responsable}}</strong><p>{{item.nit || 'Sin NIT'}}</p></td>
+              <td>{{item.codigo}}</td>
+              <td>{{item.correo}}</td>
+              <td>{{item.id_plan}}</td>
+              <td>{{item.fecha_finalizacion | date:'yyyy-MM-dd'}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editSubscriber(item)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableSubscriber(item)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'usuarios'">
+      <form class="admin-form" (ngSubmit)="saveUser()">
+        <h2>{{editingUserId ? 'Editar usuario' : 'Nuevo usuario'}}</h2>
+        <label>Nombre<input name="nombre" [(ngModel)]="userForm.nombre" required></label>
+        <label>Cedula<input name="cedula" type="number" [(ngModel)]="userForm.cedula"></label>
+        <label>Cargo<input name="cargo" [(ngModel)]="userForm.cargo"></label>
+        <label>Usuario<input name="usuario" [(ngModel)]="userForm.usuario" required></label>
+        <label>Password<input name="password" type="password" [(ngModel)]="userForm.password" [required]="!editingUserId"></label>
+        <label>Empresa
+          <select name="empresa" [(ngModel)]="userForm.id_suscrito" required>
+            <option [ngValue]="undefined">Seleccione</option>
+            <option *ngFor="let item of catalogs.subscribers" [ngValue]="item.id">{{item.responsable}}</option>
+          </select>
+        </label>
+        <label>Rol
+          <select name="rolUsuario" [(ngModel)]="userForm.id_rol" required>
+            <option [ngValue]="undefined">Seleccione</option>
+            <option *ngFor="let role of catalogs.roles" [ngValue]="role.id">{{role.rol}}</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
+          <button type="button" class="btn rd-4" (click)="cancelUser()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Usuario</th><th>Empresa</th><th>Rol</th><th>Cargo</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let item of users">
+              <td><strong>{{item.colaborador}}</strong><p>{{item.usuario}}</p></td>
+              <td>{{item.suscrito || '-'}}</td>
+              <td>{{item.rol || '-'}}</td>
+              <td>{{item.cargo || '-'}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editUser(item)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableUser(item)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'roles'">
+      <form class="admin-form" (ngSubmit)="saveRole()">
+        <h2>{{editingRoleId ? 'Editar rol' : 'Nuevo rol'}}</h2>
+        <label>Rol<input name="rol" [(ngModel)]="roleForm.rol" required></label>
+        <label>Descripcion<textarea name="descripcion" rows="4" [(ngModel)]="roleForm.descripcion"></textarea></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
+          <button type="button" class="btn rd-4" (click)="cancelRole()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Rol</th><th>Descripcion</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let role of catalogs.roles">
+              <td>{{role.rol}}</td>
+              <td>{{role.descripcion || '-'}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editRole(role)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableRole(role)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="permissions-shell" *ngIf="activeTab === 'permisos'">
+      <aside class="role-list">
+        <button type="button" *ngFor="let role of catalogs.roles" [class.active-role]="role.id === selectedRoleId" (click)="selectRole(role)">
+          <i class="fa-solid fa-user-tag"></i>
+          <span>{{role.rol}}</span>
+        </button>
+      </aside>
+
+      <div class="module-grid">
+        <label class="module-toggle" *ngFor="let module of catalogs.modules">
+          <input type="checkbox" [checked]="module.id ? selectedModules[module.id] : false" (change)="toggleModule(module, $event)">
+          <span><i [className]="module.icono || 'fa-solid fa-cube'"></i></span>
+          <strong>{{module.modulo}}</strong>
+          <small>{{module.ruta}}</small>
+        </label>
+        <div class="permission-actions">
+          <button type="button" class="btn btn-success rd-4" (click)="savePermissions()" [disabled]="isSaving || !selectedRoleId">
+            <i class="fa-solid fa-check"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

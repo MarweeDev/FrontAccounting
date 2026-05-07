@@ -25,6 +25,8 @@ export enum ServicesMethod {
     ServicesSettingParameter = 'setting/parameter',
     ServicesDevelopmentResource = 'development/resource',
     ServicesDevelopmentPermission = 'development/permission',
+    ServicesAccessControl = 'access-control',
+    ServicesRole = 'role',
 }
 
 export class ApiConfig {

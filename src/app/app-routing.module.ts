@@ -15,6 +15,8 @@ const routes: Routes = [
   { path: 'ajustes', redirectTo: 'settings/dashboard' },
   { path: 'dev', loadChildren: () => import('./modules/dev/dev.module').then(m => m.DevModule) },
   { path: 'desarrollo', redirectTo: 'dev/resources' },
+  { path: 'access-control', loadChildren: () => import('./modules/access-control/access-control.module').then(m => m.AccessControlModule) },
+  { path: 'control-acceso', redirectTo: 'access-control/dashboard' },
   { path: '**', redirectTo: 'login' }
 ];
 
