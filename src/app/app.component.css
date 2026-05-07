@@ -51,13 +51,13 @@
 .lava-loader {
   position: relative;
   width: 92px;
-  height: 128px;
+  height: 118px;
   margin: 0 auto 16px;
 }
 
 .lava-glass {
   position: absolute;
-  inset: 0 17px 10px;
+  inset: 0 17px;
   overflow: hidden;
   border: 1px solid rgba(108, 128, 193, .34);
   border-radius: 34px 34px 26px 26px;
@@ -140,17 +140,6 @@
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(255, 255, 255, .76), rgba(255, 255, 255, 0));
   opacity: .68;
-}
-
-.lava-base {
-  position: absolute;
-  left: 15px;
-  right: 15px;
-  bottom: 0;
-  height: 16px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #566595, #25304e);
-  box-shadow: 0 10px 20px rgba(22, 28, 45, .18);
 }
 
 .loading-copy {
