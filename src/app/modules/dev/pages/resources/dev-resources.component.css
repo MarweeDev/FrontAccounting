@@ -1,0 +1,233 @@
+* {
+  box-sizing: border-box;
+}
+
+.container-component {
+  position: relative;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.container-head {
+  width: 100%;
+  position: sticky;
+  top: 4rem;
+  z-index: 1;
+  background-color: var(--color-secondary);
+}
+
+.container-head .banner {
+  margin-top: 0;
+  padding: 0 20px;
+  width: 100%;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.container-head .count-register {
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin: 11px 0;
+}
+
+.container-head .count-register strong {
+  padding: 3px 10px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: var(--background-primario);
+  color: var(--color-primary);
+}
+
+.container-head .container-pag {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.container-head .container-pag button {
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  margin: 6px;
+  font-size: 10px;
+  height: fit-content;
+  cursor: pointer;
+}
+
+.container-head .container-pag button span {
+  margin-left: 6px;
+}
+
+.container-head .container-pag button:hover,
+.container-head .container-pag .active-filter {
+  border-color: var(--color-texto-terciario);
+  background-color: var(--background-primario);
+}
+
+.dev-shell {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 12px;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.quick-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.quick-form h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.quick-form p,
+td p {
+  margin: 4px 0 0;
+  color: var(--color-adicional-secundario);
+  font-size: 11px;
+  line-height: 18px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.check-row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.check-row input {
+  width: auto;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.container-table {
+  padding: 0 10px 10px;
+  width: 100%;
+  border-radius: 7px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+thead tr {
+  position: sticky;
+  top: -0.6rem;
+  background-color: var(--background-primario);
+  z-index: 2;
+}
+
+th {
+  text-align: left;
+  font-size: 12px;
+  padding: 20px 10px;
+  color: var(--color-primary);
+}
+
+td {
+  text-align: left;
+  padding: 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  background-color: #fff;
+  border-top: 1px solid var(--color-texto-terciario);
+  border-bottom: 1px solid var(--color-texto-terciario);
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, .1);
+}
+
+tbody tr:hover > td {
+  background-color: rgb(225, 227, 255);
+}
+
+td:first-child {
+  border-left: 2px solid var(--color-primary);
+}
+
+td:last-child {
+  border-right: 1px solid var(--color-texto-terciario);
+  border-radius: 0 10px 10px 0;
+  text-align: end;
+}
+
+.status-pill {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color: rgba(27, 169, 76, .12);
+  color: var(--color-success);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.status-pill.pending {
+  background-color: rgba(255, 193, 7, .18);
+  color: rgb(126, 88, 0);
+}
+
+.btn-option {
+  font-size: 15px;
+  margin-left: 12px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.message-not-result {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.message-not-result img {
+  width: 7rem;
+}
+
+@media (max-width: 800px) {
+  .container-head .banner,
+  .dev-shell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  table {
+    min-width: 760px;
+  }
+}

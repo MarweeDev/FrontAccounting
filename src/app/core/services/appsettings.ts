@@ -22,6 +22,9 @@ export enum ServicesMethod {
     ServicesShopping = 'shopping',
     ServicesSupplier = 'supplier',
     ServicesStock = 'stock',
+    ServicesSettingParameter = 'setting/parameter',
+    ServicesDevelopmentResource = 'development/resource',
+    ServicesDevelopmentPermission = 'development/permission',
 }
 
 export class ApiConfig {

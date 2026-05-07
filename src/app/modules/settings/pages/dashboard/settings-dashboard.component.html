@@ -1,0 +1,84 @@
+<section class="container-component">
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">Ajustes configurados <strong>{{configuredCount}}</strong></p>
+        <div class="container-pag">
+          <button
+            type="button"
+            class="rd-4"
+            *ngFor="let section of sections"
+            [class.active-filter]="section.id === activeSection"
+            (click)="setSection(section.id)"
+            [title]="section.title">
+            <i [className]="section.icon"></i>
+            <span>{{section.title}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-shell">
+      <aside class="section-summary">
+        <div class="summary-icon">
+          <i [className]="currentSection.icon"></i>
+        </div>
+        <h1>{{currentSection.title}}</h1>
+        <p>{{currentSection.description}}</p>
+      </aside>
+
+      <div class="container-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Parametro</th>
+              <th>Valor</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let setting of currentSection.settings">
+              <td>
+                <div class="setting-title">
+                  <span class="setting-icon"><i [className]="setting.icon"></i></span>
+                  <div>
+                    <strong>{{setting.label}}</strong>
+                    <p>{{setting.description}}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <select *ngIf="setting.type === 'booleano'; else textInput" [value]="getValue(setting)" (change)="setValue(setting, $event)">
+                  <option value="">Sin definir</option>
+                  <option value="true">Si</option>
+                  <option value="false">No</option>
+                </select>
+                <ng-template #textInput>
+                  <input
+                    [type]="setting.type === 'numero' ? 'number' : 'text'"
+                    [placeholder]="setting.placeholder || ''"
+                    [value]="getValue(setting)"
+                    (input)="setValue(setting, $event)">
+                </ng-template>
+              </td>
+              <td>
+                <span class="status-pill" [class.pending]="!hasParameter(setting)">
+                  {{hasParameter(setting) ? 'Activo' : 'Pendiente'}}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn-option" title="Guardar" (click)="save(setting)" [disabled]="isSaving(setting)">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button type="button" class="btn-option" title="Deshabilitar" (click)="disable(setting)" [disabled]="!hasParameter(setting) || isSaving(setting)">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

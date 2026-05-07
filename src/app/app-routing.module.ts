@@ -10,6 +10,11 @@ const routes: Routes = [
   { path: 'shopping', loadChildren: () => import('./modules/shopping/shopping.module').then(m => m.ShoppingModule) },
   { path: 'inventory', loadChildren: () => import('./modules/inventory/inventory.module').then(m => m.InventoryModule) },
   { path: 'reports', loadChildren: () => import('./modules/reports/reports.module').then(m => m.ReportsModule) },
+  { path: 'settings', loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule) },
+  { path: 'ajuste', redirectTo: 'settings/dashboard' },
+  { path: 'ajustes', redirectTo: 'settings/dashboard' },
+  { path: 'dev', loadChildren: () => import('./modules/dev/dev.module').then(m => m.DevModule) },
+  { path: 'desarrollo', redirectTo: 'dev/resources' },
   { path: '**', redirectTo: 'login' }
 ];
 

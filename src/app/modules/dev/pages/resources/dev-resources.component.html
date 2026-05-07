@@ -1,0 +1,118 @@
+<section class="container-component">
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">Recursos activos <strong>{{ListResource.length}}</strong></p>
+        <div class="container-pag">
+          <button
+            type="button"
+            class="rd-4"
+            *ngFor="let type of resourceTypes"
+            [class.active-filter]="type.id === activeType"
+            (click)="setType(type.id)"
+            [title]="type.label">
+            <i [className]="type.icon"></i>
+            <span>{{type.label}} {{countByType(type.id)}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dev-shell">
+      <form class="quick-form" (ngSubmit)="save()">
+        <h1>{{editingId ? 'Editar recurso' : 'Nuevo recurso'}}</h1>
+        <p>Registra artefactos tecnicos visibles para administracion del sistema.</p>
+
+        <label>
+          Titulo
+          <input type="text" name="titulo" [(ngModel)]="form.titulo" required placeholder="Ej: API de productos">
+        </label>
+
+        <label>
+          Tipo
+          <select name="tipo_recurso" [(ngModel)]="form.tipo_recurso">
+            <option value="api">API</option>
+            <option value="documento">Documento</option>
+            <option value="version">Version</option>
+            <option value="enlace">Enlace</option>
+            <option value="nota">Nota</option>
+          </select>
+        </label>
+
+        <label>
+          Ruta o enlace
+          <input type="text" name="ruta" [(ngModel)]="form.ruta" placeholder="/appdomain/api/product/get">
+        </label>
+
+        <label>
+          Version
+          <input type="text" name="version" [(ngModel)]="form.version" placeholder="v1">
+        </label>
+
+        <label>
+          Descripcion
+          <textarea name="descripcion" rows="3" [(ngModel)]="form.descripcion"></textarea>
+        </label>
+
+        <label class="check-row">
+          <input type="checkbox" name="visible" [(ngModel)]="form.visible">
+          Visible en consola
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving">
+            <i class="fa-solid fa-check"></i>
+          </button>
+          <button type="button" class="btn rd-4" (click)="cancelEdit()" [disabled]="isSaving">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <div class="message-not-result" *ngIf="FilterListResource.length === 0">
+          <img src="../../../../../assets/img/dobby/not_results_IA.png" alt="Sin resultados" />
+          <h3>No se encontraron recursos</h3>
+          <h5>Registra APIs, documentos o versiones del sistema</h5>
+        </div>
+
+        <table *ngIf="FilterListResource.length > 0">
+          <thead>
+            <tr>
+              <th>Recurso</th>
+              <th>Tipo</th>
+              <th>Ruta</th>
+              <th>Version</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of FilterListResource">
+              <td>
+                <strong>{{item.titulo}}</strong>
+                <p>{{item.descripcion || 'Sin descripcion'}}</p>
+              </td>
+              <td>{{item.tipo_recurso}}</td>
+              <td>{{item.ruta || '-'}}</td>
+              <td>{{item.version || '-'}}</td>
+              <td>
+                <span class="status-pill" [class.pending]="!item.visible">
+                  {{item.visible ? 'Visible' : 'Oculto'}}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn-option" title="Editar" (click)="edit(item)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button type="button" class="btn-option" title="Deshabilitar" (click)="disable(item)">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
