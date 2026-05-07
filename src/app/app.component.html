@@ -1,8 +1,9 @@
 <app-breadcrumbs id="nav"></app-breadcrumbs>
 
-<app-mainlayout *ngIf="statusDisabledMain"></app-mainlayout>
+<div class="aside-overlay" *ngIf="statusDisabledMain" (click)="OnHiddenBar()"></div>
+<app-mainlayout *ngIf="statusDisabledMain" (click)="$event.stopPropagation()"></app-mainlayout>
 
-<div class="content" id="content" (click)="OnHiddenBar()">
+<div class="content" id="content">
     <router-outlet></router-outlet>
 </div>
 

@@ -47,28 +47,17 @@ export class AppComponent implements OnInit {
   //#region methods
   OnExpandBar(){
     let element :any = document.getElementById('icon_btn_open');
-    let elementSlider :any = document.getElementById('slider_left');
-    if(element != undefined && elementSlider != undefined){
-      if (this.statusDisabledMain) {
-        this.statusDisabledMain = false;
-        element.className = "fa-solid fa-bars";
-        elementSlider.className = "animate__animated animate__fadeOutTopLeft";
-      }
-      else{
-        this.statusDisabledMain = true;
-        element.className = "fa-solid fa-bars-staggered";
-        elementSlider.className = "animate__animated animate__fadeInTopLeft";
-      }
+    if(element != undefined){
+      this.statusDisabledMain = !this.statusDisabledMain;
+      element.className = this.statusDisabledMain ? "fa-solid fa-bars-staggered" : "fa-solid fa-bars";
     }
   }
   OnHiddenBar(){
     let element :any = document.getElementById('icon_btn_open');
-    let elementSlider :any = document.getElementById('slider_left');
-    if(element != undefined && elementSlider != undefined){
+    if(element != undefined){
       element.className = "fa-solid fa-bars";
-      elementSlider.className = "animate__animated animate__fadeOutTopLeft";
-      setTimeout(()=>{this.statusDisabledMain = false;},1000);
     }
+    this.statusDisabledMain = false;
   }
 
   OnHiddenBarAsync(){

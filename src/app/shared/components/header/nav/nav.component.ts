@@ -46,13 +46,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   OnHiddenBar(){
-    let element :any = document.getElementById('icon_btn_open');
-    let elementSlider :any = document.getElementById('slider_left');
-    if(element != undefined && elementSlider != undefined){
-      element.className = "fa-solid fa-bars";
-      elementSlider.className = "slider animate__animated animate__fadeOutLeft";
-      setTimeout(()=>{this.app.statusDisabledMain = false;},1000);
-    }
+    this.app.OnHiddenBar();
   }
 
   onButtonGroupClick(e:any){
