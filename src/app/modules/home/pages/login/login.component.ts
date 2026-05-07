@@ -30,6 +30,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.authService.hasLegacySessionOnly()) {
+      this.authService.clearSession();
+    }
+
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['sales/register']);
       return;

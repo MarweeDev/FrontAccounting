@@ -12,6 +12,7 @@ import { FooterComponent } from './components/footer/footer/footer.component';
 import { FilterSearchPipe } from './pipes/search/filter-search.pipe';
 import { StatusComponent } from './components/error/status/status.component';
 import { SelectComponent } from './components/form-items/select/select.component';
+import { LoadingContainerComponent } from './components/feedback/loading-container/loading-container.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SelectComponent } from './components/form-items/select/select.component
     MainlayoutComponent,
     FooterComponent,
     StatusComponent,
-    SelectComponent
+    SelectComponent,
+    LoadingContainerComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { SelectComponent } from './components/form-items/select/select.component
     MainlayoutComponent,
     FooterComponent,
     StatusComponent,
-    SelectComponent
+    SelectComponent,
+    LoadingContainerComponent
   ]
 })
 export class SharedModule { }

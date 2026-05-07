@@ -1,1 +1,16 @@
-<p>status works!</p>
+<section class="status-page">
+  <div class="status-panel">
+    <div class="status-code">{{code}}</div>
+    <i [className]="icon"></i>
+    <h1>{{title}}</h1>
+    <p>{{detail}}</p>
+    <button type="button" class="btn btn-success rd-4" (click)="primaryAction()">
+      <i class="fa-solid fa-right-to-bracket"></i>
+      <span>{{actionLabel}}</span>
+    </button>
+    <button type="button" class="btn rd-4 secondary-action" *ngIf="canGoBack" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Regresar</span>
+    </button>
+  </div>
+</section>

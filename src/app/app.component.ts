@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavDTO } from './core/models/nav';
-import { Router } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { InactivityService } from './shared/directives/inactivity.service';
+import { LoadingService, LoadingState } from './core/services/loading/loading.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +18,7 @@ export class AppComponent implements OnInit {
   listNav : NavDTO[] = [];
 
   /*Cargar*/
-  statusLoaderModule : boolean = false;
-  statusLoaderComponent : boolean = false;
+  loadingState$!: Observable<LoadingState>;
 
   /*Estado menu*/
   statusDisabledMain : boolean = false;
@@ -36,11 +37,21 @@ export class AppComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef, 
     private router: Router,
+    private loadingService: LoadingService,
     //private inactivityService: InactivityService
   ) {}
 
   ngOnInit(): void {
-    
+    this.loadingState$ = this.loadingService.state$;
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.loadingService.show('Abriendo modulo', 'route');
+      }
+
+      if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+        this.loadingService.hide();
+      }
+    });
   }
   //#endregion
 
@@ -66,16 +77,10 @@ export class AppComponent implements OnInit {
   }
 
   OnLoadingModule() {
-    this.statusLoaderModule = true;
-    setTimeout(() => {
-      this.statusLoaderModule = false;
-    }, 900);
+    this.loadingService.pulse('Cargando modulo', 'manual');
   }
   OnLoadingComponent() {
-    this.statusLoaderComponent = true;
-    setTimeout(() => {
-      this.statusLoaderComponent = false;
-    }, 900);
+    this.loadingService.pulse('Actualizando vista', 'manual');
   }
   //#endregion  
 }

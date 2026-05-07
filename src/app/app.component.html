@@ -7,15 +7,18 @@
     <router-outlet></router-outlet>
 </div>
 
-<section class="container-loader-module" *ngIf="statusLoaderModule">
-    <div class="container-loader-margin">
-        <div class="custom-loader"></div>
-        <p class="info">Cargando componentes</p>
-    </div>
-</section>
-
-<section class="container-loader-component" *ngIf="statusLoaderComponent">
-    <div class="container-loader-margin">
-        <div class="custom-loader"></div>
+<section class="app-loading-overlay" *ngIf="loadingState$ | async as loading" [class.active]="loading.active">
+    <div class="app-loading-panel" *ngIf="loading.active">
+        <div class="loading-orbit" aria-hidden="true">
+            <span></span>
+            <span></span>
+        </div>
+        <div class="loading-copy">
+            <strong>{{loading.message}}</strong>
+            <p>{{loading.mode === 'route' ? 'Preparando navegacion y permisos.' : 'Estamos consultando la informacion.'}}</p>
+        </div>
+        <div class="loading-bars" aria-hidden="true">
+            <i></i><i></i><i></i>
+        </div>
     </div>
 </section>

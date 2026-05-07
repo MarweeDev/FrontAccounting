@@ -21,6 +21,10 @@ export class AuthService {
     return sessionStorage.getItem('accessToken');
   }
 
+  hasLegacySessionOnly(): boolean {
+    return !this.getAccessToken() && !!sessionStorage.getItem('authenticator');
+  }
+
   setSession(data: LoginResponse): void {
     sessionStorage.setItem('accessToken', data.token);
 
@@ -42,6 +46,6 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getAccessToken() || !!sessionStorage.getItem('authenticator');
+    return !!this.getAccessToken();
   }
 }

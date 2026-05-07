@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './modules/home/pages/login/login.component';
+import { StatusComponent } from './shared/components/error/status/status.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, title: 'Generando autorización', data: { breadcrumb: 'Login' } },
+  { path: 'status/:code', component: StatusComponent, title: 'Estado de acceso', data: { breadcrumb: 'Estado' } },
   { path: 'sales', loadChildren: () => import('./modules/sales/sales.module').then(m => m.SalesModule) },
   { path: 'home', redirectTo: 'sales/register' },
   { path: 'shopping', loadChildren: () => import('./modules/shopping/shopping.module').then(m => m.ShoppingModule) },
