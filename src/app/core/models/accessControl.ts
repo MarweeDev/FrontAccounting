@@ -82,6 +82,25 @@ export interface AuditEventDTO {
   fecha_creacion?: string;
 }
 
+export interface AuditFiltersDTO {
+  page: number;
+  pageSize: number;
+  accion?: string;
+  entidad?: string;
+  id_usuario?: number;
+  id_suscrito?: number;
+  id_modulo?: number;
+  dateFrom?: string;
+  dateTo?: string;
+}
+
+export interface PaginationDTO {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface AccessCatalogsDTO {
   plans: PlanDTO[];
   roles: RoleDTO[];

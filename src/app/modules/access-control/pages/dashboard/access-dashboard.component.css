@@ -53,9 +53,9 @@ label { display: flex; flex-direction: column; gap: 6px; font-size: 11px; letter
 input, select, textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--color-texto-terciario); border-radius: 8px; outline: none; resize: vertical; }
 .form-actions { display: flex; gap: 8px; }
 
-.container-table { padding: 0 10px 10px; width: 100%; overflow-x: auto; }
+.container-table { padding: 0 10px 10px; width: 100%; overflow-x: auto; z-index: 0; }
 table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
-thead tr { position: sticky; top: -0.6rem; background-color: var(--background-primario); z-index: 2; }
+thead tr { position: sticky; top: -0.6rem; z-index: 2; }
 th { text-align: left; font-size: 12px; padding: 20px 10px; color: var(--color-primary); }
 td { text-align: left; padding: 10px; font-size: 11px; letter-spacing: 1px; font-weight: 500; background-color: #fff; border-top: 1px solid var(--color-texto-terciario); border-bottom: 1px solid var(--color-texto-terciario); box-shadow: 1px 3px 3px rgba(0, 0, 0, .1); }
 tbody tr:hover > td { background-color: rgb(225, 227, 255); }
@@ -121,6 +121,24 @@ td p { margin: 4px 0 0; color: var(--color-adicional-secundario); font-size: 11p
   padding-top: 12px;
 }
 
+.audit-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.audit-filter-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
 .audit-action {
   display: inline-flex;
   align-items: center;
@@ -132,6 +150,21 @@ td p { margin: 4px 0 0; color: var(--color-adicional-secundario); font-size: 11p
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.audit-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 8px 14px 16px;
+  color: var(--color-primary);
+  font-size: 11px;
+}
+
+.audit-pagination select {
+  width: auto;
+  min-width: 74px;
 }
 
 @media (max-width: 860px) {

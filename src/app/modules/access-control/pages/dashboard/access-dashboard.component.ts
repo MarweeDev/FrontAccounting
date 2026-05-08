@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
-import { AccessCatalogsDTO, AccessModuleDTO, AccessSummaryDTO, AccessUserDTO, AuditEventDTO, RoleDTO, SubscriberDTO } from 'src/app/core/models/accessControl';
+import { AccessCatalogsDTO, AccessModuleDTO, AccessSummaryDTO, AccessUserDTO, AuditEventDTO, AuditFiltersDTO, PaginationDTO, RoleDTO, SubscriberDTO } from 'src/app/core/models/accessControl';
 import { AccessControlService } from 'src/app/core/services/access-control/access-control.service';
 import { ModuleService } from 'src/app/core/services/module/module.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
@@ -21,6 +21,9 @@ export class AccessDashboardComponent implements OnInit {
   subscribers: SubscriberDTO[] = [];
   users: AccessUserDTO[] = [];
   auditEvents: AuditEventDTO[] = [];
+  auditFilters: AuditFiltersDTO = this.emptyAuditFilters();
+  auditPagination: PaginationDTO = { page: 1, pageSize: 20, total: 0, totalPages: 0 };
+  auditLoaded = false;
 
   subscriberForm: SubscriberDTO = this.emptySubscriber();
   userForm: AccessUserDTO = this.emptyUser();
@@ -70,11 +73,13 @@ export class AccessDashboardComponent implements OnInit {
     this.loadCatalogs();
     this.loadSubscribers();
     this.loadUsers();
-    this.loadAuditEvents();
   }
 
   setTab(tab: AccessTab): void {
     this.activeTab = tab;
+    if (tab === 'auditoria' && !this.auditLoaded) {
+      this.loadAuditEvents();
+    }
   }
 
   loadSummary(): void {
@@ -111,10 +116,36 @@ export class AccessDashboardComponent implements OnInit {
   }
 
   loadAuditEvents(): void {
-    this.accessService.getAuditEvents().subscribe({
-      next: data => this.auditEvents = data.result || [],
+    this.accessService.getAuditEvents(this.auditFilters).subscribe({
+      next: data => {
+        this.auditEvents = data.result || [];
+        this.auditPagination = data.pagination || this.auditPagination;
+        this.auditLoaded = true;
+      },
       error: error => this.showError(error, 'Error al cargar auditoria')
     });
+  }
+
+  applyAuditFilters(): void {
+    this.auditFilters.page = 1;
+    this.loadAuditEvents();
+  }
+
+  clearAuditFilters(): void {
+    this.auditFilters = this.emptyAuditFilters();
+    this.loadAuditEvents();
+  }
+
+  changeAuditPage(direction: number): void {
+    const nextPage = this.auditFilters.page + direction;
+    if (nextPage < 1 || (this.auditPagination.totalPages && nextPage > this.auditPagination.totalPages)) return;
+    this.auditFilters.page = nextPage;
+    this.loadAuditEvents();
+  }
+
+  changeAuditPageSize(): void {
+    this.auditFilters.page = 1;
+    this.loadAuditEvents();
   }
 
   saveSubscriber(): void {
@@ -367,6 +398,10 @@ export class AccessDashboardComponent implements OnInit {
       icono: 'fa-solid fa-cube',
       position_module: (this.catalogs.modules.length || 0) + 1
     };
+  }
+
+  private emptyAuditFilters(): AuditFiltersDTO {
+    return { page: 1, pageSize: 20 };
   }
 
   private notify(title: string, message: string): void {

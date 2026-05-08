@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiConfig, HttpMethod, ServicesMethod } from '../appsettings';
-import { AccessCatalogsDTO, AccessSummaryDTO, AccessUserDTO, AuditEventDTO, RoleDTO, RoleModuleDTO, SubscriberDTO } from '../../models/accessControl';
+import { AccessCatalogsDTO, AccessSummaryDTO, AccessUserDTO, AuditEventDTO, AuditFiltersDTO, PaginationDTO, RoleDTO, RoleModuleDTO, SubscriberDTO } from '../../models/accessControl';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +41,15 @@ export class AccessControlService {
     return this.http.get<{ result: AccessUserDTO[] }>(`${this.ApiURL}/users${HttpMethod.GET}`);
   }
 
-  getAuditEvents(): Observable<{ result: AuditEventDTO[] }> {
-    return this.http.get<{ result: AuditEventDTO[] }>(`${this.ApiURL}/audit${HttpMethod.GET}`);
+  getAuditEvents(filters: AuditFiltersDTO): Observable<{ result: AuditEventDTO[]; pagination: PaginationDTO }> {
+    let params = new HttpParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params = params.append(key, String(value));
+      }
+    });
+
+    return this.http.get<{ result: AuditEventDTO[]; pagination: PaginationDTO }>(`${this.ApiURL}/audit${HttpMethod.GET}`, { params });
   }
 
   postUser(data: AccessUserDTO): Observable<{ message: string; result: AccessUserDTO }> {

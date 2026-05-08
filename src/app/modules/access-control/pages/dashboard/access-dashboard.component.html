@@ -206,6 +206,44 @@
     </div>
 
     <div class="audit-shell" *ngIf="activeTab === 'auditoria'">
+      <div class="audit-filters">
+        <label>Accion
+          <select name="auditAccion" [(ngModel)]="auditFilters.accion">
+            <option [ngValue]="undefined">Todas</option>
+            <option value="crear">Crear</option>
+            <option value="actualizar">Actualizar</option>
+            <option value="deshabilitar">Deshabilitar</option>
+            <option value="reactivar">Reactivar</option>
+            <option value="actualizar_permisos">Permisos</option>
+          </select>
+        </label>
+        <label>Entidad<input name="auditEntidad" [(ngModel)]="auditFilters.entidad" placeholder="usuarios, modulo..."></label>
+        <label>Usuario
+          <select name="auditUsuario" [(ngModel)]="auditFilters.id_usuario">
+            <option [ngValue]="undefined">Todos</option>
+            <option *ngFor="let item of users" [ngValue]="item.id">{{item.usuario}}</option>
+          </select>
+        </label>
+        <label>Empresa
+          <select name="auditEmpresa" [(ngModel)]="auditFilters.id_suscrito">
+            <option [ngValue]="undefined">Todas</option>
+            <option *ngFor="let item of catalogs.subscribers" [ngValue]="item.id">{{item.responsable}}</option>
+          </select>
+        </label>
+        <label>Modulo
+          <select name="auditModulo" [(ngModel)]="auditFilters.id_modulo">
+            <option [ngValue]="undefined">Todos</option>
+            <option *ngFor="let item of catalogs.modules" [ngValue]="item.id">{{item.modulo}}</option>
+          </select>
+        </label>
+        <label>Desde<input name="auditDesde" type="date" [(ngModel)]="auditFilters.dateFrom"></label>
+        <label>Hasta<input name="auditHasta" type="date" [(ngModel)]="auditFilters.dateTo"></label>
+        <div class="audit-filter-actions">
+          <button type="button" class="btn btn-success rd-4" (click)="applyAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-filter"></i></button>
+          <button type="button" class="btn rd-4" (click)="clearAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-eraser"></i></button>
+        </div>
+      </div>
+
       <div class="container-table">
         <table>
           <thead>
@@ -234,6 +272,20 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="audit-pagination">
+        <button type="button" class="btn-option" (click)="changeAuditPage(-1)" [disabled]="auditFilters.page <= 1">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span>Pagina {{auditPagination.page}} de {{auditPagination.totalPages || 1}} · {{auditPagination.total}} eventos</span>
+        <button type="button" class="btn-option" (click)="changeAuditPage(1)" [disabled]="auditPagination.totalPages === 0 || auditFilters.page >= auditPagination.totalPages">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <select name="auditPageSize" [(ngModel)]="auditFilters.pageSize" (change)="changeAuditPageSize()">
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="50">50</option>
+          <option [ngValue]="80">80</option>
+        </select>
       </div>
     </div>
   </div>
