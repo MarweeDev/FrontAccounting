@@ -27,6 +27,51 @@
         <p>{{currentSection.description}}</p>
       </aside>
 
+      <div class="theme-panel" *ngIf="activeSection === 'apariencia'; else parameterSettings">
+        <div class="appearance-group">
+          <h2>Tema visual</h2>
+        </div>
+        <button
+          type="button"
+          class="theme-card"
+          *ngFor="let theme of themes"
+          [class.active-theme]="theme.id === selectedTheme"
+          (click)="setTheme(theme.id)">
+          <span class="theme-preview" aria-hidden="true">
+            <i *ngFor="let color of theme.swatches" [style.background]="color"></i>
+          </span>
+          <span class="theme-copy">
+            <strong>{{theme.label}}</strong>
+            <small>{{theme.description}}</small>
+          </span>
+          <span class="theme-status">
+            <i [className]="theme.id === selectedTheme ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+          </span>
+        </button>
+
+        <div class="appearance-group">
+          <h2>Efecto ambiental</h2>
+        </div>
+        <button
+          type="button"
+          class="theme-card effect-card"
+          *ngFor="let effect of visualEffects"
+          [class.active-theme]="effect.id === selectedEffect"
+          (click)="setVisualEffect(effect.id)">
+          <span class="effect-preview" aria-hidden="true">
+            <i [className]="effect.icon"></i>
+          </span>
+          <span class="theme-copy">
+            <strong>{{effect.label}}</strong>
+            <small>{{effect.description}}</small>
+          </span>
+          <span class="theme-status">
+            <i [className]="effect.id === selectedEffect ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+          </span>
+        </button>
+      </div>
+
+      <ng-template #parameterSettings>
       <div class="container-table">
         <table>
           <thead>
@@ -79,6 +124,7 @@
           </tbody>
         </table>
       </div>
+      </ng-template>
     </div>
   </div>
 </section>

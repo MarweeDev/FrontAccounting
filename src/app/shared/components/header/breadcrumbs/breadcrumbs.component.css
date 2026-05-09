@@ -10,13 +10,14 @@
       ". . .";
 
     /*background-color: var(--color-primary);*/
-    background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgb(24, 75, 72) 100%);
+    background-color: var(--surface-bg);
+    background: var(--header-bg);
+    border: 1px solid var(--header-border);
 
     position: fixed;
     top: 0.6rem;left: 0.6rem;right: 0.6rem;
     z-index: 2;
-    box-shadow: 0px 5px 10px rgba(0,0,0,.3);
+    box-shadow: 0px 5px 18px var(--header-shadow);
     border-radius: 10px;
 }
 .container::after {
@@ -52,7 +53,7 @@
     padding: 11px;
     width: 54px;
     height: 54px;
-    color: rgb(255, 255, 255) !important;
+    color: var(--header-text) !important;
     margin: 5px;
     background-color: transparent;
     border: none;
@@ -60,11 +61,11 @@
     border-radius: 50px;
 }
 .col1 button:hover {
-    background-color: rgb(55 146 141 / 14%);
+    background-color: var(--header-hover);
     box-shadow: 0px 2px 3px rgba(0,0,0,.1);
 }
 .col1 button i { 
-    color: rgb(255, 255, 255) !important;
+    color: var(--header-text) !important;
 }
   
 .col2 {
@@ -74,12 +75,12 @@
     line-height: 19px;
     text-align: center;
     max-width: fit-content;
-    color:  var(--color-texto-terciario) !important;
+    color: var(--header-muted) !important;
     display: flex;
 }
 .col2 button {
     padding: 11px 14px;
-    color: rgb(255, 255, 255) !important;
+    color: var(--header-text) !important;
     margin: 5px;
     margin-left: 10px;
     background-color: transparent;
@@ -88,11 +89,11 @@
     border-radius: 50px;
 }
 .col2 button:hover {
-    background-color: var(--color-info-dark);
+    background-color: var(--header-hover);
     box-shadow: 0px 2px 3px rgba(0,0,0,.1);
 }
 .col2 button i { 
-    color: rgb(255, 255, 255) !important;
+    color: var(--header-text) !important;
 }
 .col2 .breadcrumb {
     padding: 15px 2rem;
@@ -107,7 +108,7 @@
 .col2 .breadcrumb span {
     padding: 0px;
     margin: 0px;
-    color: rgb(255, 255, 255);
+    color: var(--header-text);
     /*font-size: 10px;*/
     letter-spacing: 2px;
     font-weight: 300;
@@ -121,7 +122,7 @@
     opacity: 1 !important;
 }
 .col2 .breadcrumb-separator i {
-    color: rgb(255, 255, 255);
+    color: var(--header-muted);
 }
 .col2 .container-info {
     padding: 5px 2rem;
@@ -131,7 +132,7 @@
 .col2 .container-info span {
     padding: 0px;
     margin: 0px;
-    color: rgb(255, 255, 255);
+    color: var(--header-muted);
     font-size: 10px;
     letter-spacing: 2px;
     font-weight: 500;
@@ -141,7 +142,7 @@
     padding: 0px;
     margin: 0px;
     margin-top: -5px;
-    color: rgb(255, 255, 255);
+    color: var(--header-text);
     letter-spacing: 2px;
     font-size: 10px;
     font-weight: 400;
@@ -155,7 +156,7 @@
     font-weight: 300;
     line-height: 19px;
     text-align: left;
-    color:  var(--color-texto-terciario) !important;
+    color: var(--header-muted) !important;
     padding: 15px 0px !important;
     justify-self: end;
 }
@@ -175,7 +176,7 @@
     font-size: 15px;
     font-weight: bold;
     border-radius: 20px;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     position: relative;
     box-shadow: 2px 2px 3px rgba(0,0,0,.1);
     box-sizing: border-box;
@@ -184,7 +185,7 @@
     cursor: pointer;
 }
 .col3 .header .circle span {
-    color: rgb(255, 255, 255);
+    color: #ffffff;
 }
 .col3 .header .text {
     padding: 0px 10px;
@@ -199,12 +200,12 @@
     letter-spacing: 1px;
     box-sizing: border-box;
     text-transform: capitalize;
-    color: rgb(255, 255, 255);
+    color: var(--header-text);
 }
 .col3 .header .circle-position {
     margin-top: -4px;
     margin-bottom: 0px;
     font-size: 10px;
-    color: rgb(255, 255, 255);
+    color: var(--header-muted);
     opacity: .8;
 }

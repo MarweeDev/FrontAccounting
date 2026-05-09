@@ -154,7 +154,7 @@ td {
 }
 
 tbody tr:hover > td {
-  background-color: rgb(225, 227, 255);
+  background-color: var(--background-hover);
 }
 
 td:first-child {
@@ -223,6 +223,108 @@ select {
   opacity: .45;
 }
 
+.theme-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  width: 100%;
+  padding: 0 10px 10px;
+}
+
+.appearance-group {
+  grid-column: 1 / -1;
+  padding: 4px 2px 0;
+}
+
+.appearance-group h2 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.theme-card {
+  display: grid;
+  grid-template-columns: 74px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 112px;
+  padding: 14px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .24s ease, box-shadow .24s ease, transform .24s ease;
+}
+
+.theme-card:hover,
+.theme-card.active-theme {
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 28px var(--shadow-soft);
+}
+
+.theme-card:hover {
+  transform: translateY(-1px);
+}
+
+.effect-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: var(--background-primario);
+}
+
+.effect-preview i {
+  color: var(--color-primary);
+  font-size: 24px;
+}
+
+.theme-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 28px);
+  grid-template-rows: repeat(2, 28px);
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: var(--background-primario);
+}
+
+.theme-preview i {
+  display: block;
+  border-radius: 7px;
+  border: 1px solid rgba(0, 0, 0, .06);
+}
+
+.theme-copy strong,
+.theme-copy small {
+  display: block;
+  letter-spacing: 0;
+}
+
+.theme-copy strong {
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.theme-copy small {
+  color: var(--color-adicional-secundario);
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.theme-status i {
+  color: var(--color-primary);
+  font-size: 18px;
+}
+
 @media (max-width: 800px) {
   .container-head .banner,
   .settings-shell {
@@ -232,5 +334,13 @@ select {
 
   table {
     min-width: 780px;
+  }
+
+  .theme-card {
+    grid-template-columns: 68px 1fr;
+  }
+
+  .theme-status {
+    grid-column: 1 / -1;
   }
 }

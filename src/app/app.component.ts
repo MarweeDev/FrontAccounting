@@ -4,6 +4,7 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 import { InactivityService } from './shared/directives/inactivity.service';
 import { LoadingService, LoadingState } from './core/services/loading/loading.service';
 import { Observable } from 'rxjs';
+import { ThemeService, VisualEffectName } from './core/services/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,22 @@ export class AppComponent implements OnInit {
 
   /*Cargar*/
   loadingState$!: Observable<LoadingState>;
+  visualEffect$!: Observable<VisualEffectName>;
+  snowParticles = Array.from({ length: 70 }, (_, index) => ({
+    x: `${(index * 37) % 100}vw`,
+    delay: `${-(index * 0.33)}s`,
+    duration: `${10 + (index % 9) * 1.1}s`,
+    size: `${3 + (index % 5)}px`,
+    drift: `${-28 + (index % 9) * 7}px`,
+    opacity: `${0.45 + (index % 5) * 0.1}`
+  }));
+  shadowParticles = Array.from({ length: 10 }, (_, index) => ({
+    top: `${10 + (index % 5) * 13}vh`,
+    delay: `${-(index * 1.2)}s`,
+    duration: `${13 + (index % 4) * 2}s`,
+    scale: `${0.72 + (index % 4) * 0.12}`,
+    opacity: `${0.24 + (index % 4) * 0.08}`
+  }));
 
   /*Estado menu*/
   statusDisabledMain : boolean = false;
@@ -38,11 +55,15 @@ export class AppComponent implements OnInit {
     private cdRef: ChangeDetectorRef, 
     private router: Router,
     private loadingService: LoadingService,
+    private themeService: ThemeService,
     //private inactivityService: InactivityService
   ) {}
 
   ngOnInit(): void {
+    this.themeService.loadTheme();
+    this.themeService.loadEffect();
     this.loadingState$ = this.loadingService.state$;
+    this.visualEffect$ = this.themeService.effect$;
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         if (this.shouldShowRouteLoader(event.url)) {

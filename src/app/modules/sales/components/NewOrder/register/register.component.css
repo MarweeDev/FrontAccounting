@@ -228,7 +228,7 @@ select {
     box-sizing: border-box;
 }
 .content .container-table table tbody tr:hover > td {
-    background-color: rgb(225, 227, 255);
+    background-color: var(--background-hover);
 }
 .content .container-table table tbody .success-tr:hover > td {
     background-color: rgb(206, 255, 202);

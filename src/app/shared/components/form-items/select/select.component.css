@@ -67,7 +67,7 @@
 .btn-action {
   width: 100%;
   padding: 0.5rem;
-  color: rgba(55,146,141,1) !important;
+  color: var(--color-info-dark) !important;
   background-color: #f1f1f1 !important;
   border-radius: 0px !important;
   border-bottom: 1px solid #dfdfdf !important;
@@ -77,5 +77,5 @@
 }
 .btn-action i {
   margin-left: 5px;
-  color: rgba(55,146,141,1) !important;
+  color: var(--color-info-dark) !important;
 }

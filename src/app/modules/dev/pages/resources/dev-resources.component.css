@@ -175,7 +175,7 @@ td {
 }
 
 tbody tr:hover > td {
-  background-color: rgb(225, 227, 255);
+  background-color: var(--background-hover);
 }
 
 td:first-child {

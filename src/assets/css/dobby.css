@@ -68,7 +68,7 @@
   border-color: var(--color-primary);
   transition: all .5s;
 }
-.btn-primary:hover { background: #7e91ce !important; cursor: pointer;}
+.btn-primary:hover { background: var(--color-info-dark) !important; cursor: pointer;}
 
 .btn-secondary { 
   background: var(--color-secondary) !important; 
@@ -76,7 +76,7 @@
   border-color: var(--color-secondary);
   transition: all .5s;
 }
-.btn-secondary:hover { background: #ff2d88 !important; cursor: pointer;}
+.btn-secondary:hover { opacity: .88 !important; cursor: pointer;}
 
 .btn-success { 
   background: var(--color-success) !important; 
@@ -150,14 +150,14 @@
 }
 .btn-origin:hover { 
   background: rgb(255, 255, 255) !important; 
-  color: rgba(55,146,141,1) !important; 
+  color: var(--color-info-dark) !important; 
   cursor: pointer;
 }
 .btn-origin i {
   transition: all 0.5s;
 }
 .btn-origin:hover > i {
-  color: #37928d !important;
+  color: var(--color-info-dark) !important;
 }
 
 /*Bordes*/
