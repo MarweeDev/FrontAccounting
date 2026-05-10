@@ -18,6 +18,26 @@ export class DevResourcesComponent implements OnInit {
   editingId: number | null = null;
   isSaving = false;
   activeType = 'todos';
+  activeView: 'resources' | 'typography' = 'resources';
+
+  typographyConfig = {
+    fontFamily: 'Outfit',
+    fontSize: 14,
+    fontWeight: 500,
+    lineHeight: 1.4,
+    letterSpacing: 0
+  };
+
+  fontFamilies = ['Outfit', 'Poppins', 'Roboto', 'MuseoModerno', 'Viga', 'Chathura'];
+  fontWeights = [300, 400, 500, 600, 700, 800];
+  previewModes = [
+    { id: 'headings', label: 'Encabezados', icon: 'fa-solid fa-heading' },
+    { id: 'form', label: 'Formulario', icon: 'fa-solid fa-pen-to-square' },
+    { id: 'table', label: 'Tabla', icon: 'fa-solid fa-table' },
+    { id: 'cards', label: 'Cards', icon: 'fa-solid fa-id-card' },
+    { id: 'copy', label: 'Texto largo', icon: 'fa-solid fa-align-left' }
+  ];
+  activePreviewMode = 'headings';
 
   resourceTypes = [
     { id: 'todos', label: 'Todos', icon: 'fa-solid fa-layer-group' },
@@ -26,6 +46,11 @@ export class DevResourcesComponent implements OnInit {
     { id: 'version', label: 'Versiones', icon: 'fa-solid fa-code-branch' },
     { id: 'enlace', label: 'Enlaces', icon: 'fa-solid fa-link' },
     { id: 'nota', label: 'Notas', icon: 'fa-solid fa-note-sticky' }
+  ];
+
+  viewTabs = [
+    { id: 'resources', label: 'Recursos', icon: 'fa-solid fa-folder-tree' },
+    { id: 'typography', label: 'Tipografia', icon: 'fa-solid fa-font' }
   ];
 
   constructor(
@@ -60,11 +85,30 @@ export class DevResourcesComponent implements OnInit {
   }
 
   setType(type: string): void {
+    this.activeView = 'resources';
     this.activeType = type;
     this.applyFilter();
     if (type !== 'todos') {
       this.form.tipo_recurso = type;
     }
+  }
+
+  setView(view: 'resources' | 'typography'): void {
+    this.activeView = view;
+  }
+
+  setPreviewMode(mode: string): void {
+    this.activePreviewMode = mode;
+  }
+
+  get typographyPreviewStyle(): Record<string, string> {
+    return {
+      'font-family': `"${this.typographyConfig.fontFamily}", sans-serif`,
+      'font-size.px': String(this.typographyConfig.fontSize),
+      'font-weight': String(this.typographyConfig.fontWeight),
+      'line-height': String(this.typographyConfig.lineHeight),
+      'letter-spacing.px': String(this.typographyConfig.letterSpacing)
+    };
   }
 
   applyFilter(): void {

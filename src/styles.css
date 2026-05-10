@@ -67,13 +67,13 @@ body.theme-marwee {
     --surface-muted: #FFF4ED;
     --border-soft: #E5E5E5;
     --shadow-soft: rgba(115, 13, 0, .14);
-    --brand-gradient: linear-gradient(135deg, #FFFFFF 0%, #FFF4ED 52%, #FFFFFF 100%);
+    --brand-gradient: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
     --header-bg: var(--brand-gradient);
-    --header-text: #1A1A1A;
-    --header-muted: #5A5A5A;
-    --header-border: #FFD8C8;
-    --header-hover: rgba(255, 51, 0, .1);
-    --header-shadow: rgba(115, 13, 0, .14);
+    --header-text: #FFFFFF;
+    --header-muted: rgba(255, 255, 255, .68);
+    --header-border: transparent;
+    --header-hover: rgba(255, 255, 255, .14);
+    --header-shadow: rgba(0, 0, 0, .3);
     --brand-gradient-button: linear-gradient(to right, #FF3300 0%, #FF7900 51%, #DD2C00 100%);
     --loader-tint-a: rgba(255, 51, 0, .12);
     --loader-tint-b: rgba(255, 121, 0, .14);
@@ -83,7 +83,7 @@ body.theme-marwee {
     --loader-glow: rgba(255, 90, 31, .35);
     --effect-snow: rgba(255, 121, 0, .34);
     --effect-shadow: rgba(115, 13, 0, .2);
-    --app-font-family: var(--font-family-company1);
+    --app-font-family: var(--font-family-company5);
 }
 
 body.theme-dark {
@@ -129,7 +129,7 @@ body.theme-dark {
     --loader-glow: rgba(255, 90, 31, .35);
     --effect-snow: rgba(246, 244, 242, .54);
     --effect-shadow: rgba(255, 121, 0, .16);
-    --app-font-family: var(--font-family-company1);
+    --app-font-family: var(--font-family-company5);
 }
 
 * {
