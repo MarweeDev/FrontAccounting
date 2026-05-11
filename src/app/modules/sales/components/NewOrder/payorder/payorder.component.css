@@ -199,6 +199,17 @@
     margin-top: 10px;
 }
 
+.payment-panel-head {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 20rem;
+}
+
+.payment-panel-head h3 {
+    margin: 0;
+}
+
 .payment-total {
     background: #fff;
     border: 1px solid var(--color-texto-terciario);
@@ -243,7 +254,7 @@
     margin: 10px 0;
     padding: 10px;
     text-align: left;
-    width: 20rem;
+    width: 100%;
 }
 
 .selected-method-btn span {
@@ -429,12 +440,18 @@
 }
 
 .payment-reference,
-.payment-confirm {
+.payment-confirm,
+.payment-subtype {
     color: rgb(97 109 138);
     display: grid;
     font-size: 11px;
     gap: 6px;
     margin-top: 10px;
+}
+
+.payment-subtype select {
+    margin-top: 0 !important;
+    width: 100% !important;
 }
 
 .cash-helper {
@@ -546,6 +563,61 @@
     margin: 12px 0;
     padding: 10px;
     width: 20rem;
+}
+
+.device-status-compact {
+    align-items: center;
+    background: rgb(239, 243, 246);
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 50%;
+    color: rgb(97 109 138);
+    cursor: help;
+    display: flex;
+    height: 32px;
+    justify-content: center;
+    position: relative;
+    width: 32px;
+}
+
+.device-status-compact.connected {
+    background: rgba(39, 174, 96, .14);
+    border-color: rgba(39, 174, 96, .22);
+    color: rgb(39, 174, 96);
+}
+
+.device-status-tooltip {
+    background: #fff;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.16);
+    display: none;
+    padding: 9px 10px;
+    position: absolute;
+    right: 0;
+    top: 39px;
+    width: 240px;
+    z-index: 20;
+}
+
+.device-status-compact:hover .device-status-tooltip {
+    display: block;
+}
+
+.device-status-tooltip strong,
+.device-status-tooltip small {
+    display: block;
+}
+
+.device-status-tooltip strong {
+    color: var(--color-primary);
+    font-size: 12px;
+}
+
+.device-status-tooltip small {
+    color: rgb(97 109 138);
+    font-size: 11px;
+    line-height: 16px;
+    margin-top: 3px;
 }
 
 .device-status span {

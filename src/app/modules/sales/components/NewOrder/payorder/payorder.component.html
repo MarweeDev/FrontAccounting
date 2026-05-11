@@ -58,14 +58,18 @@
                 </div>
             </div>
             <div class="col col-final" id="col_final">
-                <h3>Medio de pago</h3>
-                <div class="device-status" *ngIf="peripheralStatus">
-                    <span [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'">
+                <div class="payment-panel-head">
+                    <h3>Medio de pago</h3>
+                    <div
+                        class="device-status-compact"
+                        *ngIf="peripheralStatus"
+                        [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+                        [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
                         <i class="fa-solid fa-print"></i>
-                    </span>
-                    <div>
-                        <strong>{{peripheralStatus.label}}</strong>
-                        <small>{{peripheralStatus.detail}}</small>
+                        <div class="device-status-tooltip">
+                            <strong>{{peripheralStatus.label}}</strong>
+                            <small>{{peripheralStatus.detail}}</small>
+                        </div>
                     </div>
                 </div>
                 <div class="payment-total">
@@ -116,18 +120,20 @@
                     </div>
                 </section>
 
-                <select *ngIf="visiblesubtype" id="selectSubType"  class="rd-2">
-                    <option [value]="item.id" *ngFor="let item of ListSubTypePay">{{item.nombre}}</option>
-                </select>
-
                 <div class="payment-context" *ngIf="selectedPaymentMethod">
                     <div class="payment-context-head">
-                        <i [className]="selectedPaymentMethod.icon || 'fa-solid fa-wallet'"></i>
+                        <i class="fa-solid fa-clipboard-check"></i>
                         <div>
-                            <strong>{{selectedPaymentMethod.name}}</strong>
-                            <small>{{selectedPaymentMethod.method_type}}</small>
+                            <strong>Datos para completar</strong>
+                            <small>Solo lo necesario para cerrar este pago</small>
                         </div>
                     </div>
+                    <label class="payment-subtype" *ngIf="visiblesubtype">
+                        Canal del datáfono
+                        <select id="selectSubType" class="rd-2">
+                            <option [value]="item.id" *ngFor="let item of ListSubTypePay">{{item.nombre}}</option>
+                        </select>
+                    </label>
                     <p *ngIf="selectedPaymentMethod.instructions">{{selectedPaymentMethod.instructions}}</p>
                     <div class="payment-account" *ngIf="selectedPaymentMethod.account_label || selectedPaymentMethod.account_value">
                         <small>{{selectedPaymentMethod.account_label || 'Dato de pago'}}</small>

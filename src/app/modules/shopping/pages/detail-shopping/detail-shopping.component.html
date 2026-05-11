@@ -19,11 +19,13 @@
   </div>
 
   <div class="detail-actions" *ngIf="shopping">
-    <div class="device-status" *ngIf="peripheralStatus">
-      <span [class.connected]="peripheralStatus.mode === 'local-agent'">
+    <div
+      class="device-status-compact"
+      *ngIf="peripheralStatus"
+      [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+      [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
         <i class="fa-solid fa-print"></i>
-      </span>
-      <div>
+      <div class="device-status-tooltip">
         <strong>{{peripheralStatus.label}}</strong>
         <small>{{peripheralStatus.detail}}</small>
       </div>

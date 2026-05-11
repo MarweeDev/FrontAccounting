@@ -266,13 +266,18 @@
       </aside>
 
       <section class="peripheral-preview">
-        <div class="device-status" *ngIf="peripheralStatus">
-          <span [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'">
+        <div class="peripheral-preview-head">
+          <h2>Vista de integracion</h2>
+          <div
+            class="device-status-compact"
+            *ngIf="peripheralStatus"
+            [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+            [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
             <i class="fa-solid fa-satellite-dish"></i>
-          </span>
-          <div>
-            <strong>{{peripheralStatus.label}}</strong>
-            <small>{{peripheralStatus.detail}}</small>
+            <div class="device-status-tooltip">
+              <strong>{{peripheralStatus.label}}</strong>
+              <small>{{peripheralStatus.detail}}</small>
+            </div>
           </div>
         </div>
 

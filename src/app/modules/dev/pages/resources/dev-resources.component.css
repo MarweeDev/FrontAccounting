@@ -135,6 +135,19 @@
   padding: 16px;
 }
 
+.peripheral-preview-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.peripheral-preview-head h2 {
+  color: var(--color-primary);
+  font-size: 16px;
+  margin: 0;
+}
+
 .mode-card {
   border: 1px solid var(--color-texto-terciario);
   border-radius: 8px;
@@ -202,6 +215,61 @@
 .device-status small {
   color: rgb(97 109 138);
   font-size: 11px;
+}
+
+.device-status-compact {
+  align-items: center;
+  background: rgb(239, 243, 246);
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 50%;
+  color: rgb(97 109 138);
+  cursor: help;
+  display: flex;
+  height: 34px;
+  justify-content: center;
+  position: relative;
+  width: 34px;
+}
+
+.device-status-compact.connected {
+  background: rgba(39, 174, 96, .14);
+  border-color: rgba(39, 174, 96, .22);
+  color: rgb(39, 174, 96);
+}
+
+.device-status-tooltip {
+  background: #fff;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.16);
+  display: none;
+  padding: 9px 10px;
+  position: absolute;
+  right: 0;
+  top: 41px;
+  width: 250px;
+  z-index: 20;
+}
+
+.device-status-compact:hover .device-status-tooltip {
+  display: block;
+}
+
+.device-status-tooltip strong,
+.device-status-tooltip small {
+  display: block;
+}
+
+.device-status-tooltip strong {
+  color: var(--color-primary);
+  font-size: 12px;
+}
+
+.device-status-tooltip small {
+  color: rgb(97 109 138);
+  font-size: 11px;
+  line-height: 16px;
+  margin-top: 3px;
 }
 
 .flow-preview {
