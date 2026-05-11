@@ -27,7 +27,7 @@
         <p>{{currentSection.description}}</p>
       </aside>
 
-      <div class="theme-panel" *ngIf="activeSection === 'apariencia'; else parameterSettings">
+      <div class="theme-panel" *ngIf="activeSection === 'apariencia'; else settingsContent">
         <div class="appearance-group">
           <h2>Tema visual</h2>
         </div>
@@ -69,6 +69,53 @@
             <i [className]="effect.id === selectedEffect ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
           </span>
         </button>
+      </div>
+
+      <ng-template #settingsContent>
+      <div class="payment-method-panel" *ngIf="activeSection === 'medios_pago'; else parameterSettings">
+        <form class="payment-method-form" (ngSubmit)="savePaymentMethod()">
+          <h2>{{paymentMethodForm.id ? 'Editar medio' : 'Nuevo medio'}}</h2>
+          <label>Nombre<input name="paymentName" [(ngModel)]="paymentMethodForm.name" placeholder="Ej: Bre-B / Llave"></label>
+          <label>Tipo
+            <select name="paymentType" [(ngModel)]="paymentMethodForm.method_type">
+              <option value="cash">Efectivo</option>
+              <option value="terminal">Datáfono / Tarjeta</option>
+              <option value="transfer">Transferencia</option>
+              <option value="qr">QR</option>
+              <option value="breb">Bre-B / Llave</option>
+              <option value="wallet">Billetera</option>
+              <option value="link">PSE / Link</option>
+              <option value="credit">Crédito</option>
+              <option value="mixed">Mixto</option>
+            </select>
+          </label>
+          <label>Icono<input name="paymentIcon" [(ngModel)]="paymentMethodForm.icon" placeholder="fa-solid fa-bolt"></label>
+          <label>Prioridad<input name="paymentPriority" type="number" [(ngModel)]="paymentMethodForm.priority"></label>
+          <label>Etiqueta dato<input name="accountLabel" [(ngModel)]="paymentMethodForm.account_label" placeholder="Llave Bre-B, cuenta, numero"></label>
+          <label>Dato de pago<input name="accountValue" [(ngModel)]="paymentMethodForm.account_value" placeholder="correo@empresa.com, celular, cuenta"></label>
+          <label>QR / enlace<input name="qrValue" [(ngModel)]="paymentMethodForm.qr_value" placeholder="Texto, URL o referencia QR"></label>
+          <label>Instrucciones<input name="instructions" [(ngModel)]="paymentMethodForm.instructions" placeholder="Confirma en la app antes de cerrar"></label>
+          <label>ID tipo pago legacy<input name="legacyType" type="number" [(ngModel)]="paymentMethodForm.id_tipopago_legacy"></label>
+          <label class="check-setting"><input name="requiresRef" type="checkbox" [(ngModel)]="paymentMethodForm.requires_reference"> Requiere referencia</label>
+          <label class="check-setting"><input name="requiresConfirm" type="checkbox" [(ngModel)]="paymentMethodForm.requires_confirmation"> Requiere confirmacion manual</label>
+          <label class="check-setting"><input name="allowsQr" type="checkbox" [(ngModel)]="paymentMethodForm.allows_qr"> Mostrar QR</label>
+          <label class="check-setting"><input name="enabled" type="checkbox" [(ngModel)]="paymentMethodForm.enabled"> Activo en caja</label>
+          <div class="payment-form-actions">
+            <button type="submit" class="btn btn-success rd-4">Guardar</button>
+            <button type="button" class="btn btn-default rd-4" (click)="newPaymentMethod()">Nuevo</button>
+          </div>
+        </form>
+
+        <div class="payment-method-list">
+          <button type="button" class="payment-admin-card" *ngFor="let method of paymentMethods" (click)="editPaymentMethod(method)">
+            <span class="payment-admin-icon"><i [className]="method.icon || 'fa-solid fa-wallet'"></i></span>
+            <span>
+              <strong>{{method.name}}</strong>
+              <small>{{method.method_type}} · {{method.enabled === false ? 'Inactivo' : 'Activo'}}</small>
+            </span>
+            <i [className]="method.enabled === false ? 'fa-regular fa-circle' : 'fa-solid fa-circle-check'"></i>
+          </button>
+        </div>
       </div>
 
       <ng-template #parameterSettings>
@@ -124,6 +171,7 @@
           </tbody>
         </table>
       </div>
+      </ng-template>
       </ng-template>
     </div>
   </div>

@@ -76,6 +76,7 @@
   gap: 12px;
   width: 100%;
   padding-top: 12px;
+  min-width: 0;
 }
 
 .section-summary {
@@ -335,9 +336,117 @@ select {
   font-size: 18px;
 }
 
+.payment-method-panel {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 12px;
+  padding: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.payment-method-form,
+.payment-method-list {
+  background: transparent;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  padding: 14px;
+  min-width: 0;
+}
+
+.payment-method-form {
+  display: grid;
+  gap: 10px;
+}
+
+.payment-method-form h2 {
+  color: var(--color-primary);
+  font-size: 16px;
+  margin: 0;
+}
+
+.payment-method-form label {
+  color: rgb(97 109 138);
+  display: grid;
+  font-size: 11px;
+  gap: 5px;
+}
+
+.check-setting {
+  align-items: center;
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.check-setting input {
+  min-width: auto;
+  width: auto;
+}
+
+.payment-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.payment-method-list {
+  align-content: start;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  overflow-x: hidden;
+  padding: 0;
+  border: 0;
+}
+
+.payment-admin-card {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 42px 1fr auto;
+  padding: 12px;
+  text-align: left;
+  min-width: 0;
+}
+
+.payment-admin-card:hover {
+  background: var(--background-hover);
+}
+
+.payment-admin-icon {
+  align-items: center;
+  background: var(--background-primario);
+  border-radius: 50%;
+  color: var(--color-primary);
+  display: flex;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.payment-admin-card strong,
+.payment-admin-card small {
+  display: block;
+}
+
+.payment-admin-card strong {
+  color: var(--color-adicional-primario);
+  font-size: 12px;
+}
+
+.payment-admin-card small {
+  color: rgb(97 109 138);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
 @media (max-width: 800px) {
   .container-head .banner,
-  .settings-shell {
+  .settings-shell,
+  .payment-method-panel {
     display: flex;
     flex-direction: column;
   }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { PaymentMethodConfigDTO } from 'src/app/core/models/paymentMethod';
+import { PaymentMethodService } from 'src/app/core/services/payment-method/payment-method.service';
 import { SettingParameterDTO } from 'src/app/core/models/settingParameter';
 import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
 import { ThemeName, ThemeOption, ThemeService, VisualEffectName, VisualEffectOption } from 'src/app/core/services/theme/theme.service';
@@ -39,6 +41,8 @@ export class SettingsDashboardComponent implements OnInit {
   selectedTheme: ThemeName = 'marwee';
   visualEffects: VisualEffectOption[] = [];
   selectedEffect: VisualEffectName = 'none';
+  paymentMethods: PaymentMethodConfigDTO[] = [];
+  paymentMethodForm: PaymentMethodConfigDTO = this.getEmptyPaymentMethod();
 
   sections: SettingSection[] = [
     {
@@ -68,6 +72,13 @@ export class SettingsDashboardComponent implements OnInit {
         { group: 'inventario', key: 'stock_minimo', label: 'Stock minimo', description: 'Cantidad desde la que un producto se marca como bajo.', type: 'numero', icon: 'fa-solid fa-arrow-trend-down', placeholder: '5' },
         { group: 'inventario', key: 'permitir_stock_negativo', label: 'Permitir stock negativo', description: 'Define si ventas o ajustes pueden dejar existencias por debajo de cero.', type: 'booleano', icon: 'fa-solid fa-circle-minus' }
       ]
+    },
+    {
+      id: 'medios_pago',
+      title: 'Medios de pago',
+      icon: 'fa-solid fa-wallet',
+      description: 'Catalogo configurable para caja: tarjetas, Bre-B, QR, transferencias y billeteras.',
+      settings: []
     },
     {
       id: 'ventas',
@@ -119,6 +130,7 @@ export class SettingsDashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private app: AppComponent,
     private dataShared: DataSharedServicesService,
+    private paymentMethodService: PaymentMethodService,
     private parameterService: SettingParameterService,
     private themeService: ThemeService,
     private toastService: ToastService
@@ -140,6 +152,7 @@ export class SettingsDashboardComponent implements OnInit {
     });
 
     this.onLoad();
+    this.loadPaymentMethods();
   }
 
   get currentSection(): SettingSection {
@@ -164,6 +177,57 @@ export class SettingsDashboardComponent implements OnInit {
 
   setSection(sectionId: string): void {
     this.activeSection = sectionId;
+    if (sectionId === 'medios_pago') {
+      this.loadPaymentMethods();
+    }
+  }
+
+  loadPaymentMethods(): void {
+    this.paymentMethodService.getMethods().subscribe({
+      next: data => this.paymentMethods = data.result || [],
+      error: error => this.showError(error, 'Error al cargar medios de pago')
+    });
+  }
+
+  editPaymentMethod(method: PaymentMethodConfigDTO): void {
+    this.paymentMethodForm = { ...method };
+  }
+
+  newPaymentMethod(): void {
+    this.paymentMethodForm = this.getEmptyPaymentMethod();
+  }
+
+  savePaymentMethod(): void {
+    if (!this.paymentMethodForm.name || !this.paymentMethodForm.method_type) {
+      this.toastService.showToast({
+        title: 'Datos incompletos',
+        message: 'Nombre y tipo son obligatorios.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
+    this.paymentMethodService.saveMethod(this.paymentMethodForm).subscribe({
+      next: () => {
+        this.toastService.showToast({
+          title: 'Medio guardado',
+          message: 'El medio de pago fue actualizado correctamente.',
+          type: 'success',
+          timeout: 3000
+        });
+        this.newPaymentMethod();
+        this.loadPaymentMethods();
+      },
+      error: error => this.showError(error, 'Error al guardar medio de pago')
+    });
+  }
+
+  togglePaymentMethod(method: PaymentMethodConfigDTO): void {
+    this.paymentMethodService.saveMethod({ ...method, enabled: !method.enabled }).subscribe({
+      next: () => this.loadPaymentMethods(),
+      error: error => this.showError(error, 'Error al cambiar estado del medio')
+    });
   }
 
   setTheme(theme: ThemeName): void {
@@ -286,5 +350,26 @@ export class SettingsDashboardComponent implements OnInit {
       type: 'error',
       timeout: 3000
     });
+  }
+
+  private getEmptyPaymentMethod(): PaymentMethodConfigDTO {
+    return {
+      name: '',
+      method_type: 'transfer',
+      icon: 'fa-solid fa-building-columns',
+      color: '#2c8e84',
+      priority: 50,
+      requires_reference: true,
+      requires_confirmation: true,
+      allows_qr: false,
+      account_label: '',
+      account_value: '',
+      qr_value: '',
+      instructions: '',
+      id_tipopago_legacy: null,
+      id_subtipopago_legacy: 1,
+      auto_print_after_payment: false,
+      enabled: true
+    };
   }
 }

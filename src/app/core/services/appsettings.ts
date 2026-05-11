@@ -29,6 +29,8 @@ export enum ServicesMethod {
     ServicesRole = 'role',
     ServicesPeripheralConfig = 'peripheral/config',
     ServicesPeripheralEvent = 'peripheral/event',
+    ServicesPaymentMethod = 'payment/method',
+    ServicesPaymentTransactionDetail = 'payment/transaction/detail',
 }
 
 export class ApiConfig {
