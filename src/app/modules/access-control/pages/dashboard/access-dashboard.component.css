@@ -51,7 +51,10 @@
 .admin-form h2 { margin: 0; font-size: 16px; letter-spacing: 0; }
 label { display: flex; flex-direction: column; gap: 6px; font-size: 11px; letter-spacing: 1px; }
 input, select, textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--color-texto-terciario); border-radius: 8px; outline: none; resize: vertical; }
-.form-actions { display: flex; gap: 8px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.form-actions .btn i,
+.permission-actions .btn i,
+.audit-filter-actions .btn i { margin-right: 6px; }
 
 .container-table { padding: 0 10px 10px; width: 100%; overflow-x: auto; z-index: 0; }
 table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
@@ -135,6 +138,7 @@ td p { margin: 4px 0 0; color: var(--color-adicional-secundario); font-size: 11p
 
 .audit-filter-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   gap: 8px;
 }

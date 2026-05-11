@@ -293,7 +293,7 @@ body.theme-dark ::placeholder {
     transition: all 0.5s;
   }
   .toast .success-close {
-    background-color: rgba(76, 175, 80, .5);
+    background-color: rgba(48, 195, 32, .5);
   }
   .toast .error-close {
     background-color: rgba(244, 67, 54, .8);
@@ -329,8 +329,8 @@ body.theme-dark ::placeholder {
     margin: 5px 0px 0px 0px;
   }
   
-  .toast.success-toast { border-color: rgba(76, 175, 80, .5); }
-  .success-toast > .content-icon { background-color: rgba(76, 175, 80, .5); }
+  .toast.success-toast { border-color: rgba(48, 195, 32, .5); }
+  .success-toast > .content-icon { background-color: rgba(48, 195, 32, .5); }
   
   .toast.error-toast { border-color: rgba(244, 67, 54, .3); }
   .error-toast > .content-icon { background-color: rgba(244, 67, 54, .8); }
@@ -356,7 +356,7 @@ body.theme-dark ::placeholder {
     width: 100%;
   }
 
-  .success-progress { background-color: rgba(76, 175, 80, .9); }
+  .success-progress { background-color: rgba(48, 195, 32, .9); }
   .error-progress { background-color: rgba(244, 67, 54, .9); }
   .warning-progress { background-color: rgba(255, 152, 0, .9); }
   .info-progress { background-color: rgba(33, 150, 243, .9); }

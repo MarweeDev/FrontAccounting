@@ -113,11 +113,11 @@
                 </span>
               </td>
               <td>
-                <button type="button" class="btn-option" title="Guardar" (click)="save(setting)" [disabled]="isSaving(setting)">
-                  <i class="fa-solid fa-check"></i>
+                <button type="button" class="btn btn-success btn-i rd-4 table-action-btn" title="Guardar" (click)="save(setting)" [disabled]="isSaving(setting)">
+                  <i class="fa-solid fa-check"></i> Guardar
                 </button>
-                <button type="button" class="btn-option" title="Deshabilitar" (click)="disable(setting)" [disabled]="!hasParameter(setting) || isSaving(setting)">
-                  <i class="fa-solid fa-ban"></i>
+                <button type="button" class="btn btn-default rd-4 table-action-btn" title="Deshabilitar" (click)="disable(setting)" [disabled]="!hasParameter(setting) || isSaving(setting)">
+                  <i class="fa-solid fa-ban"></i> Deshabilitar
                 </button>
               </td>
             </tr>

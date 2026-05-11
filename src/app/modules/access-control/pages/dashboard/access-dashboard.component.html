@@ -40,8 +40,8 @@
         </label>
         <label>Finaliza<input name="fechaFinalizacion" type="date" [(ngModel)]="subscriberForm.fecha_finalizacion"></label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
-          <button type="button" class="btn rd-4" (click)="cancelSubscriber()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingSubscriberId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelSubscriber()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
         </div>
       </form>
 
@@ -86,8 +86,8 @@
           </select>
         </label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
-          <button type="button" class="btn rd-4" (click)="cancelUser()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingUserId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelUser()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
         </div>
       </form>
 
@@ -116,8 +116,8 @@
         <label>Rol<input name="rol" [(ngModel)]="roleForm.rol" required></label>
         <label>Descripcion<textarea name="descripcion" rows="4" [(ngModel)]="roleForm.descripcion"></textarea></label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
-          <button type="button" class="btn rd-4" (click)="cancelRole()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingRoleId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelRole()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
         </div>
       </form>
 
@@ -158,8 +158,8 @@
         <label>Posicion<input name="positionModule" type="number" [(ngModel)]="moduleForm.position_module"></label>
         <label>Descripcion<textarea name="descripcionModulo" rows="4" [(ngModel)]="moduleForm.descripcion"></textarea></label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i></button>
-          <button type="button" class="btn rd-4" (click)="cancelModule()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i></button>
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingModuleId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelModule()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
         </div>
       </form>
 
@@ -198,8 +198,8 @@
           <small>{{module.ruta}}</small>
         </label>
         <div class="permission-actions">
-          <button type="button" class="btn btn-success rd-4" (click)="savePermissions()" [disabled]="isSaving || !selectedRoleId">
-            <i class="fa-solid fa-check"></i>
+          <button type="button" class="btn btn-success btn-i rd-4" (click)="savePermissions()" [disabled]="isSaving || !selectedRoleId">
+            <i class="fa-solid fa-check"></i> Guardar permisos
           </button>
         </div>
       </div>
@@ -239,8 +239,8 @@
         <label>Desde<input name="auditDesde" type="date" [(ngModel)]="auditFilters.dateFrom"></label>
         <label>Hasta<input name="auditHasta" type="date" [(ngModel)]="auditFilters.dateTo"></label>
         <div class="audit-filter-actions">
-          <button type="button" class="btn btn-success rd-4" (click)="applyAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-filter"></i></button>
-          <button type="button" class="btn rd-4" (click)="clearAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-eraser"></i></button>
+          <button type="button" class="btn btn-success btn-i rd-4" (click)="applyAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-filter"></i> Filtrar</button>
+          <button type="button" class="btn btn-default rd-4" (click)="clearAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-eraser"></i> Limpiar</button>
         </div>
       </div>
 

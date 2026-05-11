@@ -78,11 +78,11 @@
         </label>
 
         <div class="form-actions">
-          <button type="submit" class="btn btn-success rd-4" [disabled]="isSaving">
-            <i class="fa-solid fa-check"></i>
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving">
+            <i class="fa-solid fa-check"></i> {{editingId ? 'Actualizar' : 'Crear'}}
           </button>
-          <button type="button" class="btn rd-4" (click)="cancelEdit()" [disabled]="isSaving">
-            <i class="fa-solid fa-xmark"></i>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelEdit()" [disabled]="isSaving">
+            <i class="fa-solid fa-xmark"></i> Cancelar
           </button>
         </div>
       </form>
@@ -193,7 +193,7 @@
             <div class="preview-block form-preview" *ngSwitchCase="'form'">
               <label>Nombre comercial <input type="text" value="Marwee Accounts"></label>
               <label>Tipo de operacion <select><option>Venta directa</option></select></label>
-              <button type="button" class="btn btn-success rd-4">Guardar</button>
+              <button type="button" class="btn btn-success btn-i rd-4">Guardar</button>
               <button type="button" class="btn btn-default rd-4">Cancelar</button>
             </div>
 
