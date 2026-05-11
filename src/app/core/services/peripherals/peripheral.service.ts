@@ -44,6 +44,7 @@ export interface PrintJobTotal {
 })
 export class PeripheralService {
   private readonly agentUrlKey = 'peripherals.localAgentUrl';
+  private readonly modeKey = 'peripherals.mode';
   private readonly defaultAgentUrl = 'http://localhost:8765';
 
   private rawHttp: HttpClient;
@@ -60,7 +61,26 @@ export class PeripheralService {
     localStorage.setItem(this.agentUrlKey, url || this.defaultAgentUrl);
   }
 
+  getMode(): PeripheralMode {
+    const mode = localStorage.getItem(this.modeKey) as PeripheralMode | null;
+    return mode || 'local-agent';
+  }
+
+  setMode(mode: PeripheralMode): void {
+    localStorage.setItem(this.modeKey, mode);
+  }
+
   getStatus(): Observable<PeripheralStatus> {
+    if (this.getMode() === 'simulation') {
+      return of({
+        mode: 'simulation',
+        available: true,
+        label: 'Simulador activo',
+        detail: 'Periféricos simulados desde la plataforma, sin consola ni hardware.',
+        capabilities: ['print', 'payment-terminal', 'usb', 'bluetooth']
+      });
+    }
+
     const agentUrl = this.getLocalAgentUrl();
     return this.rawHttp.get<any>(`${agentUrl}/health`).pipe(
       timeout(1200),
@@ -76,6 +96,14 @@ export class PeripheralService {
   }
 
   print(job: PrintJob): Observable<{ mode: PeripheralMode; success: boolean; message: string }> {
+    if (this.getMode() === 'simulation') {
+      return of({
+        mode: 'simulation',
+        success: true,
+        message: `Comprobante ${job.reference || ''} recibido por impresora simulada.`
+      });
+    }
+
     const agentUrl = this.getLocalAgentUrl();
     return this.rawHttp.post<{ message?: string }>(`${agentUrl}/print`, job).pipe(
       timeout(2500),

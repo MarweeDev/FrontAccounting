@@ -6,7 +6,7 @@ import { PeripheralService, PrintJob, PrintJobLine } from './peripheral.service'
   providedIn: 'root'
 })
 export class PrintService {
-  readonly internalDisclaimer = 'Comprobante interno. No es factura fiscal.';
+  readonly internalDisclaimer = 'Comprobante interno. No es factura fiscal ni reemplaza el voucher del datáfono.';
 
   constructor(private peripheralService: PeripheralService) { }
 
@@ -44,7 +44,7 @@ export class PrintService {
 
     return {
       documentType: 'order-receipt',
-      title: 'Comprobante de venta',
+      title: 'Comprobante interno de venta',
       reference: first.codigo || '',
       customerName: first.cliente,
       createdAt: first.fecha,

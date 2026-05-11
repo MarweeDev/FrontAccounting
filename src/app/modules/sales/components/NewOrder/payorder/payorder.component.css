@@ -269,3 +269,155 @@
 .print-disclaimer {
     margin: 12px 0 0 0;
 }
+
+.operation-status {
+    align-items: center;
+    background: rgba(44, 142, 132, .1);
+    border: 1px solid rgba(44, 142, 132, .18);
+    border-radius: 8px;
+    color: var(--color-primary);
+    display: flex;
+    font-size: 11px;
+    gap: 8px;
+    line-height: 16px;
+    margin-top: 10px;
+    padding: 9px 10px;
+    width: 20rem;
+}
+
+.device-actions {
+    margin-bottom: 10px;
+    width: 20rem;
+}
+
+.device-actions button {
+    font-size: 10px;
+    padding: 7px 8px;
+}
+
+.payment-terminal-modal {
+    align-items: center;
+    background: rgba(0,0,0,.55);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1200;
+}
+
+.terminal-shell {
+    background: rgba(255,255,255,.22);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.terminal-device {
+    background: #202a33;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    padding: 18px;
+    width: 320px;
+}
+
+.terminal-top {
+    align-items: center;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.terminal-top span {
+    background: #10161d;
+    border-radius: 999px;
+    height: 8px;
+    width: 46px;
+}
+
+.terminal-top strong {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.terminal-top button {
+    background: transparent;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.terminal-screen {
+    background: #e8f6f2;
+    border-radius: 12px;
+    color: #173b36;
+    display: grid;
+    gap: 8px;
+    min-height: 138px;
+    padding: 18px;
+}
+
+.terminal-screen small {
+    color: #48766f;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.terminal-screen strong {
+    font-size: 30px;
+}
+
+.terminal-screen p {
+    color: #5f7470;
+    font-size: 12px;
+    margin: 0;
+}
+
+.terminal-screen p.ok {
+    color: #219653;
+    font-weight: 700;
+}
+
+.terminal-screen p.fail {
+    color: #d64545;
+    font-weight: 700;
+}
+
+.terminal-reader {
+    align-items: center;
+    border: 1px dashed rgba(255,255,255,.25);
+    border-radius: 12px;
+    color: rgba(255,255,255,.72);
+    display: flex;
+    font-size: 11px;
+    gap: 10px;
+    margin: 12px 0;
+    padding: 12px;
+}
+
+.terminal-actions {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.terminal-actions button {
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 12px;
+}
+
+.terminal-actions .approve {
+    background: #219653;
+    color: #fff;
+}
+
+.terminal-actions .reject {
+    background: #d64545;
+    color: #fff;
+}

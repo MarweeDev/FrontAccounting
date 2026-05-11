@@ -27,6 +27,8 @@ export enum ServicesMethod {
     ServicesDevelopmentPermission = 'development/permission',
     ServicesAccessControl = 'access-control',
     ServicesRole = 'role',
+    ServicesPeripheralConfig = 'peripheral/config',
+    ServicesPeripheralEvent = 'peripheral/event',
 }
 
 export class ApiConfig {

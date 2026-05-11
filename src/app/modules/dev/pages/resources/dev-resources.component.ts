@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { DevelopmentResourceDTO } from 'src/app/core/models/developmentResource';
+import { PeripheralConfigDTO } from 'src/app/core/models/peripheral';
+import { PeripheralConfigService } from 'src/app/core/services/peripherals/peripheral-config.service';
+import { PeripheralMode, PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
 import { DevelopmentResourceService } from 'src/app/core/services/development-resource/development-resource.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
@@ -18,7 +21,10 @@ export class DevResourcesComponent implements OnInit {
   editingId: number | null = null;
   isSaving = false;
   activeType = 'todos';
-  activeView: 'resources' | 'typography' = 'resources';
+  activeView: 'resources' | 'typography' | 'peripherals' = 'resources';
+  peripheralStatus?: PeripheralStatus;
+  peripheralMode: PeripheralMode = 'local-agent';
+  peripheralConfig?: PeripheralConfigDTO | null;
 
   typographyConfig = {
     fontFamily: 'Outfit',
@@ -50,7 +56,8 @@ export class DevResourcesComponent implements OnInit {
 
   viewTabs = [
     { id: 'resources', label: 'Recursos', icon: 'fa-solid fa-folder-tree' },
-    { id: 'typography', label: 'Tipografia', icon: 'fa-solid fa-font' }
+    { id: 'typography', label: 'Tipografia', icon: 'fa-solid fa-font' },
+    { id: 'peripherals', label: 'Perifericos', icon: 'fa-solid fa-print' }
   ];
 
   constructor(
@@ -58,6 +65,8 @@ export class DevResourcesComponent implements OnInit {
     private app: AppComponent,
     private dataShared: DataSharedServicesService,
     private resourceService: DevelopmentResourceService,
+    private peripheralConfigService: PeripheralConfigService,
+    private peripheralService: PeripheralService,
     private toastService: ToastService
   ) { }
 
@@ -72,6 +81,8 @@ export class DevResourcesComponent implements OnInit {
     });
 
     this.onLoad();
+    this.loadPeripheralConfig();
+    this.loadPeripheralStatus();
   }
 
   onLoad(): void {
@@ -93,8 +104,72 @@ export class DevResourcesComponent implements OnInit {
     }
   }
 
-  setView(view: 'resources' | 'typography'): void {
+  setView(view: 'resources' | 'typography' | 'peripherals'): void {
     this.activeView = view;
+    if (view === 'peripherals') {
+      this.loadPeripheralStatus();
+    }
+  }
+
+  loadPeripheralStatus(): void {
+    this.peripheralMode = this.peripheralService.getMode();
+    this.peripheralService.getStatus().subscribe(status => {
+      this.peripheralStatus = status;
+    });
+  }
+
+  loadPeripheralConfig(): void {
+    this.peripheralConfigService.get().subscribe({
+      next: data => {
+        this.peripheralConfig = data.result;
+        if (data.result?.agent_url) {
+          this.peripheralService.setLocalAgentUrl(data.result.agent_url);
+        }
+        if (data.result?.modo && this.peripheralService.getMode() !== 'simulation') {
+          this.peripheralService.setMode(data.result.modo);
+        }
+        this.loadPeripheralStatus();
+      },
+      error: () => {
+        this.peripheralConfig = null;
+      }
+    });
+  }
+
+  setPeripheralMode(mode: PeripheralMode): void {
+    this.peripheralService.setMode(mode);
+    this.loadPeripheralStatus();
+
+    if (mode !== 'simulation') {
+      this.savePeripheralConfig(mode);
+    }
+
+    this.toastService.showToast({
+      title: 'Modo de perifericos',
+      message: mode === 'simulation'
+        ? 'Simulador de desarrollo activo para datáfono e impresion.'
+        : 'La app intentara usar el agente local real.',
+      type: 'success',
+      timeout: 3000
+    });
+  }
+
+  savePeripheralConfig(mode: PeripheralMode = this.peripheralMode): void {
+    const payload: PeripheralConfigDTO = {
+      modo: mode,
+      agent_url: this.peripheralService.getLocalAgentUrl(),
+      printer_name: this.peripheralConfig?.printer_name || 'POS-58',
+      printer_type: this.peripheralConfig?.printer_type || 'thermal',
+      payment_terminal_enabled: true,
+      payment_provider: this.peripheralConfig?.payment_provider || 'pending-provider',
+      auto_print_after_payment: this.peripheralConfig?.auto_print_after_payment || false,
+      print_copies: this.peripheralConfig?.print_copies || 1
+    };
+
+    this.peripheralConfigService.save(payload).subscribe({
+      next: data => this.peripheralConfig = data.result,
+      error: error => this.showError(error, 'Error al guardar configuracion de perifericos')
+    });
   }
 
   setPreviewMode(mode: string): void {

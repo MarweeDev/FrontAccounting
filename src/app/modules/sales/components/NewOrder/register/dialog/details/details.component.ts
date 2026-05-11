@@ -5,6 +5,7 @@ import { RegisterComponent } from '../../register.component';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 import { OrderDTO } from 'src/app/core/models/order';
 import { PrintService } from 'src/app/core/services/peripherals/print.service';
+import { PeripheralLogEntry, PeripheralLogService } from 'src/app/core/services/peripherals/peripheral-log.service';
 
 @Component({
   selector: 'app-details',
@@ -19,12 +20,14 @@ export class DetailsComponent implements OnInit {
   order : any;
   ListOrder: any[] =[];
   modal: boolean = false;
+  peripheralLogs: PeripheralLogEntry[] = [];
 
   constructor(private router:Router, 
     private toastService: ToastService,
     private url: ActivatedRoute, 
     private ApiOrder: OrderService,
     private printService: PrintService,
+    private peripheralLogService: PeripheralLogService,
     private registercomponent: RegisterComponent) {
     //this.getUrl();
   }
@@ -41,6 +44,7 @@ export class DetailsComponent implements OnInit {
     this.ApiOrder.getID(this.order).subscribe(data => {
       this.ListOrder = data.result;
       this.estado = this.ListOrder[0].estado;
+      this.loadPeripheralLogs();
     },error => {
       console.log('Error get: ', error)
     });
@@ -60,12 +64,27 @@ export class DetailsComponent implements OnInit {
     if (!this.ListOrder?.length) return;
 
     this.printService.printOrder(this.ListOrder).subscribe(result => {
+      this.peripheralLogService.add({
+        orderCode: this.order,
+        type: 'print',
+        status: result.success ? 'success' : 'failed',
+        message: result.message,
+        deviceMode: result.mode,
+        payload: result
+      });
+      this.peripheralLogs = this.peripheralLogService.getByOrder(this.order);
       this.toastService.showToast({
         title: result.success ? 'Impresion enviada' : 'Impresion del navegador',
         message: result.message,
         type: result.success ? 'success' : 'warning',
         timeout: 3500
       });
+    });
+  }
+
+  private loadPeripheralLogs(): void {
+    this.peripheralLogService.getByOrder$(this.order).subscribe(logs => {
+      this.peripheralLogs = logs;
     });
   }
 

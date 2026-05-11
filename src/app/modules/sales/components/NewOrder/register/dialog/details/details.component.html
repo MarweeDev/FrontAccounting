@@ -35,6 +35,13 @@
                 </tbody>
             </table>
         </div>
+        <div class="peripheral-log" *ngIf="peripheralLogs.length > 0">
+            <strong>Bitacora perifericos</strong>
+            <div *ngFor="let log of peripheralLogs.slice(0, 5)">
+                <span>{{log.type}} · {{log.status}}</span>
+                <small>{{log.message}}</small>
+            </div>
+        </div>
         <div class="container-btn">
             <div class="col1-btn">
                 <button type="button" class="btn btn-default rd-2" (click)="cancel()">Volver</button>
@@ -54,7 +61,7 @@
                 </button>
             </div>
         </div>
-        <p class="print-disclaimer" *ngIf="ListOrder[0]?.estado == 'Pagada'">Comprobante interno. No es factura fiscal.</p>
+        <p class="print-disclaimer" *ngIf="ListOrder[0]?.estado == 'Pagada'">Comprobante interno. No es factura fiscal ni reemplaza el voucher del datáfono.</p>
     </div>
 </section>
 

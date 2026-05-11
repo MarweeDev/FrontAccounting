@@ -9,7 +9,7 @@
             class="rd-4"
             *ngFor="let tab of viewTabs"
             [class.active-filter]="tab.id === activeView"
-            (click)="setView(tab.id === 'resources' ? 'resources' : 'typography')"
+            (click)="setView(tab.id === 'resources' ? 'resources' : tab.id === 'typography' ? 'typography' : 'peripherals')"
             [title]="tab.label">
             <i [className]="tab.icon"></i>
             <span>{{tab.label}}</span>
@@ -225,6 +225,68 @@
               <p>Accounts necesita una tipografia clara para jornadas largas. El usuario debe poder escanear tablas, entender estados y completar formularios sin sentir ruido visual. Esta muestra ayuda a revisar si el tamano, el peso y la altura de linea mantienen una experiencia comoda en modulos administrativos y operativos.</p>
             </div>
           </ng-container>
+        </div>
+      </section>
+    </div>
+
+    <div class="peripherals-shell" *ngIf="activeView === 'peripherals'">
+      <aside class="peripheral-controls">
+        <h1>Laboratorio de perifericos</h1>
+        <p>Activa el simulador solo para desarrollo. En operacion normal la app debe usar el agente local instalado en el punto de venta.</p>
+
+        <div class="mode-card" [class.active]="peripheralMode === 'simulation'">
+          <div>
+            <strong>Simulador de desarrollo</strong>
+            <small>Modal de datáfono, aprobacion/rechazo y comprobante simulado sin hardware.</small>
+          </div>
+          <button type="button" class="btn btn-success rd-4" (click)="setPeripheralMode('simulation')">
+            Activar demo
+          </button>
+        </div>
+
+        <div class="mode-card" [class.active]="peripheralMode !== 'simulation'">
+          <div>
+            <strong>Agente local real</strong>
+            <small>Usa http://localhost:8765 para impresora POS, datáfono o adaptadores del proveedor.</small>
+          </div>
+          <button type="button" class="btn btn-default rd-4" (click)="setPeripheralMode('local-agent')">
+            Usar agente
+          </button>
+        </div>
+
+        <div class="mode-card" *ngIf="peripheralConfig">
+          <div>
+            <strong>Configuracion en DB</strong>
+            <small>{{peripheralConfig.modo}} · {{peripheralConfig.agent_url || 'sin agente'}} · {{peripheralConfig.printer_name || 'sin impresora'}}</small>
+          </div>
+          <button type="button" class="btn btn-default rd-4" (click)="savePeripheralConfig('local-agent')">
+            Guardar agente
+          </button>
+        </div>
+      </aside>
+
+      <section class="peripheral-preview">
+        <div class="device-status" *ngIf="peripheralStatus">
+          <span [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'">
+            <i class="fa-solid fa-satellite-dish"></i>
+          </span>
+          <div>
+            <strong>{{peripheralStatus.label}}</strong>
+            <small>{{peripheralStatus.detail}}</small>
+          </div>
+        </div>
+
+        <div class="flow-preview">
+          <article>
+            <i class="fa-solid fa-credit-card"></i>
+            <h2>Datáfono</h2>
+            <p>Cuando el usuario elija tarjeta y el simulador este activo, la pantalla de pago abre una modal de transaccion. En produccion esa modal se reemplaza por el estado devuelto por el agente o proveedor.</p>
+          </article>
+          <article>
+            <i class="fa-solid fa-print"></i>
+            <h2>Impresora</h2>
+            <p>El comprobante interno se envia primero al agente local. Si no existe agente, el navegador sigue como fallback para imprimir.</p>
+          </article>
         </div>
       </section>
     </div>

@@ -60,7 +60,7 @@
             <div class="col col-final" id="col_final">
                 <h3>Medio de pago</h3>
                 <div class="device-status" *ngIf="peripheralStatus">
-                    <span [class.connected]="peripheralStatus.mode === 'local-agent'">
+                    <span [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'">
                         <i class="fa-solid fa-print"></i>
                     </span>
                     <div>
@@ -75,6 +75,11 @@
                     <option [value]="item.id" *ngFor="let item of ListSubTypePay">{{item.nombre}}</option>
                 </select>
 
+                <div class="operation-status" *ngIf="operationMessage">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{operationMessage}}</span>
+                </div>
+
                 <div class="action">
                     <div class="btn-order">
                         <div class="row">
@@ -82,13 +87,13 @@
                                 <button type="button" class="btn btn-default rd-2" (click)="viewCancel()">Cancelar</button>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-success rd-2" (click)="viewOk()" *ngIf="!paymentCompleted">Pagar</button>
+                                <button type="button" class="btn btn-success rd-2" (click)="viewOk()" [disabled]="processingPayment" *ngIf="!paymentCompleted">Pagar</button>
                                 <button type="button" class="btn btn-success rd-2" (click)="printReceipt()" [disabled]="printing" *ngIf="paymentCompleted">
                                     Imprimir comprobante
                                 </button>
                             </div>
                         </div>
-                        <p class="print-disclaimer" *ngIf="paymentCompleted">Comprobante interno. No es factura fiscal.</p>
+                        <p class="print-disclaimer" *ngIf="paymentCompleted">Comprobante interno. No es factura fiscal ni reemplaza el voucher del datáfono.</p>
                     </div>
                 </div>
             </div>
@@ -96,4 +101,40 @@
 
     </div>
 
+</section>
+
+<section class="payment-terminal-modal" *ngIf="paymentTerminalModalVisible">
+    <div class="terminal-shell">
+        <div class="terminal-device">
+            <div class="terminal-top">
+                <span></span>
+                <strong>POS inalámbrico</strong>
+                <button type="button" (click)="closeTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="terminal-screen">
+                <small>Venta {{ListOrder[0]?.codigo}}</small>
+                <strong>{{totalProduct}}</strong>
+                <p [class.ok]="simulatedPaymentStatus === 'approved'" [class.fail]="simulatedPaymentStatus === 'rejected' || simulatedPaymentStatus === 'cancelled'">
+                    {{simulatedPaymentMessage}}
+                </p>
+            </div>
+            <div class="terminal-reader">
+                <i class="fa-solid fa-wifi"></i>
+                <span>Acerque, inserte o deslice la tarjeta</span>
+            </div>
+            <div class="terminal-actions">
+                <button type="button" class="approve" (click)="approveTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                <button type="button" class="reject" (click)="rejectTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button type="button" (click)="cancelTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-ban"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>

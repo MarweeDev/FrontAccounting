@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
+import { PeripheralLogEntry, PeripheralLogService, PeripheralLogStatus, PeripheralLogType } from 'src/app/core/services/peripherals/peripheral-log.service';
 import { PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
 import { PrintService } from 'src/app/core/services/peripherals/print.service';
 import { TypepayService } from 'src/app/core/services/typePay/typepay.service';
@@ -26,6 +27,12 @@ export class PayorderComponent implements OnInit {
   paymentCompleted: boolean = false;
   printing: boolean = false;
   peripheralStatus?: PeripheralStatus;
+  paymentTerminalModalVisible = false;
+  simulatedPaymentStatus: 'idle' | 'pending' | 'approved' | 'rejected' | 'cancelled' = 'idle';
+  simulatedPaymentMessage = 'Esperando lectura de tarjeta...';
+  processingPayment = false;
+  operationMessage = '';
+  peripheralLogs: PeripheralLogEntry[] = [];
 
   constructor(
     private toastService: ToastService,
@@ -37,7 +44,8 @@ export class PayorderComponent implements OnInit {
     private ApiOrder: OrderService,
     private ApiTypePay: TypepayService,
     private peripheralService: PeripheralService,
-    private printService: PrintService) 
+    private printService: PrintService,
+    private peripheralLogService: PeripheralLogService) 
   {
     
     this.ApiTypePay.get().subscribe(data => {
@@ -71,6 +79,7 @@ export class PayorderComponent implements OnInit {
       this.ListOrder = data.result;
       this.estado = this.ListOrder[0].estado;
       this.OnTotal();
+      this.refreshPeripheralLogs();
     },error => {
       console.log('Error get: ', error)
     });
@@ -128,29 +137,41 @@ export class PayorderComponent implements OnInit {
   viewOk() {
     let elementType :any = document.getElementById('selectType');
     let elementSubType :any = document.getElementById('selectSubType');
-    let elementBefore :any = document.getElementById('col_final')?.classList;
     let subtype = 1; //1: no definido
 
-    if (elementBefore != undefined) {
+    if (elementSubType?.value != undefined) {
+      subtype = elementSubType?.value;
+    }
+
+    const orderData: OrderDTO = {
+      codigo: this.order,
+      id_tipopago: elementType?.value,
+      id_subtipopago: subtype,
+    };
+
+    if (this.isPaymentTerminalFlow(elementType)) {
+      this.openPaymentTerminal(orderData);
+      return;
+    }
+
+    this.completePayment(orderData);
+  }
+
+  completePayment(orderData: OrderDTO): void {
+    let elementBefore :any = document.getElementById('col_final')?.classList;
+
+    if (elementBefore != undefined && !this.processingPayment) {
+      this.processingPayment = true;
       elementBefore.remove('completed');
       elementBefore.remove('notcompleted');
       elementBefore.add('process');
-
-      if (elementSubType?.value != undefined) {
-        subtype = elementSubType?.value;
-      }
-  
-      const orderData: OrderDTO = {
-        codigo: this.order,
-        id_tipopago: elementType?.value,
-        id_subtipopago: subtype,
-      };
       
       this.ApiOrder.putStatus(orderData).subscribe(() => {
         setTimeout(() => {
           elementBefore.remove('process');
           elementBefore.remove('notcompleted');
           elementBefore.add('completed');
+          this.operationMessage = 'Pago registrado. Preparando comprobante interno...';
         }, 3000);
 
         setTimeout(() => {
@@ -159,15 +180,27 @@ export class PayorderComponent implements OnInit {
           elementBefore.add('completed');
 
           this.paymentCompleted = true;
+          this.operationMessage = 'Pago registrado correctamente.';
+          this.logPeripheral('payment', 'approved', 'Pago registrado en la plataforma despues de respuesta del datáfono.');
 
           this.toastService.showToast({
             title: 'Proceso exitoso',
-            message: 'Pago de la orden se completo. Puedes imprimir el comprobante interno.',
+            message: 'Pago registrado. La impresion se intentara sin bloquear la caja.',
             type: 'success',
             timeout: 5000,
           });
+
+          this.processingPayment = false;
+          this.printReceipt(true);
+
+          setTimeout(() => {
+            elementBefore.remove('completed');
+          }, 1200);
         }, 5000);
       },error => {
+        this.processingPayment = false;
+        this.operationMessage = 'No fue posible registrar el pago.';
+        this.logPeripheral('payment', 'failed', error.error?.message || error.message || 'Error al registrar pago.');
         elementBefore.remove('process');
         elementBefore.remove('completed');
         elementBefore.add('notcompleted');
@@ -196,19 +229,114 @@ export class PayorderComponent implements OnInit {
     });
   }
 
-  printReceipt(): void {
-    if (!this.ListOrder?.length) return;
+  toggleSimulation(): void {
+    const nextMode = this.peripheralStatus?.mode === 'simulation' ? 'local-agent' : 'simulation';
+    this.peripheralService.setMode(nextMode);
+    this.paymentTerminalModalVisible = false;
+    this.simulatedPaymentStatus = nextMode === 'simulation' ? 'pending' : 'idle';
+    this.loadPeripheralStatus();
+  }
+
+  openPaymentTerminal(orderData?: OrderDTO): void {
+    if (this.peripheralStatus?.mode !== 'simulation') {
+      this.completePayment(orderData || this.getOrderDataFromForm());
+      return;
+    }
+
+    this.paymentTerminalModalVisible = true;
+    this.simulatedPaymentStatus = 'pending';
+    this.simulatedPaymentMessage = 'Esperando lectura de tarjeta...';
+  }
+
+  approveTerminal(): void {
+    this.simulatedPaymentStatus = 'approved';
+    this.simulatedPaymentMessage = 'Pago aprobado. Cerrando datáfono...';
+    this.logPeripheral('payment', 'approved', 'Datáfono simulado aprobo la transaccion.');
+    setTimeout(() => {
+      this.paymentTerminalModalVisible = false;
+      this.completePayment(this.getOrderDataFromForm());
+    }, 900);
+  }
+
+  rejectTerminal(): void {
+    this.simulatedPaymentStatus = 'rejected';
+    this.simulatedPaymentMessage = 'Pago rechazado por el datáfono simulado.';
+    this.logPeripheral('payment', 'rejected', 'Datáfono simulado rechazo la transaccion.');
+  }
+
+  cancelTerminal(): void {
+    this.simulatedPaymentStatus = 'cancelled';
+    this.simulatedPaymentMessage = 'Transaccion cancelada en datáfono simulado.';
+    this.logPeripheral('payment', 'cancelled', 'Transaccion cancelada en datáfono simulado.');
+    setTimeout(() => {
+      this.paymentTerminalModalVisible = false;
+      this.operationMessage = 'Transaccion cancelada. La orden sigue pendiente y puedes intentar otro medio de pago.';
+    }, 700);
+  }
+
+  closeTerminal(): void {
+    this.paymentTerminalModalVisible = false;
+  }
+
+  private getOrderDataFromForm(): OrderDTO {
+    let elementType :any = document.getElementById('selectType');
+    let elementSubType :any = document.getElementById('selectSubType');
+    return {
+      codigo: this.order,
+      id_tipopago: elementType?.value,
+      id_subtipopago: elementSubType?.value || 1,
+    };
+  }
+
+  private isPaymentTerminalFlow(elementType: HTMLSelectElement): boolean {
+    const selectedText = elementType?.selectedOptions?.[0]?.text?.toLowerCase() || '';
+    return this.peripheralStatus?.mode === 'simulation'
+      && (selectedText.includes('tarjeta') || selectedText.includes('datafono') || selectedText.includes('datáfono') || selectedText.includes('credito') || selectedText.includes('débito') || selectedText.includes('debito'));
+  }
+
+  printReceipt(returnToRegister: boolean = false): void {
+    if (!this.ListOrder?.length) {
+      if (returnToRegister) this.viewCancel();
+      return;
+    }
 
     this.printing = true;
+    this.operationMessage = this.peripheralStatus?.mode === 'simulation'
+      ? 'Enviando comprobante a impresora simulada...'
+      : 'Enviando comprobante a impresora...';
+
     this.printService.printOrder(this.ListOrder).subscribe(result => {
       this.printing = false;
+      this.operationMessage = result.success
+        ? result.message
+        : 'Agente local no disponible. Se abrio impresion del navegador.';
+      this.logPeripheral('print', result.success ? 'success' : 'failed', result.message, result);
       this.toastService.showToast({
-        title: result.success ? 'Impresion enviada' : 'Impresion del navegador',
+        title: result.mode === 'simulation' ? 'Impresion simulada' : result.success ? 'Impresion enviada' : 'Impresion del navegador',
         message: result.message,
         type: result.success ? 'success' : 'warning',
         timeout: 3500
       });
       this.loadPeripheralStatus();
+      if (returnToRegister) {
+        setTimeout(() => this.viewCancel(), 900);
+      }
     });
+  }
+
+  private logPeripheral(type: PeripheralLogType, status: PeripheralLogStatus, message: string, payload?: any): void {
+    this.peripheralLogService.add({
+      orderCode: this.order,
+      type,
+      status,
+      message,
+      deviceMode: this.peripheralStatus?.mode,
+      payload
+    });
+    this.refreshPeripheralLogs();
+  }
+
+  private refreshPeripheralLogs(): void {
+    this.peripheralLogs = this.peripheralLogService.getByOrder(this.order);
   }
 }
