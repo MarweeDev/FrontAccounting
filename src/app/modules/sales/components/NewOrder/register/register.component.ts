@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit {
   searchTerm : string = '';
   orderCode: any;
   visibleDetails : boolean = false;
+  visibleHistory: boolean = false;
 
   ListOrder: any[] =[];
   FilterListOrder : any[] = [];
@@ -159,6 +160,20 @@ export class RegisterComponent implements OnInit {
 
   getPayOrder(code:any){
     this.router.navigate(['/sales/payments', code]);
+  }
+
+  openHistory(): void {
+    this.visibleHistory = true;
+  }
+
+  closeHistory(): void {
+    this.visibleHistory = false;
+  }
+
+  get recentPaidOrders(): any[] {
+    return (this.ListOrder || [])
+      .filter(item => item.nombre === 'Pagada' || item.nombre === 'Credito')
+      .slice(0, 12);
   }
 
 

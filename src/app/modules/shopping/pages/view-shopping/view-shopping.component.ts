@@ -18,6 +18,7 @@ export class ViewShoppingComponent implements OnInit {
   currentPage = 1;
   itemsPorPagina = 10;
   TotalPag = 0;
+  visibleHistory = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -127,5 +128,17 @@ export class ViewShoppingComponent implements OnInit {
         timeout: 3000
       })
     });
+  }
+
+  openHistory(): void {
+    this.visibleHistory = true;
+  }
+
+  closeHistory(): void {
+    this.visibleHistory = false;
+  }
+
+  get recentShoppings(): ShoppingDTO[] {
+    return (this.ListOrder || []).slice(0, 12);
   }
 }

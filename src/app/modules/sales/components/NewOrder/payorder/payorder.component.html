@@ -107,32 +107,38 @@
     <div class="terminal-shell">
         <div class="terminal-device">
             <div class="terminal-top">
-                <span></span>
-                <strong>POS inalámbrico</strong>
+                <span class="terminal-brand">Marwee POS</span>
+                <strong>Datáfono inalámbrico</strong>
                 <button type="button" (click)="closeTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div class="terminal-screen">
-                <small>Venta {{ListOrder[0]?.codigo}}</small>
+                <div class="terminal-screen-head">
+                    <small>Venta {{ListOrder[0]?.codigo}}</small>
+                    <span>{{simulatedPaymentStatus === 'pending' ? 'En espera' : simulatedPaymentStatus}}</span>
+                </div>
                 <strong>{{totalProduct}}</strong>
                 <p [class.ok]="simulatedPaymentStatus === 'approved'" [class.fail]="simulatedPaymentStatus === 'rejected' || simulatedPaymentStatus === 'cancelled'">
                     {{simulatedPaymentMessage}}
                 </p>
             </div>
             <div class="terminal-reader">
-                <i class="fa-solid fa-wifi"></i>
+                <span class="reader-chip"><i class="fa-solid fa-wifi"></i></span>
                 <span>Acerque, inserte o deslice la tarjeta</span>
             </div>
             <div class="terminal-actions">
                 <button type="button" class="approve" (click)="approveTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
                     <i class="fa-solid fa-check"></i>
+                    <span>Aprobar</span>
                 </button>
                 <button type="button" class="reject" (click)="rejectTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
                     <i class="fa-solid fa-xmark"></i>
+                    <span>Rechazar</span>
                 </button>
                 <button type="button" (click)="cancelTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
                     <i class="fa-solid fa-ban"></i>
+                    <span>Cancelar</span>
                 </button>
             </div>
         </div>

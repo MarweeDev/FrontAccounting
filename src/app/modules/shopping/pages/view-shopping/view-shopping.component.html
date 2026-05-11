@@ -17,6 +17,10 @@
       <div class="banner">
         <p class="count-register">Resultados <strong>{{ListOrder.length}}</strong></p>
         <div class="container-pag">
+          <button type="button" class="rd-4 history-btn" (click)="openHistory()" title="Historial de compras">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Historial</span>
+          </button>
           <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
           <p>{{currentPage}} / {{TotalPag || 0}}</p>
           <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
@@ -72,6 +76,34 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<section class="history-modal" *ngIf="visibleHistory">
+  <div class="history-card">
+    <div class="history-header">
+      <div>
+        <h2>Historial de compras/gastos</h2>
+        <p>Ultimos registros para abrir detalle e imprimir soporte interno.</p>
+      </div>
+      <button type="button" (click)="closeHistory()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="history-list">
+      <button type="button" *ngFor="let item of recentShoppings" (click)="closeHistory(); getDetailsOrder(item.id)">
+        <span>
+          <strong>{{item.codigo}}</strong>
+          <small>{{item.proveedor}} · {{item.fecha_creacion | date:'dd-MM-yyyy HH:mm'}}</small>
+        </span>
+        <span>
+          <strong>{{item.total_compra | currency}}</strong>
+          <small>{{item.items.length}} items</small>
+        </span>
+      </button>
+      <div class="history-empty" *ngIf="recentShoppings.length === 0">
+        <i class="fa-solid fa-receipt"></i>
+        <p>No hay compras recientes.</p>
+      </div>
     </div>
   </div>
 </section>

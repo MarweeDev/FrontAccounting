@@ -41,6 +41,11 @@
                             <option value="9">Anulada</option>
                         </select>
                     </div>
+
+                    <button type="button" class="rd-4 history-btn" (click)="openHistory()" title="Historial de pagos">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Historial</span>
+                    </button>
     
                     <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
                     <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
@@ -131,3 +136,31 @@
 </section>
 
 <app-details [orderCode]="orderCode" *ngIf="visibleDetails"></app-details>
+
+<section class="history-modal" *ngIf="visibleHistory">
+    <div class="history-card">
+        <div class="history-header">
+            <div>
+                <h2>Historial de pagos</h2>
+                <p>Ultimos pagos y creditos para revisar detalle o reimprimir comprobante.</p>
+            </div>
+            <button type="button" (click)="closeHistory()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="history-list">
+            <button type="button" *ngFor="let item of recentPaidOrders" (click)="closeHistory(); getDetailsOrder(item.codigo)">
+                <span>
+                    <strong>{{item.codigo}}</strong>
+                    <small>{{item.cliente}} · {{item.fecha}}</small>
+                </span>
+                <span>
+                    <strong>${{getConverPrice(item.total).toLocaleString()}}</strong>
+                    <small>{{item.nombre}}</small>
+                </span>
+            </button>
+            <div class="history-empty" *ngIf="recentPaidOrders.length === 0">
+                <i class="fa-solid fa-receipt"></i>
+                <p>No hay pagos recientes con el filtro actual.</p>
+            </div>
+        </div>
+    </div>
+</section>
