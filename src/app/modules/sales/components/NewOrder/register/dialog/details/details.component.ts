@@ -4,6 +4,7 @@ import { OrderService } from 'src/app/core/services/order/order.service';
 import { RegisterComponent } from '../../register.component';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 import { OrderDTO } from 'src/app/core/models/order';
+import { PrintService } from 'src/app/core/services/peripherals/print.service';
 
 @Component({
   selector: 'app-details',
@@ -23,6 +24,7 @@ export class DetailsComponent implements OnInit {
     private toastService: ToastService,
     private url: ActivatedRoute, 
     private ApiOrder: OrderService,
+    private printService: PrintService,
     private registercomponent: RegisterComponent) {
     //this.getUrl();
   }
@@ -52,6 +54,19 @@ export class DetailsComponent implements OnInit {
   getConverPrice(e:any){
     var price = Number(e);
     return price;
+  }
+
+  printReceipt(): void {
+    if (!this.ListOrder?.length) return;
+
+    this.printService.printOrder(this.ListOrder).subscribe(result => {
+      this.toastService.showToast({
+        title: result.success ? 'Impresion enviada' : 'Impresion del navegador',
+        message: result.message,
+        type: result.success ? 'success' : 'warning',
+        timeout: 3500
+      });
+    });
   }
 
   getPayOrder(code:any){

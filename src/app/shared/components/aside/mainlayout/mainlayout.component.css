@@ -164,6 +164,44 @@ ul li button:hover > span {
     transform: rotate(0deg);
 }
 
+ul li button .ai-badge {
+    align-items: center;
+    background: rgba(44, 142, 132, .12);
+    border: 1px solid rgba(44, 142, 132, .25);
+    color: var(--color-primary);
+    display: inline-flex;
+    font-size: 9px;
+    font-weight: 700;
+    gap: 4px;
+    letter-spacing: .5px;
+    line-height: 1;
+    padding: 4px 7px;
+    right: 10px;
+    text-transform: uppercase;
+    top: 7px;
+}
+
+ul li button .ai-badge i {
+    color: inherit;
+    font-size: 9px;
+    margin: 0;
+    transform: none;
+}
+
+ul li button:hover > .ai-badge,
+ul li .active > .ai-badge {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+ul li button:hover > .ai-badge i,
+ul li .active > .ai-badge i {
+    color: #fff !important;
+    transform: none !important;
+    animation-name: none !important;
+}
+
 ul li .button-close:hover {
     background: var(--color-danger) !important;
     color: #ffffff !important;

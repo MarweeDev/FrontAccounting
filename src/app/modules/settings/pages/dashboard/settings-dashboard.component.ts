@@ -89,6 +89,29 @@ export class SettingsDashboardComponent implements OnInit {
         { group: 'caja', key: 'requiere_cierre_diario', label: 'Requiere cierre diario', description: 'Activa control de cierre al terminar la jornada.', type: 'booleano', icon: 'fa-solid fa-calendar-check' },
         { group: 'caja', key: 'monto_base', label: 'Monto base', description: 'Valor inicial esperado en caja.', type: 'numero', icon: 'fa-solid fa-money-bill-1', placeholder: '0' }
       ]
+    },
+    {
+      id: 'perifericos',
+      title: 'Perifericos',
+      icon: 'fa-solid fa-print',
+      description: 'Conexion con impresoras, agente local y preparacion para datáfono.',
+      settings: [
+        { group: 'perifericos', key: 'modo_impresion', label: 'Modo de impresion', description: 'Define local-agent, web o simulation segun el punto de venta.', type: 'texto', icon: 'fa-solid fa-plug', placeholder: 'local-agent' },
+        { group: 'perifericos', key: 'url_agente_local', label: 'URL agente local', description: 'Servicio puente para impresoras y futuros datáfonos.', type: 'texto', icon: 'fa-solid fa-network-wired', placeholder: 'http://localhost:8765' },
+        { group: 'perifericos', key: 'impresora_predeterminada', label: 'Impresora predeterminada', description: 'Nombre sugerido para el agente local al imprimir comprobantes internos.', type: 'texto', icon: 'fa-solid fa-print', placeholder: 'POS-58' },
+        { group: 'perifericos', key: 'habilitar_datafono', label: 'Preparar datáfono', description: 'Deja visible la capacidad, sin ejecutar pagos automaticos todavia.', type: 'booleano', icon: 'fa-solid fa-credit-card' }
+      ]
+    },
+    {
+      id: 'ia',
+      title: 'IA',
+      icon: 'fa-solid fa-wand-magic-sparkles',
+      description: 'Vista previa sin consumo API: ideas y reglas locales para el asistente operativo.',
+      settings: [
+        { group: 'ia', key: 'habilitar_demo_local', label: 'Demo local', description: 'Muestra recomendaciones generadas por reglas internas, sin OpenAI.', type: 'booleano', icon: 'fa-solid fa-toggle-on' },
+        { group: 'ia', key: 'estado_integracion', label: 'Estado integracion', description: 'Marca el modulo como no conectado, demo local o listo para backend futuro.', type: 'texto', icon: 'fa-solid fa-circle-nodes', placeholder: 'demo-local' },
+        { group: 'ia', key: 'modelo_futuro', label: 'Modelo futuro', description: 'Referencia visual para una conexion posterior; no se consume en esta fase.', type: 'texto', icon: 'fa-solid fa-microchip', placeholder: 'gpt-5.4-mini' }
+      ]
     }
   ];
 

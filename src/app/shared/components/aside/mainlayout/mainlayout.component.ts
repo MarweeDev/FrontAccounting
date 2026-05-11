@@ -65,6 +65,12 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     }
   }
 
+  isReportsModule(item: any): boolean {
+    const route = `${item?.ruta || ''}`.toLowerCase();
+    const moduleName = `${item?.modulo || ''}`.toLowerCase();
+    return route.includes('reports') || moduleName.includes('reporte');
+  }
+
   // Función para generar un color aleatorio
   getColor(usuario: string): string {
     // Calcular un valor hash único basado en el nombre de usuario

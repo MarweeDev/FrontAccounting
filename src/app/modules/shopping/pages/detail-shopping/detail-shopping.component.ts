@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { ShoppingDTO } from 'src/app/core/models/shopping';
 import { ShoppingService } from 'src/app/core/services/shopping/shopping.service';
+import { PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
+import { PrintService } from 'src/app/core/services/peripherals/print.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
@@ -13,12 +15,16 @@ import { ToastService } from 'src/app/shared/directives/toast.service';
 })
 export class DetailShoppingComponent implements OnInit {
   shopping?: ShoppingDTO;
+  peripheralStatus?: PeripheralStatus;
+  printing = false;
 
   constructor(
     private route: ActivatedRoute,
     private app: AppComponent,
     private dataShared: DataSharedServicesService,
     private shoppingService: ShoppingService,
+    private peripheralService: PeripheralService,
+    private printService: PrintService,
     private toastService: ToastService
   ) { }
 
@@ -30,6 +36,7 @@ export class DetailShoppingComponent implements OnInit {
     ];
     this.dataShared.OnSetNav(this.app.listNav);
     this.dataShared.OnSetBreadcrumb('Compras/Detalle');
+    this.loadPeripheralStatus();
     this.loadShopping();
   }
 
@@ -50,5 +57,27 @@ export class DetailShoppingComponent implements OnInit {
 
   get totalItems(): number {
     return this.shopping?.items?.reduce((sum, item) => sum + Number(item.cantidad || 0), 0) || 0;
+  }
+
+  loadPeripheralStatus(): void {
+    this.peripheralService.getStatus().subscribe(status => {
+      this.peripheralStatus = status;
+    });
+  }
+
+  printSupport(): void {
+    if (!this.shopping) return;
+
+    this.printing = true;
+    this.printService.printShopping(this.shopping).subscribe(result => {
+      this.printing = false;
+      this.toastService.showToast({
+        title: result.success ? 'Impresion enviada' : 'Impresion del navegador',
+        message: result.message,
+        type: result.success ? 'success' : 'warning',
+        timeout: 3500
+      });
+      this.loadPeripheralStatus();
+    });
   }
 }

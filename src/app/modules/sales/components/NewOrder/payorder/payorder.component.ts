@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { OrderDTO } from 'src/app/core/models/order';
 import { OrderService } from 'src/app/core/services/order/order.service';
+import { PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
+import { PrintService } from 'src/app/core/services/peripherals/print.service';
 import { TypepayService } from 'src/app/core/services/typePay/typepay.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
@@ -21,6 +23,9 @@ export class PayorderComponent implements OnInit {
   ListTypePay : any[] = [];
   ListSubTypePay : any[] = [];
   visiblesubtype : boolean = false;
+  paymentCompleted: boolean = false;
+  printing: boolean = false;
+  peripheralStatus?: PeripheralStatus;
 
   constructor(
     private toastService: ToastService,
@@ -30,7 +35,9 @@ export class PayorderComponent implements OnInit {
     private router:Router, 
     private url: ActivatedRoute, 
     private ApiOrder: OrderService,
-    private ApiTypePay: TypepayService) 
+    private ApiTypePay: TypepayService,
+    private peripheralService: PeripheralService,
+    private printService: PrintService) 
   {
     
     this.ApiTypePay.get().subscribe(data => {
@@ -41,7 +48,7 @@ export class PayorderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.loadPeripheralStatus();
   }
 
   ngAfterContentInit():void {
@@ -151,11 +158,11 @@ export class PayorderComponent implements OnInit {
           elementBefore.remove('notcompleted');
           elementBefore.add('completed');
 
-          this.viewCancel();
+          this.paymentCompleted = true;
 
           this.toastService.showToast({
             title: 'Proceso exitoso',
-            message: 'Pago de la orden se completo.',
+            message: 'Pago de la orden se completo. Puedes imprimir el comprobante interno.',
             type: 'success',
             timeout: 5000,
           });
@@ -181,5 +188,27 @@ export class PayorderComponent implements OnInit {
 
   viewCancel(){
     this.router.navigate(['sales/register']);
+  }
+
+  loadPeripheralStatus(): void {
+    this.peripheralService.getStatus().subscribe(status => {
+      this.peripheralStatus = status;
+    });
+  }
+
+  printReceipt(): void {
+    if (!this.ListOrder?.length) return;
+
+    this.printing = true;
+    this.printService.printOrder(this.ListOrder).subscribe(result => {
+      this.printing = false;
+      this.toastService.showToast({
+        title: result.success ? 'Impresion enviada' : 'Impresion del navegador',
+        message: result.message,
+        type: result.success ? 'success' : 'warning',
+        timeout: 3500
+      });
+      this.loadPeripheralStatus();
+    });
   }
 }

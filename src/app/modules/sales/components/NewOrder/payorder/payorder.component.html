@@ -59,6 +59,15 @@
             </div>
             <div class="col col-final" id="col_final">
                 <h3>Medio de pago</h3>
+                <div class="device-status" *ngIf="peripheralStatus">
+                    <span [class.connected]="peripheralStatus.mode === 'local-agent'">
+                        <i class="fa-solid fa-print"></i>
+                    </span>
+                    <div>
+                        <strong>{{peripheralStatus.label}}</strong>
+                        <small>{{peripheralStatus.detail}}</small>
+                    </div>
+                </div>
                 <select (change)="changeType($event)" id="selectType" class="rd-2">
                     <option [value]="item.id" *ngFor="let item of ListTypePay">{{item.nombre}}</option>
                 </select>
@@ -73,9 +82,13 @@
                                 <button type="button" class="btn btn-default rd-2" (click)="viewCancel()">Cancelar</button>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-success rd-2" (click)="viewOk()">Pagar</button>
+                                <button type="button" class="btn btn-success rd-2" (click)="viewOk()" *ngIf="!paymentCompleted">Pagar</button>
+                                <button type="button" class="btn btn-success rd-2" (click)="printReceipt()" [disabled]="printing" *ngIf="paymentCompleted">
+                                    Imprimir comprobante
+                                </button>
                             </div>
                         </div>
+                        <p class="print-disclaimer" *ngIf="paymentCompleted">Comprobante interno. No es factura fiscal.</p>
                     </div>
                 </div>
             </div>

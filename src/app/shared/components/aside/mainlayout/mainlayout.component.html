@@ -12,6 +12,9 @@
                     [class.active]="item.id_modulo === activeButtonId" 
                     (click)="OnRouterModule(item.ruta, item.id_modulo)">
                         <i [className]="item.icono"></i> {{item.modulo}}
+                        <span class="ai-badge" *ngIf="isReportsModule(item)">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> IA
+                        </span>
                     </button>
                 </li>
             </ul>

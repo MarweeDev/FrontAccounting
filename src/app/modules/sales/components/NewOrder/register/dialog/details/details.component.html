@@ -49,8 +49,12 @@
                 <button (click)="getPayOrder(ListOrder[0]?.codigo)" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-success rd-2 btn-pay">
                     Pagar
                 </button>
+                <button (click)="printReceipt()" *ngIf="ListOrder[0]?.estado == 'Pagada'" type="button" class="btn btn-success rd-2 btn-pay">
+                    Imprimir comprobante
+                </button>
             </div>
         </div>
+        <p class="print-disclaimer" *ngIf="ListOrder[0]?.estado == 'Pagada'">Comprobante interno. No es factura fiscal.</p>
     </div>
 </section>
 
@@ -69,4 +73,3 @@
         </div>
     </div>
 </section>
-

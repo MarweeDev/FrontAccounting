@@ -1,1 +1,50 @@
-<p>general works!</p>
+<section class="container-component">
+  <div class="content">
+    <div class="ai-hero">
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> Vista previa sin consumo API</span>
+        <h1>Asistente operativo</h1>
+        <p>IA no conectada. Esta vista usa reglas locales y plantillas para mostrar como se vera el modulo cuando exista backend de IA.</p>
+      </div>
+      <div class="ai-state">
+        <strong>Demo local</strong>
+        <small>Sin OpenAI, sin tokens, sin costos adicionales.</small>
+      </div>
+    </div>
+
+    <div class="metrics-strip">
+      <div>
+        <span>Ordenes</span>
+        <strong>{{orders.length}}</strong>
+      </div>
+      <div>
+        <span>Compras/Gastos</span>
+        <strong>{{shoppings.length}}</strong>
+      </div>
+      <div>
+        <span>Productos en stock</span>
+        <strong>{{stock.length}}</strong>
+      </div>
+    </div>
+
+    <div class="ai-grid" *ngIf="!loading; else loadingTpl">
+      <article class="ai-card" *ngFor="let card of cards">
+        <div class="card-top">
+          <span class="card-icon"><i [className]="card.icon"></i></span>
+          <span class="status-pill">{{card.status}}</span>
+        </div>
+        <h2>{{card.title}}</h2>
+        <strong class="card-value">{{card.value}}</strong>
+        <p>{{card.detail}}</p>
+        <small>{{card.action}}</small>
+      </article>
+    </div>
+
+    <ng-template #loadingTpl>
+      <div class="loading-demo">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Preparando reglas locales...</span>
+      </div>
+    </ng-template>
+  </div>
+</section>
