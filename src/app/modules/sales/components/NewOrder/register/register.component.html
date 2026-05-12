@@ -147,6 +147,10 @@
             <button type="button" (click)="closeHistory()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="history-list">
+            <div class="history-empty" *ngIf="historyLoading">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>Cargando pagos recientes...</p>
+            </div>
             <button type="button" *ngFor="let item of recentPaidOrders" (click)="closeHistory(); getDetailsOrder(item.codigo)">
                 <span>
                     <strong>{{item.codigo}}</strong>
@@ -157,9 +161,9 @@
                     <small>{{item.nombre}}</small>
                 </span>
             </button>
-            <div class="history-empty" *ngIf="recentPaidOrders.length === 0">
+            <div class="history-empty" *ngIf="!historyLoading && recentPaidOrders.length === 0">
                 <i class="fa-solid fa-receipt"></i>
-                <p>No hay pagos recientes con el filtro actual.</p>
+                <p>No hay pagos recientes en el historial.</p>
             </div>
         </div>
     </div>

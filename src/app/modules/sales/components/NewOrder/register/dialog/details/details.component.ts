@@ -6,6 +6,7 @@ import { ToastService } from 'src/app/shared/directives/toast.service';
 import { OrderDTO } from 'src/app/core/models/order';
 import { PrintService } from 'src/app/core/services/peripherals/print.service';
 import { PeripheralLogEntry, PeripheralLogService } from 'src/app/core/services/peripherals/peripheral-log.service';
+import { PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
 
 @Component({
   selector: 'app-details',
@@ -18,9 +19,12 @@ export class DetailsComponent implements OnInit {
   
   estado : any;
   order : any;
+  private loadedOrderCode?: any;
   ListOrder: any[] =[];
   modal: boolean = false;
+  visiblePeripheralLogModal = false;
   peripheralLogs: PeripheralLogEntry[] = [];
+  peripheralStatus?: PeripheralStatus;
 
   constructor(private router:Router, 
     private toastService: ToastService,
@@ -28,6 +32,7 @@ export class DetailsComponent implements OnInit {
     private ApiOrder: OrderService,
     private printService: PrintService,
     private peripheralLogService: PeripheralLogService,
+    private peripheralService: PeripheralService,
     private registercomponent: RegisterComponent) {
     //this.getUrl();
   }
@@ -38,14 +43,26 @@ export class DetailsComponent implements OnInit {
 
   ngOnChanges() : void {
     this.order = this.orderCode;
+    if (this.order) {
+      this.loadOrderDetail();
+    }
   }
 
   ngAfterContentInit():void {
+    this.loadOrderDetail();
+  }
+
+  private loadOrderDetail(): void {
+    if (!this.order || this.loadedOrderCode === this.order) return;
+    this.loadedOrderCode = this.order;
+
     this.ApiOrder.getID(this.order).subscribe(data => {
       this.ListOrder = data.result;
       this.estado = this.ListOrder[0].estado;
       this.loadPeripheralLogs();
+      this.loadPeripheralStatus();
     },error => {
+      this.loadedOrderCode = undefined;
       console.log('Error get: ', error)
     });
   }
@@ -79,6 +96,20 @@ export class DetailsComponent implements OnInit {
         type: result.success ? 'success' : 'warning',
         timeout: 3500
       });
+    });
+  }
+
+  openPeripheralLogModal(): void {
+    this.visiblePeripheralLogModal = true;
+  }
+
+  closePeripheralLogModal(): void {
+    this.visiblePeripheralLogModal = false;
+  }
+
+  private loadPeripheralStatus(): void {
+    this.peripheralService.getStatus().subscribe(status => {
+      this.peripheralStatus = status;
     });
   }
 

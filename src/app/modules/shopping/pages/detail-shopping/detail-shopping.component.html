@@ -30,6 +30,9 @@
         <small>{{peripheralStatus.detail}}</small>
       </div>
     </div>
+    <button type="button" class="btn btn-default rd-2" (click)="openPeripheralLogModal()" *ngIf="peripheralLogs.length > 0">
+      Bitacora perifericos
+    </button>
     <button type="button" class="btn btn-success rd-2" (click)="printSupport()" [disabled]="printing">
       Imprimir soporte interno
     </button>
@@ -55,5 +58,24 @@
       </tbody>
     </table>
     <p class="print-disclaimer">Comprobante interno. No es factura fiscal.</p>
+  </div>
+</section>
+
+<section class="peripheral-log-modal" *ngIf="visiblePeripheralLogModal">
+  <div class="peripheral-log-card">
+    <div class="peripheral-log-header">
+      <div>
+        <h2>Bitacora perifericos</h2>
+        <p>Eventos asociados a impresion y periféricos de esta compra/gasto.</p>
+      </div>
+      <button type="button" (click)="closePeripheralLogModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="peripheral-log-list">
+      <div *ngFor="let log of peripheralLogs">
+        <span>{{log.type}} · {{log.status}}</span>
+        <small>{{log.message}}</small>
+        <small>{{log.deviceMode || 'sin modo'}} · {{log.createdAt | date:'short'}}</small>
+      </div>
+    </div>
   </div>
 </section>

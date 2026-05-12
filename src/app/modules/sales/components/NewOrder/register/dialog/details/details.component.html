@@ -35,7 +35,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="peripheral-log" *ngIf="peripheralLogs.length > 0">
+        <div class="peripheral-log" *ngIf="false">
             <strong>Bitacora perifericos</strong>
             <div *ngFor="let log of peripheralLogs.slice(0, 5)">
                 <span>{{log.type}} · {{log.status}}</span>
@@ -47,6 +47,20 @@
                 <button type="button" class="btn btn-default rd-2" (click)="cancel()">Volver</button>
             </div>
             <div class="col2-btn">
+                <div
+                    class="device-status-compact"
+                    *ngIf="peripheralStatus && ListOrder[0]?.estado == 'Pagada'"
+                    [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+                    [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
+                    <i class="fa-solid fa-print"></i>
+                    <div class="device-status-tooltip">
+                        <strong>{{peripheralStatus.label}}</strong>
+                        <small>{{peripheralStatus.detail}}</small>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-default rd-2 btn-pay" (click)="openPeripheralLogModal()" *ngIf="peripheralLogs.length > 0">
+                    Bitacora perifericos
+                </button>
                 <button (click)="getNullOrder()" *ngIf="ListOrder[0]?.estado == 'Pendiente' || ListOrder[0]?.estado == 'Credito'" type="button" class="btn btn-default rd-2 btn-pay">
                     Anular
                 </button>
@@ -62,6 +76,25 @@
             </div>
         </div>
         <p class="print-disclaimer" *ngIf="ListOrder[0]?.estado == 'Pagada'">Comprobante interno. No es factura fiscal ni reemplaza el voucher del datáfono.</p>
+    </div>
+</section>
+
+<section class="peripheral-log-modal" *ngIf="visiblePeripheralLogModal">
+    <div class="peripheral-log-card">
+        <div class="peripheral-log-header">
+            <div>
+                <h2>Bitacora perifericos</h2>
+                <p>Eventos asociados a pago, datáfono e impresion de esta orden.</p>
+            </div>
+            <button type="button" (click)="closePeripheralLogModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="peripheral-log-list">
+            <div *ngFor="let log of peripheralLogs">
+                <span>{{log.type}} · {{log.status}}</span>
+                <small>{{log.message}}</small>
+                <small>{{log.deviceMode || 'sin modo'}} · {{log.createdAt | date:'short'}}</small>
+            </div>
+        </div>
     </div>
 </section>
 

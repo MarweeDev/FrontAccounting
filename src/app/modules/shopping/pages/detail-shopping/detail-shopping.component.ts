@@ -5,6 +5,7 @@ import { ShoppingDTO } from 'src/app/core/models/shopping';
 import { ShoppingService } from 'src/app/core/services/shopping/shopping.service';
 import { PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
 import { PrintService } from 'src/app/core/services/peripherals/print.service';
+import { PeripheralLogEntry, PeripheralLogService } from 'src/app/core/services/peripherals/peripheral-log.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
@@ -16,6 +17,8 @@ import { ToastService } from 'src/app/shared/directives/toast.service';
 export class DetailShoppingComponent implements OnInit {
   shopping?: ShoppingDTO;
   peripheralStatus?: PeripheralStatus;
+  peripheralLogs: PeripheralLogEntry[] = [];
+  visiblePeripheralLogModal = false;
   printing = false;
 
   constructor(
@@ -25,6 +28,7 @@ export class DetailShoppingComponent implements OnInit {
     private shoppingService: ShoppingService,
     private peripheralService: PeripheralService,
     private printService: PrintService,
+    private peripheralLogService: PeripheralLogService,
     private toastService: ToastService
   ) { }
 
@@ -45,7 +49,10 @@ export class DetailShoppingComponent implements OnInit {
     if (!id) return;
 
     this.shoppingService.getID(id).subscribe({
-      next: data => this.shopping = data.result,
+      next: data => {
+        this.shopping = data.result;
+        this.loadPeripheralLogs();
+      },
       error: error => this.toastService.showToast({
         title: 'Error ' + error.status,
         message: error.error?.message || error.message,
@@ -71,6 +78,15 @@ export class DetailShoppingComponent implements OnInit {
     this.printing = true;
     this.printService.printShopping(this.shopping).subscribe(result => {
       this.printing = false;
+      this.peripheralLogService.add({
+        orderCode: this.shopping?.codigo,
+        type: 'print',
+        status: result.success ? 'success' : 'failed',
+        message: result.message,
+        deviceMode: result.mode,
+        payload: result
+      });
+      this.loadPeripheralLogs();
       this.toastService.showToast({
         title: result.success ? 'Impresion enviada' : 'Impresion del navegador',
         message: result.message,
@@ -78,6 +94,21 @@ export class DetailShoppingComponent implements OnInit {
         timeout: 3500
       });
       this.loadPeripheralStatus();
+    });
+  }
+
+  openPeripheralLogModal(): void {
+    this.visiblePeripheralLogModal = true;
+  }
+
+  closePeripheralLogModal(): void {
+    this.visiblePeripheralLogModal = false;
+  }
+
+  private loadPeripheralLogs(): void {
+    if (!this.shopping?.codigo) return;
+    this.peripheralLogService.getByOrder$(this.shopping.codigo).subscribe(logs => {
+      this.peripheralLogs = logs;
     });
   }
 }

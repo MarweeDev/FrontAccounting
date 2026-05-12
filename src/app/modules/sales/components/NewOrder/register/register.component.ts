@@ -16,8 +16,10 @@ export class RegisterComponent implements OnInit {
   orderCode: any;
   visibleDetails : boolean = false;
   visibleHistory: boolean = false;
+  historyLoading: boolean = false;
 
   ListOrder: any[] =[];
+  HistoryListOrder: any[] = [];
   FilterListOrder : any[] = [];
   FilterListOrderSearch : any[] = [];
   currentPage: number = 1;
@@ -164,6 +166,7 @@ export class RegisterComponent implements OnInit {
 
   openHistory(): void {
     this.visibleHistory = true;
+    this.loadSalesHistory();
   }
 
   closeHistory(): void {
@@ -171,9 +174,27 @@ export class RegisterComponent implements OnInit {
   }
 
   get recentPaidOrders(): any[] {
-    return (this.ListOrder || [])
+    return (this.HistoryListOrder || [])
       .filter(item => item.nombre === 'Pagada' || item.nombre === 'Credito')
       .slice(0, 12);
+  }
+
+  loadSalesHistory(): void {
+    const startDate = this.yearRange || this.monthRange || this.todayStr || this.formatDate(new Date());
+    const orderData: OrderDTO = {
+      id_estadoorden: 0,
+      fecha_creacion: startDate as any
+    };
+
+    this.historyLoading = true;
+    this.ApiOrder.getFind(orderData).subscribe(data => {
+      this.HistoryListOrder = data.result || [];
+      this.historyLoading = false;
+    }, error => {
+      this.HistoryListOrder = [];
+      this.historyLoading = false;
+      console.log('Error get history: ', error);
+    });
   }
 
 
