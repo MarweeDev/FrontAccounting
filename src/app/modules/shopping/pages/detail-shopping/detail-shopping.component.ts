@@ -19,6 +19,7 @@ export class DetailShoppingComponent implements OnInit {
   peripheralStatus?: PeripheralStatus;
   peripheralLogs: PeripheralLogEntry[] = [];
   visiblePeripheralLogModal = false;
+  peripheralEnabled = false;
   printing = false;
 
   constructor(
@@ -67,6 +68,12 @@ export class DetailShoppingComponent implements OnInit {
   }
 
   loadPeripheralStatus(): void {
+    this.peripheralEnabled = this.peripheralService.isEnabled();
+    if (!this.peripheralEnabled) {
+      this.peripheralStatus = undefined;
+      return;
+    }
+
     this.peripheralService.getStatus().subscribe(status => {
       this.peripheralStatus = status;
     });

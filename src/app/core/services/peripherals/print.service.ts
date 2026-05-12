@@ -14,7 +14,7 @@ export class PrintService {
     const job = this.buildOrderJob(orderRows);
     return this.peripheralService.print(job).pipe(
       tap(result => {
-        if (!result.success) {
+        if (!result.success && result.mode !== 'disabled') {
           this.printInBrowser(job);
         }
       })
@@ -25,7 +25,7 @@ export class PrintService {
     const job = this.buildShoppingJob(shopping);
     return this.peripheralService.print(job).pipe(
       tap(result => {
-        if (!result.success) {
+        if (!result.success && result.mode !== 'disabled') {
           this.printInBrowser(job);
         }
       })

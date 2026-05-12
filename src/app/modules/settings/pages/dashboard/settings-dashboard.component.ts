@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { PaymentMethodConfigDTO } from 'src/app/core/models/paymentMethod';
 import { PaymentMethodService } from 'src/app/core/services/payment-method/payment-method.service';
+import { PeripheralService } from 'src/app/core/services/peripherals/peripheral.service';
 import { SettingParameterDTO } from 'src/app/core/models/settingParameter';
 import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
 import { ThemeName, ThemeOption, ThemeService, VisualEffectName, VisualEffectOption } from 'src/app/core/services/theme/theme.service';
@@ -107,6 +108,7 @@ export class SettingsDashboardComponent implements OnInit {
       icon: 'fa-solid fa-print',
       description: 'Conexion con impresoras, agente local y preparacion para datáfono.',
       settings: [
+        { group: 'perifericos', key: 'habilitar_perifericos', label: 'Activar perifericos', description: 'Muestra y habilita impresora, datáfono, agente local y bitácoras de periféricos.', type: 'booleano', icon: 'fa-solid fa-toggle-on' },
         { group: 'perifericos', key: 'modo_impresion', label: 'Modo de impresion', description: 'Define local-agent, web o simulation segun el punto de venta.', type: 'texto', icon: 'fa-solid fa-plug', placeholder: 'local-agent' },
         { group: 'perifericos', key: 'url_agente_local', label: 'URL agente local', description: 'Servicio puente para impresoras y futuros datáfonos.', type: 'texto', icon: 'fa-solid fa-network-wired', placeholder: 'http://localhost:8765' },
         { group: 'perifericos', key: 'impresora_predeterminada', label: 'Impresora predeterminada', description: 'Nombre sugerido para el agente local al imprimir comprobantes internos.', type: 'texto', icon: 'fa-solid fa-print', placeholder: 'POS-58' },
@@ -131,6 +133,7 @@ export class SettingsDashboardComponent implements OnInit {
     private app: AppComponent,
     private dataShared: DataSharedServicesService,
     private paymentMethodService: PaymentMethodService,
+    private peripheralService: PeripheralService,
     private parameterService: SettingParameterService,
     private themeService: ThemeService,
     private toastService: ToastService
@@ -170,6 +173,7 @@ export class SettingsDashboardComponent implements OnInit {
       next: data => {
         this.ListParameter = data.result || [];
         this.hydrateValues();
+        this.syncPeripheralFeatureFlag();
       },
       error: error => this.showError(error, 'Error al cargar ajustes')
     });
@@ -286,6 +290,7 @@ export class SettingsDashboardComponent implements OnInit {
           timeout: 3000
         });
         this.onLoad();
+        this.syncLocalFeatureFlags(setting, payload.valor || '');
         this.savingKey = null;
       },
       error: error => {
@@ -304,6 +309,7 @@ export class SettingsDashboardComponent implements OnInit {
     this.parameterService.delete(existing.id).subscribe({
       next: () => {
         this.values[settingId] = '';
+        this.syncLocalFeatureFlags(setting, '');
         this.toastService.showToast({
           title: 'Ajuste deshabilitado',
           message: 'El valor queda inactivo y no se elimina de la base de datos.',
@@ -333,6 +339,16 @@ export class SettingsDashboardComponent implements OnInit {
       const parameter = this.findParameter(setting);
       this.values[this.getSettingId(setting)] = parameter?.valor || '';
     });
+  }
+
+  private syncPeripheralFeatureFlag(): void {
+    this.peripheralService.setEnabled(this.values['perifericos.habilitar_perifericos'] === 'true');
+  }
+
+  private syncLocalFeatureFlags(setting: SettingDefinition, value: string): void {
+    if (setting.group === 'perifericos' && setting.key === 'habilitar_perifericos') {
+      this.peripheralService.setEnabled(value === 'true');
+    }
   }
 
   private findParameter(setting: SettingDefinition): SettingParameterDTO | undefined {

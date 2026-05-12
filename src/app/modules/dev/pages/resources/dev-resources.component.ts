@@ -155,8 +155,9 @@ export class DevResourcesComponent implements OnInit {
   }
 
   savePeripheralConfig(mode: PeripheralMode = this.peripheralMode): void {
+    const configMode = mode === 'disabled' ? 'local-agent' : mode;
     const payload: PeripheralConfigDTO = {
-      modo: mode,
+      modo: configMode,
       agent_url: this.peripheralService.getLocalAgentUrl(),
       printer_name: this.peripheralConfig?.printer_name || 'POS-58',
       printer_type: this.peripheralConfig?.printer_type || 'thermal',

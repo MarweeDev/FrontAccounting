@@ -2,7 +2,7 @@ import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, timeout } from 'rxjs';
 
-export type PeripheralMode = 'local-agent' | 'web' | 'simulation';
+export type PeripheralMode = 'disabled' | 'local-agent' | 'web' | 'simulation';
 export type DeviceCapability = 'print' | 'payment-terminal' | 'serial' | 'usb' | 'bluetooth';
 
 export interface PeripheralStatus {
@@ -45,6 +45,7 @@ export interface PrintJobTotal {
 export class PeripheralService {
   private readonly agentUrlKey = 'peripherals.localAgentUrl';
   private readonly modeKey = 'peripherals.mode';
+  private readonly enabledKey = 'peripherals.enabled';
   private readonly defaultAgentUrl = 'http://localhost:8765';
 
   private rawHttp: HttpClient;
@@ -70,7 +71,25 @@ export class PeripheralService {
     localStorage.setItem(this.modeKey, mode);
   }
 
+  isEnabled(): boolean {
+    return localStorage.getItem(this.enabledKey) === 'true';
+  }
+
+  setEnabled(enabled: boolean): void {
+    localStorage.setItem(this.enabledKey, enabled ? 'true' : 'false');
+  }
+
   getStatus(): Observable<PeripheralStatus> {
+    if (!this.isEnabled()) {
+      return of({
+        mode: 'disabled',
+        available: false,
+        label: 'Periféricos inactivos',
+        detail: 'La integración con impresora, datáfono y agente local está desactivada en ajustes.',
+        capabilities: []
+      });
+    }
+
     if (this.getMode() === 'simulation') {
       return of({
         mode: 'simulation',
@@ -96,6 +115,14 @@ export class PeripheralService {
   }
 
   print(job: PrintJob): Observable<{ mode: PeripheralMode; success: boolean; message: string }> {
+    if (!this.isEnabled()) {
+      return of({
+        mode: 'disabled',
+        success: false,
+        message: 'Periféricos desactivados en ajustes.'
+      });
+    }
+
     if (this.getMode() === 'simulation') {
       return of({
         mode: 'simulation',

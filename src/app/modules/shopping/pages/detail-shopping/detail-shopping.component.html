@@ -21,7 +21,7 @@
   <div class="detail-actions" *ngIf="shopping">
     <div
       class="device-status-compact"
-      *ngIf="peripheralStatus"
+      *ngIf="peripheralEnabled && peripheralStatus"
       [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
       [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
         <i class="fa-solid fa-print"></i>
@@ -30,10 +30,10 @@
         <small>{{peripheralStatus.detail}}</small>
       </div>
     </div>
-    <button type="button" class="btn btn-default rd-2" (click)="openPeripheralLogModal()" *ngIf="peripheralLogs.length > 0">
+    <button type="button" class="btn btn-default rd-2" (click)="openPeripheralLogModal()" *ngIf="peripheralEnabled && peripheralLogs.length > 0">
       Bitacora perifericos
     </button>
-    <button type="button" class="btn btn-success rd-2" (click)="printSupport()" [disabled]="printing">
+    <button type="button" class="btn btn-success rd-2" (click)="printSupport()" [disabled]="printing" *ngIf="peripheralEnabled">
       Imprimir soporte interno
     </button>
   </div>
@@ -57,11 +57,11 @@
         </tr>
       </tbody>
     </table>
-    <p class="print-disclaimer">Comprobante interno. No es factura fiscal.</p>
+    <p class="print-disclaimer" *ngIf="peripheralEnabled">Comprobante interno. No es factura fiscal.</p>
   </div>
 </section>
 
-<section class="peripheral-log-modal" *ngIf="visiblePeripheralLogModal">
+<section class="peripheral-log-modal" *ngIf="peripheralEnabled && visiblePeripheralLogModal">
   <div class="peripheral-log-card">
     <div class="peripheral-log-header">
       <div>

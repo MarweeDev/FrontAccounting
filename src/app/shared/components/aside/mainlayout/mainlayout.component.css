@@ -1,262 +1,312 @@
-.container {
+.shell {
     position: relative;
     width: max-content;
-
-    transition: all 0.5s;
 }
 
-.parent {
-    display: grid; 
-    grid-template-columns: 1.8fr; 
-    grid-template-rows: auto 1.5fr auto; 
-    gap: 0px 0px; 
-    grid-template-areas: 
-        "header"
-        "menu"
-        "footer";
-
+.command-center {
+    background: rgba(255, 255, 255, .96);
+    border: 1px solid rgba(211, 218, 224, .95);
+    border-radius: 14px;
+    bottom: .6rem;
+    box-shadow: 0 24px 60px rgba(15, 25, 35, .24);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 12px;
+    left: .6rem;
+    overflow: hidden;
+    padding: 12px;
     position: fixed;
-    top: 0.6rem;
-    bottom: 0.6rem;
-    left: 0.6rem;
-
+    top: .6rem;
+    transition: width .25s ease, padding .25s ease;
+    width: 292px;
     z-index: 3 !important;
-    transition: all 0.5s;
+}
 
-    background-color: rgba(255,255,255,1);
-    border-right: 1px solid var(--color-texto-terciario);
-    border-radius: 10px;
-    box-shadow: 2px 2px 9px rgba(0,0,0,.2);
+.brand-zone,
+.operator-card,
+.signal-strip,
+.module-button,
+.footer-zone {
+    transition: all .25s ease;
 }
-    
-.header { 
-    grid-area: header; 
-    display: flex; 
-    padding: 20px 10px 15px 10px;
-    border-bottom: 1px solid var(--color-texto-terciario);
-    margin: 0px 15px;
-}
-.menu { grid-area: menu; }
-.footer { grid-area: footer; }
 
-.header .circle {
-    padding: 9px;
-    text-align: center;
-    width: 35px;
-    height: 35px;
-    font-size: 13px;
-    font-weight: bold;
-    border-radius: 20px;
-    color: rgb(255, 255, 255);
-    position: relative;
-    box-sizing: border-box;
+.brand-zone {
+    align-items: center;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 44px 1fr;
+    min-width: 0;
 }
-.header .circle span {
-    color: rgb(255, 255, 255);
+
+.brand-mark {
+    align-items: center;
+    background: var(--background-primario);
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 12px;
+    display: flex;
+    height: 44px;
+    justify-content: center;
+    overflow: hidden;
+    width: 44px;
 }
-.header .circle-name {
-    padding: 4px 1px 1px 10px;
-    margin: 0px;
+
+.brand-mark img {
+    max-height: 34px;
+    max-width: 34px;
+    object-fit: contain;
+}
+
+.brand-mark span {
+    color: var(--color-primary);
     font-size: 12px;
-    /* text-transform: uppercase; */
-    letter-spacing: 2px;
-    box-sizing: border-box;
+    font-weight: 900;
+}
+
+.brand-copy small,
+.brand-copy strong,
+.operator-copy small,
+.operator-copy strong,
+.operator-copy span,
+.module-copy strong,
+.module-copy small {
+    display: block;
+}
+
+.brand-copy small,
+.operator-copy small,
+.module-copy small {
+    color: rgb(97 109 138);
+    font-size: 10px;
+    letter-spacing: .6px;
+}
+
+.brand-copy strong {
+    color: var(--color-adicional-primario);
+    font-size: 13px;
+}
+
+.operator-card {
+    align-items: center;
+    background: linear-gradient(135deg, rgba(44, 142, 132, .12), rgba(255, 255, 255, .95));
+    border: 1px solid rgba(44, 142, 132, .18);
+    border-radius: 12px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 38px 1fr;
+    padding: 10px;
+}
+
+.operator-avatar {
+    align-items: center;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    font-size: 12px;
+    font-weight: 900;
+    height: 38px;
+    justify-content: center;
+    width: 38px;
+}
+
+.operator-copy {
+    min-width: 0;
+}
+
+.operator-copy strong {
+    color: var(--color-adicional-primario);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.operator-copy span {
+    color: var(--color-primary);
+    font-size: 10px;
+    margin-top: 2px;
     text-transform: capitalize;
 }
-.header .circle-name small {
-    font-size: 10px;
-}
-.header img {
-    width: 70px;
-    margin: auto;
+
+.signal-strip {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr 1fr;
 }
 
-ul {
-    margin: 0px;
-    padding: 5px 0px 0px 0px;
-}
-ul li {
-    margin: 5px 15px;
-    padding: 0px;
-    list-style: none;
-}
-ul li:first-child {
-    margin-top: 15px;
-}
-ul li:last-child {
-    margin-bottom: 15px;
-}
-ul li button {
-    margin: 0px;
-    padding: 10px 5rem 10px 20px !important;
-    display: flex;
-    width: 100%;
-
-    background: transparent;
-    border-color: transparent;
-    border-style: solid !important;
-    border-width: 1px !important;
-    border-radius: 10px !important;
-    font-weight: 400;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    position: relative;
-    transition: all .6s;
-}
-ul li button:hover {
-    background-color: var(--background-hover);
-    /*background: linear-gradient(100deg, var(--color-info-dark) 0%, 
-    var(--color-info-dark) 50%, var(--color-info-dark) 100%);*/
-    /*color: #ffffff !important;*/
-    border-color: #e9e9e9 !important;
-    transition: all .5s;
-}
-ul li button i {
-    margin-right: 10px;
-    margin-top: -2px;
-    transition: all .5s;
-    font-size: initial;
-}
-ul li button:hover > i {
-    color: rgba(255,255,255,1);
-    transform: rotate(18deg) scale(1.5,1.5);
-    transition: all .5s;
-    animation-name: rotateIcon;
-    animation-duration: 1s;
-}
-@keyframes rotateIcon {
-    0%   {transform: rotate(0deg) scale(1,1);}
-    100% {transform: rotate(18deg) scale(1.5,1.5);}
-  }
-
-/*Active*/
-ul li .active {
-    background-color: var(--background-hover);
-    border-color: #e9e9e9 !important;
-    transition: all .5s !important;
-}
-ul li .active > i {
-    color: rgba(255,255,255,1) !important;
-    transform: rotate(18deg) scale(1.5,1.5) !important;
-    transition: all .5s !important;
-    animation-name: rotateIcon !important;
-    animation-duration: 1s !important;
-}
-/*Active end*/
-
-
-ul li button span {
-    position: absolute;
-    right: 15px;
-    top: 8px;
-    padding: 3px 10px;
-    font-size: 10px;
-    border-radius: 10px;
-    background-color: var(--background-primario);
-    color: var(--color-primary);
-    letter-spacing: 0px;
-    transition: all .5s;
-}
-ul li button:hover > span {
-    background-color: #FF3535;
-    color: rgba(255,255,255,1);
-    transform: rotate(0deg);
-}
-
-ul li button .ai-badge {
+.signal-strip div {
     align-items: center;
-    background: rgba(44, 142, 132, .12);
-    border: 1px solid rgba(44, 142, 132, .25);
+    background: #fff;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 10px;
+    color: rgb(97 109 138);
+    display: flex;
+    gap: 7px;
+    min-height: 36px;
+    padding: 8px;
+}
+
+.signal-strip i {
     color: var(--color-primary);
-    display: inline-flex;
-    font-size: 9px;
-    font-weight: 700;
-    gap: 4px;
-    letter-spacing: .5px;
-    line-height: 1;
-    padding: 4px 7px;
-    right: 10px;
-    text-transform: uppercase;
-    top: 7px;
+    font-size: 12px;
 }
 
-ul li button .ai-badge i {
-    color: inherit;
-    font-size: 9px;
-    margin: 0;
-    transform: none;
+.signal-strip span {
+    font-size: 10px;
+    font-weight: 800;
 }
 
-ul li button:hover > .ai-badge,
-ul li .active > .ai-badge {
+.module-dock {
+    display: grid;
+    gap: 8px;
+    overflow-y: auto;
+    padding: 2px 2px 8px;
+}
+
+.module-button {
+    align-items: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: var(--color-adicional-primario);
+    cursor: pointer;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 40px 1fr auto;
+    min-height: 54px;
+    padding: 7px;
+    position: relative;
+    text-align: left;
+}
+
+.module-button::before {
+    background: var(--color-primary);
+    border-radius: 12px;
+    bottom: 9px;
+    content: '';
+    left: -5px;
+    opacity: 0;
+    position: absolute;
+    top: 9px;
+    transition: opacity .2s ease;
+    width: 3px;
+}
+
+.module-button:hover,
+.module-button.active {
+    background: var(--background-primario);
+    border-color: var(--color-texto-terciario);
+}
+
+.module-button.active::before {
+    opacity: 1;
+}
+
+.module-icon {
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 11px;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+}
+
+.module-icon i {
+    color: var(--color-primary);
+    font-size: 15px;
+}
+
+.module-button:hover .module-icon,
+.module-button.active .module-icon {
     background: var(--color-primary);
     border-color: var(--color-primary);
+}
+
+.module-button:hover .module-icon i,
+.module-button.active .module-icon i {
     color: #fff;
 }
 
-ul li button:hover > .ai-badge i,
-ul li .active > .ai-badge i {
-    color: #fff !important;
-    transform: none !important;
-    animation-name: none !important;
+.module-copy {
+    min-width: 0;
 }
 
-ul li .button-close:hover {
-    background: var(--color-danger) !important;
-    color: #ffffff !important;
-    border-color: transparent;
-    transition: all .5s;
-}
-ul li .button-close i {
-    transform: rotate(180deg);
-}
-ul li .button-close:hover > i {
-    transform: rotate(180deg) !important;
+.module-copy strong {
+    color: var(--color-adicional-primario);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-/*Iconos modulos con asset local. Si no hay asset, se usa el icono Font Awesome de DB. */
-ul li button .fa-store::before,
-ul li button .fa-bag-shopping::before,
-ul li button .fa-clipboard-list::before,
-ul li button .fa-chart-simple::before,
-ul li button .fa-sliders::before,
-ul li button .fa-code::before,
-ul li button .fa-user-shield::before,
-ul li button .fa-right-from-bracket::before,
-ul li button .fa-gear::before {
-    content: "" !important;
-    display: inline-block;
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: 15px;
-    height: 15px;
-    vertical-align: middle;
+.module-copy small {
+    margin-top: 2px;
 }
-ul li button .fa-store::before {
-    background-image: url("../../../../../assets/img/dobby/swipe-card.png");
+
+.module-indicator {
+    align-items: center;
+    background: rgba(44, 142, 132, .12);
+    border: 1px solid rgba(44, 142, 132, .25);
+    border-radius: 999px;
+    color: var(--color-primary);
+    display: inline-flex;
+    font-size: 9px;
+    font-weight: 900;
+    gap: 4px;
+    padding: 4px 7px;
 }
-ul li button .fa-bag-shopping::before {
-    background-image: url("../../../../../assets/img/dobby/box.png");
+
+.module-indicator i {
+    color: inherit;
+    font-size: 9px;
 }
-ul li button .fa-clipboard-list::before {
-    background-image: url("../../../../../assets/img/dobby/inventory.png");
+
+.footer-zone {
+    border-top: 1px solid var(--color-texto-terciario);
+    display: grid;
+    gap: 8px;
+    padding-top: 10px;
 }
-ul li button .fa-chart-simple::before {
-    background-image: url("../../../../../assets/img/dobby/reports.png");
+
+.utility-button {
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 11px;
+    color: var(--color-adicional-primario);
+    cursor: pointer;
+    display: flex;
+    font-size: 11px;
+    font-weight: 800;
+    gap: 9px;
+    min-height: 38px;
+    padding: 9px 10px;
+    text-align: left;
 }
-ul li button .fa-sliders::before {
-    background-image: url("../../../../../assets/img/dobby/settings.png");
+
+.utility-button i {
+    color: var(--color-primary);
+    width: 16px;
 }
-ul li button .fa-code::before {
-    background-image: url("../../../../../assets/img/dobby/dev.png");
+
+.utility-button:hover {
+    background: var(--background-primario);
 }
-ul li button .fa-user-shield::before {
-    background-image: url("../../../../../assets/img/dobby/access-control.svg");
+
+.utility-button.exit:hover {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff;
 }
-ul li button .fa-right-from-bracket::before {
-    background-image: url("../../../../../assets/img/dobby/logout.png");
+
+.utility-button.exit:hover i {
+    color: #fff;
 }
-ul li button .fa-gear::before {
-    background-image: url("../../../../../assets/img/dobby/gear.png");
+
+@media screen and (max-width: 760px) {
+    .command-center {
+        right: .6rem;
+        width: auto;
+    }
 }

@@ -24,6 +24,7 @@ export class DetailsComponent implements OnInit {
   modal: boolean = false;
   visiblePeripheralLogModal = false;
   peripheralLogs: PeripheralLogEntry[] = [];
+  peripheralEnabled = false;
   peripheralStatus?: PeripheralStatus;
 
   constructor(private router:Router, 
@@ -108,6 +109,12 @@ export class DetailsComponent implements OnInit {
   }
 
   private loadPeripheralStatus(): void {
+    this.peripheralEnabled = this.peripheralService.isEnabled();
+    if (!this.peripheralEnabled) {
+      this.peripheralStatus = undefined;
+      return;
+    }
+
     this.peripheralService.getStatus().subscribe(status => {
       this.peripheralStatus = status;
     });

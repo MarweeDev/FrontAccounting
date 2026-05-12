@@ -14,6 +14,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
 
   user : string = "ivagomal";
   rol : string = "super admin";
+  companyName : string = "Accounts POS";
   total : number = 0;
   imagenBase64: string = '';
   activeButtonId: number | null = null;
@@ -36,8 +37,10 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
       t.token = auth;
       this.ApiUser.getInfoUserCached(t).subscribe(data => {
         this.ListModule = data.result;
+        console.log(this.ListModule);
         this.user  = this.ListModule[0].usuario;
         this.rol  = this.ListModule[0].rol;
+        this.companyName = this.ListModule[0].empresa || this.ListModule[0].responsable || "Accounts POS";
         this.imagenBase64 = `${this.ListModule[0].imagen}`;
       });
     }
@@ -69,6 +72,26 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     const route = `${item?.ruta || ''}`.toLowerCase();
     const moduleName = `${item?.modulo || ''}`.toLowerCase();
     return route.includes('reports') || moduleName.includes('reporte');
+  }
+
+  getInitials(value?: string): string {
+    const text = `${value || this.user || 'U'}`.trim();
+    const parts = text.split(' ').filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+
+  getModuleKind(item: any): string {
+    const route = `${item?.ruta || ''}`.toLowerCase();
+    const moduleName = `${item?.modulo || ''}`.toLowerCase();
+    if (route.includes('sales') || moduleName.includes('venta')) return 'Caja';
+    if (route.includes('shopping') || moduleName.includes('compra')) return 'Gasto';
+    if (route.includes('inventory') || moduleName.includes('inventario')) return 'Stock';
+    if (route.includes('reports') || moduleName.includes('reporte')) return 'IA';
+    if (route.includes('settings') || moduleName.includes('ajuste')) return 'Config';
+    if (route.includes('access') || moduleName.includes('acceso')) return 'Admin';
+    if (route.includes('dev') || moduleName.includes('dev')) return 'Lab';
+    return 'Modulo';
   }
 
   // Función para generar un color aleatorio

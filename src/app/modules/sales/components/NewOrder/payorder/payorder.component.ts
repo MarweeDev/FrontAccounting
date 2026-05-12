@@ -33,6 +33,7 @@ export class PayorderComponent implements OnInit {
   paymentMethodModalVisible = false;
   paymentCompleted = false;
   printing = false;
+  peripheralEnabled = false;
   peripheralStatus?: PeripheralStatus;
   paymentTerminalModalVisible = false;
   simulatedPaymentStatus: 'idle' | 'pending' | 'approved' | 'rejected' | 'cancelled' = 'idle';
@@ -251,13 +252,19 @@ export class PayorderComponent implements OnInit {
   }
 
   loadPeripheralStatus(): void {
+    this.peripheralEnabled = this.peripheralService.isEnabled();
+    if (!this.peripheralEnabled) {
+      this.peripheralStatus = undefined;
+      return;
+    }
+
     this.peripheralService.getStatus().subscribe(status => {
       this.peripheralStatus = status;
     });
   }
 
   openPaymentTerminal(orderData?: OrderDTO): void {
-    if (this.peripheralStatus?.mode !== 'simulation') {
+    if (!this.peripheralEnabled || this.peripheralStatus?.mode !== 'simulation') {
       this.completePayment(orderData || this.getOrderDataFromForm());
       return;
     }
@@ -298,6 +305,11 @@ export class PayorderComponent implements OnInit {
   }
 
   printReceipt(returnToRegister: boolean = false): void {
+    if (!this.peripheralEnabled) {
+      if (returnToRegister) this.viewCancel();
+      return;
+    }
+
     if (!this.ListOrder?.length) {
       if (returnToRegister) this.viewCancel();
       return;
@@ -378,7 +390,8 @@ export class PayorderComponent implements OnInit {
 
   private isPaymentTerminalFlow(method: PaymentMethodConfigDTO): boolean {
     const selectedText = `${method.name || ''}`.toLowerCase();
-    return this.peripheralStatus?.mode === 'simulation'
+    return this.peripheralEnabled
+      && this.peripheralStatus?.mode === 'simulation'
       && (method.method_type === 'terminal' || selectedText.includes('tarjeta') || selectedText.includes('datafono') || selectedText.includes('datáfono') || selectedText.includes('débito') || selectedText.includes('debito'));
   }
 
