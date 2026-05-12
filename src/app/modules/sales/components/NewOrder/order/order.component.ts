@@ -56,6 +56,10 @@ export class OrderComponent implements OnInit {
   visibleNavNewProduct ?: boolean;
   visibleComponentNewProduct ?: boolean = false;
   isSavingClient = false;
+  visibleCategoryModal = false;
+  isSavingCategory = false;
+  editingCategory?: CategoriaProductoDTO;
+  categoryForm: CategoriaProductoDTO = { nombre: '', descripcion: '', id_estado: 1 };
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
@@ -108,8 +112,6 @@ export class OrderComponent implements OnInit {
       this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
     });
 
-    console.log('CodeOrderInput: ', this.CodeOrderInput);
-    console.log('ProcessOrderInput: ', this.ProcessOrderInput);
   }
 
   //Metodo para cargar productos para editar
@@ -192,12 +194,7 @@ export class OrderComponent implements OnInit {
   OnSetValueList(){
     //Cargar filtros
     if(this.selectedId === 0) {
-      this.ApiCateg.get().subscribe(data => {
-        this.ListFilter = data.category
-      },
-      error => {
-        console.log('Error: ', error)
-      });
+      this.loadCategories();
     }
 
     //Cargar productos
@@ -236,8 +233,140 @@ export class OrderComponent implements OnInit {
 
   onSelectChange(event: any) {
     // Obtén el valor seleccionado y guárdalo en la propiedad selectedId
-    this.selectedId = event.target.value;
+    this.selectedId = Number(event.target.value);
+    this.productVisibleCount = this.productPageSize;
     this.OnSetValueList();
+  }
+
+  get selectedCategoryName(): string {
+    if (Number(this.selectedId) === 0) return 'Todas';
+    return this.ListFilter.find(item => Number(item.id) === Number(this.selectedId))?.nombre || 'Categoria';
+  }
+
+  loadCategories(): void {
+    this.ApiCateg.get().subscribe(data => {
+      this.ListFilter = data.category || [];
+    },
+    error => {
+      console.log('Error: ', error)
+    });
+  }
+
+  openCategoryModal(): void {
+    this.visibleCategoryModal = true;
+    this.resetCategoryForm();
+    this.loadCategories();
+  }
+
+  closeCategoryModal(): void {
+    if (this.isSavingCategory) return;
+    this.visibleCategoryModal = false;
+    this.resetCategoryForm();
+  }
+
+  selectCategory(id: number | string | undefined): void {
+    this.selectedId = Number(id || 0);
+    this.productVisibleCount = this.productPageSize;
+    this.OnSetValueList();
+    this.visibleCategoryModal = false;
+  }
+
+  editCategory(category: CategoriaProductoDTO, event?: MouseEvent): void {
+    event?.stopPropagation();
+    this.editingCategory = category;
+    this.categoryForm = {
+      id: category.id,
+      nombre: category.nombre || '',
+      descripcion: category.descripcion || '',
+      id_estado: category.id_estado || 1
+    };
+  }
+
+  resetCategoryForm(): void {
+    this.editingCategory = undefined;
+    this.categoryForm = { nombre: '', descripcion: '', id_estado: 1 };
+  }
+
+  saveCategory(): void {
+    const payload: CategoriaProductoDTO = {
+      nombre: this.categoryForm.nombre?.trim(),
+      descripcion: this.categoryForm.descripcion?.trim(),
+      id_estado: 1
+    };
+
+    if (!payload.nombre) {
+      this.toastService.showToast({
+        title: 'Categoria requerida',
+        message: 'Escribe el nombre de la categoria.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
+    this.isSavingCategory = true;
+    const request = this.editingCategory?.id
+      ? this.ApiCateg.put(this.editingCategory.id, payload)
+      : this.ApiCateg.post(payload);
+
+    const isEditing = !!this.editingCategory?.id;
+
+    request.subscribe({
+      next: () => {
+        this.isSavingCategory = false;
+        this.resetCategoryForm();
+        this.loadCategories();
+        this.OnSetValueList();
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: isEditing ? 'Categoria actualizada.' : 'Categoria creada.',
+          type: 'success',
+          timeout: 3000
+        });
+      },
+      error: error => {
+        this.isSavingCategory = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      }
+    });
+  }
+
+  deleteCategory(category: CategoriaProductoDTO, event?: MouseEvent): void {
+    event?.stopPropagation();
+    if (!category.id || !window.confirm(`Desea deshabilitar la categoria ${category.nombre}?`)) return;
+
+    this.isSavingCategory = true;
+    this.ApiCateg.delete(category.id, { id_estado: 2 }).subscribe({
+      next: () => {
+        if (Number(this.selectedId) === Number(category.id)) {
+          this.selectedId = 0;
+          this.productVisibleCount = this.productPageSize;
+        }
+        this.isSavingCategory = false;
+        this.loadCategories();
+        this.OnSetValueList();
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: 'Categoria deshabilitada.',
+          type: 'success',
+          timeout: 3000
+        });
+      },
+      error: error => {
+        this.isSavingCategory = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      }
+    });
   }
 
   get VisibleProductData(): ProductDTO[] {
@@ -304,8 +433,9 @@ export class OrderComponent implements OnInit {
   }
 
   OnValidateAddItem(e:any, input:any){
-    let elementTitle :any = document.getElementById('card-title-' + e.target.id)?.style;
-    let elementCard :any = document.getElementById('card-order-' + e.target.id)?.classList;
+    const target = e.currentTarget || e.target;
+    let elementTitle :any = document.getElementById('card-title-' + target.id)?.style;
+    let elementCard :any = document.getElementById('card-order-' + target.id)?.classList;
     if (elementTitle != undefined && input != undefined) {
       if (input.value > 0) { 
         elementTitle.display = "unset";
@@ -333,24 +463,25 @@ export class OrderComponent implements OnInit {
   }
 
   additem(e:any) {
-    let element :any = document.getElementById('input-' + e.target.id);
+    const target = e.currentTarget || e.target;
+    let element :any = document.getElementById('input-' + target.id);
     if (element != undefined) {
       if (element.value < 10) { 
         element.value = Number(element.value) + 1;
         this.OnValidateAddItem(e, element);
 
-        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        let exist = this.ListProduct.filter(item => item.id == target.attributes['id'].value).length;
         if (exist == 0) 
         {
           const product = new ProductDTO();
-          product.id = e.target.attributes['id'].value;
-          product.nombre = e.target.attributes['name'].value;
-          product.precio = e.target.attributes['value'].value;
+          product.id = target.attributes['id'].value;
+          product.nombre = target.attributes['name'].value;
+          product.precio = target.attributes['value'].value;
           product.id_estado = Number(element.value);
           this.ListProduct?.push(product);
         }
         else {
-          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          let row = this.ListProduct.findIndex(item => item.id == target.attributes['id'].value);
           this.ListProduct[row].id_estado = Number(element.value);
         }
 
@@ -360,22 +491,22 @@ export class OrderComponent implements OnInit {
   }
 
   deleteitem(e:any) {
-    
-    let element :any = document.getElementById('input-' + e.target.id);
+    const target = e.currentTarget || e.target;
+    let element :any = document.getElementById('input-' + target.id);
     if (element != undefined) {
       if (element.value > 0) { 
         element.value = Number(element.value) - 1;
         this.OnValidateAddItem(e, element);
 
         if(element.value == 0){
-            let newList = this.ListProduct.filter(item => item.id !== e.target.attributes['id'].value);
+            let newList = this.ListProduct.filter(item => item.id !== target.attributes['id'].value);
             this.ListProduct = newList;
         }
         else {
-          let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+          let exist = this.ListProduct.filter(item => item.id == target.attributes['id'].value).length;
           if (exist > 0) 
           {
-            let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+            let row = this.ListProduct.findIndex(item => item.id == target.attributes['id'].value);
             this.ListProduct[row].id_estado = Number(element.value);
           }
         }
@@ -387,24 +518,25 @@ export class OrderComponent implements OnInit {
 
   //#region agregar y eliminar desde la orden
   additemOrder(e:any) {
-    let element :any = document.getElementById('input-' + e.target.id);
+    const target = e.currentTarget || e.target;
+    let element :any = document.getElementById('input-' + target.id);
     if (element != undefined) {
       if (element.value < 10) { 
         element.value = Number(element.value) + 1;
         this.OnValidateAddItem(e, element);
 
-        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        let exist = this.ListProduct.filter(item => item.id == target.attributes['id'].value).length;
         if (exist == 0) 
         {
           const product = new ProductDTO();
-          product.id = e.target.attributes['id'].value;
-          product.nombre = e.target.attributes['name'].value;
-          product.precio = e.target.attributes['value'].value;
+          product.id = target.attributes['id'].value;
+          product.nombre = target.attributes['name'].value;
+          product.precio = target.attributes['value'].value;
           product.id_estado = Number(element.value);
           this.ListProduct?.push(product);
         }
         else {
-          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          let row = this.ListProduct.findIndex(item => item.id == target.attributes['id'].value);
           this.ListProduct[row].id_estado = Number(element.value);
         }
 
