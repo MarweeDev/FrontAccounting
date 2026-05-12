@@ -37,7 +37,6 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
       t.token = auth;
       this.ApiUser.getInfoUserCached(t).subscribe(data => {
         this.ListModule = data.result;
-        console.log(this.ListModule);
         this.user  = this.ListModule[0].usuario;
         this.rol  = this.ListModule[0].rol;
         this.companyName = this.ListModule[0].empresa || this.ListModule[0].responsable || "Accounts POS";
