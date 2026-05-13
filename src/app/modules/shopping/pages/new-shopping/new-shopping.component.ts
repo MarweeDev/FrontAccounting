@@ -26,7 +26,7 @@ export class NewShoppingComponent implements OnInit {
 
   typeShopping = [
     { id: 1, name: 'Compra' },
-    { id: 2, name: 'Gasto' }
+    { id: 2, name: 'Gasto/Costo' }
   ];
 
   constructor(
