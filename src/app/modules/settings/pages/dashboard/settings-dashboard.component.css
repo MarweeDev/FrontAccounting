@@ -281,6 +281,39 @@ select {
   transform: translateY(-1px);
 }
 
+.profile-shift-option {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 8px;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.profile-shift-option span,
+.profile-shift-option strong,
+.profile-shift-option small {
+  display: block;
+}
+
+.profile-shift-option strong {
+  color: var(--color-adicional-primario);
+  font-size: 13px;
+}
+
+.profile-shift-option small {
+  color: var(--color-adicional-secundario);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.profile-shift-option input {
+  height: 18px;
+  width: 18px;
+}
+
 .effect-preview {
   display: inline-flex;
   align-items: center;

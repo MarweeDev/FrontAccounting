@@ -67,7 +67,8 @@
               <th style="width: 25%;">Descripción</th>
               <th style="width: 10%;">Cant.</th>
               <th style="width: 15%;">Valor Unit.</th>
-              <th style="width: 10%;">Impuesto</th>
+              <th style="width: 10%;">Descuento</th>
+              <th style="width: 14%;">Impuestos</th>
               <th style="width: 15%;">Valor Total</th>
               <th></th>
             </tr>
@@ -112,6 +113,20 @@
                 <input type="number" formControlName="discount" class="form-control form-control-td-value" (input)="calculateItemTotal(i)">
               </td>
               <td>
+                <div class="tax-selector">
+                  <button type="button" class="tax-summary" [title]="getTaxSummary(i)">
+                    {{getTaxSummary(i)}}
+                  </button>
+                  <div class="tax-menu">
+                    <label *ngFor="let tax of taxOptions">
+                      <input type="checkbox" [checked]="hasTax(i, tax)" (change)="toggleTax(i, tax, $event)">
+                      {{tax.name}} {{tax.percentage}}%
+                    </label>
+                    <small *ngIf="taxOptions.length === 0">Configura impuestos en Ajustes</small>
+                  </div>
+                </div>
+              </td>
+              <td>
                 <input type="text" formControlName="totalValue" class="form-control form-control-td-value" readonly>
               </td>
               <td>
@@ -145,6 +160,10 @@
       <div class="total-row subtotal">
         <span>Subtotal:</span>
         <strong>{{ purchaseForm.get('subtotal')?.value | currency }}</strong>
+      </div>
+      <div class="total-row">
+        <span>Impuestos:</span>
+        <strong>{{ purchaseForm.get('totalImpuestos')?.value | currency }}</strong>
       </div>
       <hr>
       <div class="total-row grand-total">

@@ -36,6 +36,10 @@
     <button type="button" class="btn btn-success rd-2" (click)="printSupport()" [disabled]="printing" *ngIf="peripheralEnabled">
       Imprimir soporte interno
     </button>
+    <input type="email" class="email-support" [(ngModel)]="emailTarget" placeholder="correo@empresa.com">
+    <button type="button" class="btn btn-default rd-2" (click)="sendSupportEmail()" [disabled]="sendingEmail">
+      Enviar por correo
+    </button>
   </div>
 
   <div class="detail-card" *ngIf="shopping">
@@ -45,6 +49,7 @@
           <th>Producto</th>
           <th>Cantidad</th>
           <th>Valor unitario</th>
+          <th>Impuestos</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -53,6 +58,7 @@
           <td>{{item.producto || item.id_producto}}</td>
           <td>{{item.cantidad}}</td>
           <td>{{item.valor_unitario | currency}}</td>
+          <td>{{item.total_impuesto || 0 | currency}}</td>
           <td>{{item.total | currency}}</td>
         </tr>
       </tbody>

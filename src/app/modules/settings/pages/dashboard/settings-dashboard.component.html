@@ -29,6 +29,38 @@
 
       <div class="theme-panel" *ngIf="activeSection === 'apariencia'; else settingsContent">
         <div class="appearance-group">
+          <h2>Tipo de empresa</h2>
+        </div>
+        <button
+          type="button"
+          class="theme-card effect-card"
+          *ngFor="let profile of businessProfiles"
+          [class.active-theme]="profile.type === selectedBusinessProfile"
+          (click)="setBusinessProfile(profile)">
+          <span class="effect-preview" aria-hidden="true">
+            <i [className]="profile.icon"></i>
+          </span>
+          <span class="theme-copy">
+            <strong>{{profile.label}}</strong>
+            <small>{{profile.description}}</small>
+          </span>
+          <span class="theme-status">
+            <i [className]="profile.type === selectedBusinessProfile ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+          </span>
+        </button>
+
+        <div class="appearance-group">
+          <h2>Control operativo</h2>
+        </div>
+        <label class="profile-shift-option" *ngFor="let profile of businessProfiles">
+          <span>
+            <strong>{{profile.label}}</strong>
+            <small>Mostrar apertura/cierre en el aside</small>
+          </span>
+          <input type="checkbox" [checked]="isShiftEnabledForProfile(profile)" (change)="toggleShiftForProfile(profile, $event)">
+        </label>
+
+        <div class="appearance-group">
           <h2>Tema visual</h2>
         </div>
         <button
@@ -72,6 +104,37 @@
       </div>
 
       <ng-template #settingsContent>
+      <div class="payment-method-panel" *ngIf="activeSection === 'impuestos'; else settingsAfterTaxes">
+        <form class="payment-method-form" (ngSubmit)="saveTax()">
+          <h2>{{taxForm.id ? 'Editar impuesto' : 'Nuevo impuesto'}}</h2>
+          <label>Nombre<input name="taxName" [(ngModel)]="taxForm.name" placeholder="IVA / Recargo servicio"></label>
+          <label>Porcentaje<input name="taxPercentage" type="number" [(ngModel)]="taxForm.percentage" placeholder="19"></label>
+          <label>Aplica a
+            <select name="taxScope" [(ngModel)]="taxForm.module_scope">
+              <option value="both">Ventas y compras</option>
+              <option value="sales">Ventas</option>
+              <option value="shopping">Compras</option>
+            </select>
+          </label>
+          <div class="payment-form-actions">
+            <button type="submit" class="btn btn-success rd-4">Guardar</button>
+            <button type="button" class="btn btn-default rd-4" (click)="newTax()">Nuevo</button>
+          </div>
+        </form>
+
+        <div class="payment-method-list">
+          <button type="button" class="payment-admin-card" *ngFor="let tax of taxes" (click)="editTax(tax)">
+            <span class="payment-admin-icon"><i class="fa-solid fa-percent"></i></span>
+            <span>
+              <strong>{{tax.name}}</strong>
+              <small>{{tax.percentage}}% · {{tax.module_scope === 'both' ? 'Ventas y compras' : tax.module_scope}}</small>
+            </span>
+            <i class="fa-solid fa-circle-check"></i>
+          </button>
+        </div>
+      </div>
+
+      <ng-template #settingsAfterTaxes>
       <div class="payment-method-panel" *ngIf="activeSection === 'medios_pago'; else parameterSettings">
         <form class="payment-method-form" (ngSubmit)="savePaymentMethod()">
           <h2>{{paymentMethodForm.id ? 'Editar medio' : 'Nuevo medio'}}</h2>
@@ -117,6 +180,7 @@
           </button>
         </div>
       </div>
+      </ng-template>
 
       <ng-template #parameterSettings>
       <div class="container-table">

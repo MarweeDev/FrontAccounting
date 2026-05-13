@@ -31,6 +31,15 @@ export enum ServicesMethod {
     ServicesPeripheralEvent = 'peripheral/event',
     ServicesPaymentMethod = 'payment/method',
     ServicesPaymentTransactionDetail = 'payment/transaction/detail',
+    ServicesTax = 'setting/tax',
+    ServicesInventoryMovement = 'inventory/movement',
+    ServicesCashShift = 'cash/shift',
+    ServicesReportSales = 'reports/sales',
+    ServicesReportSalesByProduct = 'reports/sales-by-product',
+    ServicesReportSalesBySeller = 'reports/sales-by-seller',
+    ServicesReportInventory = 'reports/inventory',
+    ServicesReportInventoryMovement = 'reports/inventory-movement',
+    ServicesInternalDocument = 'documents/internal',
 }
 
 export class ApiConfig {

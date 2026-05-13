@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { PaymentMethodConfigDTO } from 'src/app/core/models/paymentMethod';
+import { BusinessProfileDTO, BusinessProfileType } from 'src/app/core/models/businessProfile';
+import { TaxDTO, TaxModuleScope } from 'src/app/core/models/tax';
 import { PaymentMethodService } from 'src/app/core/services/payment-method/payment-method.service';
 import { PeripheralService } from 'src/app/core/services/peripherals/peripheral.service';
 import { SettingParameterDTO } from 'src/app/core/models/settingParameter';
 import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
+import { TaxService } from 'src/app/core/services/tax/tax.service';
 import { ThemeName, ThemeOption, ThemeService, VisualEffectName, VisualEffectOption } from 'src/app/core/services/theme/theme.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
@@ -44,6 +47,11 @@ export class SettingsDashboardComponent implements OnInit {
   selectedEffect: VisualEffectName = 'none';
   paymentMethods: PaymentMethodConfigDTO[] = [];
   paymentMethodForm: PaymentMethodConfigDTO = this.getEmptyPaymentMethod();
+  taxes: TaxDTO[] = [];
+  taxForm: TaxDTO = this.getEmptyTax();
+  businessProfiles: BusinessProfileDTO[] = this.getBusinessProfiles();
+  selectedBusinessProfile: BusinessProfileType = 'pymes';
+  shiftEnabledProfiles: BusinessProfileType[] = ['pymes', 'gastronomia'];
 
   sections: SettingSection[] = [
     {
@@ -73,6 +81,13 @@ export class SettingsDashboardComponent implements OnInit {
         { group: 'inventario', key: 'stock_minimo', label: 'Stock minimo', description: 'Cantidad desde la que un producto se marca como bajo.', type: 'numero', icon: 'fa-solid fa-arrow-trend-down', placeholder: '5' },
         { group: 'inventario', key: 'permitir_stock_negativo', label: 'Permitir stock negativo', description: 'Define si ventas o ajustes pueden dejar existencias por debajo de cero.', type: 'booleano', icon: 'fa-solid fa-circle-minus' }
       ]
+    },
+    {
+      id: 'impuestos',
+      title: 'Impuestos',
+      icon: 'fa-solid fa-percent',
+      description: 'Catalogo fiscal reutilizable por ventas, compras y documentos internos.',
+      settings: []
     },
     {
       id: 'medios_pago',
@@ -135,6 +150,7 @@ export class SettingsDashboardComponent implements OnInit {
     private paymentMethodService: PaymentMethodService,
     private peripheralService: PeripheralService,
     private parameterService: SettingParameterService,
+    private taxService: TaxService,
     private themeService: ThemeService,
     private toastService: ToastService
   ) { }
@@ -156,6 +172,7 @@ export class SettingsDashboardComponent implements OnInit {
 
     this.onLoad();
     this.loadPaymentMethods();
+    this.loadTaxes();
   }
 
   get currentSection(): SettingSection {
@@ -184,6 +201,70 @@ export class SettingsDashboardComponent implements OnInit {
     if (sectionId === 'medios_pago') {
       this.loadPaymentMethods();
     }
+    if (sectionId === 'impuestos') {
+      this.loadTaxes();
+    }
+  }
+
+  loadTaxes(): void {
+    this.taxService.get().subscribe({
+      next: data => this.taxes = data.result || [],
+      error: error => this.showError(error, 'Error al cargar impuestos')
+    });
+  }
+
+  editTax(tax: TaxDTO): void {
+    this.taxForm = { ...tax };
+  }
+
+  newTax(): void {
+    this.taxForm = this.getEmptyTax();
+  }
+
+  saveTax(): void {
+    if (!this.taxForm.name || this.taxForm.percentage === undefined) {
+      this.toastService.showToast({
+        title: 'Datos incompletos',
+        message: 'Nombre y porcentaje son obligatorios.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
+    const request = this.taxForm.id
+      ? this.taxService.put(this.taxForm.id, this.taxForm)
+      : this.taxService.post(this.taxForm);
+
+    request.subscribe({
+      next: () => {
+        this.toastService.showToast({
+          title: 'Impuesto guardado',
+          message: 'El catalogo fiscal fue actualizado correctamente.',
+          type: 'success',
+          timeout: 3000
+        });
+        this.newTax();
+        this.loadTaxes();
+      },
+      error: error => this.showError(error, 'Error al guardar impuesto')
+    });
+  }
+
+  disableTax(tax: TaxDTO): void {
+    if (!tax.id) return;
+    this.taxService.delete(tax.id).subscribe({
+      next: () => {
+        this.toastService.showToast({
+          title: 'Impuesto deshabilitado',
+          message: 'El impuesto ya no aparecera para nuevos documentos.',
+          type: 'success',
+          timeout: 3000
+        });
+        this.loadTaxes();
+      },
+      error: error => this.showError(error, 'Error al deshabilitar impuesto')
+    });
   }
 
   loadPaymentMethods(): void {
@@ -243,6 +324,20 @@ export class SettingsDashboardComponent implements OnInit {
       type: 'success',
       timeout: 2500
     });
+  }
+
+  setBusinessProfile(profile: BusinessProfileDTO): void {
+    this.selectedBusinessProfile = profile.type;
+    const setting: SettingDefinition = {
+      group: 'empresa',
+      key: 'perfil_negocio',
+      label: 'Perfil de negocio',
+      description: 'Tipo de empresa usado para adaptar experiencia visual y lenguaje.',
+      type: 'texto',
+      icon: profile.icon
+    };
+    this.values[this.getSettingId(setting)] = profile.type;
+    this.save(setting);
   }
 
   setVisualEffect(effect: VisualEffectName): void {
@@ -339,6 +434,13 @@ export class SettingsDashboardComponent implements OnInit {
       const parameter = this.findParameter(setting);
       this.values[this.getSettingId(setting)] = parameter?.valor || '';
     });
+    const profileParameter = this.ListParameter.find(item => item.grupo === 'empresa' && item.clave === 'perfil_negocio');
+    const profile = this.normalizeBusinessProfile(profileParameter?.valor || '');
+    if (profile) {
+      this.selectedBusinessProfile = profile;
+      this.values['empresa.perfil_negocio'] = profile;
+    }
+    this.hydrateShiftEnabledProfiles();
   }
 
   private syncPeripheralFeatureFlag(): void {
@@ -387,5 +489,86 @@ export class SettingsDashboardComponent implements OnInit {
       auto_print_after_payment: false,
       enabled: true
     };
+  }
+
+  private getEmptyTax(): TaxDTO {
+    return {
+      name: '',
+      percentage: 0,
+      module_scope: 'both' as TaxModuleScope,
+      visible_modules: ['sales', 'shopping'],
+      id_estado: 1
+    };
+  }
+
+  isShiftEnabledForProfile(profile: BusinessProfileDTO): boolean {
+    return this.shiftEnabledProfiles.includes(profile.type);
+  }
+
+  toggleShiftForProfile(profile: BusinessProfileDTO, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.shiftEnabledProfiles = checked
+      ? [...new Set([...this.shiftEnabledProfiles, profile.type])]
+      : this.shiftEnabledProfiles.filter(item => item !== profile.type);
+    this.saveShiftEnabledProfiles();
+  }
+
+  private hydrateShiftEnabledProfiles(): void {
+    const parameter = this.ListParameter.find(item => item.grupo === 'empresa' && item.clave === 'perfiles_turno_habilitado');
+    if (!parameter?.valor) return;
+
+    try {
+      const values = JSON.parse(parameter.valor);
+      if (Array.isArray(values)) {
+        this.shiftEnabledProfiles = values
+          .map(value => this.normalizeBusinessProfile(value))
+          .filter((value): value is BusinessProfileType => !!value);
+      }
+    } catch {
+      this.shiftEnabledProfiles = ['pymes', 'gastronomia'];
+    }
+  }
+
+  private saveShiftEnabledProfiles(): void {
+    const existing = this.ListParameter.find(item => item.grupo === 'empresa' && item.clave === 'perfiles_turno_habilitado');
+    const payload: SettingParameterDTO = {
+      grupo: 'empresa',
+      clave: 'perfiles_turno_habilitado',
+      valor: JSON.stringify(this.shiftEnabledProfiles),
+      tipo_dato: 'json',
+      descripcion: 'Tipos de empresa donde se muestra control de caja, turno o jornada en el aside.'
+    };
+    const request = existing?.id
+      ? this.parameterService.put(existing.id, payload)
+      : this.parameterService.post(payload);
+
+    request.subscribe({
+      next: () => {
+        this.toastService.showToast({
+          title: 'Configuracion guardada',
+          message: 'La visibilidad del control operativo fue actualizada.',
+          type: 'success',
+          timeout: 2500
+        });
+        this.onLoad();
+      },
+      error: error => this.showError(error, 'Error al guardar visibilidad por empresa')
+    });
+  }
+
+  private normalizeBusinessProfile(value: string): BusinessProfileType | null {
+    if (value === 'instituto') return 'instituciones';
+    if (value === 'restaurante' || value === 'bar') return 'gastronomia';
+    if (value === 'servicios' || value === 'productos' || value === 'pyme' || value === 'personalizado') return 'pymes';
+    if (value === 'pymes' || value === 'gastronomia' || value === 'instituciones') return value;
+    return null;
+  }
+
+  private getBusinessProfiles(): BusinessProfileDTO[] {
+    return [
+      { type: 'pymes', label: 'Pymes', description: 'Ventas, compras, caja, inventario y reportes para negocios comerciales o de servicios.', theme: 'marwee', icon: 'fa-solid fa-store', highlightedModules: ['ventas', 'compras', 'inventario'] },
+      { type: 'gastronomia', label: 'Gastronomia', description: 'Pedidos, mesas, turnos, recargos, insumos y rotacion de productos.', theme: 'marwee', icon: 'fa-solid fa-utensils', highlightedModules: ['pedidos', 'mesas', 'turnos'] },
+      { type: 'instituciones', label: 'Instituciones', description: 'Jornadas, pagos, estudiantes o usuarios, servicios y reportes administrativos.', theme: 'marwee', icon: 'fa-solid fa-graduation-cap', highlightedModules: ['jornadas', 'pagos', 'servicios'] }
+    ];
   }
 }

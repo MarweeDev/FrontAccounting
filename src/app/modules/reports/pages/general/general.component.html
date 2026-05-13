@@ -2,48 +2,68 @@
   <div class="content">
     <div class="ai-hero">
       <div>
-        <span class="eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> Vista previa sin consumo API</span>
-        <h1>Asistente operativo</h1>
-        <p>IA no conectada. Esta vista usa reglas locales y plantillas para mostrar como se vera el modulo cuando exista backend de IA.</p>
+        <span class="eyebrow"><i class="fa-solid fa-chart-simple"></i> Reportes operativos</span>
+        <h1>Centro de lectura Marwee</h1>
+        <p>Ventas, inventario y movimientos con filtros por periodo y exportacion directa a Excel.</p>
       </div>
       <div class="ai-state">
-        <strong>Demo local</strong>
-        <small>Sin OpenAI, sin tokens, sin costos adicionales.</small>
+        <strong>{{rows.length}}</strong>
+        <small>registros cargados</small>
       </div>
+    </div>
+
+    <div class="report-toolbar">
+      <button
+        type="button"
+        *ngFor="let option of reportOptions"
+        [class.active-report]="option.id === activeReport"
+        (click)="setReport(option.id)">
+        <i [className]="option.icon"></i>
+        <span>{{option.label}}</span>
+      </button>
+    </div>
+
+    <div class="report-filters">
+      <label>Desde<input type="date" [(ngModel)]="filters.dateFrom"></label>
+      <label>Hasta<input type="date" [(ngModel)]="filters.dateTo"></label>
+      <label>Producto<input type="number" [(ngModel)]="filters.productId" placeholder="ID producto"></label>
+      <label>Vendedor<input type="number" [(ngModel)]="filters.sellerId" placeholder="ID vendedor"></label>
+      <button type="button" class="btn btn-success rd-2" (click)="loadReport()">Aplicar</button>
+      <button type="button" class="btn btn-default rd-2" (click)="exportExcel()" [disabled]="rows.length === 0">Excel</button>
     </div>
 
     <div class="metrics-strip">
-      <div>
-        <span>Ordenes</span>
-        <strong>{{orders.length}}</strong>
-      </div>
-      <div>
-        <span>Compras/Gastos</span>
-        <strong>{{shoppings.length}}</strong>
-      </div>
-      <div>
-        <span>Productos en stock</span>
-        <strong>{{stock.length}}</strong>
+      <div *ngFor="let card of summaryCards">
+        <span><i [className]="card.icon"></i> {{card.label}}</span>
+        <strong>{{card.value}}</strong>
       </div>
     </div>
 
-    <div class="ai-grid" *ngIf="!loading; else loadingTpl">
-      <article class="ai-card" *ngFor="let card of cards">
-        <div class="card-top">
-          <span class="card-icon"><i [className]="card.icon"></i></span>
-          <span class="status-pill">{{card.status}}</span>
-        </div>
-        <h2>{{card.title}}</h2>
-        <strong class="card-value">{{card.value}}</strong>
-        <p>{{card.detail}}</p>
-        <small>{{card.action}}</small>
-      </article>
+    <div class="container-table" *ngIf="!loading; else loadingTpl">
+      <div class="message-not-result" *ngIf="rows.length === 0">
+        <img src="../../../../../../assets/img/dobby/not_results_IA.png" alt="Sin resultados" />
+        <h3>No se encontraron resultados</h3>
+        <h5>Ajusta los filtros o registra operaciones para alimentar el reporte</h5>
+      </div>
+
+      <table *ngIf="rows.length > 0">
+        <thead>
+          <tr>
+            <th *ngFor="let column of getColumns()">{{column}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows">
+            <td *ngFor="let column of getColumns()">{{row[column]}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <ng-template #loadingTpl>
       <div class="loading-demo">
         <i class="fa-solid fa-circle-notch fa-spin"></i>
-        <span>Preparando reglas locales...</span>
+        <span>Preparando reporte...</span>
       </div>
     </ng-template>
   </div>

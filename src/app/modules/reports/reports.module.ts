@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ReportsRouting } from './reports.routing';
 
@@ -12,6 +12,7 @@ import { GeneralComponent } from './pages/general/general.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     ReportsRouting
   ]

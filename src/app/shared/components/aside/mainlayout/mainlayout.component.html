@@ -35,6 +35,24 @@
         </nav>
 
         <div class="footer-zone">
+            <div class="shift-widget" *ngIf="showShiftWidget">
+                <strong>{{getShiftTitle()}}</strong>
+                <small *ngIf="currentShift?.status === 'open'">Base {{currentShift?.opening_amount | currency}}</small>
+                <div *ngIf="currentShift?.status !== 'open'; else closeShiftTpl">
+                    <input type="number" [(ngModel)]="openingAmount" [placeholder]="getOpeningPlaceholder()">
+                    <button type="button" [title]="businessProfile === 'instituciones' ? 'Abrir jornada' : 'Abrir caja'" (click)="openShift()">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                </div>
+                <ng-template #closeShiftTpl>
+                    <div>
+                        <input type="number" [(ngModel)]="countedCash" [placeholder]="getClosingPlaceholder()">
+                        <button type="button" [title]="businessProfile === 'instituciones' ? 'Cerrar jornada' : 'Cerrar caja'" (click)="closeShift()">
+                            <i class="fa-solid fa-lock"></i>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
             <button type="button" class="utility-button" title="Configuracion" (click)="OnRouterModule('settings/dashboard', 0)">
                 <i class="fa-solid fa-sliders"></i>
                 <span>Preferencias</span>

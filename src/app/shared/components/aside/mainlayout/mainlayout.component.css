@@ -30,6 +30,55 @@
     transition: all .25s ease;
 }
 
+.shift-widget {
+    background: var(--background-primario);
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 11px;
+    display: grid;
+    gap: 6px;
+    padding: 9px;
+}
+
+.shift-widget strong,
+.shift-widget small {
+    display: block;
+}
+
+.shift-widget strong {
+    color: var(--color-adicional-primario);
+    font-size: 11px;
+}
+
+.shift-widget small {
+    color: rgb(97 109 138);
+    font-size: 10px;
+}
+
+.shift-widget div {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: 1fr 34px;
+}
+
+.shift-widget input {
+    border: 1px solid var(--color-texto-terciario);
+    border-radius: 8px;
+    font-size: 11px;
+    min-width: 0;
+    padding: 7px;
+}
+
+.shift-widget button {
+    align-items: center;
+    background: var(--color-primary);
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
 .brand-zone {
     align-items: center;
     display: grid;

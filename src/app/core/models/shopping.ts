@@ -2,8 +2,13 @@ export interface ShoppingItemDTO {
   id?: number;
   id_producto: number;
   producto?: string;
+  type?: number;
   cantidad: number;
   valor_unitario: number;
+  discount?: number;
+  subtotal?: number;
+  taxes?: import('./tax').AppliedTaxDTO[];
+  total_impuesto?: number;
   total?: number;
 }
 

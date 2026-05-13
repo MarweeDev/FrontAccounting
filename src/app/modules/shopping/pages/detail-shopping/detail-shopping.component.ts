@@ -6,6 +6,7 @@ import { ShoppingService } from 'src/app/core/services/shopping/shopping.service
 import { PeripheralService, PeripheralStatus } from 'src/app/core/services/peripherals/peripheral.service';
 import { PrintService } from 'src/app/core/services/peripherals/print.service';
 import { PeripheralLogEntry, PeripheralLogService } from 'src/app/core/services/peripherals/peripheral-log.service';
+import { InternalDocumentService } from 'src/app/core/services/documents/internal-document.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
@@ -21,6 +22,8 @@ export class DetailShoppingComponent implements OnInit {
   visiblePeripheralLogModal = false;
   peripheralEnabled = false;
   printing = false;
+  sendingEmail = false;
+  emailTarget = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +32,7 @@ export class DetailShoppingComponent implements OnInit {
     private shoppingService: ShoppingService,
     private peripheralService: PeripheralService,
     private printService: PrintService,
+    private internalDocumentService: InternalDocumentService,
     private peripheralLogService: PeripheralLogService,
     private toastService: ToastService
   ) { }
@@ -101,6 +105,45 @@ export class DetailShoppingComponent implements OnInit {
         timeout: 3500
       });
       this.loadPeripheralStatus();
+    });
+  }
+
+  sendSupportEmail(): void {
+    if (!this.shopping || !this.emailTarget) {
+      this.toastService.showToast({
+        title: 'Correo requerido',
+        message: 'Ingresa el correo destino para enviar el soporte interno.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
+    this.sendingEmail = true;
+    this.internalDocumentService.sendEmail({
+      documentType: 'shopping-support',
+      reference: this.shopping.codigo || '',
+      email: this.emailTarget,
+      payload: this.shopping
+    }).subscribe({
+      next: data => {
+        this.sendingEmail = false;
+        this.toastService.showToast({
+          title: 'Soporte enviado',
+          message: data.message || 'El soporte interno fue enviado correctamente.',
+          type: 'success',
+          timeout: 3500
+        });
+      },
+      error: error => {
+        this.sendingEmail = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      }
     });
   }
 

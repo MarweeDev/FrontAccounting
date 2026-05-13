@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as XLSX from 'xlsx';
 import { AppComponent } from 'src/app/app.component';
+import { ReportsService, ReportFilters } from 'src/app/core/services/reports/reports.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
-
-interface AiDemoCard {
-  title: string;
-  icon: string;
-  status: string;
-  value: string;
-  detail: string;
-  action: string;
-}
 
 @Component({
   selector: 'app-general',
@@ -19,36 +12,32 @@ interface AiDemoCard {
 })
 export class GeneralComponent implements OnInit {
   loading = false;
-  orders: any[] = [
-    { total: 48000 },
-    { total: 52000 },
-    { total: 156000 },
-    { total: 39000 },
-    { total: 62000 }
+  activeReport = 'sales';
+  filters: ReportFilters = {
+    dateFrom: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0, 10),
+    dateTo: new Date().toISOString().slice(0, 10)
+  };
+  rows: any[] = [];
+  summaryCards: any[] = [];
+  reportOptions = [
+    { id: 'sales', label: 'Ventas generales', icon: 'fa-solid fa-chart-line' },
+    { id: 'salesByProduct', label: 'Ventas por producto', icon: 'fa-solid fa-box' },
+    { id: 'salesBySeller', label: 'Ventas por vendedor', icon: 'fa-solid fa-user-tie' },
+    { id: 'inventory', label: 'Inventario actual', icon: 'fa-solid fa-boxes-stacked' },
+    { id: 'inventoryMovement', label: 'Movimiento inventario', icon: 'fa-solid fa-arrow-right-arrow-left' }
   ];
-  shoppings: any[] = [
-    { total_compra: 28000 },
-    { total_compra: 175000 },
-    { total_compra: 42000 }
-  ];
-  stock: any[] = [
-    { producto: 'Producto demo A', cantidad: 3 },
-    { producto: 'Producto demo B', cantidad: 18 },
-    { producto: 'Producto demo C', cantidad: 5 },
-    { producto: 'Producto demo D', cantidad: 11 }
-  ];
-  cards: AiDemoCard[] = [];
 
   constructor(
     private route : ActivatedRoute,
     private app: AppComponent, 
     private DataShared: DataSharedServicesService,
+    private reportsService: ReportsService,
     private router: Router) 
   {
   }
 
   ngOnInit(): void {
-    this.loadDemoData();
+    this.loadReport();
   }
 
   ngAfterContentInit():void {
@@ -64,70 +53,55 @@ export class GeneralComponent implements OnInit {
     });
   }
 
-  loadDemoData(): void {
-    this.cards = this.buildCards();
-    this.loading = false;
+  setReport(reportId: string): void {
+    this.activeReport = reportId;
+    this.loadReport();
   }
 
-  private buildCards(): AiDemoCard[] {
-    const salesTotals = this.orders.map(item => this.toNumber(item.total));
-    const shoppingTotals = this.shoppings.map(item => this.toNumber(item.total_compra));
-    const averageSale = this.average(salesTotals);
-    const averageShopping = this.average(shoppingTotals);
-    const unusualSales = this.orders.filter(item => this.toNumber(item.total) > averageSale * 1.5).length;
-    const highShoppings = this.shoppings.filter(item => this.toNumber(item.total_compra) > averageShopping * 1.5).length;
-    const lowStock = this.stock.filter(item => Number(item.cantidad || 0) <= 5).length;
-    const totalSales = salesTotals.reduce((sum, value) => sum + value, 0);
-    const totalShopping = shoppingTotals.reduce((sum, value) => sum + value, 0);
-    const cashSignal = totalSales - totalShopping;
+  loadReport(): void {
+    this.loading = true;
+    const request = this.activeReport === 'salesByProduct'
+      ? this.reportsService.salesByProduct(this.filters)
+      : this.activeReport === 'salesBySeller'
+        ? this.reportsService.salesBySeller(this.filters)
+        : this.activeReport === 'inventory'
+          ? this.reportsService.inventory(this.filters)
+          : this.activeReport === 'inventoryMovement'
+            ? this.reportsService.inventoryMovement(this.filters)
+            : this.reportsService.sales(this.filters);
 
-    return [
-      {
-        title: 'Ventas inusuales',
-        icon: 'fa-solid fa-chart-line',
-        status: 'Regla local',
-        value: `${unusualSales}`,
-        detail: unusualSales
-          ? 'Hay ordenes por encima del promedio esperado para revisar precios, cantidades o demanda.'
-          : 'No se detectan picos fuertes con la regla local actual.',
-        action: 'Futuro: explicar causas y sugerir combos o ajustes de inventario.'
+    request.subscribe({
+      next: data => {
+        this.rows = data.result || [];
+        this.summaryCards = this.buildSummary(this.rows);
+        this.loading = false;
       },
-      {
-        title: 'Productos con bajo movimiento',
-        icon: 'fa-solid fa-box-open',
-        status: 'Regla local',
-        value: `${lowStock}`,
-        detail: lowStock
-          ? 'Hay productos con existencia baja o critica segun el umbral local de 5 unidades.'
-          : 'No hay alertas de stock bajo con los datos actuales.',
-        action: 'Futuro: priorizar compras segun rotacion y margen.'
-      },
-      {
-        title: 'Gastos altos',
-        icon: 'fa-solid fa-receipt',
-        status: 'Regla local',
-        value: `${highShoppings}`,
-        detail: highShoppings
-          ? 'Algunas compras/gastos superan el comportamiento promedio registrado.'
-          : 'Los gastos registrados se mantienen dentro del rango esperado.',
-        action: 'Futuro: resumir proveedores, rubros y desviaciones.'
-      },
-      {
-        title: 'Sugerencias de caja',
-        icon: 'fa-solid fa-wallet',
-        status: 'Plantilla local',
-        value: this.formatMoney(cashSignal),
-        detail: cashSignal >= 0
-          ? 'La senal simple de caja queda positiva al comparar ventas y compras cargadas.'
-          : 'La senal simple de caja queda negativa; conviene revisar gastos recientes.',
-        action: 'Futuro: proponer cierre, alertas y preguntas en lenguaje natural.'
+      error: () => {
+        this.rows = [];
+        this.summaryCards = this.buildSummary([]);
+        this.loading = false;
       }
-    ];
+    });
   }
 
-  private average(values: number[]): number {
-    if (!values.length) return 0;
-    return values.reduce((sum, value) => sum + value, 0) / values.length;
+  exportExcel(): void {
+    const sheet = XLSX.utils.json_to_sheet(this.rows);
+    const book = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book, sheet, 'Reporte');
+    XLSX.writeFile(book, `marwee-${this.activeReport}-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  }
+
+  getColumns(): string[] {
+    return this.rows.length ? Object.keys(this.rows[0]) : [];
+  }
+
+  private buildSummary(rows: any[]): any[] {
+    const total = rows.reduce((sum, item) => sum + this.toNumber(item.total || item.valor_total || item.final_quantity), 0);
+    return [
+      { label: 'Registros', value: rows.length, icon: 'fa-solid fa-list-check' },
+      { label: 'Valor total', value: this.formatMoney(total), icon: 'fa-solid fa-coins' },
+      { label: 'Periodo', value: `${this.filters.dateFrom || '-'} / ${this.filters.dateTo || '-'}`, icon: 'fa-solid fa-calendar-days' }
+    ];
   }
 
   private toNumber(value: any): number {

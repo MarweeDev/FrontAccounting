@@ -4,6 +4,10 @@ import { AppComponent } from 'src/app/app.component';
 import { ModuleService } from 'src/app/core/services/module/module.service';
 import { OrderService } from 'src/app/core/services/order/order.service';
 import { UserService } from 'src/app/core/services/user/user.service';
+import { ShiftDTO } from 'src/app/core/models/shift';
+import { CashShiftService } from 'src/app/core/services/cash-shift/cash-shift.service';
+import { BusinessProfileType } from 'src/app/core/models/businessProfile';
+import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
 
 @Component({
   selector: 'app-mainlayout',
@@ -20,9 +24,16 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   activeButtonId: number | null = null;
   ListModule: any[] =[];
   ListOrder: any[] =[];
+  currentShift: ShiftDTO | null = null;
+  openingAmount = 0;
+  countedCash = 0;
+  businessProfile: BusinessProfileType = 'pymes';
+  showShiftWidget = true;
 
   constructor(private router: Router, private app: AppComponent, 
-    private ApiModule: ModuleService, private ApiOrder: OrderService, private ApiUser: UserService) {
+    private ApiModule: ModuleService, private ApiOrder: OrderService, private ApiUser: UserService,
+    private cashShiftService: CashShiftService,
+    private settingParameterService: SettingParameterService) {
   }
 
   ngOnInit(): void {
@@ -48,6 +59,8 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     if (savedId) {
       this.activeButtonId = parseInt(savedId, 10);
     }
+
+    this.loadBusinessProfileConfig();
   }
 
   ngAfterViewInit(): void {
@@ -64,6 +77,91 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     if (id == 0) {
       this.ApiUser.clearInfoUserCache();
       sessionStorage.clear();
+    }
+  }
+
+  loadCurrentShift(): void {
+    this.cashShiftService.current().subscribe({
+      next: data => this.currentShift = data.result,
+      error: () => this.currentShift = null
+    });
+  }
+
+  loadBusinessProfileConfig(): void {
+    this.settingParameterService.get().subscribe({
+      next: data => {
+        const parameters = data.result || [];
+        const profileParameter = parameters.find(item => item.grupo === 'empresa' && item.clave === 'perfil_negocio');
+        const shiftParameter = parameters.find(item => item.grupo === 'empresa' && item.clave === 'perfiles_turno_habilitado');
+        this.businessProfile = this.normalizeBusinessProfile(profileParameter?.valor || null);
+        this.showShiftWidget = this.isShiftVisibleForProfile(shiftParameter?.valor);
+        if (this.showShiftWidget) {
+          this.loadCurrentShift();
+        }
+      },
+      error: () => {
+        this.businessProfile = 'pymes';
+        this.showShiftWidget = true;
+        this.loadCurrentShift();
+      }
+    });
+  }
+
+  openShift(): void {
+    this.cashShiftService.open({ opening_amount: Number(this.openingAmount || 0), notes: 'Apertura desde aside' }).subscribe({
+      next: data => {
+        this.currentShift = data.result;
+        this.openingAmount = 0;
+      }
+    });
+  }
+
+  closeShift(): void {
+    if (!this.currentShift?.id) return;
+    this.cashShiftService.close(this.currentShift.id, { counted_cash: Number(this.countedCash || 0), notes: 'Cierre desde aside' }).subscribe({
+      next: data => {
+        this.currentShift = data.result;
+        this.countedCash = 0;
+      }
+    });
+  }
+
+  getShiftTitle(): string {
+    if (this.businessProfile === 'instituciones') return this.currentShift?.status === 'open' ? 'Jornada abierta' : 'Sin jornada';
+    if (this.businessProfile === 'pymes') return this.currentShift?.status === 'open' ? 'Caja abierta' : 'Sin caja';
+    return this.currentShift?.status === 'open' ? 'Turno abierto' : 'Sin turno';
+  }
+
+  getOpeningPlaceholder(): string {
+    if (this.businessProfile === 'instituciones') return 'Fondo inicial';
+    if (this.businessProfile === 'pymes') return 'Base caja';
+    return 'Monto base';
+  }
+
+  getClosingPlaceholder(): string {
+    if (this.businessProfile === 'instituciones') return 'Conteo jornada';
+    return 'Conteo cierre';
+  }
+
+  private normalizeBusinessProfile(value: string | null): BusinessProfileType {
+    if (value === 'instituto') return 'instituciones';
+    if (value === 'restaurante' || value === 'bar') return 'gastronomia';
+    if (value === 'servicios' || value === 'productos' || value === 'pyme' || value === 'personalizado') return 'pymes';
+    if (value === 'gastronomia' || value === 'instituciones' || value === 'pymes') return value;
+    return 'pymes';
+  }
+
+  private isShiftVisibleForProfile(value?: string): boolean {
+    if (!value) return this.businessProfile !== 'instituciones';
+
+    try {
+      const enabledProfiles = JSON.parse(value);
+      if (!Array.isArray(enabledProfiles)) return true;
+      return enabledProfiles
+        .map(item => this.normalizeBusinessProfile(item))
+        .includes(this.businessProfile);
+    } catch {
+      return true;
     }
   }
 

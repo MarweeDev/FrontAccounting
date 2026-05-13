@@ -4,9 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { ProductDTO } from 'src/app/core/models/product';
 import { ShoppingDTO } from 'src/app/core/models/shopping';
+import { AppliedTaxDTO, TaxDTO } from 'src/app/core/models/tax';
 import { ProductService } from 'src/app/core/services/product/product.service';
 import { ShoppingService } from 'src/app/core/services/shopping/shopping.service';
 import { SupplierService } from 'src/app/core/services/supplier/supplier.service';
+import { TaxService } from 'src/app/core/services/tax/tax.service';
 import { SelectItem } from 'src/app/shared/components/form-items/select/select.component';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
@@ -21,6 +23,7 @@ export class NewShoppingComponent implements OnInit {
   providers: SelectItem[] = [];
   products: SelectItem[] = [];
   productRows: ProductDTO[] = [];
+  taxOptions: TaxDTO[] = [];
   isEditMode = false;
   shoppingId?: string | null;
 
@@ -38,6 +41,7 @@ export class NewShoppingComponent implements OnInit {
     protected shoppingService: ShoppingService,
     protected supplierService: SupplierService,
     protected productService: ProductService,
+    protected taxService: TaxService,
     protected toastService: ToastService
   ) {
     this.purchaseForm = this.fb.group({
@@ -50,6 +54,7 @@ export class NewShoppingComponent implements OnInit {
       totalBruto: [0],
       descuentos: [0],
       subtotal: [0],
+      totalImpuestos: [0],
       totalNeto: [0]
     });
   }
@@ -92,6 +97,10 @@ export class NewShoppingComponent implements OnInit {
         this.addItem();
       }
     });
+
+    this.taxService.getForModule('shopping').subscribe(taxes => {
+      this.taxOptions = taxes;
+    });
   }
 
   loadShopping(): void {
@@ -115,6 +124,8 @@ export class NewShoppingComponent implements OnInit {
             description: item.producto || '',
             quantity: item.cantidad,
             unitValue: item.valor_unitario,
+            taxes: item.taxes || [],
+            taxValue: item.total_impuesto || 0,
             totalValue: item.total || 0
           }));
         });
@@ -136,7 +147,9 @@ export class NewShoppingComponent implements OnInit {
       quantity: [value?.quantity || 1, [Validators.required, Validators.min(1)]],
       unitValue: [value?.unitValue || 0, Validators.required],
       discount: [value?.discount || 0],
-      totalValue: [value?.totalValue || 0]
+      totalValue: [value?.totalValue || 0],
+      taxes: [value?.taxes || []],
+      taxValue: [value?.taxValue || 0]
     });
   }
 
@@ -173,18 +186,23 @@ export class NewShoppingComponent implements OnInit {
     const quantity = Number(item.get('quantity')?.value || 0);
     const unitValue = Number(item.get('unitValue')?.value || 0);
     const discount = Number(item.get('discount')?.value || 0);
-    const total = (quantity * unitValue) - discount;
-    item.patchValue({ totalValue: total }, { emitEvent: false });
+    const subtotal = Math.max((quantity * unitValue) - discount, 0);
+    const taxes = this.getAppliedTaxes(index, subtotal);
+    const taxValue = taxes.reduce((sum, tax) => sum + tax.value, 0);
+    const total = subtotal + taxValue;
+    item.patchValue({ totalValue: total, taxValue, taxes }, { emitEvent: false });
     this.calculateTotals();
   }
 
   calculateTotals(): void {
     let totalBruto = 0;
     let descuentos = 0;
+    let totalImpuestos = 0;
 
     this.items.controls.forEach(control => {
       totalBruto += Number(control.get('quantity')?.value || 0) * Number(control.get('unitValue')?.value || 0);
       descuentos += Number(control.get('discount')?.value || 0);
+      totalImpuestos += Number(control.get('taxValue')?.value || 0);
     });
 
     const subtotal = totalBruto - descuentos;
@@ -192,7 +210,8 @@ export class NewShoppingComponent implements OnInit {
       totalBruto,
       descuentos,
       subtotal,
-      totalNeto: subtotal
+      totalImpuestos,
+      totalNeto: subtotal + totalImpuestos
     }, { emitEvent: false });
   }
 
@@ -215,9 +234,12 @@ export class NewShoppingComponent implements OnInit {
       codigo: raw.invoiceNumber,
       id_proveedor: raw.provider,
       items: raw.items.map((item: any) => ({
+        type: Number(item.type || 1),
         id_producto: item.product,
         cantidad: Number(item.quantity),
-        valor_unitario: Number(item.unitValue)
+        valor_unitario: Number(item.unitValue),
+        discount: Number(item.discount || 0),
+        taxes: item.taxes || []
       }))
     };
 
@@ -241,6 +263,47 @@ export class NewShoppingComponent implements OnInit {
 
   generateCode(): string {
     return `FC-${Date.now()}`;
+  }
+
+  toggleTax(index: number, tax: TaxDTO, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const item = this.items.at(index);
+    const selected = Array.isArray(item.get('taxes')?.value) ? item.get('taxes')?.value : [];
+    const next = checked
+      ? [...selected.filter((current: AppliedTaxDTO) => current.id_tax !== tax.id), this.toAppliedTax(tax, 0)]
+      : selected.filter((current: AppliedTaxDTO) => current.id_tax !== tax.id);
+    item.patchValue({ taxes: next }, { emitEvent: false });
+    this.calculateItemTotal(index);
+  }
+
+  hasTax(index: number, tax: TaxDTO): boolean {
+    const selected = this.items.at(index).get('taxes')?.value || [];
+    return selected.some((item: AppliedTaxDTO) => item.id_tax === tax.id);
+  }
+
+  getTaxSummary(index: number): string {
+    const selected = this.items.at(index).get('taxes')?.value || [];
+    if (!selected.length) return 'Sin impuesto';
+    return selected.map((item: AppliedTaxDTO) => `${item.name} ${item.percentage}%`).join(' + ');
+  }
+
+  private getAppliedTaxes(index: number, base: number): AppliedTaxDTO[] {
+    const selected = this.items.at(index).get('taxes')?.value || [];
+    return selected.map((item: AppliedTaxDTO) => ({
+      ...item,
+      base,
+      value: (base * Number(item.percentage || 0)) / 100
+    }));
+  }
+
+  private toAppliedTax(tax: TaxDTO, base: number): AppliedTaxDTO {
+    return {
+      id_tax: tax.id,
+      name: tax.name,
+      percentage: Number(tax.percentage || 0),
+      base,
+      value: (base * Number(tax.percentage || 0)) / 100
+    };
   }
 
   showError(error: any): void {

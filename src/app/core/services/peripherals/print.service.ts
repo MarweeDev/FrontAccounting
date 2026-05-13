@@ -106,6 +106,9 @@ export class PrintService {
         <title>${this.escape(job.title)}</title>
         <style>
           body { font-family: Arial, sans-serif; color: #222; margin: 24px; }
+          .brand { align-items: center; border-bottom: 2px solid #ff7900; display: flex; justify-content: space-between; margin-bottom: 16px; padding-bottom: 10px; }
+          .brand strong { color: #ff3300; font-size: 18px; letter-spacing: .5px; }
+          .brand small { color: #5f6b7a; display: block; font-size: 10px; text-transform: uppercase; }
           h1 { font-size: 20px; margin: 0 0 6px; }
           .muted, .disclaimer { color: #5f6b7a; font-size: 12px; }
           .meta { margin: 16px 0; font-size: 12px; line-height: 1.6; }
@@ -117,6 +120,13 @@ export class PrintService {
         </style>
       </head>
       <body>
+        <div class="brand">
+          <div>
+            <strong>Marwee</strong>
+            <small>Operacion inteligente</small>
+          </div>
+          <small>Documento interno</small>
+        </div>
         <h1>${this.escape(job.title)}</h1>
         <div class="muted">Referencia ${this.escape(job.reference)}</div>
         <div class="meta">
