@@ -1,0 +1,292 @@
+<section class="container-component">
+  <div class="access-hero">
+    <div>
+      <p>Super admin</p>
+      <h1>Control de Acceso</h1>
+    </div>
+    <div class="metric-row">
+      <span>Empresas <strong>{{summary.subscribers}}</strong></span>
+      <span>Usuarios <strong>{{summary.users}}</strong></span>
+      <span>Roles <strong>{{summary.roles}}</strong></span>
+      <span>Modulos <strong>{{summary.modules}}</strong></span>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">{{activeTab | uppercase}}</p>
+        <div class="container-pag">
+          <button type="button" class="rd-4" *ngFor="let tab of tabs" [class.active-filter]="tab.id === activeTab" (click)="setTab(tab.id)">
+            <i [className]="tab.icon"></i>
+            <span>{{tab.label}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'empresas'">
+      <form class="admin-form" (ngSubmit)="saveSubscriber()">
+        <h2>{{editingSubscriberId ? 'Editar empresa' : 'Nueva empresa'}}</h2>
+        <label>Responsable<input name="responsable" [(ngModel)]="subscriberForm.responsable" required></label>
+        <label>NIT<input name="nit" [(ngModel)]="subscriberForm.nit"></label>
+        <label>Contacto<input name="contacto" [(ngModel)]="subscriberForm.contacto_n" required></label>
+        <label>Correo<input name="correo" type="email" [(ngModel)]="subscriberForm.correo" required></label>
+        <label>Plan
+          <select name="plan" [(ngModel)]="subscriberForm.id_plan" required>
+            <option [ngValue]="undefined">Seleccione</option>
+            <option *ngFor="let plan of catalogs.plans" [ngValue]="plan.id">{{plan.tipo}} - {{plan.precio | currency}}</option>
+          </select>
+        </label>
+        <label>Finaliza<input name="fechaFinalizacion" type="date" [(ngModel)]="subscriberForm.fecha_finalizacion"></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingSubscriberId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelSubscriber()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Empresa</th><th>Codigo</th><th>Correo</th><th>Plan</th><th>Finaliza</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let item of subscribers">
+              <td><strong>{{item.responsable}}</strong><p>{{item.nit || 'Sin NIT'}}</p></td>
+              <td>{{item.codigo}}</td>
+              <td>{{item.correo}}</td>
+              <td>{{item.id_plan}}</td>
+              <td>{{item.fecha_finalizacion | date:'yyyy-MM-dd'}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editSubscriber(item)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableSubscriber(item)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'usuarios'">
+      <form class="admin-form" (ngSubmit)="saveUser()">
+        <h2>{{editingUserId ? 'Editar usuario' : 'Nuevo usuario'}}</h2>
+        <label>Nombre<input name="nombre" [(ngModel)]="userForm.nombre" required></label>
+        <label>Cedula<input name="cedula" type="number" [(ngModel)]="userForm.cedula"></label>
+        <label>Cargo<input name="cargo" [(ngModel)]="userForm.cargo"></label>
+        <label>Usuario<input name="usuario" [(ngModel)]="userForm.usuario" required></label>
+        <label>Password<input name="password" type="password" [(ngModel)]="userForm.password" [required]="!editingUserId"></label>
+        <label>Empresa
+          <select name="empresa" [(ngModel)]="userForm.id_suscrito" required>
+            <option [ngValue]="undefined">Seleccione</option>
+            <option *ngFor="let item of catalogs.subscribers" [ngValue]="item.id">{{item.responsable}}</option>
+          </select>
+        </label>
+        <label>Rol
+          <select name="rolUsuario" [(ngModel)]="userForm.id_rol" required>
+            <option [ngValue]="undefined">Seleccione</option>
+            <option *ngFor="let role of catalogs.roles" [ngValue]="role.id">{{role.rol}}</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingUserId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelUser()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Usuario</th><th>Empresa</th><th>Rol</th><th>Cargo</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let item of users">
+              <td><strong>{{item.colaborador}}</strong><p>{{item.usuario}}</p></td>
+              <td>{{item.suscrito || '-'}}</td>
+              <td>{{item.rol || '-'}}</td>
+              <td>{{item.cargo || '-'}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editUser(item)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableUser(item)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'roles'">
+      <form class="admin-form" (ngSubmit)="saveRole()">
+        <h2>{{editingRoleId ? 'Editar rol' : 'Nuevo rol'}}</h2>
+        <label>Rol<input name="rol" [(ngModel)]="roleForm.rol" required></label>
+        <label>Descripcion<textarea name="descripcion" rows="4" [(ngModel)]="roleForm.descripcion"></textarea></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingRoleId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelRole()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Rol</th><th>Descripcion</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let role of catalogs.roles">
+              <td>{{role.rol}}</td>
+              <td>{{role.descripcion || '-'}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editRole(role)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableRole(role)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-shell" *ngIf="activeTab === 'modulos'">
+      <form class="admin-form" (ngSubmit)="saveModule()">
+        <h2>{{editingModuleId ? 'Editar modulo' : 'Nuevo modulo'}}</h2>
+        <label>Nombre<input name="modulo" [(ngModel)]="moduleForm.modulo" required></label>
+        <label>Ruta<input name="rutaModulo" [(ngModel)]="moduleForm.ruta" placeholder="access-control/dashboard" required></label>
+        <label>Icono
+          <select name="iconoModulo" [(ngModel)]="moduleForm.icono">
+            <option value="fa-solid fa-store">Ventas</option>
+            <option value="fa-solid fa-bag-shopping">Compras</option>
+            <option value="fa-solid fa-clipboard-list">Inventario</option>
+            <option value="fa-solid fa-chart-simple">Reportes</option>
+            <option value="fa-solid fa-sliders">Ajustes</option>
+            <option value="fa-solid fa-code">Desarrollo</option>
+            <option value="fa-solid fa-user-shield">Control de Acceso</option>
+            <option value="fa-solid fa-cube">Generico</option>
+          </select>
+        </label>
+        <label>Posicion<input name="positionModule" type="number" [(ngModel)]="moduleForm.position_module"></label>
+        <label>Descripcion<textarea name="descripcionModulo" rows="4" [(ngModel)]="moduleForm.descripcion"></textarea></label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving"><i class="fa-solid fa-check"></i> {{editingModuleId ? 'Actualizar' : 'Crear'}}</button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelModule()" [disabled]="isSaving"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <table>
+          <thead><tr><th>Modulo</th><th>Ruta</th><th>Icono</th><th>Orden</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let module of catalogs.modules">
+              <td><strong>{{module.modulo}}</strong><p>{{module.descripcion || '-'}}</p></td>
+              <td>{{module.ruta}}</td>
+              <td><i [className]="module.icono || 'fa-solid fa-cube'"></i> {{module.icono}}</td>
+              <td>{{module.position_module}}</td>
+              <td>
+                <button class="btn-option" type="button" (click)="editModule(module)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-option" type="button" (click)="disableModule(module)" title="Deshabilitar"><i class="fa-solid fa-ban"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="permissions-shell" *ngIf="activeTab === 'permisos'">
+      <aside class="role-list">
+        <button type="button" *ngFor="let role of catalogs.roles" [class.active-role]="role.id === selectedRoleId" (click)="selectRole(role)">
+          <i class="fa-solid fa-user-tag"></i>
+          <span>{{role.rol}}</span>
+        </button>
+      </aside>
+
+      <div class="module-grid">
+        <label class="module-toggle" *ngFor="let module of catalogs.modules">
+          <input type="checkbox" [checked]="module.id ? selectedModules[module.id] : false" (change)="toggleModule(module, $event)">
+          <span><i [className]="module.icono || 'fa-solid fa-cube'"></i></span>
+          <strong>{{module.modulo}}</strong>
+          <small>{{module.ruta}}</small>
+        </label>
+        <div class="permission-actions">
+          <button type="button" class="btn btn-success btn-i rd-4" (click)="savePermissions()" [disabled]="isSaving || !selectedRoleId">
+            <i class="fa-solid fa-check"></i> Guardar permisos
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="audit-shell" *ngIf="activeTab === 'auditoria'">
+      <div class="audit-filters">
+        <label>Accion
+          <select name="auditAccion" [(ngModel)]="auditFilters.accion">
+            <option [ngValue]="undefined">Todas</option>
+            <option value="crear">Crear</option>
+            <option value="actualizar">Actualizar</option>
+            <option value="deshabilitar">Deshabilitar</option>
+            <option value="reactivar">Reactivar</option>
+            <option value="actualizar_permisos">Permisos</option>
+          </select>
+        </label>
+        <label>Entidad<input name="auditEntidad" [(ngModel)]="auditFilters.entidad" placeholder="usuarios, modulo..."></label>
+        <label>Usuario
+          <select name="auditUsuario" [(ngModel)]="auditFilters.id_usuario">
+            <option [ngValue]="undefined">Todos</option>
+            <option *ngFor="let item of users" [ngValue]="item.id">{{item.usuario}}</option>
+          </select>
+        </label>
+        <label>Empresa
+          <select name="auditEmpresa" [(ngModel)]="auditFilters.id_suscrito">
+            <option [ngValue]="undefined">Todas</option>
+            <option *ngFor="let item of catalogs.subscribers" [ngValue]="item.id">{{item.responsable}}</option>
+          </select>
+        </label>
+        <label>Modulo
+          <select name="auditModulo" [(ngModel)]="auditFilters.id_modulo">
+            <option [ngValue]="undefined">Todos</option>
+            <option *ngFor="let item of catalogs.modules" [ngValue]="item.id">{{item.modulo}}</option>
+          </select>
+        </label>
+        <label>Desde<input name="auditDesde" type="date" [(ngModel)]="auditFilters.dateFrom"></label>
+        <label>Hasta<input name="auditHasta" type="date" [(ngModel)]="auditFilters.dateTo"></label>
+        <div class="audit-filter-actions">
+          <button type="button" class="btn btn-success btn-i rd-4" (click)="applyAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-filter"></i> Filtrar</button>
+          <button type="button" class="btn btn-default rd-4" (click)="clearAuditFilters()" [disabled]="isSaving"><i class="fa-solid fa-eraser"></i> Limpiar</button>
+        </div>
+      </div>
+
+      <div class="container-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Usuario</th>
+              <th>Empresa</th>
+              <th>Modulo</th>
+              <th>Accion</th>
+              <th>Entidad</th>
+              <th>Descripcion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of auditEvents">
+              <td>{{item.fecha_creacion | date:'yyyy-MM-dd HH:mm'}}</td>
+              <td>{{getUserLabel(item.id_usuario)}}</td>
+              <td>{{getSubscriberLabel(item.id_suscrito)}}</td>
+              <td>{{getModuleLabel(item.id_modulo)}}</td>
+              <td><span class="audit-action">{{item.accion}}</span></td>
+              <td><strong>{{item.entidad}}</strong><p>{{item.id_entidad || '-'}}</p></td>
+              <td>{{item.descripcion || '-'}}</td>
+            </tr>
+            <tr *ngIf="auditEvents.length === 0">
+              <td colspan="7">No hay eventos de auditoria activos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="audit-pagination">
+        <button type="button" class="btn-option" (click)="changeAuditPage(-1)" [disabled]="auditFilters.page <= 1">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span>Pagina {{auditPagination.page}} de {{auditPagination.totalPages || 1}} · {{auditPagination.total}} eventos</span>
+        <button type="button" class="btn-option" (click)="changeAuditPage(1)" [disabled]="auditPagination.totalPages === 0 || auditFilters.page >= auditPagination.totalPages">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <select name="auditPageSize" [(ngModel)]="auditFilters.pageSize" (change)="changeAuditPageSize()">
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="50">50</option>
+          <option [ngValue]="80">80</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>

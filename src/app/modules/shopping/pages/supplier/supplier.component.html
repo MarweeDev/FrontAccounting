@@ -1,7 +1,15 @@
 <section class="container-component">
     <!--Titulo componente-->
     <div class="container-prev">
-        <h3 class="title">Gestión de Compras</h3>
+        <!--<h3 class="title">Gestión de Compras</h3>-->
+        <div class="container-search">
+            <label for="searchId">
+                <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+                <span>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </label>
+        </div>
     </div>
 
     <br>
@@ -12,33 +20,35 @@
             
         </div>
         <div class="container-head">
-            <p class="count-register">Resultados <strong>{{ListOrder ? ListOrder.length : 0}}</strong></p>
-            <div class="container-pag">
-                <div class="container-select-filter">
-                    <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
-                        <option value="kilo">Kilo</option>
-                        <option value="libra">Libra</option>
-                        <option value="litro">Litro</option>
-                        <option value="mililitro">Mililitro</option>
-                        <option value="unidad">Unidad</option>
-                        <option value="gramo">Gramo</option>
-                        <option value="onza">Onza</option>
-                        <option value="metro">Metro</option>
-                        <option value="centimetro">Centímetro</option>
-                        <option value="milimetro">Milímetro</option>
-                    </select>
-                </div>
-
-                <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
-                <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
-                <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
-                
-                <div>
-                    <select id="selectCount" (change)="onSelectInit()">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                    </select>
+            <div class="banner">
+                <p class="count-register">Resultados <strong>{{ListOrder ? ListOrder.length : 0}}</strong></p>
+                <div class="container-pag">
+                    <div class="container-select-filter">
+                        <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
+                            <option value="kilo">Kilo</option>
+                            <option value="libra">Libra</option>
+                            <option value="litro">Litro</option>
+                            <option value="mililitro">Mililitro</option>
+                            <option value="unidad">Unidad</option>
+                            <option value="gramo">Gramo</option>
+                            <option value="onza">Onza</option>
+                            <option value="metro">Metro</option>
+                            <option value="centimetro">Centímetro</option>
+                            <option value="milimetro">Milímetro</option>
+                        </select>
+                    </div>
+    
+                    <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                    <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
+                    <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+                    
+                    <div>
+                        <select id="selectCount" (change)="onSelectInit()">
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

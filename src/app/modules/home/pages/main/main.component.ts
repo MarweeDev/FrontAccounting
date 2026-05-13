@@ -36,7 +36,7 @@ export class MainComponent implements OnInit {
     if (auth != undefined && auth != "") {
       let t = new token();
       t.token = auth;
-      this.ApiUser.getInfoUser(t).subscribe(data => {
+      this.ApiUser.getInfoUserCached(t).subscribe(data => {
         this.ListModule = data.result;
       });
     }
@@ -57,7 +57,6 @@ export class MainComponent implements OnInit {
   OnRouterModule(router:any, id:any=null){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
-    this.app.OnLoadingModule();
 
     localStorage.setItem("nav_left", id ? id : '');
   }

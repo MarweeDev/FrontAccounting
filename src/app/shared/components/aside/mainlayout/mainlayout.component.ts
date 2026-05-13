@@ -14,7 +14,9 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
 
   user : string = "ivagomal";
   rol : string = "super admin";
+  companyName : string = "Accounts POS";
   total : number = 0;
+  imagenBase64: string = '';
   activeButtonId: number | null = null;
   ListModule: any[] =[];
   ListOrder: any[] =[];
@@ -33,11 +35,12 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     if (auth != undefined && auth != "") {
       let t = new token();
       t.token = auth;
-      this.ApiUser.getInfoUser(t).subscribe(data => {
+      this.ApiUser.getInfoUserCached(t).subscribe(data => {
         this.ListModule = data.result;
         this.user  = this.ListModule[0].usuario;
         this.rol  = this.ListModule[0].rol;
-        console.log(this.ListModule)
+        this.companyName = this.ListModule[0].empresa || this.ListModule[0].responsable || "Accounts POS";
+        this.imagenBase64 = `${this.ListModule[0].imagen}`;
       });
     }
 
@@ -54,14 +57,40 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   OnRouterModule(router:any, id:any=null){
     this.router.navigate([router]);
     this.app.OnHiddenBar();
-    this.app.OnLoadingModule();
 
     this.activeButtonId = id;
     localStorage.setItem("nav_left", id ? id : '');
 
     if (id == 0) {
+      this.ApiUser.clearInfoUserCache();
       sessionStorage.clear();
     }
+  }
+
+  isReportsModule(item: any): boolean {
+    const route = `${item?.ruta || ''}`.toLowerCase();
+    const moduleName = `${item?.modulo || ''}`.toLowerCase();
+    return route.includes('reports') || moduleName.includes('reporte');
+  }
+
+  getInitials(value?: string): string {
+    const text = `${value || this.user || 'U'}`.trim();
+    const parts = text.split(' ').filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+
+  getModuleKind(item: any): string {
+    const route = `${item?.ruta || ''}`.toLowerCase();
+    const moduleName = `${item?.modulo || ''}`.toLowerCase();
+    if (route.includes('sales') || moduleName.includes('venta')) return 'Caja';
+    if (route.includes('shopping') || moduleName.includes('compra')) return 'Gasto';
+    if (route.includes('inventory') || moduleName.includes('inventario')) return 'Stock';
+    if (route.includes('reports') || moduleName.includes('reporte')) return 'IA';
+    if (route.includes('settings') || moduleName.includes('ajuste')) return 'Config';
+    if (route.includes('access') || moduleName.includes('acceso')) return 'Admin';
+    if (route.includes('dev') || moduleName.includes('dev')) return 'Lab';
+    return 'Modulo';
   }
 
   // Función para generar un color aleatorio
@@ -76,6 +105,13 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     const color = '#' + ((hash & 0xFFFFFF) | 0x1000000).toString(16).slice(1);
     
     return color;
+  }
+
+  getBase64FromBuffer(buffer: number[]): string {
+    const uint8Array = new Uint8Array(buffer);
+    let binary = '';
+    uint8Array.forEach(byte => binary += String.fromCharCode(byte));
+    return window.btoa(binary);
   }
 
 }

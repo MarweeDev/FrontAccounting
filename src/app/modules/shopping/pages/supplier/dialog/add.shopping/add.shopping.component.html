@@ -1,33 +1,48 @@
 <section class="container-component">
-    <div class="card">
-        <h3>Proceso de creación</h3>
-        <form [formGroup]="form" (ngSubmit)="add()">
-            <label for="numero">
-                <input type="text" id="numero" formControlName="Numero" placeholder="Número">
-                <div class="error-message" *ngIf="form.get('Numero')?.hasError('required') && form.get('Numero')?.touched">
-                    Requerido
-                </div>
-            </label>
-          
-            <label for="nombre">
-                <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
-                <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
-                    Requerido
-                </div>
-            </label>
-          
-            <label for="capacidad">
-                <input type="text" id="capacidad" formControlName="Capacidad" placeholder="Capacidad">
-                <div class="error-message" *ngIf="form.get('Capacidad')?.hasError('required') && form.get('Capacidad')?.touched">
-                    Requerido
-                </div>
-            </label>
-          
-            <div class="container-btn">
-                <button type="submit" class="btn btn-success m-2 rd-4">Crear</button>
-                <button type="button" class="btn btn-default rd-4" (click)="cancel()">Cancelar</button>
-            </div>
-        </form>
+  <div class="card">
+    <div class="supplier-header">
+      <div class="supplier-icon">
+        <i class="fa-solid fa-truck-field"></i>
+      </div>
+      <div>
+        <h3>Nuevo proveedor</h3>
+        <p>Registra la información básica para usarlo en compras.</p>
+      </div>
     </div>
-</section>
 
+    <form [formGroup]="form" (ngSubmit)="add()">
+      <label for="proveedor">
+        <input type="text" id="proveedor" formControlName="Proveedor" placeholder="Proveedor">
+        <div class="error-message" *ngIf="form.get('Proveedor')?.hasError('required') && form.get('Proveedor')?.touched">
+          Requerido
+        </div>
+      </label>
+
+      <label for="nit">
+        <input type="text" id="nit" formControlName="Nit" placeholder="NIT">
+        <div class="error-message" *ngIf="form.get('Nit')?.hasError('required') && form.get('Nit')?.touched">
+          Requerido
+        </div>
+      </label>
+
+      <label for="contacto">
+        <input type="text" id="contacto" formControlName="Contacto" placeholder="Contacto">
+        <div class="error-message" *ngIf="form.get('Contacto')?.hasError('required') && form.get('Contacto')?.touched">
+          Requerido
+        </div>
+      </label>
+
+      <label for="descripcion">
+        <input type="text" id="descripcion" formControlName="Descripcion" placeholder="Descripción">
+        <div class="error-message" *ngIf="form.get('Descripcion')?.hasError('required') && form.get('Descripcion')?.touched">
+          Requerido
+        </div>
+      </label>
+
+      <div class="container-btn">
+        <button type="button" class="btn btn-default rd-4" (click)="cancel()">Cancelar</button>
+        <button type="submit" class="btn btn-success m-2 rd-4">Crear proveedor</button>
+      </div>
+    </form>
+  </div>
+</section>

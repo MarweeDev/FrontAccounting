@@ -13,7 +13,7 @@
 .container-componentt::before {
     content: '';
     background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    background: var(--brand-gradient);
     position: fixed;
     top: 0px; left: 0px; right: 0px;
     height: 35%;
@@ -39,7 +39,7 @@
     display: grid;
     justify-content: center;
     background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    background: var(--brand-gradient);
 }
 .container-component .banner::before {
     content: '';
@@ -89,7 +89,7 @@
          
 .container-btn button {
     background-color: transparent !important;
-    background-image: linear-gradient(to right, rgba(255, 51, 0, 1) 0%, rgb(253, 81, 38) 51%, rgba(255, 51, 0, 1) 100%) !important;
+    background-image: var(--brand-gradient-button) !important;
     background-size: 200% auto !important;
 }
 

@@ -12,11 +12,16 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 })
 export class RegisterComponent implements OnInit {
 
+  searchTerm : string = '';
   orderCode: any;
   visibleDetails : boolean = false;
+  visibleHistory: boolean = false;
+  historyLoading: boolean = false;
 
   ListOrder: any[] =[];
+  HistoryListOrder: any[] = [];
   FilterListOrder : any[] = [];
+  FilterListOrderSearch : any[] = [];
   currentPage: number = 1;
   itemsPorPagina: number = 10;
   TotalPag : number = 0;
@@ -42,13 +47,14 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.onLoadSelectDate();
+    this.OnReloadSearch();
   }
   
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Exportar', url: 'sales/neworder/register/export', icon: 'fa-solid fa-file-arrow-down', type: "btn-origin"},
-      { nombre: 'Nueva orden', url: 'sales/neworder/order', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Reportes', url: 'sales/register/export', icon: 'fa-solid fa-file-arrow-down', type: "btn-origin"},
+      { nombre: 'Nueva orden', url: 'sales/order', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -88,7 +94,6 @@ export class RegisterComponent implements OnInit {
     if (DateEle != undefined) {
       this.ApiOrder.getFind(orderData).subscribe(data => {
         this.ListOrder = data.result;
-  
         this.onSelectInit();
       },error => {
         console.log('Error get: ', error)
@@ -101,6 +106,7 @@ export class RegisterComponent implements OnInit {
     this.TotalPag = Math.ceil(this.ListOrder?.length / element.value);
     this.itemsPorPagina = element.value;
     this.FilterListOrder = this.ListOrder?.slice(0, this.itemsPorPagina);
+    this.FilterListOrderSearch = this.FilterListOrder;
 
     if (this.currentPage > this.TotalPag) {
       this.currentPage = 1;
@@ -148,14 +154,47 @@ export class RegisterComponent implements OnInit {
   }
 
   getDetailsOrder(code:any){
-    //this.router.navigate(['/sales/neworder/register/details', code]);
+    //this.router.navigate(['/sales/register/details', code]);
     this.orderCode = code;
     this.visibleDetails = true;
 
   }
 
   getPayOrder(code:any){
-    this.router.navigate(['/sales/neworder/payments', code]);
+    this.router.navigate(['/sales/payments', code]);
+  }
+
+  openHistory(): void {
+    this.visibleHistory = true;
+    this.loadSalesHistory();
+  }
+
+  closeHistory(): void {
+    this.visibleHistory = false;
+  }
+
+  get recentPaidOrders(): any[] {
+    return (this.HistoryListOrder || [])
+      .filter(item => item.nombre === 'Pagada' || item.nombre === 'Credito')
+      .slice(0, 12);
+  }
+
+  loadSalesHistory(): void {
+    const startDate = this.yearRange || this.monthRange || this.todayStr || this.formatDate(new Date());
+    const orderData: OrderDTO = {
+      id_estadoorden: 0,
+      fecha_creacion: startDate as any
+    };
+
+    this.historyLoading = true;
+    this.ApiOrder.getFind(orderData).subscribe(data => {
+      this.HistoryListOrder = data.result || [];
+      this.historyLoading = false;
+    }, error => {
+      this.HistoryListOrder = [];
+      this.historyLoading = false;
+      console.log('Error get history: ', error);
+    });
   }
 
 
@@ -196,4 +235,26 @@ export class RegisterComponent implements OnInit {
     this.yearRange = `${lastYearStr}`;
   }
 
+  OnSearchChange(search: string) {
+    this.DataShared.OnSet(search);
+  }
+
+  OnReloadSearch() {
+    this.DataShared.OnGet().subscribe((list: any) => {
+      this.searchTerm = list
+
+      if (list == undefined || list == null || list == "") {
+        this.FilterListOrder = this.FilterListOrderSearch;
+      }
+      else {
+        this.FilterListOrder = this.FilterListOrder.filter(item => {
+          return Object.values(item).some(value =>
+            value?.toString().toLowerCase().includes(list.toLowerCase())
+          );
+        });
+      }
+    });
+
+    this.onLoadOrder();
+  }
 }

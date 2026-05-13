@@ -1,0 +1,178 @@
+<section class="container-component">
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">Ajustes configurados <strong>{{configuredCount}}</strong></p>
+        <div class="container-pag">
+          <button
+            type="button"
+            class="rd-4"
+            *ngFor="let section of sections"
+            [class.active-filter]="section.id === activeSection"
+            (click)="setSection(section.id)"
+            [title]="section.title">
+            <i [className]="section.icon"></i>
+            <span>{{section.title}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-shell">
+      <aside class="section-summary">
+        <div class="summary-icon">
+          <i [className]="currentSection.icon"></i>
+        </div>
+        <h1>{{currentSection.title}}</h1>
+        <p>{{currentSection.description}}</p>
+      </aside>
+
+      <div class="theme-panel" *ngIf="activeSection === 'apariencia'; else settingsContent">
+        <div class="appearance-group">
+          <h2>Tema visual</h2>
+        </div>
+        <button
+          type="button"
+          class="theme-card"
+          *ngFor="let theme of themes"
+          [class.active-theme]="theme.id === selectedTheme"
+          (click)="setTheme(theme.id)">
+          <span class="theme-preview" aria-hidden="true">
+            <i *ngFor="let color of theme.swatches" [style.background]="color"></i>
+          </span>
+          <span class="theme-copy">
+            <strong>{{theme.label}}</strong>
+            <small>{{theme.description}}</small>
+          </span>
+          <span class="theme-status">
+            <i [className]="theme.id === selectedTheme ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+          </span>
+        </button>
+
+        <div class="appearance-group">
+          <h2>Efecto ambiental</h2>
+        </div>
+        <button
+          type="button"
+          class="theme-card effect-card"
+          *ngFor="let effect of visualEffects"
+          [class.active-theme]="effect.id === selectedEffect"
+          (click)="setVisualEffect(effect.id)">
+          <span class="effect-preview" aria-hidden="true">
+            <i [className]="effect.icon"></i>
+          </span>
+          <span class="theme-copy">
+            <strong>{{effect.label}}</strong>
+            <small>{{effect.description}}</small>
+          </span>
+          <span class="theme-status">
+            <i [className]="effect.id === selectedEffect ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+          </span>
+        </button>
+      </div>
+
+      <ng-template #settingsContent>
+      <div class="payment-method-panel" *ngIf="activeSection === 'medios_pago'; else parameterSettings">
+        <form class="payment-method-form" (ngSubmit)="savePaymentMethod()">
+          <h2>{{paymentMethodForm.id ? 'Editar medio' : 'Nuevo medio'}}</h2>
+          <label>Nombre<input name="paymentName" [(ngModel)]="paymentMethodForm.name" placeholder="Ej: Bre-B / Llave"></label>
+          <label>Tipo
+            <select name="paymentType" [(ngModel)]="paymentMethodForm.method_type">
+              <option value="cash">Efectivo</option>
+              <option value="terminal">Datáfono / Tarjeta</option>
+              <option value="transfer">Transferencia</option>
+              <option value="qr">QR</option>
+              <option value="breb">Bre-B / Llave</option>
+              <option value="wallet">Billetera</option>
+              <option value="link">PSE / Link</option>
+              <option value="credit">Crédito</option>
+              <option value="mixed">Mixto</option>
+            </select>
+          </label>
+          <label>Icono<input name="paymentIcon" [(ngModel)]="paymentMethodForm.icon" placeholder="fa-solid fa-bolt"></label>
+          <label>Prioridad<input name="paymentPriority" type="number" [(ngModel)]="paymentMethodForm.priority"></label>
+          <label>Etiqueta dato<input name="accountLabel" [(ngModel)]="paymentMethodForm.account_label" placeholder="Llave Bre-B, cuenta, numero"></label>
+          <label>Dato de pago<input name="accountValue" [(ngModel)]="paymentMethodForm.account_value" placeholder="correo@empresa.com, celular, cuenta"></label>
+          <label>QR / enlace<input name="qrValue" [(ngModel)]="paymentMethodForm.qr_value" placeholder="Texto, URL o referencia QR"></label>
+          <label>Instrucciones<input name="instructions" [(ngModel)]="paymentMethodForm.instructions" placeholder="Confirma en la app antes de cerrar"></label>
+          <label>ID tipo pago legacy<input name="legacyType" type="number" [(ngModel)]="paymentMethodForm.id_tipopago_legacy"></label>
+          <label class="check-setting"><input name="requiresRef" type="checkbox" [(ngModel)]="paymentMethodForm.requires_reference"> Requiere referencia</label>
+          <label class="check-setting"><input name="requiresConfirm" type="checkbox" [(ngModel)]="paymentMethodForm.requires_confirmation"> Requiere confirmacion manual</label>
+          <label class="check-setting"><input name="allowsQr" type="checkbox" [(ngModel)]="paymentMethodForm.allows_qr"> Mostrar QR</label>
+          <label class="check-setting"><input name="enabled" type="checkbox" [(ngModel)]="paymentMethodForm.enabled"> Activo en caja</label>
+          <div class="payment-form-actions">
+            <button type="submit" class="btn btn-success rd-4">Guardar</button>
+            <button type="button" class="btn btn-default rd-4" (click)="newPaymentMethod()">Nuevo</button>
+          </div>
+        </form>
+
+        <div class="payment-method-list">
+          <button type="button" class="payment-admin-card" *ngFor="let method of paymentMethods" (click)="editPaymentMethod(method)">
+            <span class="payment-admin-icon"><i [className]="method.icon || 'fa-solid fa-wallet'"></i></span>
+            <span>
+              <strong>{{method.name}}</strong>
+              <small>{{method.method_type}} · {{method.enabled === false ? 'Inactivo' : 'Activo'}}</small>
+            </span>
+            <i [className]="method.enabled === false ? 'fa-regular fa-circle' : 'fa-solid fa-circle-check'"></i>
+          </button>
+        </div>
+      </div>
+
+      <ng-template #parameterSettings>
+      <div class="container-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Parametro</th>
+              <th>Valor</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let setting of currentSection.settings">
+              <td>
+                <div class="setting-title">
+                  <span class="setting-icon"><i [className]="setting.icon"></i></span>
+                  <div>
+                    <strong>{{setting.label}}</strong>
+                    <p>{{setting.description}}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <select *ngIf="setting.type === 'booleano'; else textInput" [value]="getValue(setting)" (change)="setValue(setting, $event)">
+                  <option value="">Sin definir</option>
+                  <option value="true">Si</option>
+                  <option value="false">No</option>
+                </select>
+                <ng-template #textInput>
+                  <input
+                    [type]="setting.type === 'numero' ? 'number' : 'text'"
+                    [placeholder]="setting.placeholder || ''"
+                    [value]="getValue(setting)"
+                    (input)="setValue(setting, $event)">
+                </ng-template>
+              </td>
+              <td>
+                <span class="status-pill" [class.pending]="!hasParameter(setting)">
+                  {{hasParameter(setting) ? 'Activo' : 'Pendiente'}}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn btn-success btn-i rd-4 table-action-btn" title="Guardar" (click)="save(setting)" [disabled]="isSaving(setting)">
+                  <i class="fa-solid fa-check"></i> Guardar
+                </button>
+                <button type="button" class="btn btn-default rd-4 table-action-btn" title="Deshabilitar" (click)="disable(setting)" [disabled]="!hasParameter(setting) || isSaving(setting)">
+                  <i class="fa-solid fa-ban"></i> Deshabilitar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</section>

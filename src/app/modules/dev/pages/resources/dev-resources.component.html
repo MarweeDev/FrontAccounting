@@ -1,0 +1,299 @@
+<section class="container-component">
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">{{activeView === 'resources' ? 'Recursos activos' : 'Laboratorio visual'}} <strong>{{activeView === 'resources' ? ListResource.length : typographyConfig.fontFamily}}</strong></p>
+        <div class="container-pag">
+          <button
+            type="button"
+            class="rd-4"
+            *ngFor="let tab of viewTabs"
+            [class.active-filter]="tab.id === activeView"
+            (click)="setView(tab.id === 'resources' ? 'resources' : tab.id === 'typography' ? 'typography' : 'peripherals')"
+            [title]="tab.label">
+            <i [className]="tab.icon"></i>
+            <span>{{tab.label}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-head sub-head" *ngIf="activeView === 'resources'">
+      <div class="banner">
+        <p class="count-register">Filtros de recursos</p>
+        <div class="container-pag">
+          <button
+            type="button"
+            class="rd-4"
+            *ngFor="let type of resourceTypes"
+            [class.active-filter]="type.id === activeType"
+            (click)="setType(type.id)"
+            [title]="type.label">
+            <i [className]="type.icon"></i>
+            <span>{{type.label}} {{countByType(type.id)}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dev-shell" *ngIf="activeView === 'resources'">
+      <form class="quick-form" (ngSubmit)="save()">
+        <h1>{{editingId ? 'Editar recurso' : 'Nuevo recurso'}}</h1>
+        <p>Registra artefactos tecnicos visibles para administracion del sistema.</p>
+
+        <label>
+          Titulo
+          <input type="text" name="titulo" [(ngModel)]="form.titulo" required placeholder="Ej: API de productos">
+        </label>
+
+        <label>
+          Tipo
+          <select name="tipo_recurso" [(ngModel)]="form.tipo_recurso">
+            <option value="api">API</option>
+            <option value="documento">Documento</option>
+            <option value="version">Version</option>
+            <option value="enlace">Enlace</option>
+            <option value="nota">Nota</option>
+          </select>
+        </label>
+
+        <label>
+          Ruta o enlace
+          <input type="text" name="ruta" [(ngModel)]="form.ruta" placeholder="/appdomain/api/product/get">
+        </label>
+
+        <label>
+          Version
+          <input type="text" name="version" [(ngModel)]="form.version" placeholder="v1">
+        </label>
+
+        <label>
+          Descripcion
+          <textarea name="descripcion" rows="3" [(ngModel)]="form.descripcion"></textarea>
+        </label>
+
+        <label class="check-row">
+          <input type="checkbox" name="visible" [(ngModel)]="form.visible">
+          Visible en consola
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success btn-i rd-4" [disabled]="isSaving">
+            <i class="fa-solid fa-check"></i> {{editingId ? 'Actualizar' : 'Crear'}}
+          </button>
+          <button type="button" class="btn btn-default rd-4" (click)="cancelEdit()" [disabled]="isSaving">
+            <i class="fa-solid fa-xmark"></i> Cancelar
+          </button>
+        </div>
+      </form>
+
+      <div class="container-table">
+        <div class="message-not-result" *ngIf="FilterListResource.length === 0">
+          <img src="../../../../../assets/img/dobby/not_results_IA.png" alt="Sin resultados" />
+          <h3>No se encontraron recursos</h3>
+          <h5>Registra APIs, documentos o versiones del sistema</h5>
+        </div>
+
+        <table *ngIf="FilterListResource.length > 0">
+          <thead>
+            <tr>
+              <th>Recurso</th>
+              <th>Tipo</th>
+              <th>Ruta</th>
+              <th>Version</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of FilterListResource">
+              <td>
+                <strong>{{item.titulo}}</strong>
+                <p>{{item.descripcion || 'Sin descripcion'}}</p>
+              </td>
+              <td>{{item.tipo_recurso}}</td>
+              <td>{{item.ruta || '-'}}</td>
+              <td>{{item.version || '-'}}</td>
+              <td>
+                <span class="status-pill" [class.pending]="!item.visible">
+                  {{item.visible ? 'Visible' : 'Oculto'}}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn-option" title="Editar" (click)="edit(item)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button type="button" class="btn-option" title="Deshabilitar" (click)="disable(item)">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="typography-shell" *ngIf="activeView === 'typography'">
+      <aside class="type-controls">
+        <h1>Tipografia</h1>
+        <p>Prueba visual local para decidir mejoras de lectura antes de llevarlas a Apariencia.</p>
+
+        <label>
+          Fuente
+          <select [(ngModel)]="typographyConfig.fontFamily" name="fontFamily">
+            <option *ngFor="let font of fontFamilies" [value]="font">{{font}}</option>
+          </select>
+        </label>
+
+        <label>
+          Tamano base <strong>{{typographyConfig.fontSize}}px</strong>
+          <input type="range" min="10" max="24" step="1" [(ngModel)]="typographyConfig.fontSize" name="fontSize">
+        </label>
+
+        <label>
+          Grosor
+          <select [(ngModel)]="typographyConfig.fontWeight" name="fontWeight">
+            <option *ngFor="let weight of fontWeights" [ngValue]="weight">{{weight}}</option>
+          </select>
+        </label>
+
+        <label>
+          Altura de linea <strong>{{typographyConfig.lineHeight}}</strong>
+          <input type="range" min="1.1" max="1.8" step="0.05" [(ngModel)]="typographyConfig.lineHeight" name="lineHeight">
+        </label>
+
+        <label>
+          Espaciado <strong>{{typographyConfig.letterSpacing}}px</strong>
+          <input type="range" min="0" max="2" step="0.1" [(ngModel)]="typographyConfig.letterSpacing" name="letterSpacing">
+        </label>
+      </aside>
+
+      <section class="type-preview">
+        <div class="preview-toolbar">
+          <button
+            type="button"
+            *ngFor="let mode of previewModes"
+            [class.active-filter]="mode.id === activePreviewMode"
+            (click)="setPreviewMode(mode.id)"
+            [title]="mode.label">
+            <i [className]="mode.icon"></i>
+            <span>{{mode.label}}</span>
+          </button>
+        </div>
+
+        <div class="preview-stage" [ngStyle]="typographyPreviewStyle">
+          <ng-container [ngSwitch]="activePreviewMode">
+            <div class="preview-block" *ngSwitchCase="'headings'">
+              <p class="eyebrow">Modulo de ventas</p>
+              <h1>Ordenes abiertas y gestion de pagos</h1>
+              <h2>Resumen operativo del dia</h2>
+              <p>Esta muestra permite validar jerarquia, ritmo de lectura y contraste con el tema actual.</p>
+            </div>
+
+            <div class="preview-block form-preview" *ngSwitchCase="'form'">
+              <label>Nombre comercial <input type="text" value="Marwee Accounts"></label>
+              <label>Tipo de operacion <select><option>Venta directa</option></select></label>
+              <button type="button" class="btn btn-success btn-i rd-4">Guardar</button>
+              <button type="button" class="btn btn-default rd-4">Cancelar</button>
+            </div>
+
+            <div class="preview-block" *ngSwitchCase="'table'">
+              <table>
+                <thead><tr><th>Producto</th><th>Estado</th><th>Total</th></tr></thead>
+                <tbody>
+                  <tr><td>Hamburguesa artesanal</td><td>Activo</td><td>$ 28.000</td></tr>
+                  <tr><td>Bebida natural</td><td>Pendiente</td><td>$ 7.500</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="preview-block card-preview" *ngSwitchCase="'cards'">
+              <article>
+                <span><i class="fa-solid fa-chart-line"></i></span>
+                <h2>Ventas del turno</h2>
+                <p>Control de ordenes, pagos recibidos y productos con mayor rotacion.</p>
+              </article>
+              <article>
+                <span><i class="fa-solid fa-boxes-stacked"></i></span>
+                <h2>Inventario critico</h2>
+                <p>Seguimiento de existencias bajas para evitar faltantes durante la operacion.</p>
+              </article>
+            </div>
+
+            <div class="preview-block" *ngSwitchDefault>
+              <h2>Lectura operativa extendida</h2>
+              <p>Accounts necesita una tipografia clara para jornadas largas. El usuario debe poder escanear tablas, entender estados y completar formularios sin sentir ruido visual. Esta muestra ayuda a revisar si el tamano, el peso y la altura de linea mantienen una experiencia comoda en modulos administrativos y operativos.</p>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+    </div>
+
+    <div class="peripherals-shell" *ngIf="activeView === 'peripherals'">
+      <aside class="peripheral-controls">
+        <h1>Laboratorio de perifericos</h1>
+        <p>Activa el simulador solo para desarrollo. En operacion normal la app debe usar el agente local instalado en el punto de venta.</p>
+
+        <div class="mode-card" [class.active]="peripheralMode === 'simulation'">
+          <div>
+            <strong>Simulador de desarrollo</strong>
+            <small>Modal de datáfono, aprobacion/rechazo y comprobante simulado sin hardware.</small>
+          </div>
+          <button type="button" class="btn btn-success rd-4" (click)="setPeripheralMode('simulation')">
+            Activar demo
+          </button>
+        </div>
+
+        <div class="mode-card" [class.active]="peripheralMode !== 'simulation'">
+          <div>
+            <strong>Agente local real</strong>
+            <small>Usa http://localhost:8765 para impresora POS, datáfono o adaptadores del proveedor.</small>
+          </div>
+          <button type="button" class="btn btn-default rd-4" (click)="setPeripheralMode('local-agent')">
+            Usar agente
+          </button>
+        </div>
+
+        <div class="mode-card" *ngIf="peripheralConfig">
+          <div>
+            <strong>Configuracion en DB</strong>
+            <small>{{peripheralConfig.modo}} · {{peripheralConfig.agent_url || 'sin agente'}} · {{peripheralConfig.printer_name || 'sin impresora'}}</small>
+          </div>
+          <button type="button" class="btn btn-default rd-4" (click)="savePeripheralConfig('local-agent')">
+            Guardar agente
+          </button>
+        </div>
+      </aside>
+
+      <section class="peripheral-preview">
+        <div class="peripheral-preview-head">
+          <h2>Vista de integracion</h2>
+          <div
+            class="device-status-compact"
+            *ngIf="peripheralStatus"
+            [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+            [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
+            <i class="fa-solid fa-satellite-dish"></i>
+            <div class="device-status-tooltip">
+              <strong>{{peripheralStatus.label}}</strong>
+              <small>{{peripheralStatus.detail}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-preview">
+          <article>
+            <i class="fa-solid fa-credit-card"></i>
+            <h2>Datáfono</h2>
+            <p>Cuando el usuario elija tarjeta y el simulador este activo, la pantalla de pago abre una modal de transaccion. En produccion esa modal se reemplaza por el estado devuelto por el agente o proveedor.</p>
+          </article>
+          <article>
+            <i class="fa-solid fa-print"></i>
+            <h2>Impresora</h2>
+            <p>El comprobante interno se envia primero al agente local. Si no existe agente, el navegador sigue como fallback para imprimir.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

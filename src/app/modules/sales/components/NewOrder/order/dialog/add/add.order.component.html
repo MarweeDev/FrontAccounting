@@ -1,31 +1,67 @@
 <section class="container-component">
     <div class="card">
-        <h3>Proceso de creación</h3>
+        <h3>{{ isEditMode ? 'Editar producto' : 'Crear producto' }}</h3>
         <form [formGroup]="form" (ngSubmit)="add()">
-            <label for="numero">
-                <input type="text" id="numero" formControlName="Numero" placeholder="Número">
-                <div class="error-message" *ngIf="form.get('Numero')?.hasError('required') && form.get('Numero')?.touched">
-                    Requerido
+            <div class="image-upload">
+                <input
+                    type="file"
+                    id="productImage"
+                    accept="image/png, image/jpeg"
+                    (change)="onImageSelected($event)"
+                />
+
+                <div class="preview-container">
+                    <img [src]="previewImage" class="preview-image" />
+
+                    <div class="image-actions">
+                        <label for="productImage" class="action-btn upload">
+                            <i class="fa-solid fa-upload"></i>
+                        </label>
+
+                        <button
+                            type="button"
+                            class="action-btn remove"
+                            *ngIf="imageLoaded"
+                            (click)="removeImage()">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+
+                    <span class="status-badge">
+                        {{ imageLoaded ? 'Imagen cargada' : 'Imagen por defecto' }}
+                    </span>
                 </div>
-            </label>
-          
+            </div>
+
             <label for="nombre">
                 <input type="text" id="nombre" formControlName="Nombre" placeholder="Nombre">
                 <div class="error-message" *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
                     Requerido
                 </div>
             </label>
-          
-            <label for="capacidad">
-                <input type="text" id="capacidad" formControlName="Capacidad" placeholder="Capacidad">
-                <div class="error-message" *ngIf="form.get('Capacidad')?.hasError('required') && form.get('Capacidad')?.touched">
+
+            <label for="descripcion">
+                <input type="text" id="descripcion" formControlName="Descripcion" placeholder="Descripción">
+                <div class="error-message" *ngIf="form.get('Descripcion')?.hasError('required') && form.get('Descripcion')?.touched">
                     Requerido
                 </div>
             </label>
-          
+
+            <label for="precio">
+                <input type="number" min="0" id="precio" formControlName="Precio" placeholder="Precio">
+                <div class="error-message" *ngIf="form.get('Precio')?.hasError('required') && form.get('Precio')?.touched">
+                    Requerido
+                </div>
+            </label>
+
+            <select class="rd-2" id="select_categ" formControlName="Categoria">
+                <option value="0">-Seleccione categoría-</option>
+                <option [value]="item.id" *ngFor="let item of ListFilter">{{item.nombre}}</option>
+            </select>
+
             <div class="container-btn">
-                <button type="submit" class="btn btn-success m-2 rd-4">Crear</button>
-                <button type="button" class="btn btn-default rd-4" (click)="cancel()">Cancelar</button>
+                <button type="submit" class="btn btn-success m-2 rd-2">{{ isEditMode ? 'Actualizar' : 'Crear' }}</button>
+                <button type="button" class="btn btn-default rd-2" (click)="cancel()">Cancelar</button>
             </div>
         </form>
     </div>

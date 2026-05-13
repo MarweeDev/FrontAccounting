@@ -1,1 +1,160 @@
-<p>new-shopping works!</p>
+<div class="form-container">
+  <!--
+  <div class="form-header">
+    <h2>Nueva factura de compra</h2>
+    <div class="header-actions">
+      <button type="submit" class="btn btn-primary rd-2" (click)="onSubmit()">Guardar</button>
+    </div>
+  </div>
+  -->
+
+  <form [formGroup]="purchaseForm" (ngSubmit)="onSubmit()">
+    <!-- Sección de datos generales de la factura -->
+    <div class="card-header-content">
+      <div class="grid-container">
+        <!-- Tipo de documento -->
+        <!--<div class="form-group">
+          <label for="type">Tipo</label>
+          <app-select
+            formControlName="type"
+            [items]="typeShopping"
+            [searchable]="true"
+            [selectFirst]="true"
+            [disabled]="false"
+            placeholder="Seleccione tipo"
+            class="form-control-select">
+          </app-select>
+        </div>-->
+        <!-- Número (Automático) -->
+        <div class="form-group">
+          <label for="invoiceNumber">Número</label>
+          <input type="text" id="invoiceNumber" formControlName="invoiceNumber" class="form-control" readonly>
+        </div>
+        <!-- Fecha de elaboración -->
+        <div class="form-group">
+          <label for="elaborationDate">Fecha de elaboración</label>
+          <input type="date" id="elaborationDate" formControlName="elaborationDate" class="form-control">
+        </div>
+        <!-- Factura del proveedor -->
+        <div class="form-group">
+          <label for="providerInvoice">No. factura proveedor</label>
+          <input type="text" id="providerInvoice" formControlName="providerInvoice" class="form-control">
+        </div>
+        <!-- Proveedor -->
+        <div class="form-group">
+          <label for="provider">Proveedores</label>
+          <app-select
+            formControlName="provider"
+            [items]="providers"
+            [searchable]="true"
+            [selectFirst]="false"
+            [disabled]="false"
+            placeholder="Seleccione proveedor"
+            class="form-control-select">
+          </app-select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de items de la factura -->
+    <div class="card-header-content items-card">
+      <div class="table-responsive">
+        <table class="table items-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Tipo</th>
+              <th style="width: 25%;">Producto/Servicio</th>
+              <th style="width: 25%;">Descripción</th>
+              <th style="width: 10%;">Cant.</th>
+              <th style="width: 15%;">Valor Unit.</th>
+              <th style="width: 10%;">Impuesto</th>
+              <th style="width: 15%;">Valor Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody formArrayName="items">
+            <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
+              <td>
+                <app-select
+                  formControlName="type"
+                  [items]="typeShopping"
+                  [searchable]="true"
+                  [selectFirst]="false"
+                  [disabled]="false"
+                  [selectAction]="false"
+                  placeholder="Seleccione tipo"
+                  class="form-control-select"
+                  (actionClick)="onTypeSelect(i)">
+                </app-select>
+              </td>
+              <td>
+                <app-select
+                  formControlName="product"
+                  [items]="products"
+                  [searchable]="true"
+                  [selectFirst]="false"
+                  [disabled]="false"
+                  placeholder="Seleccionar producto" 
+                  (actionChange)="onProductSelect(i)"
+                  class="form-control-select">
+                </app-select>
+              </td>
+              <td>
+                <input type="text" formControlName="description" class="form-control">
+              </td>
+              <td>
+                <input type="number" min="1" formControlName="quantity" class="form-control form-control-td-quantity" (input)="calculateItemTotal(i)">
+              </td>
+              <td>
+                <input type="number" formControlName="unitValue" class="form-control form-control-td-value" (input)="calculateItemTotal(i)">
+              </td>
+              <td>
+                <input type="number" formControlName="discount" class="form-control form-control-td-value" (input)="calculateItemTotal(i)">
+              </td>
+              <td>
+                <input type="text" formControlName="totalValue" class="form-control form-control-td-value" readonly>
+              </td>
+              <td>
+                <button type="button" 
+                *ngIf="items.controls.length > 1"
+                class="btn rd-3 delete" 
+                (click)="removeItem(i)" 
+                title="Eliminar fila">
+                  <i class="fa-solid fa-minus txt-danger"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-primary rd-2 add btn-span" (click)="addItem()">
+        Agregar línea <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+
+    <!-- Sección de totales y observaciones -->
+    <div class="totals">
+      <div class="total-row">
+        <span>Total Bruto:</span>
+        <strong>{{ purchaseForm.get('totalBruto')?.value | currency }}</strong>
+      </div>
+      <div class="total-row">
+        <span>Descuentos:</span>
+        <span>- {{ purchaseForm.get('descuentos')?.value | currency }}</span>
+      </div>
+      <div class="total-row subtotal">
+        <span>Subtotal:</span>
+        <strong>{{ purchaseForm.get('subtotal')?.value | currency }}</strong>
+      </div>
+      <hr>
+      <div class="total-row grand-total">
+        <span>TOTAL NETO:</span>
+        <strong>{{ purchaseForm.get('totalNeto')?.value | currency }}</strong>
+      </div>
+      <hr>
+      <div class="btn-save-shop">
+        <button type="submit" class="btn btn-success rd-2">Guardar</button>
+      </div>
+    </div>
+  </form>
+</div>

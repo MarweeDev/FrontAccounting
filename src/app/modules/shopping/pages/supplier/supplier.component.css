@@ -27,25 +27,33 @@
 }
 
 .container-head {
-    margin-top: 10px;
-    padding: 10px 20px 10px 20px;
+    width: 100%;
+    position: sticky;
+    top: 4rem;
+    z-index: 1;
+    background-color: var(--color-secondary);
+}
+.container-head .banner {
+    margin-top: 0px;
+    padding: 0px 20px 0px 20px;
     width: 100%;
     border: 1px solid var(--color-texto-terciario);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 1);
-    position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 .container-head .count-register {
     font-size: 10px;
     letter-spacing: 1px;
-    margin: 0px;
+    margin: 11px 0px;
 }
 .container-head .count-register strong {
     padding: 3px 10px;
     border: 1px solid var(--color-texto-terciario);
     border-radius: 10px;
     background-color: var(--background-primario);
-    color: var(--color-info);
+    color: var(--color-primary);
     letter-spacing: 0px;
 }
 select {
@@ -84,12 +92,12 @@ select {
 
 .container-head .container-pag {
     display: flex;
-    position: absolute;
+    /*position: absolute;
     right: 0px;
-    top: 0px;
+    top: 0px;*/
 }
 .container-head .container-pag button {
-    padding: 4px 7px;
+    padding: 4px 9px;
     border-width: 1px;
     border-color: transparent;
     background-color: transparent;
@@ -106,17 +114,19 @@ select {
 .container-head .container-pag p {
     font-size: 12px;
     padding: 10px;
+    margin: 0px;
 }
 
 
 .content .container-table {
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     width: 100%;
     /*border: 1px solid var(--color-texto-terciario);*/
     border-radius: 7px;
     /*background-color: rgba(255, 255, 255, 1);*/
-    max-height: calc(100vh - 180px);
+    /*max-height: calc(100vh - 180px);*/
     overflow-y: auto;
+    z-index: 0;
 }
 .content .container-table .message-not-result {
     margin-top: 3rem;
@@ -199,7 +209,7 @@ select {
     box-sizing: border-box;
 }
 .content .container-table table tbody tr:hover > td {
-    background-color: rgb(225, 227, 255);
+    background-color: var(--background-hover);
 }
 .content .container-table table tbody .success-tr:hover > td {
     background-color: rgb(206, 255, 202);

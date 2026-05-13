@@ -25,9 +25,9 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.listNav = [];
+    this.listNav = new Array<NavDTO>();
     this.DataShared.OnGetNav().subscribe(item => {
-      this.listNav = item;
+      this.listNav = item.filter(x => x.visible == true || x.visible == undefined);
       this.cdRef.detectChanges();
     }, error => {
       console.log('error:', error)
@@ -46,13 +46,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   OnHiddenBar(){
-    let element :any = document.getElementById('icon_btn_open');
-    let elementSlider :any = document.getElementById('slider_left');
-    if(element != undefined && elementSlider != undefined){
-      element.className = "fa-solid fa-bars";
-      elementSlider.className = "slider animate__animated animate__fadeOutLeft";
-      setTimeout(()=>{this.app.statusDisabledMain = false;},1000);
-    }
+    this.app.OnHiddenBar();
   }
 
   onButtonGroupClick(e:any){

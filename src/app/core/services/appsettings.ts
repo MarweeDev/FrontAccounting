@@ -4,11 +4,13 @@ export enum HttpMethod {
     GETID = '/get/',
     POST = '/post',
     PUT = '/put/',
+    PUT2 = '/put',
     STATUS = '/status/',
     DELETE = '/delete/'
 }
 
 export enum ServicesMethod {
+    ServicesAuth = 'Auth',
     ServicesMesa = 'Mesa',
     ServicesCategory = 'Category',
     ServicesProduct = 'Product',
@@ -17,6 +19,18 @@ export enum ServicesMethod {
     ServicesTypePay = 'TypePay',
     ServicesUsers = 'Users',
     ServicesClient = 'Client',
+    ServicesShopping = 'shopping',
+    ServicesSupplier = 'supplier',
+    ServicesStock = 'stock',
+    ServicesSettingParameter = 'setting/parameter',
+    ServicesDevelopmentResource = 'development/resource',
+    ServicesDevelopmentPermission = 'development/permission',
+    ServicesAccessControl = 'access-control',
+    ServicesRole = 'role',
+    ServicesPeripheralConfig = 'peripheral/config',
+    ServicesPeripheralEvent = 'peripheral/event',
+    ServicesPaymentMethod = 'payment/method',
+    ServicesPaymentTransactionDetail = 'payment/transaction/detail',
 }
 
 export class ApiConfig {

@@ -1,41 +1,48 @@
-<section class="container animated fadeInTopLeft" id="slider_left">
-    <div class="parent">
-        <div class="header">
-            <div class="circle" [style.background-color]="getColor(user)">
-                <span>{{user[0] | uppercase}}</span>
+<section class="shell animated fadeInTopLeft" id="slider_left">
+    <div class="command-center">
+        <div class="brand-zone">
+            <div class="brand-mark">
+                <img *ngIf="imagenBase64" [src]="imagenBase64" alt="logo compania">
+                <span *ngIf="!imagenBase64">{{getInitials(user)}}</span>
             </div>
-            <p class="circle-name">
-                {{user}}
-                <br>
-                <small class="txt-company">{{rol}}</small>
-            </p>
+            <div class="brand-copy">
+                <small>{{companyName}}</small>
+                <strong>Centro de operacion</strong>
+            </div>
         </div>
-        <div class="menu">
-            <ul>
-                <li *ngFor="let item of ListModule; let i = index">
-                    <button 
-                    type="button" 
-                    [id]="'nav_left_' + item.id_modulo"
-                    [class.active]="item.id_modulo === activeButtonId" 
-                    (click)="OnRouterModule(item.ruta, item.id_modulo)">
-                        <i [className]="item.icono"></i> {{item.modulo}}
-                    </button>
-                </li>
-            </ul>
-        </div>
-        <div class="footer">
-            <ul>
-                <li>
-                    <button type="button" class="button-close" (click)="OnRouterModule('login', 0)">
-                        <i class="fa-solid fa-right-from-bracket"></i> Salir
-                    </button>
-                </li>
-                <!--<li>
-                    <button type="button">
-                        <i class="fa-solid fa-gear"></i> Cofiguración
-                    </button>
-                </li>-->
-            </ul>
+
+        <nav class="module-dock" aria-label="Modulos principales">
+            <button
+                type="button"
+                class="module-button"
+                *ngFor="let item of ListModule"
+                [id]="'nav_left_' + item.id_modulo"
+                [class.active]="item.id_modulo === activeButtonId"
+                (click)="OnRouterModule(item.ruta, item.id_modulo)"
+                [title]="item.modulo">
+                <span class="module-icon">
+                    <i [className]="item.icono"></i>
+                </span>
+                <span class="module-copy">
+                    <strong>{{item.modulo}}</strong>
+                    <small>{{getModuleKind(item)}}</small>
+                </span>
+                <span class="module-indicator" *ngIf="isReportsModule(item)">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    IA
+                </span>
+            </button>
+        </nav>
+
+        <div class="footer-zone">
+            <button type="button" class="utility-button" title="Configuracion" (click)="OnRouterModule('settings/dashboard', 0)">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Preferencias</span>
+            </button>
+            <button type="button" class="utility-button exit" title="Salir" (click)="OnRouterModule('login', 0)">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Salir</span>
+            </button>
         </div>
     </div>
 </section>

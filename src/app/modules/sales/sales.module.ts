@@ -22,6 +22,7 @@ import { EditOrderComponent } from './components/NewOrder/order/dialog/edit/edit
 //Dialog RegisterComponent
 import { DetailsComponent } from './components/NewOrder/register/dialog/details/details.component';
 import { ExportOrderComponent } from './components/NewOrder/register/dialog/export/export-order.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -39,14 +40,15 @@ import { ExportOrderComponent } from './components/NewOrder/register/dialog/expo
 
     //Dialog RegisterComponent
     DetailsComponent,
-     ExportOrderComponent,
+    ExportOrderComponent,
   ],
   imports: [
     CommonModule,
     SalesRouting,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ]
 })
 export class SalesModule { }

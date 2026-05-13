@@ -5,4 +5,6 @@ export class ProductDTO {
   precio?: number;
   id_categoria?: number;
   id_estado?: number;
+  referencia?: string;
+  image?: string;
 }

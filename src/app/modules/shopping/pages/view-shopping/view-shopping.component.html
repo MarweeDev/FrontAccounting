@@ -1,0 +1,109 @@
+<section class="container-component">
+  <div class="container-prev">
+    <div class="container-search">
+      <label for="searchId">
+        <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+        <span>
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">Resultados <strong>{{ListOrder.length}}</strong></p>
+        <div class="container-pag">
+          <button type="button" class="rd-4 history-btn" (click)="openHistory()" title="Historial de compras">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Historial</span>
+          </button>
+          <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+          <p>{{currentPage}} / {{TotalPag || 0}}</p>
+          <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+
+          <div>
+            <select (change)="onSelectInit($event)">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-table">
+      <div class="message-not-result" *ngIf="ListOrder.length === 0">
+        <img src="../../../../../../assets/img/dobby/not_results_IA.png" alt="Image not found" />
+        <h3>No se encontraron resultados</h3>
+        <h5>Registra una compra para empezar</h5>
+      </div>
+
+      <table *ngIf="ListOrder.length > 0">
+        <thead>
+          <tr>
+            <th><i class="fa-solid fa-arrow-down-1-9 fa-fw"></i></th>
+            <th>Código</th>
+            <th>Proveedor</th>
+            <th>NIT</th>
+            <th>Fecha</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="getDetailsOrder(item.id)" *ngFor="let item of FilterListOrder; let i = index">
+            <td>{{ (currentPage - 1) * itemsPorPagina + i + 1 }}</td>
+            <td>{{item.codigo}}</td>
+            <td>{{item.proveedor}}</td>
+            <td>{{item.nit}}</td>
+            <td>{{item.fecha_creacion | date:'dd-MM-yyyy HH:mm'}}</td>
+            <td>{{item.items.length}}</td>
+            <td>{{item.total_compra | currency}}</td>
+            <td>
+              <button type="button" class="btn-option" title="Editar" (click)="editShopping($event, item.id)">
+                <i class="fa-solid fa-pencil fa-fw"></i>
+              </button>
+              <button type="button" class="btn-option" title="Anular" (click)="deleteShopping($event, item.id)">
+                <i class="fa-solid fa-trash-can fa-fw"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="history-modal" *ngIf="visibleHistory">
+  <div class="history-card">
+    <div class="history-header">
+      <div>
+        <h2>Historial de compras/gastos</h2>
+        <p>Ultimos registros para abrir detalle e imprimir soporte interno.</p>
+      </div>
+      <button type="button" (click)="closeHistory()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="history-list">
+      <button type="button" *ngFor="let item of recentShoppings" (click)="closeHistory(); getDetailsOrder(item.id)">
+        <span>
+          <strong>{{item.codigo}}</strong>
+          <small>{{item.proveedor}} · {{item.fecha_creacion | date:'dd-MM-yyyy HH:mm'}}</small>
+        </span>
+        <span>
+          <strong>{{item.total_compra | currency}}</strong>
+          <small>{{item.items.length}} items</small>
+        </span>
+      </button>
+      <div class="history-empty" *ngIf="recentShoppings.length === 0">
+        <i class="fa-solid fa-receipt"></i>
+        <p>No hay compras recientes.</p>
+      </div>
+    </div>
+  </div>
+</section>

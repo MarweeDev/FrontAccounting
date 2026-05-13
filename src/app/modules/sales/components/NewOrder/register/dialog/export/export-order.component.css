@@ -16,8 +16,14 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     padding-left: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
+}
+.container-prev select {
+    padding: 6px 40px 6px 20px !important;
+    margin-left: 10px;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .content {
@@ -48,7 +54,7 @@
     color: var(--color-primary);
     letter-spacing: 0px;
 }
-select {
+.container-head select {
     padding: 8px 20px !important;
     padding-right: calc(1rem * 3) !important;
     border-color: transparent !important;
@@ -225,7 +231,7 @@ select {
     box-sizing: border-box;
 }
 .content .container-table table tbody tr:hover > td {
-    background-color: rgb(225, 227, 255);
+    background-color: var(--background-hover);
 }
 .content .container-table table tbody .success-tr:hover > td {
     background-color: rgb(206, 255, 202);

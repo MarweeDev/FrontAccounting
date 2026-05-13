@@ -6,7 +6,7 @@
         </button>
     </div>
     <div class="col2">
-        <button type="button" (click)="OnRouterModule('home/main')">
+        <button type="button" style="display: none;" (click)="OnRouterModule('home/main')">
             <i class="fa-solid fa-house-chimney"></i>
         </button>
         <div class="breadcrumb rd-4">
@@ -17,12 +17,26 @@
                 </span>
             </div>
         </div>
-        <div class="container-info">
+        <div class="container-info" style="display: none;">
             <span>Último ingreso:</span>
             <p>10/06/2024 01:00:12</p>
         </div>
     </div>
     <div class="col3">
         <app-nav></app-nav>
+        <div class="header" id="nav_user">
+            <div class="circle" [style.background-color]="getColor(user)">
+                <span>{{user[0] | uppercase}}</span>
+            </div>
+            <div class="text">
+                <p class="circle-name">
+                    {{user}}
+                </p>
+                <p class="circle-position">
+                    {{rol}}
+                </p>
+            </div>
+            
+        </div>
     </div>
 </section>

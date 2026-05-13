@@ -3,14 +3,15 @@
   --color-primary: rgb(23,25,33);
   --color-secondary: #f5f5f5;
 
-  --color-success: #45E936;
+  --color-success_: #30c320;
+  --color-success: #50bf44;
   --color-danger: #FF3535;
   --color-warning: #FFB800;
   --color-info: #3A86FF;
   /*--color-info-dark: #6568c9;*/
   --color-info-dark: rgba(55,146,141,1);
 
-  --color-company: rgba(255, 51, 0, 1);
+  --color-company: #ff3300;
   --color-company-two: #fd8060;
   --color-company-three: #ffc637;
 
@@ -59,6 +60,19 @@
   font-size: 12px;
 }
 .btn-span i, .btn-i i { color: #ffffff !important; }
+.btn-primary i,
+.btn-success i,
+.btn-danger i,
+.btn-warning i,
+.btn-info i,
+.btn-company i,
+.btn-companyTwo i,
+.btn-companyThree i {
+  color: #ffffff !important;
+}
+.btn-default i {
+  color: var(--color-adicional-secundario) !important;
+}
 
 /*Botones alert*/
 .btn-primary { 
@@ -67,7 +81,7 @@
   border-color: var(--color-primary);
   transition: all .5s;
 }
-.btn-primary:hover { background: #7e91ce !important; cursor: pointer;}
+.btn-primary:hover { background: var(--color-info-dark) !important; cursor: pointer;}
 
 .btn-secondary { 
   background: var(--color-secondary) !important; 
@@ -75,7 +89,7 @@
   border-color: var(--color-secondary);
   transition: all .5s;
 }
-.btn-secondary:hover { background: #ff2d88 !important; cursor: pointer;}
+.btn-secondary:hover { opacity: .88 !important; cursor: pointer;}
 
 .btn-success { 
   background: var(--color-success) !important; 
@@ -83,7 +97,7 @@
   border-color: var(--color-success);
   transition: all .5s;
 }
-.btn-success:hover { background: #71f462 !important; cursor: pointer;}
+.btn-success:hover { background: #60d355 !important; cursor: pointer;}
 
 .btn-danger { 
   background: var(--color-danger) !important; 
@@ -147,7 +161,17 @@
   border-color: transparent;
   transition: all .5s;
 }
-.btn-origin:hover { background: rgba(55,146,141,1) !important; cursor: pointer;}
+.btn-origin:hover { 
+  background: rgb(255, 255, 255) !important; 
+  color: var(--color-info-dark) !important; 
+  cursor: pointer;
+}
+.btn-origin i {
+  transition: all 0.5s;
+}
+.btn-origin:hover > i {
+  color: var(--color-info-dark) !important;
+}
 
 /*Bordes*/
 .border-success:hover { border-color: var(--color-success); }
@@ -176,7 +200,7 @@
   margin: 10px;
   background-color: rgba(255, 255, 255, 1);
   border: 1px solid var(--color-texto-terciario);
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer; 
   transition: all .8s;
 }
@@ -190,7 +214,7 @@
 /*icon status*/
 .icon-success span {
   color: var(--color-success) !important;
-  background-color: #cdffc8 !important;
+  background-color: rgba(48, 195, 32, .14) !important;
   padding: 20px;
 }
 .icon-danger span {
@@ -298,4 +322,47 @@ select::-ms-expand {
 body {
   scrollbar-width: thin;
   scrollbar-color: var(--color-primary) #f1f1f1;
+}
+
+/*Buscador - search*/
+.container-prev .container-search { 
+    grid-area: col2;
+    line-height: 19px;
+    max-width: fit-content;
+    background-color: rgba(255, 255, 255, 1) !important;
+    border-radius: 10px;
+    border: 1px solid var(--color-texto-terciario);
+    margin-left: 10px;
+}
+.container-prev .container-search input {
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    text-align: center;
+    letter-spacing: 1px;
+    color: var(--color-adicional-primario);
+    font-size: 13px;
+    border-radius: 10px;
+}
+/* Para desactivar la "X" en navegadores basados en WebKit (como Chrome y Safari) */
+.container-prev .container-search input[type="search"]::-webkit-search-cancel-button,
+.container-prev .container-search input[type="search"]::-webkit-search-clear-button {
+  -webkit-appearance: none;
+}
+/* Para desactivar la "X" en Firefox */
+.container-prev .container-search input[type="search"] {
+  -moz-appearance: none;
+}
+.container-prev .container-search input::placeholder {
+    color:  var(--color-texto-terciario);
+}
+.container-prev .container-search label {
+    /*margin-left: 10px;*/
+    padding-right: 10px;
+    /*border-left: 1px solid var(--color-texto-terciario);*/
+}
+.container-prev .container-search label span i {
+    color:  var(--color-texto-terciario) !important;
+    cursor: text;
+    font-size: 11px;
 }

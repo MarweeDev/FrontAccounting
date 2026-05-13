@@ -1,7 +1,15 @@
 <section class="container-component">
     <!--Titulo componente-->
     <div class="container-prev">
-        <h3 class="title">Gestión de Ordenes</h3>
+        <!--<h3 class="title">Gestión de Ordenes</h3>-->
+        <div class="container-search">
+            <label for="searchId">
+                <input type="search" placeholder="Buscador" id="searchId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+                <span>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </label>
+        </div>
     </div>
 
     <br>
@@ -9,40 +17,47 @@
     <!--Contenido productos-->
     <div class="content">
         <div class="container-head">
-            <p class="count-register">Resultados <strong>{{ListOrder ? ListOrder.length : 0}}</strong></p>
-            <div class="container-pag">
-                <div class="container-select-filter">
-                    <select id="selectDate" class="select-calendar" (change)="onLoadOrder()">
-                        <option [value]="todayStr" selected>Hoy</option>
-                        <option [value]="weekRange">Ultima semana</option>
-                        <option [value]="monthRange">Ultimo mes</option>
-                        <option value="personalizada">Personalizada</option>
-                    </select>
-                    <div class="container-select-filter-modal" *ngIf="disabledDateCalendar">
-                        <input type="date" [max]="DateMaxInput" name="" id="selectDateCalendar" (change)="onLoadOrder()">
+            <div class="banner">
+                <p class="count-register">Resultados <strong>{{ListOrder ? ListOrder.length : 0}}</strong></p>
+                <div class="container-pag">
+                    <div class="container-select-filter">
+                        <select id="selectDate" class="select-calendar" (change)="onLoadOrder()">
+                            <option [value]="todayStr" selected>Hoy</option>
+                            <option [value]="weekRange">Ultima semana</option>
+                            <option [value]="monthRange">Ultimo mes</option>
+                            <option value="personalizada">Personalizada</option>
+                        </select>
+                        <div class="container-select-filter-modal" *ngIf="disabledDateCalendar">
+                            <input type="date" [max]="DateMaxInput" name="" id="selectDateCalendar" (change)="onLoadOrder()">
+                        </div>
                     </div>
-                </div>
+    
+                    <div class="container-select-filter">
+                        <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
+                            <option value="0">Todos</option>
+                            <option value="7" selected>Pendiente</option>
+                            <option value="10">Crédito</option>
+                            <option value="8">Pagada</option>
+                            <option value="9">Anulada</option>
+                        </select>
+                    </div>
 
-                <div class="container-select-filter">
-                    <select id="selectFilter" class="select-filter" (change)="onLoadOrder()">
-                        <option value="0">Todos</option>
-                        <option value="7" selected>Pendiente</option>
-                        <option value="10">Debiendo</option>
-                        <option value="8">Pagada</option>
-                        <option value="9">Cancelada</option>
-                    </select>
-                </div>
-
-                <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
-                <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
-                <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
-                
-                <div>
-                    <select id="selectCount" (change)="onSelectInit()">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                    </select>
+                    <button type="button" class="rd-4 history-btn" (click)="openHistory()" title="Historial de pagos">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Historial</span>
+                    </button>
+    
+                    <button type="button" class="rd-4" (click)="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                    <p>{{currentPage}} / {{TotalPag ? TotalPag : 0 }}</p>
+                    <button type="button" class="rd-4" (click)="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+                    
+                    <div>
+                        <select id="selectCount" (change)="onSelectInit()">
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,7 +78,7 @@
                         <th>Responsable</th>
                         <th>Orden</th>
                         <th>Estado</th>
-                        <th>Usuario</th>
+                        <th>Cliente</th>
                         <th>Fecha/Hora</th>
                         <th>Productos</th>
                         <th>Total</th>
@@ -72,11 +87,11 @@
                 </thead>
                 <tbody>
                     <tr (click)="getDetailsOrder(item.codigo)" *ngFor="let item of FilterListOrder; let i = index" 
-                        [class.not-pending-tr]="item.nombre == 'Cancelada'"
+                        [class.not-pending-tr]="item.nombre == 'Anulada'"
                         [class.success-tr]="item.nombre == 'Pagada'"
-                        [class.pending-tr]="item.nombre == 'Debiendo'">
+                        [class.pending-tr]="item.nombre == 'Credito'">
 
-                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Debiendo'">
+                        <td [class.success-td]="item.nombre == 'Pagada'" [class.not-pending-td]="item.nombre !== 'Pendiente' && item.nombre !== 'Credito'">
                             {{ (currentPage - 1) * itemsPorPagina + i + 1 }}
                         </td>
                         <td class="td">
@@ -97,7 +112,7 @@
                         <td>{{item.cantidad}}</td>
                         <td>${{getConverPrice(item.total).toLocaleString()}}</td>
                         <td>
-                            <div class="td-container-tag" *ngIf="item.nombre == 'Cancelada'">
+                            <div class="td-container-tag" *ngIf="item.nombre == 'Anulada'">
                                 <div class="td-tag">{{item.nombre}}</div>
                                 <i class="fa-solid fa-circle-xmark txt-danger"></i>
                             </div>
@@ -106,7 +121,7 @@
                                 <i class="fa-solid fa-circle-check txt-success"></i>
                             </div>
                             
-                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-4 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Debiendo'">
+                            <button (click)="getPayOrder(item.codigo)" type="button" class="btn btn-success rd-2 btn-pay" *ngIf="item.nombre == 'Pendiente' || item.nombre == 'Credito'">
                                 Pagar
                             </button>
                         </td>
@@ -121,3 +136,35 @@
 </section>
 
 <app-details [orderCode]="orderCode" *ngIf="visibleDetails"></app-details>
+
+<section class="history-modal" *ngIf="visibleHistory">
+    <div class="history-card">
+        <div class="history-header">
+            <div>
+                <h2>Historial de pagos</h2>
+                <p>Ultimos pagos y creditos para revisar detalle o reimprimir comprobante.</p>
+            </div>
+            <button type="button" (click)="closeHistory()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="history-list">
+            <div class="history-empty" *ngIf="historyLoading">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>Cargando pagos recientes...</p>
+            </div>
+            <button type="button" *ngFor="let item of recentPaidOrders" (click)="closeHistory(); getDetailsOrder(item.codigo)">
+                <span>
+                    <strong>{{item.codigo}}</strong>
+                    <small>{{item.cliente}} · {{item.fecha}}</small>
+                </span>
+                <span>
+                    <strong>${{getConverPrice(item.total).toLocaleString()}}</strong>
+                    <small>{{item.nombre}}</small>
+                </span>
+            </button>
+            <div class="history-empty" *ngIf="!historyLoading && recentPaidOrders.length === 0">
+                <i class="fa-solid fa-receipt"></i>
+                <p>No hay pagos recientes en el historial.</p>
+            </div>
+        </div>
+    </div>
+</section>

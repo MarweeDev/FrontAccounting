@@ -1,0 +1,100 @@
+<section class="container-component">
+  <div class="container-prev">
+    <div class="container-search">
+      <label for="searchInventoryId">
+        <input type="search" placeholder="Buscador" id="searchInventoryId" [(ngModel)]="searchTerm" (keyup)="OnSearchChange(searchTerm)">
+        <span>
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="content">
+    <div class="container-head">
+      <div class="banner">
+        <p class="count-register">Productos <strong>{{ListStock.length}}</strong></p>
+        <div class="container-pag">
+          <button type="button" class="rd-4" (click)="prevPage()" title="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+          <p>{{currentPage}} / {{TotalPag || 0}}</p>
+          <button type="button" class="rd-4" (click)="nextPage()" title="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+
+          <div>
+            <select (change)="onSelectInit($event)">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-table">
+      <div class="message-not-result" *ngIf="ListStock.length === 0">
+        <img src="../../../../../../assets/img/dobby/not_results_IA.png" alt="Sin resultados" />
+        <h3>No se encontraron resultados</h3>
+        <h5>Registra productos o compras para iniciar el inventario</h5>
+      </div>
+
+      <table *ngIf="ListStock.length > 0">
+        <thead>
+          <tr>
+            <th><i class="fa-solid fa-arrow-down-1-9 fa-fw"></i></th>
+            <th>Producto</th>
+            <th>Referencia</th>
+            <th>Categoría</th>
+            <th>Cantidad</th>
+            <th>Estado</th>
+            <th>Valor estimado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of FilterListStock; let i = index" [class.negative-tr]="getStockStatus(item) === 'negative'" [class.low-tr]="getStockStatus(item) === 'low'">
+            <td>{{ (currentPage - 1) * itemsPorPagina + i + 1 }}</td>
+            <td>
+              <div class="product-cell">
+                <img *ngIf="item.image" [src]="item.image" [alt]="item.producto || 'Producto'">
+                <span>{{item.producto || 'Producto sin nombre'}}</span>
+              </div>
+            </td>
+            <td>{{item.referencia || '-'}}</td>
+            <td>{{item.categoria || '-'}}</td>
+            <td>
+              <ng-container *ngIf="editingStockId !== item.id; else editQuantityTpl">
+                <strong>{{item.cantidad}}</strong>
+              </ng-container>
+              <ng-template #editQuantityTpl>
+                <input class="quantity-input" type="number" [(ngModel)]="editQuantity">
+              </ng-template>
+            </td>
+            <td>
+              <span class="status-pill" [class]="getStockStatus(item)">
+                {{getStockLabel(item)}}
+              </span>
+            </td>
+            <td>{{((item.precio || 0) * item.cantidad) | currency}}</td>
+            <td>
+              <ng-container *ngIf="editingStockId !== item.id; else saveActionsTpl">
+                <button type="button" class="btn-option" title="Ajustar cantidad" (click)="startEdit(item)">
+                  <i class="fa-solid fa-sliders fa-fw"></i>
+                </button>
+              </ng-container>
+              <ng-template #saveActionsTpl>
+                <button type="button" class="btn-option" title="Guardar" (click)="saveStock(item)" [disabled]="isSaving">
+                  <i class="fa-solid fa-check fa-fw"></i>
+                </button>
+                <button type="button" class="btn-option" title="Cancelar" (click)="cancelEdit()" [disabled]="isSaving">
+                  <i class="fa-solid fa-xmark fa-fw"></i>
+                </button>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,177 @@
+* { box-sizing: border-box; }
+
+.container-component { position: relative; }
+
+.access-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.access-hero p { margin: 0 0 6px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-primario); }
+.access-hero h1 { margin: 0; font-size: 26px; letter-spacing: 0; }
+
+.metric-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: flex-end; }
+.metric-row span { padding: 8px 10px; border: 1px solid var(--color-texto-terciario); border-radius: 10px; background-color: var(--background-primario); font-size: 11px; letter-spacing: 1px; }
+.metric-row strong { margin-left: 8px; color: var(--color-primary); }
+
+.content { display: flex; flex-wrap: wrap; justify-content: center; }
+
+.container-head { width: 100%; position: sticky; top: 4rem; z-index: 1; background-color: var(--color-secondary); }
+.container-head .banner { padding: 0 20px; width: 100%; border: 1px solid var(--color-texto-terciario); border-radius: 10px; background-color: #fff; display: flex; justify-content: space-between; }
+.count-register { font-size: 10px; letter-spacing: 1px; margin: 11px 0; }
+.container-pag { display: flex; flex-wrap: wrap; }
+.container-pag button { padding: 4px 9px; border: 1px solid transparent; background: transparent; margin: 6px; font-size: 10px; cursor: pointer; }
+.container-pag button span { margin-left: 6px; }
+.container-pag button:hover, .active-filter { border-color: var(--color-texto-terciario) !important; background-color: var(--background-primario) !important; }
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 12px;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.admin-form h2 { margin: 0; font-size: 16px; letter-spacing: 0; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 11px; letter-spacing: 1px; }
+input, select, textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--color-texto-terciario); border-radius: 8px; outline: none; resize: vertical; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.form-actions .btn i,
+.permission-actions .btn i,
+.audit-filter-actions .btn i { margin-right: 6px; }
+
+.container-table { padding: 0 10px 10px; width: 100%; overflow-x: auto; z-index: 0; }
+table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+thead tr { position: sticky; top: -0.6rem; z-index: 2; }
+th { text-align: left; font-size: 12px; padding: 20px 10px; color: var(--color-primary); }
+td { text-align: left; padding: 10px; font-size: 11px; letter-spacing: 1px; font-weight: 500; background-color: #fff; border-top: 1px solid var(--color-texto-terciario); border-bottom: 1px solid var(--color-texto-terciario); box-shadow: 1px 3px 3px rgba(0, 0, 0, .1); }
+tbody tr:hover > td { background-color: var(--background-hover); }
+td:first-child { border-left: 2px solid var(--color-primary); }
+td:last-child { border-right: 1px solid var(--color-texto-terciario); border-radius: 0 10px 10px 0; text-align: end; }
+td p { margin: 4px 0 0; color: var(--color-adicional-secundario); font-size: 11px; }
+.btn-option { font-size: 15px; margin-left: 12px; border: none; background: transparent; cursor: pointer; }
+
+.permissions-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 12px;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.role-list {
+  padding: 10px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.role-list button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.role-list button:hover, .active-role { border-color: var(--color-texto-terciario) !important; background-color: var(--background-primario) !important; }
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.module-toggle {
+  min-height: 110px;
+  padding: 14px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.module-toggle input { width: auto; }
+.module-toggle span { display: inline-flex; margin: 8px 0; font-size: 20px; }
+.module-toggle strong { display: block; font-size: 12px; }
+.module-toggle small { display: block; margin-top: 5px; color: var(--color-adicional-secundario); word-break: break-word; }
+.permission-actions { align-self: start; }
+
+.audit-shell {
+  width: 100%;
+  padding-top: 12px;
+}
+
+.audit-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.audit-filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.audit-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background-color: var(--background-primario);
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.audit-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 8px 14px 16px;
+  color: var(--color-primary);
+  font-size: 11px;
+}
+
+.audit-pagination select {
+  width: auto;
+  min-width: 74px;
+}
+
+@media (max-width: 860px) {
+  .access-hero, .container-head .banner, .admin-shell, .permissions-shell { display: flex; flex-direction: column; }
+  table { min-width: 760px; }
+}

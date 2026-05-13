@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { OrderDTO } from 'src/app/core/models/order';
@@ -10,8 +10,9 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
   templateUrl: './supplier.component.html',
   styleUrls: ['./supplier.component.css']
 })
-export class SupplierComponent {
+export class SupplierComponent implements OnInit {
 
+  searchTerm : string = '';
   ListOrder: any[] =[];
   FilterListOrder : any[] = [];
   currentPage: number = 1;
@@ -44,7 +45,6 @@ export class SupplierComponent {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Proveedores', url: 'shopping/register/add', type: "btn-primary"},
       { nombre: 'Nueva compra', url: 'shopping/register/add', icon: 'fa-solid fa-plus', type: "btn-success"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
@@ -55,6 +55,10 @@ export class SupplierComponent {
     });
 
     this.onLoadOrder();
+  }
+
+  OnSearchChange(search: string) {
+    this.DataShared.OnSet(search);
   }
 
   onLoadOrder() {

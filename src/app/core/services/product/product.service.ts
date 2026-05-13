@@ -26,11 +26,11 @@ export class ProductService {
     return this.http.get(this.ApiURL + HttpMethod.GETID + id);
   }
 
-  post(data: ProductDTO): Observable<ProductDTO>{
+  post(data: ProductDTO | FormData): Observable<ProductDTO>{
     return this.http.post<ProductDTO>(this.ApiURL + HttpMethod.POST, data);
   }
 
-  put(id: any, data: ProductDTO) : Observable<ProductDTO> {
+  put(id: any, data: ProductDTO | FormData) : Observable<ProductDTO> {
     return this.http.put<ProductDTO>(this.ApiURL + HttpMethod.PUT + id, data);
   }
 

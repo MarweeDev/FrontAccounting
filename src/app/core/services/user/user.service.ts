@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable, of, tap } from 'rxjs';
 import { ApiConfig, HttpMethod, ServicesMethod } from '../appsettings';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private readonly infoUserCacheKey = 'infoUserCache';
+  private infoUserCacheToken: string | null = null;
+  private infoUserCacheData: any = null;
 
   constructor(private http: HttpClient) { }
 
@@ -32,5 +35,41 @@ export class UserService {
     }
     
     return this.http.get(this.ApiURL + HttpMethod.GET + "InfoUser", {params});
+  }
+
+  getInfoUserCached(data: any): Observable<any> {
+    const token = data?.token || '';
+
+    if (this.infoUserCacheToken === token && this.infoUserCacheData) {
+      return of(this.infoUserCacheData);
+    }
+
+    const stored = sessionStorage.getItem(this.infoUserCacheKey);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed?.token === token && parsed?.data) {
+          this.infoUserCacheToken = token;
+          this.infoUserCacheData = parsed.data;
+          return of(parsed.data);
+        }
+      } catch {
+        sessionStorage.removeItem(this.infoUserCacheKey);
+      }
+    }
+
+    return this.getInfoUser(data).pipe(
+      tap(response => {
+        this.infoUserCacheToken = token;
+        this.infoUserCacheData = response;
+        sessionStorage.setItem(this.infoUserCacheKey, JSON.stringify({ token, data: response }));
+      })
+    );
+  }
+
+  clearInfoUserCache(): void {
+    this.infoUserCacheToken = null;
+    this.infoUserCacheData = null;
+    sessionStorage.removeItem(this.infoUserCacheKey);
   }
 }

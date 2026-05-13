@@ -38,7 +38,7 @@ export class ExportOrderComponent {
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
+      { nombre: 'Volver', url: 'sales/register', type: "btn-origin"},
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -94,7 +94,6 @@ export class ExportOrderComponent {
       
       this.ApiOrder.getFinExport(orderData).subscribe(data => {
         this.ListOrder = data.result;
-        console.log(this.ListOrder);
   
         this.onSelectInit();
       },error => {
@@ -175,6 +174,11 @@ export class ExportOrderComponent {
     this.weekRange = `${lastWeekStr}`;
     this.monthRange = `${lastMonthStr}`;
     this.yearRange = `${lastYearStr}`;
+  }
+
+  onSelectChange(event: any) {
+    // Obtén el valor seleccionado y guárdalo en la propiedad selectedId
+    let selectedId = event.target.value;
   }
 }
 

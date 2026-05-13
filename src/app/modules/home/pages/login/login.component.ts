@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/core/services/user/user.service';
+import { LoginRequest } from 'src/app/core/models/auth';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private router:Router, 
     private toastService: ToastService,
     private formBuilder: FormBuilder, 
-    private api:UserService) {
+    private authService: AuthService) {
     this.form = this.formBuilder.group({
       Email: ['', [Validators.required]],
       Password: ['', [Validators.required]],
@@ -29,8 +30,21 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.authService.hasLegacySessionOnly()) {
+      this.authService.clearSession();
+    }
+
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['sales/register']);
+      return;
+    }
+
     //Resetea los active en el menu lateral
     localStorage.removeItem("nav_left");
+    let elementNav : any = document.getElementById('nav')?.style;
+    let elementNavUser : any = document.getElementById('nav_user')?.style;
+    if (elementNav) elementNav.display = "none";
+    if (elementNavUser) elementNavUser.opacity = "0";
   }
 
   login () {
@@ -41,24 +55,31 @@ export class LoginComponent implements OnInit {
     this.form.updateValueAndValidity();
 
     if(!this.form.status.includes('INVALID')) {
+      
       const email = this.form.get('Email');
       const pass = this.form.get('Password');
 
-      let t = new login();
-      t.email = email?.value;
-      t.pass = pass?.value;
+      const t: LoginRequest = {
+        email: email?.value,
+        pass: pass?.value
+      };
 
-      this.api.getLogin(t).subscribe(data => {
+      this.authService.login(t).subscribe({
+        next: data => {
         this.form.reset();
-        console.log(data);
 
-        if (data?.status != 204) {
-          sessionStorage.setItem('authenticator', data?.result[0]?.token);
-          this.router.navigate(['home/main']);
+        if (data?.token) {
+          this.authService.setSession(data);
+
+          //this.router.navigate(['home/main']);
+          this.router.navigate(['sales/register']);
+
+          let elementNav : any = document.getElementById('nav')?.style;
+          elementNav.display = "unset";
 
           this.toastService.showToast({
             title: 'Proceso exitoso',
-            message: 'Inicio de sessión autorizado.',
+            message: 'Inicio de sesión autorizado.',
             type: 'success',
             timeout: 5000,
           });
@@ -66,20 +87,21 @@ export class LoginComponent implements OnInit {
         else {
           this.toastService.showToast({
             title: 'Proceso advertencia',
-            message: data?.message,
+            message: 'Credenciales inválidas.',
             type: 'error',
             timeout: 5000,
           });
         }
-        
-      }), (error: any) => {
-        this.toastService.showToast({
-          title: 'Error ' + error.status,
-          message: error.message,
-          type: 'error',
-          timeout: 3000
-        });
-      }
+        },
+        error: (error: any) => {
+          this.toastService.showToast({
+            title: 'Error ' + error.status,
+            message: error.error?.message || error.message,
+            type: 'error',
+            timeout: 3000
+          });
+        }
+      });
     }
     else {
       this.toastService.showToast({

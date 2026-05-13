@@ -47,6 +47,14 @@ export class OrderService {
     return this.http.post<OrderDTO[]>(this.ApiURL + HttpMethod.POST, data);
   }
 
+  put(data: OrderDTO[]): Observable<OrderDTO[]> {
+    return this.http.put<OrderDTO[]>(this.ApiURL + HttpMethod.PUT2, data);
+  }
+
+  putNull(data: any): Observable<any> {
+    return this.http.put(this.ApiURL + HttpMethod.STATUS + "null", data);
+  }
+
   putStatus(data: any): Observable<any> {
     return this.http.put(this.ApiURL + HttpMethod.STATUS + "pay", data);
   }

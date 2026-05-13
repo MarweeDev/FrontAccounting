@@ -1,20 +1,61 @@
 <app-breadcrumbs id="nav"></app-breadcrumbs>
 
-<app-mainlayout *ngIf="statusDisabledMain"></app-mainlayout>
+<div class="aside-overlay" *ngIf="statusDisabledMain" (click)="OnHiddenBar()"></div>
+<app-mainlayout *ngIf="statusDisabledMain" (click)="$event.stopPropagation()"></app-mainlayout>
 
-<div class="content" id="content" (click)="OnHiddenBar()">
+<div class="content" id="content">
     <router-outlet></router-outlet>
 </div>
 
-<section class="container-loader-module" *ngIf="statusLoaderModule">
-    <div class="container-loader-margin">
-        <div class="custom-loader"></div>
-        <p class="info">Cargando componentes</p>
-    </div>
+<section
+    class="season-effect-overlay"
+    *ngIf="visualEffect$ | async as visualEffect"
+    [class.active]="visualEffect !== 'none'"
+    [class.snow-effect]="visualEffect === 'christmas'"
+    [class.shadow-effect]="visualEffect === 'halloween'"
+    aria-hidden="true">
+    <ng-container *ngIf="visualEffect === 'christmas'">
+        <span
+            class="snow-particle"
+            *ngFor="let item of snowParticles"
+            [style.--x]="item.x"
+            [style.--delay]="item.delay"
+            [style.--duration]="item.duration"
+            [style.--size]="item.size"
+            [style.--drift]="item.drift"
+            [style.--opacity]="item.opacity"></span>
+    </ng-container>
+    <ng-container *ngIf="visualEffect === 'halloween'">
+        <span
+            class="shadow-particle"
+            *ngFor="let item of shadowParticles"
+            [style.--top]="item.top"
+            [style.--delay]="item.delay"
+            [style.--duration]="item.duration"
+            [style.--scale]="item.scale"
+            [style.--opacity]="item.opacity"></span>
+    </ng-container>
 </section>
 
-<section class="container-loader-component" *ngIf="statusLoaderComponent">
-    <div class="container-loader-margin">
-        <div class="custom-loader"></div>
+<section class="app-loading-overlay" *ngIf="loadingState$ | async as loading" [class.active]="loading.active">
+    <div class="app-loading-panel" *ngIf="loading.active">
+        <div class="lava-loader" aria-hidden="true">
+            <div class="lava-glass">
+                <span class="lava-blob blob-a"></span>
+                <span class="lava-blob blob-b"></span>
+                <span class="lava-blob blob-c"></span>
+                <span class="lava-blob blob-d"></span>
+                <span class="lava-shine"></span>
+            </div>
+        </div>
+        <div class="loading-copy">
+            <strong>{{loading.message}}</strong>
+            <p>{{loading.mode === 'route' ? 'Preparando navegacion y permisos.' : 'Estamos consultando la informacion.'}}</p>
+        </div>
+        <div class="loading-ripple" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+        </div>
     </div>
 </section>

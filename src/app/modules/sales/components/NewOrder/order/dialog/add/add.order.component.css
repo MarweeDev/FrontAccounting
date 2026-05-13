@@ -2,10 +2,11 @@
     position: fixed !important;
     right: 0px !important;
     bottom: 0px !important;
-    z-index: 2 !important;
+    z-index: 3 !important;
     display: flex !important;
     padding: 3rem 10px 3rem 10px !important;
-    background: var(--background-primario) !important;
+    /*background: var(--background-primario) !important;*/
+    background-color: rgba(0, 0, 0, .5);
     left: 0 !important;
     top: 0 !important;
     justify-content: center;
@@ -13,16 +14,18 @@
 }
 .container-component::before {
     content: '';
-    background-color: rgb(23,25,33);
-    background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    /*background-color: rgb(23,25,33);*/
+    /*background: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);*/
     position: fixed;
     top: 0px; left: 0px; right: 0px;
-    height: 35%;
+    height: 100%;
     z-index: -1;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 .container-component::after {
     content: '';
-    background-image: url('src/assets/img/5130890.png');
+    /*background-image: url('src/assets/img/5130890.png');*/
     background-size: 100% auto;
     background-position: bottom;
     position: fixed;
@@ -34,10 +37,12 @@
 
 .card { 
     cursor: unset; 
-    height: fit-content; 
+    height: inherit !important; 
     box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, .1);
     width: 30em !important;
     padding: 30px;
+    position: relative;
+    overflow: auto;
 }
 
 label {
@@ -51,8 +56,10 @@ input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
 }
   
 .error-message {
@@ -62,7 +69,7 @@ input {
     width: fit-content;
     margin: auto;
     margin-left: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: rgba(255, 53, 53, .9);
     color: #fff;
 }
@@ -76,5 +83,101 @@ input {
     padding: 7px 20px;
     cursor: pointer;
     margin: 3px;
+}
+
+select {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+/*Subir imagen*/
+.image-upload {
+  margin-bottom: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.image-upload input {
+  display: none;
+}
+
+.preview-container {
+  position: relative;
+  height: 170px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f4f6f8;
+  border: 1px solid #e0e0e0;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* acciones flotantes */
+.image-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* botón eliminar */
+.action-btn.remove {
+  background: rgba(255, 40, 40, 0.85);
+}
+
+.action-btn.remove:hover {
+  background: rgb(255, 22, 22);
+}
+
+/* badge estado */
+.status-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+.status-badge.loaded {
+  background: rgba(56, 142, 60, 0.85);
+}
+.status-badge.error {
+  background: rgba(211, 47, 47, 0.85);
+}
+
+.upload i {
+  cursor: pointer;
+  color: #ffffff;
+}
+.remove i {
+  cursor: pointer;
+  color: #ffffff;
 }
 

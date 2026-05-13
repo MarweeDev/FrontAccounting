@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 //Components
@@ -11,6 +11,8 @@ import { MainlayoutComponent } from './components/aside/mainlayout/mainlayout.co
 import { FooterComponent } from './components/footer/footer/footer.component';
 import { FilterSearchPipe } from './pipes/search/filter-search.pipe';
 import { StatusComponent } from './components/error/status/status.component';
+import { SelectComponent } from './components/form-items/select/select.component';
+import { LoadingContainerComponent } from './components/feedback/loading-container/loading-container.component';
 
 @NgModule({
   declarations: [
@@ -19,12 +21,15 @@ import { StatusComponent } from './components/error/status/status.component';
     MainlayoutComponent,
     FooterComponent,
     StatusComponent,
+    SelectComponent,
+    LoadingContainerComponent
   ],
   imports: [
     CommonModule,
-    BrowserModule,
+    //BrowserModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    NgOptimizedImage
   ],
   exports: [
     //components
@@ -32,7 +37,9 @@ import { StatusComponent } from './components/error/status/status.component';
     BreadcrumbsComponent,
     MainlayoutComponent,
     FooterComponent,
-    StatusComponent
+    StatusComponent,
+    SelectComponent,
+    LoadingContainerComponent
   ]
 })
 export class SharedModule { }

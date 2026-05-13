@@ -1,0 +1,229 @@
+/* Estilos generales del formulario */
+.form-container {
+  background-color: #f4f7fa;
+  padding: 2rem;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Estilos para los botones */
+.btn {
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background-color: #27ae60;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #2ecc71;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: #ecf0f1;
+  color: #7f8c8d;
+}
+.btn-secondary:hover {
+  background-color: #bdc3c7;
+}
+
+.btn-link {
+  background: none;
+  color: #3498db;
+  font-weight: bold;
+  padding: 0.5rem 0;
+  border-radius: 0;
+}
+
+.btn-icon.btn-danger {
+  color: #e74c3c;
+  font-size: 1.2rem;
+}
+
+/* Estilos de las tarjetas y campos del formulario */
+.card-header-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.card-header-content .add {
+  margin: 10px 0px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+.card-header-content .add i {
+  margin-left: 5px;
+}
+.card-header-content .delete {
+  padding: 6px 10px;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 400;
+  border: 1px solid transparent !important;
+  background-color: transparent !important;
+}
+.card-header-content .delete:hover {
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  border-color: #e9e9e9 !important;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-col-span-2 {
+  grid-column: span 2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: auto;
+  padding: 0.75rem;
+  border: 1px solid #dfe4ea;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-control-select {
+  font-size: 12px;
+}
+
+.form-control-td-quantity {
+  width: 50px !important;
+}
+
+.form-control-td-value {
+  width: 100px !important;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.2);
+}
+
+.form-control[readonly] {
+  background-color: #f4f7fa;
+  cursor: not-allowed;
+}
+
+.observations {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+.observations .description {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  min-width: -moz-available;
+  min-width: -webkit-fill-available;
+  max-width: -moz-available;
+  max-width: -webkit-fill-available;
+  height: 200px;
+  min-height: 200px;
+  max-height: 200px;
+  padding: 0.75rem;
+  border: 1px solid #dfe4ea;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* Table container */
+/*.table-responsive {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}*/
+
+/* Tabla de items */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.items-table th {
+  text-align: left;
+  padding-bottom: 1rem;
+  color: #7f8c8d;
+  font-size: 12px;
+}
+.items-table td {
+  padding-top: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Sección de resumen (observaciones y totales) */
+.summary-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.totals {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  color: #34495e;
+}
+.total-row.subtotal {
+  font-weight: bold;
+}
+.total-row.grand-total {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: bold;
+}
+.btn-save-shop {
+  padding: 0.75rem 0 0 0;
+  text-align: center;
+}
+
+.totals hr {
+  border: none;
+  border-top: 1px solid #ecf0f1;
+  margin: 0.5rem 0;
+}

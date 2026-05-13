@@ -2,7 +2,7 @@
 
     <!--Titulo componente-->
     <div class="container-prev">
-        <h3 class="title">Proceso de pago</h3>
+        <!--<h3 class="title">Proceso de pago</h3>-->
     </div>
 
     <br>
@@ -58,24 +58,134 @@
                 </div>
             </div>
             <div class="col col-final" id="col_final">
-                <h3>Medio de pago</h3>
-                <select (change)="changeType($event)" id="selectType">
-                    <option [value]="item.id" *ngFor="let item of ListTypePay">{{item.nombre}}</option>
-                </select>
-                <select *ngIf="visiblesubtype" id="selectSubType">
-                    <option [value]="item.id" *ngFor="let item of ListSubTypePay">{{item.nombre}}</option>
-                </select>
+                <div class="payment-panel-head">
+                    <h3>Medio de pago</h3>
+                    <div
+                        class="device-status-compact"
+                        *ngIf="peripheralEnabled && peripheralStatus"
+                        [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+                        [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
+                        <i class="fa-solid fa-print"></i>
+                        <div class="device-status-tooltip">
+                            <strong>{{peripheralStatus.label}}</strong>
+                            <small>{{peripheralStatus.detail}}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-total">
+                    <small>Total a cobrar</small>
+                    <strong>{{totalProduct}}</strong>
+                </div>
+
+                <button type="button" class="selected-method-btn" (click)="openPaymentMethodModal()" *ngIf="selectedPaymentMethod">
+                    <span>
+                        <i [className]="selectedPaymentMethod.icon || 'fa-solid fa-wallet'"></i>
+                    </span>
+                    <div>
+                        <small>Medio de pago</small>
+                        <strong>{{selectedPaymentMethod.name}}</strong>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+
+                <button type="button" class="selected-method-btn" (click)="openPaymentMethodModal()" *ngIf="!selectedPaymentMethod">
+                    <span><i class="fa-solid fa-wallet"></i></span>
+                    <div>
+                        <small>Medio de pago</small>
+                        <strong>Seleccionar</strong>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+
+                <section class="payment-method-modal" *ngIf="paymentMethodModalVisible">
+                    <div class="payment-method-modal-card">
+                        <div class="payment-method-modal-head">
+                            <div>
+                                <h2>Seleccionar medio</h2>
+                                <p>Elige cómo recibiste el pago de esta orden.</p>
+                            </div>
+                            <button type="button" (click)="closePaymentMethodModal()"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="payment-method-grid">
+                            <button
+                                type="button"
+                                class="payment-method-card"
+                                *ngFor="let method of paymentMethods"
+                                [class.active]="selectedPaymentMethod?.id === method.id && selectedPaymentMethod?.name === method.name"
+                                (click)="selectPaymentMethod(method)">
+                                <i [className]="method.icon || 'fa-solid fa-wallet'"></i>
+                                <span>{{method.name}}</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="payment-context" *ngIf="selectedPaymentMethod">
+                    <div class="payment-context-head">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                        <div>
+                            <strong>Datos para completar</strong>
+                            <small>Solo lo necesario para cerrar este pago</small>
+                        </div>
+                    </div>
+                    <label class="payment-subtype" *ngIf="visiblesubtype">
+                        Canal del datáfono
+                        <select id="selectSubType" class="rd-2">
+                            <option [value]="item.id" *ngFor="let item of ListSubTypePay">{{item.nombre}}</option>
+                        </select>
+                    </label>
+                    <p *ngIf="selectedPaymentMethod.instructions">{{selectedPaymentMethod.instructions}}</p>
+                    <div class="payment-account" *ngIf="selectedPaymentMethod.account_label || selectedPaymentMethod.account_value">
+                        <small>{{selectedPaymentMethod.account_label || 'Dato de pago'}}</small>
+                        <strong>{{selectedPaymentMethod.account_value || 'Pendiente por configurar'}}</strong>
+                    </div>
+                    <div class="payment-qr" *ngIf="selectedPaymentMethod.allows_qr">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span>{{selectedPaymentMethod.qr_value || 'QR pendiente por configurar'}}</span>
+                    </div>
+                    <div class="cash-helper" *ngIf="selectedPaymentMethod.method_type === 'cash'">
+                        <label>
+                            Recibido en efectivo
+                            <input type="number" min="0" [(ngModel)]="cashReceived" placeholder="Ej: 50000">
+                        </label>
+                        <div class="cash-change" *ngIf="cashReceived">
+                            <span>Cambio</span>
+                            <strong>{{cashChange | currency:'COP':'symbol':'1.0-0'}}</strong>
+                        </div>
+                        <p class="cash-suggestion" *ngIf="cashSuggestion">
+                            <i class="fa-solid fa-lightbulb"></i>
+                            {{cashSuggestion}}
+                        </p>
+                    </div>
+                    <label class="payment-reference" *ngIf="selectedPaymentMethod.requires_reference">
+                        Referencia o comprobante
+                        <input type="text" [(ngModel)]="paymentReference" placeholder="Ej: autorizacion, ultimos digitos, soporte">
+                    </label>
+                    <label class="payment-confirm" *ngIf="selectedPaymentMethod.requires_confirmation">
+                        <input type="checkbox" [(ngModel)]="paymentConfirmed">
+                        Pago recibido y verificado
+                    </label>
+                </div>
+
+                <div class="operation-status" *ngIf="operationMessage">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{operationMessage}}</span>
+                </div>
 
                 <div class="action">
                     <div class="btn-order">
                         <div class="row">
                             <div class="col">
-                                <button type="button" class="btn btn-default rd-4" (click)="viewCancel()">Cancelar</button>
+                                <button type="button" class="btn btn-default rd-2" (click)="viewCancel()">Cancelar</button>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-success rd-4" (click)="viewOk()">Pagar</button>
+                                <button type="button" class="btn btn-success rd-2" (click)="viewOk()" [disabled]="processingPayment || !selectedPaymentMethod" *ngIf="!paymentCompleted">Pagar</button>
+                                <button type="button" class="btn btn-success rd-2" (click)="printReceipt()" [disabled]="printing" *ngIf="paymentCompleted && peripheralEnabled">
+                                    Imprimir comprobante
+                                </button>
                             </div>
                         </div>
+                        <p class="print-disclaimer" *ngIf="paymentCompleted && peripheralEnabled">Comprobante interno. No es factura fiscal ni reemplaza el voucher del datáfono.</p>
                     </div>
                 </div>
             </div>
@@ -83,4 +193,46 @@
 
     </div>
 
+</section>
+
+<section class="payment-terminal-modal" *ngIf="paymentTerminalModalVisible">
+    <div class="terminal-shell">
+        <div class="terminal-device">
+            <div class="terminal-top">
+                <span class="terminal-brand">Marwee POS</span>
+                <strong>Datáfono inalámbrico</strong>
+                <button type="button" (click)="closeTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="terminal-screen">
+                <div class="terminal-screen-head">
+                    <small>Venta {{ListOrder[0]?.codigo}}</small>
+                    <span>{{simulatedPaymentStatus === 'pending' ? 'En espera' : simulatedPaymentStatus}}</span>
+                </div>
+                <strong>{{totalProduct}}</strong>
+                <p [class.ok]="simulatedPaymentStatus === 'approved'" [class.fail]="simulatedPaymentStatus === 'rejected' || simulatedPaymentStatus === 'cancelled'">
+                    {{simulatedPaymentMessage}}
+                </p>
+            </div>
+            <div class="terminal-reader">
+                <span class="reader-chip"><i class="fa-solid fa-wifi"></i></span>
+                <span>Acerque, inserte o deslice la tarjeta</span>
+            </div>
+            <div class="terminal-actions">
+                <button type="button" class="approve" (click)="approveTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Aprobar</span>
+                </button>
+                <button type="button" class="reject" (click)="rejectTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-xmark"></i>
+                    <span>Rechazar</span>
+                </button>
+                <button type="button" (click)="cancelTerminal()" [disabled]="simulatedPaymentStatus === 'approved'">
+                    <i class="fa-solid fa-ban"></i>
+                    <span>Cancelar</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>

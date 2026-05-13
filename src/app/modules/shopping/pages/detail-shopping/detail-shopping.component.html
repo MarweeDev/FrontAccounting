@@ -1,0 +1,81 @@
+<section class="shopping-detail">
+  <div class="summary" *ngIf="shopping">
+    <div>
+      <span>Compra</span>
+      <strong>{{shopping.codigo}}</strong>
+    </div>
+    <div>
+      <span>Proveedor</span>
+      <strong>{{shopping.proveedor}}</strong>
+    </div>
+    <div>
+      <span>Items</span>
+      <strong>{{totalItems}}</strong>
+    </div>
+    <div>
+      <span>Total</span>
+      <strong>{{shopping.total_compra | currency}}</strong>
+    </div>
+  </div>
+
+  <div class="detail-actions" *ngIf="shopping">
+    <div
+      class="device-status-compact"
+      *ngIf="peripheralEnabled && peripheralStatus"
+      [class.connected]="peripheralStatus.mode === 'local-agent' || peripheralStatus.mode === 'simulation'"
+      [attr.aria-label]="peripheralStatus.label + '. ' + peripheralStatus.detail">
+        <i class="fa-solid fa-print"></i>
+      <div class="device-status-tooltip">
+        <strong>{{peripheralStatus.label}}</strong>
+        <small>{{peripheralStatus.detail}}</small>
+      </div>
+    </div>
+    <button type="button" class="btn btn-default rd-2" (click)="openPeripheralLogModal()" *ngIf="peripheralEnabled && peripheralLogs.length > 0">
+      Bitacora perifericos
+    </button>
+    <button type="button" class="btn btn-success rd-2" (click)="printSupport()" [disabled]="printing" *ngIf="peripheralEnabled">
+      Imprimir soporte interno
+    </button>
+  </div>
+
+  <div class="detail-card" *ngIf="shopping">
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Valor unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of shopping.items">
+          <td>{{item.producto || item.id_producto}}</td>
+          <td>{{item.cantidad}}</td>
+          <td>{{item.valor_unitario | currency}}</td>
+          <td>{{item.total | currency}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="print-disclaimer" *ngIf="peripheralEnabled">Comprobante interno. No es factura fiscal.</p>
+  </div>
+</section>
+
+<section class="peripheral-log-modal" *ngIf="peripheralEnabled && visiblePeripheralLogModal">
+  <div class="peripheral-log-card">
+    <div class="peripheral-log-header">
+      <div>
+        <h2>Bitacora perifericos</h2>
+        <p>Eventos asociados a impresion y periféricos de esta compra/gasto.</p>
+      </div>
+      <button type="button" (click)="closePeripheralLogModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="peripheral-log-list">
+      <div *ngFor="let log of peripheralLogs">
+        <span>{{log.type}} · {{log.status}}</span>
+        <small>{{log.message}}</small>
+        <small>{{log.deviceMode || 'sin modo'}} · {{log.createdAt | date:'short'}}</small>
+      </div>
+    </div>
+  </div>
+</section>

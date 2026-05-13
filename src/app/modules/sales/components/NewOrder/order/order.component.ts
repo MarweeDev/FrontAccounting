@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductDTO } from '../../../../../core/models/product';
 import { CategoriaProductoDTO } from '../../../../../core/models/categoriaProducto';
 import { AppComponent } from 'src/app/app.component';
@@ -20,6 +20,9 @@ import { ToastService } from 'src/app/shared/directives/toast.service';
 })
 export class OrderComponent implements OnInit {
 
+  @Input() CodeOrderInput = 0;
+  @Input() ProcessOrderInput = "Insert";
+
   searchTerm : string = '';
 
   selectedId: number | string = 0;
@@ -33,6 +36,7 @@ export class OrderComponent implements OnInit {
   _btn_modal_add : boolean = false;
   _modal_add : boolean = true;
   _modal_add_client : boolean = false;
+  visibleAddProduct : boolean = false;
 
   heightAuto : string = "container-add container-add-open";
 
@@ -44,14 +48,25 @@ export class OrderComponent implements OnInit {
   NameClient ?: string = "name";
   ListProduct: ProductDTO[] = [];
   ListOrder: OrderDTO[] =[];
+  ListProductDB: any[] =[];
   codeOrder: string = "0";
   totalProduct: string = "0";
   codeClient: number = 0;
-  ListClient: any[] = []; 
+  ListClient: any[] = [];
+  visibleNavNewProduct ?: boolean;
+  visibleComponentNewProduct ?: boolean = false;
+  isSavingClient = false;
+  visibleCategoryModal = false;
+  isSavingCategory = false;
+  editingCategory?: CategoriaProductoDTO;
+  categoryForm: CategoriaProductoDTO = { nombre: '', descripcion: '', id_estado: 1 };
 
   //#region propietari
   ListFilter : CategoriaProductoDTO[] = [];
   ListProductData: ProductDTO[] = [];
+  FilterProductData: ProductDTO[] = [];
+  productPageSize = 24;
+  productVisibleCount = 24;
   //#endregion
 
   //Form
@@ -74,20 +89,21 @@ export class OrderComponent implements OnInit {
     this.form = this.formBuilder.group({
       Nombre: ['', [Validators.required]],
       Nit: ['', [Validators.required]],
-      Correo: ['']
+      Correo: ['', [Validators.email]]
     });
   }
 
   ngOnInit(): void {
     this.OnSetValueList();
     this.OnReloadSearch();
+    this.OnLoadProductEdit();
   }
 
   ngAfterContentInit():void {
     //Opciones para el nav
     this.app.listNav = [
-      { nombre: 'Volver', url: 'sales/neworder/register', type: "btn-origin"},
-      //{ nombre: 'Nuevo producto', url: 'sales/neworder/order/add', icon: 'fa-solid fa-plus', type: "btn-success"},
+      { nombre: 'Volver', url: 'sales/register', type: "btn-origin"},
+      { nombre: 'Nuevo producto', url: 'sales/order/add', icon: 'fa-solid fa-plus', type: "btn-success", visible: this.visibleNavNewProduct }
     ];
     this.DataShared.OnSetNav(this.app.listNav);
 
@@ -96,9 +112,54 @@ export class OrderComponent implements OnInit {
       this.DataShared.OnSetBreadcrumb(data['breadcrumb']);
     });
 
-    this.ApiOrder.getCodeOrder().subscribe(data => {
-      this.codeOrder = data.status;
-    });
+  }
+
+  //Metodo para cargar productos para editar
+  OnLoadProductEdit(){
+    //Validar si esta editando o creando nueva orden
+    if(this.CodeOrderInput == 0) {
+      //Obtener codigo orden
+      this.ApiOrder.getCodeOrder().subscribe(data => {
+        this.codeOrder = data.status;
+      });
+      //Mostrar btn newProduct
+      this.visibleNavNewProduct = true;
+    }
+    else {
+      //Ocultar btn newProduct
+      this.visibleNavNewProduct = false;
+      //Cargar codigo de la orden
+      this.codeOrder = this.CodeOrderInput.toString();
+
+      //Cargar productos de la orden
+      this.ApiOrder.getID(this.codeOrder).subscribe(data => {
+        this.ListProductDB = data.result;
+        this.ListProductDB.forEach((item: any) => {
+          const product = new ProductDTO();
+          product.id = item.id_producto;
+          product.nombre = item.producto;
+          product.precio = item.precio;
+          product.id_estado = item.cantidad;
+          this.ListProduct?.push(product);
+        });
+        
+        //Selección del cliente
+        this.codeClient = this.ListProductDB[0]?.id_cliente;
+        setTimeout(() => {
+          let elementClient :any = document.getElementById("select_client");
+          elementClient.value = this.ListProductDB[0]?.id_cliente;
+        }, 1000);
+
+        //Calcular total
+        this.OnTotal();
+        //Refrescar selección de productos
+        setTimeout(() => {
+          this.OnValidateRefresh();
+        }, 1000);
+      },error => {
+        console.log('Error get: ', error)
+      });
+    }
   }
 
   OnSearchChange(search: string) {
@@ -125,42 +186,22 @@ export class OrderComponent implements OnInit {
 
   OnReloadSearch() {
     this.DataShared.OnGet().subscribe((list: any) => {
-      this.searchTerm = list;
-
-      if (list == undefined || list == null || list == "") {
-        this.ListProductData.forEach(item => {
-          let element :any = document.getElementById('card-order-' + item.id);
-          if(element != null)
-            element.removeAttribute("style");
-        });
-      }
-      else {
-        let rows = this.ListProductData.filter(item => !item.nombre?.toLowerCase().includes(list.toLowerCase()));
-        if(rows.length > 0) {
-          rows.forEach(item => {
-            let element :any = document.getElementById('card-order-' + item.id);
-            element.style = "display: none;"
-          });
-        }
-      }
+      this.searchTerm = list || '';
+      this.refreshProductView();
     });
   }
 
   OnSetValueList(){
     //Cargar filtros
     if(this.selectedId === 0) {
-      this.ApiCateg.get().subscribe(data => {
-        this.ListFilter = data.category
-      },
-      error => {
-        console.log('Error: ', error)
-      });
+      this.loadCategories();
     }
 
     //Cargar productos
     if (this.selectedId != 0) {
       this.ApiProduct.getCateg(this.selectedId).subscribe(data => {
-        this.ListProductData = data.product
+        this.ListProductData = data.product;
+        this.refreshProductView();
       },
       error => {
         console.log('Error: ', error)
@@ -168,7 +209,8 @@ export class OrderComponent implements OnInit {
     }
     else {
       this.ApiProduct.get().subscribe(data => {
-        this.ListProductData = data.product
+        this.ListProductData = data.product;
+        this.refreshProductView();
       },
       error => {
         console.log('Error: ', error)
@@ -191,12 +233,179 @@ export class OrderComponent implements OnInit {
 
   onSelectChange(event: any) {
     // Obtén el valor seleccionado y guárdalo en la propiedad selectedId
-    this.selectedId = event.target.value;
+    this.selectedId = Number(event.target.value);
+    this.productVisibleCount = this.productPageSize;
     this.OnSetValueList();
-    
-    setTimeout(() => {
-      this.OnValidateRefresh();
-    }, 100);
+  }
+
+  get selectedCategoryName(): string {
+    if (Number(this.selectedId) === 0) return 'Todas';
+    return this.ListFilter.find(item => Number(item.id) === Number(this.selectedId))?.nombre || 'Categoria';
+  }
+
+  loadCategories(): void {
+    this.ApiCateg.get().subscribe(data => {
+      this.ListFilter = data.category || [];
+    },
+    error => {
+      console.log('Error: ', error)
+    });
+  }
+
+  openCategoryModal(): void {
+    this.visibleCategoryModal = true;
+    this.resetCategoryForm();
+    this.loadCategories();
+  }
+
+  closeCategoryModal(): void {
+    if (this.isSavingCategory) return;
+    this.visibleCategoryModal = false;
+    this.resetCategoryForm();
+  }
+
+  selectCategory(id: number | string | undefined): void {
+    this.selectedId = Number(id || 0);
+    this.productVisibleCount = this.productPageSize;
+    this.OnSetValueList();
+    this.visibleCategoryModal = false;
+  }
+
+  editCategory(category: CategoriaProductoDTO, event?: MouseEvent): void {
+    event?.stopPropagation();
+    this.editingCategory = category;
+    this.categoryForm = {
+      id: category.id,
+      nombre: category.nombre || '',
+      descripcion: category.descripcion || '',
+      id_estado: category.id_estado || 1
+    };
+  }
+
+  resetCategoryForm(): void {
+    this.editingCategory = undefined;
+    this.categoryForm = { nombre: '', descripcion: '', id_estado: 1 };
+  }
+
+  saveCategory(): void {
+    const payload: CategoriaProductoDTO = {
+      nombre: this.categoryForm.nombre?.trim(),
+      descripcion: this.categoryForm.descripcion?.trim(),
+      id_estado: 1
+    };
+
+    if (!payload.nombre) {
+      this.toastService.showToast({
+        title: 'Categoria requerida',
+        message: 'Escribe el nombre de la categoria.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
+    this.isSavingCategory = true;
+    const request = this.editingCategory?.id
+      ? this.ApiCateg.put(this.editingCategory.id, payload)
+      : this.ApiCateg.post(payload);
+
+    const isEditing = !!this.editingCategory?.id;
+
+    request.subscribe({
+      next: () => {
+        this.isSavingCategory = false;
+        this.resetCategoryForm();
+        this.loadCategories();
+        this.OnSetValueList();
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: isEditing ? 'Categoria actualizada.' : 'Categoria creada.',
+          type: 'success',
+          timeout: 3000
+        });
+      },
+      error: error => {
+        this.isSavingCategory = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      }
+    });
+  }
+
+  deleteCategory(category: CategoriaProductoDTO, event?: MouseEvent): void {
+    event?.stopPropagation();
+    if (!category.id || !window.confirm(`Desea deshabilitar la categoria ${category.nombre}?`)) return;
+
+    this.isSavingCategory = true;
+    this.ApiCateg.delete(category.id, { id_estado: 2 }).subscribe({
+      next: () => {
+        if (Number(this.selectedId) === Number(category.id)) {
+          this.selectedId = 0;
+          this.productVisibleCount = this.productPageSize;
+        }
+        this.isSavingCategory = false;
+        this.loadCategories();
+        this.OnSetValueList();
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: 'Categoria deshabilitada.',
+          type: 'success',
+          timeout: 3000
+        });
+      },
+      error: error => {
+        this.isSavingCategory = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
+      }
+    });
+  }
+
+  get VisibleProductData(): ProductDTO[] {
+    return this.FilterProductData.slice(0, this.productVisibleCount);
+  }
+
+  get hasMoreProducts(): boolean {
+    return this.productVisibleCount < this.FilterProductData.length;
+  }
+
+  refreshProductView(resetScroll: boolean = true) {
+    const term = this.searchTerm?.trim().toLowerCase();
+    this.FilterProductData = !term
+      ? [...this.ListProductData]
+      : this.ListProductData.filter(item =>
+        item.nombre?.toLowerCase().includes(term) ||
+        item.descripcion?.toLowerCase().includes(term) ||
+        item.referencia?.toLowerCase().includes(term)
+      );
+
+    if (resetScroll) {
+      this.productVisibleCount = this.productPageSize;
+    }
+
+    setTimeout(() => this.OnValidateRefresh(), 0);
+  }
+
+  onProductScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const threshold = 120;
+    const isNearBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - threshold;
+
+    if (isNearBottom && this.hasMoreProducts) {
+      this.productVisibleCount = Math.min(
+        this.productVisibleCount + this.productPageSize,
+        this.FilterProductData.length
+      );
+      setTimeout(() => this.OnValidateRefresh(), 0);
+    }
   }
 
   OnTotal(){
@@ -210,7 +419,6 @@ export class OrderComponent implements OnInit {
   }
 
   OnValidateRefresh() {
-    console.log(this.ListProduct);
     this.ListProduct.forEach(item => {
       let elementTitle :any = document.getElementById('card-title-' + item.id)?.style;
       let elementCard :any = document.getElementById('card-order-' + item.id)?.classList;
@@ -225,8 +433,9 @@ export class OrderComponent implements OnInit {
   }
 
   OnValidateAddItem(e:any, input:any){
-    let elementTitle :any = document.getElementById('card-title-' + e.target.id)?.style;
-    let elementCard :any = document.getElementById('card-order-' + e.target.id)?.classList;
+    const target = e.currentTarget || e.target;
+    let elementTitle :any = document.getElementById('card-title-' + target.id)?.style;
+    let elementCard :any = document.getElementById('card-order-' + target.id)?.classList;
     if (elementTitle != undefined && input != undefined) {
       if (input.value > 0) { 
         elementTitle.display = "unset";
@@ -254,24 +463,25 @@ export class OrderComponent implements OnInit {
   }
 
   additem(e:any) {
-    let element :any = document.getElementById('input-' + e.target.id);
+    const target = e.currentTarget || e.target;
+    let element :any = document.getElementById('input-' + target.id);
     if (element != undefined) {
       if (element.value < 10) { 
         element.value = Number(element.value) + 1;
         this.OnValidateAddItem(e, element);
 
-        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        let exist = this.ListProduct.filter(item => item.id == target.attributes['id'].value).length;
         if (exist == 0) 
         {
           const product = new ProductDTO();
-          product.id = e.target.attributes['id'].value;
-          product.nombre = e.target.attributes['name'].value;
-          product.precio = e.target.attributes['value'].value;
+          product.id = target.attributes['id'].value;
+          product.nombre = target.attributes['name'].value;
+          product.precio = target.attributes['value'].value;
           product.id_estado = Number(element.value);
           this.ListProduct?.push(product);
         }
         else {
-          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          let row = this.ListProduct.findIndex(item => item.id == target.attributes['id'].value);
           this.ListProduct[row].id_estado = Number(element.value);
         }
 
@@ -281,22 +491,22 @@ export class OrderComponent implements OnInit {
   }
 
   deleteitem(e:any) {
-    
-    let element :any = document.getElementById('input-' + e.target.id);
+    const target = e.currentTarget || e.target;
+    let element :any = document.getElementById('input-' + target.id);
     if (element != undefined) {
       if (element.value > 0) { 
         element.value = Number(element.value) - 1;
         this.OnValidateAddItem(e, element);
 
         if(element.value == 0){
-            let newList = this.ListProduct.filter(item => item.id !== e.target.attributes['id'].value);
+            let newList = this.ListProduct.filter(item => item.id !== target.attributes['id'].value);
             this.ListProduct = newList;
         }
         else {
-          let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+          let exist = this.ListProduct.filter(item => item.id == target.attributes['id'].value).length;
           if (exist > 0) 
           {
-            let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+            let row = this.ListProduct.findIndex(item => item.id == target.attributes['id'].value);
             this.ListProduct[row].id_estado = Number(element.value);
           }
         }
@@ -308,24 +518,25 @@ export class OrderComponent implements OnInit {
 
   //#region agregar y eliminar desde la orden
   additemOrder(e:any) {
-    let element :any = document.getElementById('input-' + e.target.id);
+    const target = e.currentTarget || e.target;
+    let element :any = document.getElementById('input-' + target.id);
     if (element != undefined) {
       if (element.value < 10) { 
         element.value = Number(element.value) + 1;
         this.OnValidateAddItem(e, element);
 
-        let exist = this.ListProduct.filter(item => item.id == e.target.attributes['id'].value).length;
+        let exist = this.ListProduct.filter(item => item.id == target.attributes['id'].value).length;
         if (exist == 0) 
         {
           const product = new ProductDTO();
-          product.id = e.target.attributes['id'].value;
-          product.nombre = e.target.attributes['name'].value;
-          product.precio = e.target.attributes['value'].value;
+          product.id = target.attributes['id'].value;
+          product.nombre = target.attributes['name'].value;
+          product.precio = target.attributes['value'].value;
           product.id_estado = Number(element.value);
           this.ListProduct?.push(product);
         }
         else {
-          let row = this.ListProduct.findIndex(item => item.id == e.target.attributes['id'].value);
+          let row = this.ListProduct.findIndex(item => item.id == target.attributes['id'].value);
           this.ListProduct[row].id_estado = Number(element.value);
         }
 
@@ -383,6 +594,13 @@ export class OrderComponent implements OnInit {
   onSelectChangeClient(event: any) {
     this.codeClient = event.target.value;
   }
+
+  editProduct(event: MouseEvent, id?: number) {
+    event.stopPropagation();
+    if (id) {
+      this.router.navigate(['/sales/product/edit', id]);
+    }
+  }
   //#endregion
 
   OnClose() {
@@ -398,17 +616,19 @@ export class OrderComponent implements OnInit {
   }
 
   viewPrev() {
-    this.router.navigate(['sales/neworder/register']);
+    this.router.navigate(['sales/register']);
   }
 
-  viewOk() {
+  viewRegister() {
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
+
+        var idUser = sessionStorage.getItem('idUser');
 
         this.ListProduct.forEach(item => {
           let order = new OrderDTO();
           order.codigo = this.codeOrder;
-          order.id_usuario = 1; //falta poner el usuario login
+          order.id_usuario = idUser ? Number(idUser) : 1; //falta poner el usuario login
           order.id_estadoorden = 7; //Estado pendiente
           order.id_tipopago = 1; //1 = no definido
           order.id_subtipopago = 1; //1 = no definido
@@ -424,39 +644,99 @@ export class OrderComponent implements OnInit {
         
         if(this.ListOrder.length > 0) 
         {
-          this.ApiOrder.post(this.ListOrder).subscribe(data => {
-            console.log("Exito: ", data)
+          if (this.ProcessOrderInput === "Insert") 
+          {
+            this.ApiOrder.post(this.ListOrder).subscribe(data => {
 
-            this.viewPrev();
-            this.toastService.showToast({
-              title: 'Proceso exitoso',
-              message: 'Registro de nueva orden exitoso.',
-              type: 'success',
-              timeout: 3000,
+              this.toastService.showToast({
+                title: 'Proceso exitoso',
+                message: 'Registro de nueva orden exitoso.',
+                type: 'success',
+                timeout: 3000,
+              });
+            },error => {
+              this.toastService.showToast({
+                title: 'Error ' + error.status,
+                message: error.message,
+                type: 'error',
+                timeout: 3000
+              });
+
+              throw new Error('Error en la creación de la orden');
             });
-          },error => {
-            this.toastService.showToast({
-              title: 'Error ' + error.status,
-              message: error.message,
-              type: 'error',
-              timeout: 3000
+          }
+          else if (this.ProcessOrderInput === "Update")
+          {
+            this.ApiOrder.put(this.ListOrder).subscribe(data => {
+              
+              this.toastService.showToast({
+                title: 'Proceso exitoso',
+                message: 'Actualización de orden exitosa.',
+                type: 'success',
+                timeout: 3000,
+              });
+            },error => {
+              this.toastService.showToast({
+                title: 'Error ' + error.status,
+                message: error.message,
+                type: 'error',
+                timeout: 3000
+              });
+
+              throw new Error('Error en la actualización de la orden');
             });
-          });
-          
+          }
         }
 
+      }
+      else {
+        this.toastService.showToast({
+          title: 'Advertencia',
+          message: 'La orden debe tener al menos un producto.',
+          type: 'warning',
+          timeout: 3000
+        });
       }
     }
   }
 
+  viewOk() {
+    try {
+      this.viewRegister();
+      if (this.ListProduct.length > 0)
+        this.viewPrev();
+    }
+    catch (error) {
+      console.log('Error viewOk: ', error);
+    }
+  }
+
   viewPay() {
+    try {
+      this.viewRegister();
+      if (this.btn_pay) {
+        this.viewPrev();
+      }
+      else {
+        if (this.ListProduct.length > 0)
+          this.router.navigate(['/sales/payments', this.codeOrder]);
+      }
+    }
+    catch (error) {
+      console.log('Error viewPay: ', error);
+    }
+  }
+
+  /*viewPay() {
     if(this.codeOrder != "0") {
       if(this.ListProduct.length > 0){
+
+        var idUser = sessionStorage.getItem('idUser');
 
         this.ListProduct.forEach(item => {
           let order = new OrderDTO();
           order.codigo = this.codeOrder;
-          order.id_usuario = 1; //falta poner el usuario login
+          order.id_usuario = idUser ? Number(idUser) : 1; //falta poner el usuario login
           order.id_estadoorden = 7; //Estado pendiente
           order.id_tipopago = 1; //1 = no definido
           order.id_subtipopago = 1; //1 = no definido
@@ -473,7 +753,7 @@ export class OrderComponent implements OnInit {
         if(this.ListOrder.length > 0) 
         {
           this.ApiOrder.post(this.ListOrder).subscribe(data => {
-            this.router.navigate(['/sales/neworder/payments', this.codeOrder]);
+            this.router.navigate(['/sales/payments', this.codeOrder]);
             this.toastService.showToast({
               title: 'Proceso exitoso',
               message: 'Registro de nueva orden exitoso.',
@@ -493,7 +773,8 @@ export class OrderComponent implements OnInit {
 
       }
     }
-  }
+  }*/
+  
   viewCancel() {
     //this.VisibleAlert = true;
     this.viewPrev();
@@ -513,42 +794,63 @@ export class OrderComponent implements OnInit {
   }
 
   addNewClient() {
-    // Validar todos los campos del formulario
     this.form.markAllAsTouched();
-
-    // Actualizar la validez del formulario
     this.form.updateValueAndValidity();
 
-    // Si el formulario es válido, continuar con la lógica de envío
+    if(this.form.invalid) {
+      this.toastService.showToast({
+        title: 'Proceso incompleto',
+        message: 'Completa los datos requeridos del cliente.',
+        type: 'warning',
+        timeout: 3000
+      });
+      return;
+    }
+
     const t : ClientDTO = {
-      nombre: this.form.get('Nombre')?.value,
-      nit: this.form.get('Nit')?.value,
-      correo: this.form.get('Correo')?.value,
+      nombre: this.form.get('Nombre')?.value?.trim(),
+      nit: this.form.get('Nit')?.value?.trim(),
+      correo: this.form.get('Correo')?.value?.trim(),
       id_estado: 1
     }
-
-    let elementClient :any = document.getElementById("select_client");
     
-    if(!this.form.status.includes('INVALID')) {
-      this.ApiClient.post(t).subscribe(data => {
-        this.ListClient.push(data.obj);
+    this.isSavingClient = true;
+    this.ApiClient.post(t).subscribe({
+      next: data => {
+        this.ListClient = [...this.ListClient, data.obj];
         this.codeClient = data.obj.id;
-        setTimeout(() => {
-          this._modal_add_client = false;
-          elementClient.value = data.obj.id;
-          this.form.reset();
-        }, 200);
+        this._modal_add_client = false;
+        this.form.reset();
+        this.isSavingClient = false;
 
-      }), (error: any) => {
-        console.log(error);
+        this.toastService.showToast({
+          title: 'Proceso exitoso',
+          message: 'Cliente creado y seleccionado.',
+          type: 'success',
+          timeout: 3000
+        });
+      },
+      error: error => {
+        this.isSavingClient = false;
+        this.toastService.showToast({
+          title: 'Error ' + error.status,
+          message: error.error?.message || error.message,
+          type: 'error',
+          timeout: 3000
+        });
       }
-    }
-    else {
-      console.log(false)
-    }
+    });
+  }
+
+  hasClientError(controlName: string, errorName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!control?.hasError(errorName) && !!control?.touched;
   }
 
   cancelNewClient(){
+    if (this.isSavingClient) {
+      return;
+    }
     this.form.reset();
     this._modal_add_client = false;
   }
