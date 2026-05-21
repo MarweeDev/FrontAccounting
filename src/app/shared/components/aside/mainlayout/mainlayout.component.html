@@ -7,7 +7,7 @@
             </div>
             <div class="brand-copy">
                 <small>{{companyName}}</small>
-                <strong>Centro de operacion</strong>
+                <strong>{{getOperationCenterLabel()}}</strong>
             </div>
         </div>
 
@@ -40,14 +40,14 @@
                 <small *ngIf="currentShift?.status === 'open'">Base {{currentShift?.opening_amount | currency}}</small>
                 <div *ngIf="currentShift?.status !== 'open'; else closeShiftTpl">
                     <input type="number" [(ngModel)]="openingAmount" [placeholder]="getOpeningPlaceholder()">
-                    <button type="button" [title]="businessProfile === 'instituciones' ? 'Abrir jornada' : 'Abrir caja'" (click)="openShift()">
+                    <button type="button" [title]="getOpenShiftActionLabel()" (click)="openShift()">
                         <i class="fa-solid fa-play"></i>
                     </button>
                 </div>
                 <ng-template #closeShiftTpl>
                     <div>
                         <input type="number" [(ngModel)]="countedCash" [placeholder]="getClosingPlaceholder()">
-                        <button type="button" [title]="businessProfile === 'instituciones' ? 'Cerrar jornada' : 'Cerrar caja'" (click)="closeShift()">
+                        <button type="button" [title]="getCloseShiftActionLabel()" (click)="closeShift()">
                             <i class="fa-solid fa-lock"></i>
                         </button>
                     </div>

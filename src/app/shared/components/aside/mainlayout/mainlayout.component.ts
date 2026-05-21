@@ -8,6 +8,7 @@ import { ShiftDTO } from 'src/app/core/models/shift';
 import { CashShiftService } from 'src/app/core/services/cash-shift/cash-shift.service';
 import { BusinessProfileType } from 'src/app/core/models/businessProfile';
 import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
+import { BusinessDictionaryService } from 'src/app/core/services/business-dictionary/business-dictionary.service';
 
 @Component({
   selector: 'app-mainlayout',
@@ -33,7 +34,8 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   constructor(private router: Router, private app: AppComponent, 
     private ApiModule: ModuleService, private ApiOrder: OrderService, private ApiUser: UserService,
     private cashShiftService: CashShiftService,
-    private settingParameterService: SettingParameterService) {
+    private settingParameterService: SettingParameterService,
+    private businessDictionary: BusinessDictionaryService) {
   }
 
   ngOnInit(): void {
@@ -94,6 +96,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
         const profileParameter = parameters.find(item => item.grupo === 'empresa' && item.clave === 'perfil_negocio');
         const shiftParameter = parameters.find(item => item.grupo === 'empresa' && item.clave === 'perfiles_turno_habilitado');
         this.businessProfile = this.normalizeBusinessProfile(profileParameter?.valor || null);
+        this.businessDictionary.setProfile(this.businessProfile);
         this.showShiftWidget = this.isShiftVisibleForProfile(shiftParameter?.valor);
         if (this.showShiftWidget) {
           this.loadCurrentShift();
@@ -127,20 +130,29 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   }
 
   getShiftTitle(): string {
-    if (this.businessProfile === 'instituciones') return this.currentShift?.status === 'open' ? 'Jornada abierta' : 'Sin jornada';
-    if (this.businessProfile === 'pymes') return this.currentShift?.status === 'open' ? 'Caja abierta' : 'Sin caja';
-    return this.currentShift?.status === 'open' ? 'Turno abierto' : 'Sin turno';
+    return this.currentShift?.status === 'open'
+      ? this.businessDictionary.term('shift.openTitle')
+      : this.businessDictionary.term('shift.closedTitle');
   }
 
   getOpeningPlaceholder(): string {
-    if (this.businessProfile === 'instituciones') return 'Fondo inicial';
-    if (this.businessProfile === 'pymes') return 'Base caja';
-    return 'Monto base';
+    return this.businessDictionary.term('shift.openingPlaceholder');
   }
 
   getClosingPlaceholder(): string {
-    if (this.businessProfile === 'instituciones') return 'Conteo jornada';
-    return 'Conteo cierre';
+    return this.businessDictionary.term('shift.closingPlaceholder');
+  }
+
+  getOperationCenterLabel(): string {
+    return this.businessDictionary.term('shell.operationCenter');
+  }
+
+  getOpenShiftActionLabel(): string {
+    return this.businessDictionary.term('shift.openAction');
+  }
+
+  getCloseShiftActionLabel(): string {
+    return this.businessDictionary.term('shift.closeAction');
   }
 
   private normalizeBusinessProfile(value: string | null): BusinessProfileType {
@@ -181,14 +193,14 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   getModuleKind(item: any): string {
     const route = `${item?.ruta || ''}`.toLowerCase();
     const moduleName = `${item?.modulo || ''}`.toLowerCase();
-    if (route.includes('sales') || moduleName.includes('venta')) return 'Caja';
-    if (route.includes('shopping') || moduleName.includes('compra')) return 'Gasto';
-    if (route.includes('inventory') || moduleName.includes('inventario')) return 'Stock';
-    if (route.includes('reports') || moduleName.includes('reporte')) return 'IA';
-    if (route.includes('settings') || moduleName.includes('ajuste')) return 'Config';
-    if (route.includes('access') || moduleName.includes('acceso')) return 'Admin';
-    if (route.includes('dev') || moduleName.includes('dev')) return 'Lab';
-    return 'Modulo';
+    if (route.includes('sales') || moduleName.includes('venta')) return this.businessDictionary.term('module.salesKind');
+    if (route.includes('shopping') || moduleName.includes('compra')) return this.businessDictionary.term('module.shoppingKind');
+    if (route.includes('inventory') || moduleName.includes('inventario')) return this.businessDictionary.term('module.inventoryKind');
+    if (route.includes('reports') || moduleName.includes('reporte')) return this.businessDictionary.term('module.reportsKind');
+    if (route.includes('settings') || moduleName.includes('ajuste')) return this.businessDictionary.term('module.settingsKind');
+    if (route.includes('access') || moduleName.includes('acceso')) return this.businessDictionary.term('module.accessKind');
+    if (route.includes('dev') || moduleName.includes('dev')) return this.businessDictionary.term('module.devKind');
+    return this.businessDictionary.term('module.defaultKind');
   }
 
   // Función para generar un color aleatorio

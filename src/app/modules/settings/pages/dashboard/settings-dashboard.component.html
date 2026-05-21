@@ -61,6 +61,16 @@
         </label>
 
         <div class="appearance-group">
+          <h2>Diccionario aplicado</h2>
+        </div>
+        <div class="dictionary-preview">
+          <div *ngFor="let term of getDictionaryPreview()">
+            <small>{{term.key}}</small>
+            <strong>{{term.value}}</strong>
+          </div>
+        </div>
+
+        <div class="appearance-group">
           <h2>Tema visual</h2>
         </div>
         <button

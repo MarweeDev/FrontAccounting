@@ -10,6 +10,8 @@ import { SettingParameterDTO } from 'src/app/core/models/settingParameter';
 import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
 import { TaxService } from 'src/app/core/services/tax/tax.service';
 import { ThemeName, ThemeOption, ThemeService, VisualEffectName, VisualEffectOption } from 'src/app/core/services/theme/theme.service';
+import { BusinessDictionaryKey } from 'src/app/core/dictionaries/business-dictionary';
+import { BusinessDictionaryService } from 'src/app/core/services/business-dictionary/business-dictionary.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
 import { ToastService } from 'src/app/shared/directives/toast.service';
 
@@ -152,6 +154,7 @@ export class SettingsDashboardComponent implements OnInit {
     private parameterService: SettingParameterService,
     private taxService: TaxService,
     private themeService: ThemeService,
+    private businessDictionary: BusinessDictionaryService,
     private toastService: ToastService
   ) { }
 
@@ -328,6 +331,7 @@ export class SettingsDashboardComponent implements OnInit {
 
   setBusinessProfile(profile: BusinessProfileDTO): void {
     this.selectedBusinessProfile = profile.type;
+    this.businessDictionary.setProfile(profile.type);
     const setting: SettingDefinition = {
       group: 'empresa',
       key: 'perfil_negocio',
@@ -439,6 +443,7 @@ export class SettingsDashboardComponent implements OnInit {
     if (profile) {
       this.selectedBusinessProfile = profile;
       this.values['empresa.perfil_negocio'] = profile;
+      this.businessDictionary.setProfile(profile);
     }
     this.hydrateShiftEnabledProfiles();
   }
@@ -503,6 +508,10 @@ export class SettingsDashboardComponent implements OnInit {
 
   isShiftEnabledForProfile(profile: BusinessProfileDTO): boolean {
     return this.shiftEnabledProfiles.includes(profile.type);
+  }
+
+  getDictionaryPreview(): Array<{ key: BusinessDictionaryKey; value: string }> {
+    return this.businessDictionary.getTerms(this.selectedBusinessProfile);
   }
 
   toggleShiftForProfile(profile: BusinessProfileDTO, event: Event): void {
