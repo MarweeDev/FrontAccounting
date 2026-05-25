@@ -10,7 +10,7 @@
     bottom: .6rem;
     box-shadow: 0 24px 60px rgba(15, 25, 35, .24);
     display: grid;
-    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     gap: 12px;
     left: .6rem;
     overflow: hidden;
@@ -77,6 +77,10 @@
     cursor: pointer;
     display: flex;
     justify-content: center;
+}
+
+.shift-widget button i {
+    color: #fff;
 }
 
 .brand-zone {
@@ -206,13 +210,15 @@
 
 .module-dock {
     display: grid;
+    align-content: start;
     gap: 8px;
+    min-height: 0;
     overflow-y: auto;
      /* Firefox */
     scrollbar-width: none;
     /* IE y Edge antiguos */
     -ms-overflow-style: none;
-    padding: 20px 2px 8px 2px;
+    padding: 8px 2px;
 }
 .module-dock::-webkit-scrollbar {
     display: none;
