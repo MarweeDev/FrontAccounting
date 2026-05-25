@@ -30,6 +30,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   countedCash = 0;
   businessProfile: BusinessProfileType = 'pymes';
   showShiftWidget = true;
+  accountMenuOpen = false;
 
   constructor(private router: Router, private app: AppComponent, 
     private ApiModule: ModuleService, private ApiOrder: OrderService, private ApiUser: UserService,
@@ -70,6 +71,7 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   }
 
   OnRouterModule(router:any, id:any=null){
+    this.accountMenuOpen = false;
     this.router.navigate([router]);
     this.app.OnHiddenBar();
 
@@ -175,6 +177,10 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
     } catch {
       return true;
     }
+  }
+
+  toggleAccountMenu(): void {
+    this.accountMenuOpen = !this.accountMenuOpen;
   }
 
   isReportsModule(item: any): boolean {

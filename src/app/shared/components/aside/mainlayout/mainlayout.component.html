@@ -53,13 +53,29 @@
                     </div>
                 </ng-template>
             </div>
-            <button type="button" class="utility-button" title="Configuracion" (click)="OnRouterModule('settings/dashboard', 0)">
-                <i class="fa-solid fa-sliders"></i>
-                <span>Preferencias</span>
-            </button>
-            <button type="button" class="utility-button exit" title="Salir" (click)="OnRouterModule('login', 0)">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Salir</span>
+            <div class="account-menu" *ngIf="accountMenuOpen">
+                <button type="button" class="utility-button" title="Preferencias personales" (click)="OnRouterModule('settings/preferences')">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Preferencias</span>
+                </button>
+                <button type="button" class="utility-button exit" title="Salir" (click)="OnRouterModule('login', 0)">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Salir</span>
+                </button>
+            </div>
+            <button
+                type="button"
+                class="account-badge"
+                [class.open]="accountMenuOpen"
+                [attr.aria-expanded]="accountMenuOpen"
+                title="Abrir cuenta"
+                (click)="toggleAccountMenu()">
+                <span class="account-avatar" [style.background-color]="getColor(user)">{{getInitials(user)}}</span>
+                <span class="account-copy">
+                    <strong>{{user}}</strong>
+                    <small>{{rol}}</small>
+                </span>
+                <i class="fa-solid fa-chevron-up account-chevron"></i>
             </button>
         </div>
     </div>

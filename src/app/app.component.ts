@@ -1,10 +1,15 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavDTO } from './core/models/nav';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { InactivityService } from './shared/directives/inactivity.service';
-import { LoadingService, LoadingState } from './core/services/loading/loading.service';
 import { Observable } from 'rxjs';
 import { ThemeService, VisualEffectName } from './core/services/theme/theme.service';
+
+export interface BrandingBrief {
+  product: string;
+  audience: string;
+  objective: string;
+  notes: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -18,8 +23,6 @@ export class AppComponent implements OnInit {
   /*Nav options*/
   listNav : NavDTO[] = [];
 
-  /*Cargar*/
-  loadingState$!: Observable<LoadingState>;
   visualEffect$!: Observable<VisualEffectName>;
   snowParticles = Array.from({ length: 70 }, (_, index) => ({
     x: `${(index * 37) % 100}vw`,
@@ -47,14 +50,22 @@ export class AppComponent implements OnInit {
 
   /*searchterm*/
   searchTerm = '';
+  private readonly brandingCaptureKey = 'dev.brandingCapture.enabled';
+  private readonly brandingBriefKey = 'dev.brandingCapture.brief';
+  brandingToastVisible = false;
+  brandingCaptureBusy = false;
+  brandingBrief: BrandingBrief = {
+    product: 'Accounts POS',
+    audience: 'Comercios, restaurantes y equipos de caja',
+    objective: 'Capturar pantallas para brief visual, branding y revision de UI.',
+    notes: ''
+  };
 
   //#endregion
   
   //#region Constructor
   constructor(
-    private cdRef: ChangeDetectorRef, 
-    private router: Router,
-    private loadingService: LoadingService,
+    private cdRef: ChangeDetectorRef,
     private themeService: ThemeService,
     //private inactivityService: InactivityService
   ) {}
@@ -62,19 +73,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.themeService.loadTheme();
     this.themeService.loadEffect();
-    this.loadingState$ = this.loadingService.state$;
     this.visualEffect$ = this.themeService.effect$;
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        if (this.shouldShowRouteLoader(event.url)) {
-          this.loadingService.show('Abriendo modulo', 'route');
-        }
-      }
-
-      if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
-        this.loadingService.hide();
-      }
-    });
+    this.loadBrandingCaptureState();
   }
   //#endregion
 
@@ -99,15 +99,73 @@ export class AppComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  OnLoadingModule() {
-    this.loadingService.pulse('Cargando modulo', 'manual');
-  }
-  OnLoadingComponent() {
-    this.loadingService.pulse('Actualizando vista', 'manual');
+  setBrandingCapture(enabled: boolean, brief?: Partial<BrandingBrief>): void {
+    if (brief) {
+      this.brandingBrief = { ...this.brandingBrief, ...brief };
+    }
+    this.brandingToastVisible = enabled;
+    localStorage.setItem(this.brandingCaptureKey, enabled ? 'true' : 'false');
+    localStorage.setItem(this.brandingBriefKey, JSON.stringify(this.brandingBrief));
   }
 
-  private shouldShowRouteLoader(url: string): boolean {
-    return !url.startsWith('/login') && !url.startsWith('/status');
+  closeBrandingToast(): void {
+    if (this.brandingCaptureBusy) return;
+    this.setBrandingCapture(false);
+  }
+
+  copyBrandingBrief(): void {
+    const text = [
+      `Producto: ${this.brandingBrief.product}`,
+      `Audiencia: ${this.brandingBrief.audience}`,
+      `Objetivo: ${this.brandingBrief.objective}`,
+      `Notas: ${this.brandingBrief.notes || 'Sin notas adicionales'}`,
+      'Uso: referencias visuales para branding, UI y brief de diseno.'
+    ].join('\n');
+
+    navigator.clipboard?.writeText(text);
+  }
+
+  persistBrandingBrief(): void {
+    localStorage.setItem(this.brandingBriefKey, JSON.stringify(this.brandingBrief));
+  }
+
+  async captureProductScreenshot(): Promise<void> {
+    const mediaDevices = navigator.mediaDevices as any;
+    if (!mediaDevices?.getDisplayMedia) return;
+
+    this.brandingCaptureBusy = true;
+    try {
+      const stream = await mediaDevices.getDisplayMedia({ video: true, audio: false });
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      await video.play();
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
+      stream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = `accounts-brief-${new Date().toISOString().slice(0, 10)}.png`;
+      link.click();
+    } finally {
+      this.brandingCaptureBusy = false;
+      this.persistBrandingBrief();
+    }
+  }
+
+  private loadBrandingCaptureState(): void {
+    const stored = localStorage.getItem(this.brandingBriefKey);
+    if (stored) {
+      try {
+        this.brandingBrief = { ...this.brandingBrief, ...JSON.parse(stored) };
+      } catch {
+        localStorage.removeItem(this.brandingBriefKey);
+      }
+    }
+    this.brandingToastVisible = localStorage.getItem(this.brandingCaptureKey) === 'true';
   }
   //#endregion  
 }

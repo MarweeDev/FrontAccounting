@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AppComponent } from 'src/app/app.component';
+import { AppComponent, BrandingBrief } from 'src/app/app.component';
 import { DevelopmentResourceDTO } from 'src/app/core/models/developmentResource';
 import { PeripheralConfigDTO } from 'src/app/core/models/peripheral';
 import { PeripheralConfigService } from 'src/app/core/services/peripherals/peripheral-config.service';
@@ -21,10 +21,16 @@ export class DevResourcesComponent implements OnInit {
   editingId: number | null = null;
   isSaving = false;
   activeType = 'todos';
-  activeView: 'resources' | 'typography' | 'peripherals' = 'resources';
+  activeView: 'resources' | 'typography' | 'peripherals' | 'branding' = 'resources';
   peripheralStatus?: PeripheralStatus;
   peripheralMode: PeripheralMode = 'local-agent';
   peripheralConfig?: PeripheralConfigDTO | null;
+  brandingBrief: BrandingBrief = {
+    product: 'Accounts POS',
+    audience: 'Comercios, restaurantes y equipos de caja',
+    objective: 'Capturar pantallas para brief visual, branding y revision de UI.',
+    notes: ''
+  };
 
   typographyConfig = {
     fontFamily: 'Outfit',
@@ -57,7 +63,8 @@ export class DevResourcesComponent implements OnInit {
   viewTabs = [
     { id: 'resources', label: 'Recursos', icon: 'fa-solid fa-folder-tree' },
     { id: 'typography', label: 'Tipografia', icon: 'fa-solid fa-font' },
-    { id: 'peripherals', label: 'Perifericos', icon: 'fa-solid fa-print' }
+    { id: 'peripherals', label: 'Perifericos', icon: 'fa-solid fa-print' },
+    { id: 'branding', label: 'Branding', icon: 'fa-solid fa-camera-retro' }
   ];
 
   constructor(
@@ -83,6 +90,7 @@ export class DevResourcesComponent implements OnInit {
     this.onLoad();
     this.loadPeripheralConfig();
     this.loadPeripheralStatus();
+    this.brandingBrief = { ...this.app.brandingBrief };
   }
 
   onLoad(): void {
@@ -104,11 +112,21 @@ export class DevResourcesComponent implements OnInit {
     }
   }
 
-  setView(view: 'resources' | 'typography' | 'peripherals'): void {
+  setView(view: 'resources' | 'typography' | 'peripherals' | 'branding'): void {
     this.activeView = view;
     if (view === 'peripherals') {
       this.loadPeripheralStatus();
     }
+  }
+
+  openBrandingToast(): void {
+    this.app.setBrandingCapture(true, this.brandingBrief);
+    this.toastService.showToast({
+      title: 'Modo captura activo',
+      message: 'El panel flotante seguira visible mientras navegas por la app.',
+      type: 'success',
+      timeout: 3000
+    });
   }
 
   loadPeripheralStatus(): void {

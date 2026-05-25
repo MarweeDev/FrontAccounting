@@ -6,10 +6,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 import { SettingsRouting } from './settings.routing';
 import { SettingsDashboardComponent } from './pages/dashboard/settings-dashboard.component';
+import { PreferencesComponent } from './pages/preferences/preferences.component';
 
 @NgModule({
   declarations: [
-    SettingsDashboardComponent
+    SettingsDashboardComponent,
+    PreferencesComponent
   ],
   imports: [
     CommonModule,

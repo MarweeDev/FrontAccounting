@@ -7,6 +7,39 @@
     <router-outlet></router-outlet>
 </div>
 
+<section class="branding-toast" *ngIf="brandingToastVisible">
+    <div class="branding-toast-card">
+        <button type="button" class="branding-toast-close" (click)="closeBrandingToast()" [disabled]="brandingCaptureBusy">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="branding-toast-head">
+            <span><i class="fa-solid fa-camera-retro"></i></span>
+            <div>
+                <strong>Captura para branding</strong>
+                <small>Brief visual local, sin backend</small>
+            </div>
+        </div>
+        <label>
+            Notas para diseno
+            <textarea rows="4" name="globalBrandingNotes" [(ngModel)]="brandingBrief.notes" (ngModelChange)="persistBrandingBrief()" placeholder="Ej: revisar header, aside, colores, jerarquia visual..."></textarea>
+        </label>
+        <div class="branding-toast-summary">
+            <span>{{brandingBrief.product}}</span>
+            <small>{{brandingBrief.audience}}</small>
+        </div>
+        <div class="branding-toast-actions">
+            <button type="button" class="btn btn-default rd-4" (click)="copyBrandingBrief()">
+                <i class="fa-solid fa-copy"></i>
+                Copiar brief
+            </button>
+            <button type="button" class="btn btn-success rd-4" (click)="captureProductScreenshot()" [disabled]="brandingCaptureBusy">
+                <i class="fa-solid fa-camera"></i>
+                {{brandingCaptureBusy ? 'Capturando...' : 'Tomar screenshot'}}
+            </button>
+        </div>
+    </div>
+</section>
+
 <section
     class="season-effect-overlay"
     *ngIf="visualEffect$ | async as visualEffect"
@@ -37,25 +70,3 @@
     </ng-container>
 </section>
 
-<section class="app-loading-overlay" *ngIf="loadingState$ | async as loading" [class.active]="loading.active">
-    <div class="app-loading-panel" *ngIf="loading.active">
-        <div class="lava-loader" aria-hidden="true">
-            <div class="lava-glass">
-                <span class="lava-blob blob-a"></span>
-                <span class="lava-blob blob-b"></span>
-                <span class="lava-blob blob-c"></span>
-                <span class="lava-blob blob-d"></span>
-                <span class="lava-shine"></span>
-            </div>
-        </div>
-        <div class="loading-copy">
-            <strong>{{loading.message}}</strong>
-            <p>{{loading.mode === 'route' ? 'Preparando navegacion y permisos.' : 'Estamos consultando la informacion.'}}</p>
-        </div>
-        <div class="loading-ripple" aria-hidden="true">
-            <i></i>
-            <i></i>
-            <i></i>
-        </div>
-    </div>
-</section>

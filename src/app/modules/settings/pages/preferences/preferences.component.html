@@ -1,0 +1,67 @@
+<section class="preferences-page">
+  <header class="preferences-head">
+    <div>
+      <p class="eyebrow">Mi experiencia</p>
+      <h1>Preferencias</h1>
+      <p>Personaliza tu espacio de trabajo en este navegador sin alterar la configuracion general del negocio.</p>
+    </div>
+    <span class="local-pill">
+      <i class="fa-solid fa-laptop"></i>
+      Solo este dispositivo
+    </span>
+  </header>
+
+  <div class="preferences-grid">
+    <section class="preference-panel appearance-panel">
+      <div class="panel-title">
+        <i class="fa-solid fa-palette"></i>
+        <div>
+          <h2>Apariencia</h2>
+          <p>Elige la identidad visual que te acompana durante la jornada.</p>
+        </div>
+      </div>
+      <div class="option-grid">
+        <button
+          type="button"
+          class="theme-option"
+          *ngFor="let theme of themes"
+          [class.selected]="theme.id === selectedTheme"
+          (click)="setTheme(theme.id)">
+          <span class="swatches">
+            <i *ngFor="let color of theme.swatches" [style.background]="color"></i>
+          </span>
+          <span class="option-copy">
+            <strong>{{theme.label}}</strong>
+            <small>{{theme.description}}</small>
+          </span>
+          <i class="choice" [className]="theme.id === selectedTheme ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="preference-panel effects-panel">
+      <div class="panel-title">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <div>
+          <h2>Ambiente visual</h2>
+          <p>Efectos opcionales, guardados solo para tu sesion visual local.</p>
+        </div>
+      </div>
+      <div class="effect-grid">
+        <button
+          type="button"
+          class="effect-option"
+          *ngFor="let effect of effects"
+          [class.selected]="effect.id === selectedEffect"
+          (click)="setEffect(effect.id)">
+          <i [className]="effect.icon"></i>
+          <span class="option-copy">
+            <strong>{{effect.label}}</strong>
+            <small>{{effect.description}}</small>
+          </span>
+          <i class="choice" [className]="effect.id === selectedEffect ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+        </button>
+      </div>
+    </section>
+  </div>
+</section>

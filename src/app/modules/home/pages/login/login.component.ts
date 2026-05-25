@@ -42,9 +42,7 @@ export class LoginComponent implements OnInit {
     //Resetea los active en el menu lateral
     localStorage.removeItem("nav_left");
     let elementNav : any = document.getElementById('nav')?.style;
-    let elementNavUser : any = document.getElementById('nav_user')?.style;
     if (elementNav) elementNav.display = "none";
-    if (elementNavUser) elementNavUser.opacity = "0";
   }
 
   login () {

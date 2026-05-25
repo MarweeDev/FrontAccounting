@@ -9,7 +9,6 @@ import { PeripheralService } from 'src/app/core/services/peripherals/peripheral.
 import { SettingParameterDTO } from 'src/app/core/models/settingParameter';
 import { SettingParameterService } from 'src/app/core/services/setting-parameter/setting-parameter.service';
 import { TaxService } from 'src/app/core/services/tax/tax.service';
-import { ThemeName, ThemeOption, ThemeService, VisualEffectName, VisualEffectOption } from 'src/app/core/services/theme/theme.service';
 import { BusinessDictionaryKey } from 'src/app/core/dictionaries/business-dictionary';
 import { BusinessDictionaryService } from 'src/app/core/services/business-dictionary/business-dictionary.service';
 import { DataSharedServicesService } from 'src/app/shared/directives/data-shared-services.service';
@@ -43,10 +42,6 @@ export class SettingsDashboardComponent implements OnInit {
   activeSection = 'empresa';
   values: Record<string, string> = {};
   savingKey: string | null = null;
-  themes: ThemeOption[] = [];
-  selectedTheme: ThemeName = 'marwee';
-  visualEffects: VisualEffectOption[] = [];
-  selectedEffect: VisualEffectName = 'none';
   paymentMethods: PaymentMethodConfigDTO[] = [];
   paymentMethodForm: PaymentMethodConfigDTO = this.getEmptyPaymentMethod();
   taxes: TaxDTO[] = [];
@@ -57,10 +52,10 @@ export class SettingsDashboardComponent implements OnInit {
 
   sections: SettingSection[] = [
     {
-      id: 'apariencia',
-      title: 'Apariencia',
-      icon: 'fa-solid fa-palette',
-      description: 'Control visual local de Accounts para adaptar el producto a la identidad preferida.',
+      id: 'operacion',
+      title: 'Operacion',
+      icon: 'fa-solid fa-sliders',
+      description: 'Perfil del negocio y reglas que adaptan el lenguaje operativo del sistema.',
       settings: []
     },
     {
@@ -153,17 +148,11 @@ export class SettingsDashboardComponent implements OnInit {
     private peripheralService: PeripheralService,
     private parameterService: SettingParameterService,
     private taxService: TaxService,
-    private themeService: ThemeService,
     private businessDictionary: BusinessDictionaryService,
     private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
-    this.themes = this.themeService.getThemes();
-    this.selectedTheme = this.themeService.getCurrentTheme();
-    this.visualEffects = this.themeService.getVisualEffects();
-    this.selectedEffect = this.themeService.getCurrentEffect();
-
     this.app.listNav = [
       { nombre: 'Refrescar', url: 'settings/dashboard', icon: 'fa-solid fa-rotate-right', type: 'btn-success' }
     ];
@@ -318,17 +307,6 @@ export class SettingsDashboardComponent implements OnInit {
     });
   }
 
-  setTheme(theme: ThemeName): void {
-    this.selectedTheme = this.themeService.setTheme(theme);
-    const selected = this.themes.find(item => item.id === this.selectedTheme);
-    this.toastService.showToast({
-      title: 'Tema aplicado',
-      message: (selected?.label || 'Tema') + ' esta activo en este navegador.',
-      type: 'success',
-      timeout: 2500
-    });
-  }
-
   setBusinessProfile(profile: BusinessProfileDTO): void {
     this.selectedBusinessProfile = profile.type;
     this.businessDictionary.setProfile(profile.type);
@@ -342,17 +320,6 @@ export class SettingsDashboardComponent implements OnInit {
     };
     this.values[this.getSettingId(setting)] = profile.type;
     this.save(setting);
-  }
-
-  setVisualEffect(effect: VisualEffectName): void {
-    this.selectedEffect = this.themeService.setVisualEffect(effect);
-    const selected = this.visualEffects.find(item => item.id === this.selectedEffect);
-    this.toastService.showToast({
-      title: 'Efecto aplicado',
-      message: (selected?.label || 'Efecto') + ' queda activo en este navegador.',
-      type: 'success',
-      timeout: 2500
-    });
   }
 
   getValue(setting: SettingDefinition): string {

@@ -9,7 +9,7 @@
             class="rd-4"
             *ngFor="let tab of viewTabs"
             [class.active-filter]="tab.id === activeView"
-            (click)="setView(tab.id === 'resources' ? 'resources' : tab.id === 'typography' ? 'typography' : 'peripherals')"
+            (click)="setView(tab.id === 'resources' ? 'resources' : tab.id === 'typography' ? 'typography' : tab.id === 'branding' ? 'branding' : 'peripherals')"
             [title]="tab.label">
             <i [className]="tab.icon"></i>
             <span>{{tab.label}}</span>
@@ -291,6 +291,55 @@
             <i class="fa-solid fa-print"></i>
             <h2>Impresora</h2>
             <p>El comprobante interno se envia primero al agente local. Si no existe agente, el navegador sigue como fallback para imprimir.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="branding-shell" *ngIf="activeView === 'branding'">
+      <aside class="branding-controls">
+        <h1>Brief visual</h1>
+        <p>Activa una guia flotante para capturar pantallas del producto y entregar referencias claras al equipo de diseno.</p>
+
+        <label>
+          Producto
+          <input type="text" name="brandingProduct" [(ngModel)]="brandingBrief.product">
+        </label>
+
+        <label>
+          Audiencia
+          <input type="text" name="brandingAudience" [(ngModel)]="brandingBrief.audience">
+        </label>
+
+        <label>
+          Objetivo
+          <textarea rows="4" name="brandingObjective" [(ngModel)]="brandingBrief.objective"></textarea>
+        </label>
+
+        <button type="button" class="btn btn-success rd-4" (click)="openBrandingToast()">
+          <i class="fa-solid fa-camera-retro"></i>
+          Activar modo captura
+        </button>
+      </aside>
+
+      <section class="branding-preview">
+        <div class="branding-hero">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <h2>Modo diseñador</h2>
+          <p>Usa el toast flotante mientras navegas por el producto, captura la pantalla y comparte el contexto del brief sin depender de backend.</p>
+        </div>
+        <div class="branding-steps">
+          <article>
+            <strong>1</strong>
+            <span>Abre la pantalla que quieres documentar.</span>
+          </article>
+          <article>
+            <strong>2</strong>
+            <span>Activa el toast de captura y escribe notas de branding.</span>
+          </article>
+          <article>
+            <strong>3</strong>
+            <span>Captura pantalla o copia el brief para el diseñador.</span>
           </article>
         </div>
       </section>

@@ -99,8 +99,18 @@
   padding-top: 12px;
 }
 
+.branding-shell {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  gap: 12px;
+  width: 100%;
+  padding-top: 12px;
+}
+
 .type-controls,
 .type-preview,
+.branding-controls,
+.branding-preview,
 .peripheral-controls,
 .peripheral-preview {
   border: 1px solid var(--color-texto-terciario);
@@ -109,6 +119,7 @@
 }
 
 .type-controls,
+.branding-controls,
 .peripheral-controls {
   display: flex;
   flex-direction: column;
@@ -117,6 +128,7 @@
 }
 
 .type-controls h1,
+.branding-controls h1,
 .peripheral-controls h1 {
   margin: 0;
   font-size: 18px;
@@ -124,10 +136,90 @@
 }
 
 .type-controls p,
+.branding-controls p,
 .peripheral-controls p {
   margin: 0;
   color: var(--color-adicional-secundario);
   font-size: 11px;
+  line-height: 18px;
+}
+
+.branding-controls .btn i {
+  margin-right: 7px;
+}
+
+.branding-preview {
+  min-width: 0;
+  padding: 16px;
+}
+
+.branding-hero {
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(44, 142, 132, .12), rgba(255,255,255,.96));
+  border: 1px solid rgba(44, 142, 132, .2);
+  border-radius: 10px;
+  display: grid;
+  gap: 8px;
+  min-height: 220px;
+  padding: 22px;
+}
+
+.branding-hero i {
+  align-items: center;
+  background: var(--color-primary);
+  border-radius: 12px;
+  color: #fff;
+  display: flex;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.branding-hero h2 {
+  color: var(--color-primary);
+  font-size: 22px;
+  margin: 8px 0 0;
+}
+
+.branding-hero p {
+  color: rgb(97 109 138);
+  font-size: 13px;
+  line-height: 21px;
+  margin: 0;
+  max-width: 620px;
+}
+
+.branding-steps {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.branding-steps article {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--color-texto-terciario);
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+}
+
+.branding-steps strong {
+  align-items: center;
+  background: var(--background-primario);
+  border-radius: 50%;
+  color: var(--color-primary);
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  min-width: 30px;
+}
+
+.branding-steps span {
+  color: var(--color-adicional-primario);
+  font-size: 12px;
   line-height: 18px;
 }
 
@@ -558,8 +650,10 @@ td:last-child {
   .container-head .banner,
   .dev-shell,
   .typography-shell,
+  .branding-shell,
   .peripherals-shell,
-  .flow-preview {
+  .flow-preview,
+  .branding-steps {
     display: flex;
     flex-direction: column;
   }

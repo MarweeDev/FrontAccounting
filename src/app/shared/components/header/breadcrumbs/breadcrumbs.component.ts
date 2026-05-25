@@ -12,8 +12,6 @@ import { DataSharedServicesService } from 'src/app/shared/directives/data-shared
 export class BreadcrumbsComponent implements OnInit, AfterViewInit {
 
   title : string = "NameModule";
-  user : string = "";
-  rol : string = "";
   breadcrumbParts : string[] = [];
   public isProcessingDataUser? : boolean = true;
 
@@ -50,10 +48,6 @@ export class BreadcrumbsComponent implements OnInit, AfterViewInit {
         let t = new token();
         t.token = auth;
         this.ApiUser.getInfoUserCached(t).subscribe(data => {
-          this.user  = data.result[0]?.usuario;
-          this.rol  = data.result[0]?.rol;
-          let elementNavUser : any = document.getElementById('nav_user')?.style;
-          elementNavUser.opacity = "1";
           this.isProcessingDataUser = false;
           sessionStorage.setItem('idUser',data.result[0]?.id_usuario);
         });

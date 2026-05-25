@@ -21,7 +21,7 @@ body.theme-classic {
     --surface-muted: #f9f9f9;
     --border-soft: #d9d9d9;
     --shadow-soft: rgba(0, 0, 0, .14);
-    --brand-gradient: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(55,146,141,1) 100%);
+    --brand-gradient: linear-gradient(100deg, rgba(23,25,33,1) 0%, rgba(34,62,68,1) 50%, rgba(23,25,33,1) 100%);
     --header-bg: var(--brand-gradient);
     --header-text: #FFFFFF;
     --header-muted: rgba(255, 255, 255, .68);
