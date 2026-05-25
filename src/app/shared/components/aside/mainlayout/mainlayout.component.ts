@@ -31,6 +31,9 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   businessProfile: BusinessProfileType = 'pymes';
   showShiftWidget = true;
   accountMenuOpen = false;
+  shiftModalVisible = false;
+  shiftConfirmation: 'open' | 'close' | null = null;
+  shiftSaving = false;
 
   constructor(private router: Router, private app: AppComponent, 
     private ApiModule: ModuleService, private ApiOrder: OrderService, private ApiUser: UserService,
@@ -72,6 +75,8 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
 
   OnRouterModule(router:any, id:any=null){
     this.accountMenuOpen = false;
+    this.shiftModalVisible = false;
+    this.shiftConfirmation = null;
     this.router.navigate([router]);
     this.app.OnHiddenBar();
 
@@ -113,22 +118,62 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   }
 
   openShift(): void {
+    this.shiftSaving = true;
     this.cashShiftService.open({ opening_amount: Number(this.openingAmount || 0), notes: 'Apertura desde aside' }).subscribe({
       next: data => {
         this.currentShift = data.result;
         this.openingAmount = 0;
-      }
+        this.shiftConfirmation = null;
+        this.shiftSaving = false;
+      },
+      error: () => this.shiftSaving = false
     });
   }
 
   closeShift(): void {
     if (!this.currentShift?.id) return;
+    this.shiftSaving = true;
     this.cashShiftService.close(this.currentShift.id, { counted_cash: Number(this.countedCash || 0), notes: 'Cierre desde aside' }).subscribe({
       next: data => {
         this.currentShift = data.result;
         this.countedCash = 0;
-      }
+        this.shiftConfirmation = null;
+        this.shiftSaving = false;
+      },
+      error: () => this.shiftSaving = false
     });
+  }
+
+  openShiftModal(): void {
+    this.accountMenuOpen = false;
+    this.shiftConfirmation = null;
+    this.shiftModalVisible = true;
+    this.loadCurrentShift();
+  }
+
+  closeShiftModal(): void {
+    if (this.shiftSaving) return;
+    this.shiftConfirmation = null;
+    this.shiftModalVisible = false;
+  }
+
+  requestShiftAction(action: 'open' | 'close'): void {
+    this.shiftConfirmation = action;
+  }
+
+  cancelShiftConfirmation(): void {
+    this.shiftConfirmation = null;
+  }
+
+  confirmShiftAction(): void {
+    if (this.shiftConfirmation === 'open') {
+      this.openShift();
+      return;
+    }
+
+    if (this.shiftConfirmation === 'close') {
+      this.closeShift();
+    }
   }
 
   getShiftTitle(): string {
@@ -180,6 +225,8 @@ export class MainlayoutComponent implements OnInit, AfterViewInit {
   }
 
   toggleAccountMenu(): void {
+    this.shiftModalVisible = false;
+    this.shiftConfirmation = null;
     this.accountMenuOpen = !this.accountMenuOpen;
   }
 

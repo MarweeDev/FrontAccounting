@@ -35,24 +35,22 @@
         </nav>
 
         <div class="footer-zone">
-            <div class="shift-widget" *ngIf="showShiftWidget">
-                <strong>{{getShiftTitle()}}</strong>
-                <small *ngIf="currentShift?.status === 'open'">Base {{currentShift?.opening_amount | currency}}</small>
-                <div *ngIf="currentShift?.status !== 'open'; else closeShiftTpl">
-                    <input type="number" [(ngModel)]="openingAmount" [placeholder]="getOpeningPlaceholder()">
-                    <button type="button" [title]="getOpenShiftActionLabel()" (click)="openShift()">
-                        <i class="fa-solid fa-play"></i>
-                    </button>
-                </div>
-                <ng-template #closeShiftTpl>
-                    <div>
-                        <input type="number" [(ngModel)]="countedCash" [placeholder]="getClosingPlaceholder()">
-                        <button type="button" [title]="getCloseShiftActionLabel()" (click)="closeShift()">
-                            <i class="fa-solid fa-lock"></i>
-                        </button>
-                    </div>
-                </ng-template>
-            </div>
+            <button
+                type="button"
+                class="shift-launcher"
+                *ngIf="showShiftWidget"
+                [class.open]="currentShift?.status === 'open'"
+                title="Gestionar turno"
+                (click)="openShiftModal()">
+                <span class="shift-launcher-icon">
+                    <i class="fa-solid fa-cash-register"></i>
+                </span>
+                <span class="shift-launcher-copy">
+                    <strong>{{currentShift?.status === 'open' ? 'Turno activo' : 'Iniciar turno'}}</strong>
+                    <small>{{currentShift?.status === 'open' ? 'Ver o cerrar jornada' : 'Abrir jornada'}}</small>
+                </span>
+                <i class="fa-solid fa-arrow-up-right-from-square shift-launcher-arrow"></i>
+            </button>
             <div class="account-menu" *ngIf="accountMenuOpen">
                 <button type="button" class="utility-button" title="Preferencias personales" (click)="OnRouterModule('settings/preferences')">
                     <i class="fa-solid fa-sliders"></i>
@@ -79,4 +77,80 @@
             </button>
         </div>
     </div>
+</section>
+
+<section class="shift-modal" *ngIf="shiftModalVisible" (click)="closeShiftModal()">
+    <article
+        class="shift-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="shift-modal-title"
+        (click)="$event.stopPropagation()">
+        <header class="shift-modal-header">
+            <div>
+                <small>Control de caja</small>
+                <h2 id="shift-modal-title">{{getShiftTitle()}}</h2>
+            </div>
+            <button type="button" class="shift-modal-close" title="Cerrar" [disabled]="shiftSaving" (click)="closeShiftModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <div class="shift-widget shift-widget-modal">
+            <div class="shift-status" *ngIf="currentShift?.status === 'open'">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Turno en operación</span>
+                <strong>Base {{currentShift?.opening_amount | currency}}</strong>
+            </div>
+
+            <label class="shift-field" *ngIf="currentShift?.status !== 'open'; else closeShiftField">
+                <span>{{getOpeningPlaceholder()}}</span>
+                <input type="number" [(ngModel)]="openingAmount" [placeholder]="getOpeningPlaceholder()">
+            </label>
+            <ng-template #closeShiftField>
+                <label class="shift-field">
+                    <span>{{getClosingPlaceholder()}}</span>
+                    <input type="number" [(ngModel)]="countedCash" [placeholder]="getClosingPlaceholder()">
+                </label>
+            </ng-template>
+        </div>
+
+        <div class="shift-confirmation" *ngIf="shiftConfirmation">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <div>
+                <strong>{{shiftConfirmation === 'open' ? '¿Seguro que deseas iniciar el turno?' : '¿Seguro que deseas cerrar el turno?'}}</strong>
+                <small>Esta acción quedará registrada en la operación de caja.</small>
+            </div>
+        </div>
+
+        <footer class="shift-modal-actions">
+            <ng-container *ngIf="!shiftConfirmation">
+                <button
+                    type="button"
+                    class="shift-primary-action"
+                    *ngIf="currentShift?.status !== 'open'; else closeShiftButton"
+                    (click)="requestShiftAction('open')">
+                    <i class="fa-solid fa-play"></i>
+                    {{getOpenShiftActionLabel()}}
+                </button>
+                <ng-template #closeShiftButton>
+                    <button type="button" class="shift-danger-action" (click)="requestShiftAction('close')">
+                        <i class="fa-solid fa-lock"></i>
+                        {{getCloseShiftActionLabel()}}
+                    </button>
+                </ng-template>
+            </ng-container>
+            <ng-container *ngIf="shiftConfirmation">
+                <button type="button" class="shift-secondary-action" [disabled]="shiftSaving" (click)="cancelShiftConfirmation()">Volver</button>
+                <button
+                    type="button"
+                    [class]="shiftConfirmation === 'open' ? 'shift-primary-action' : 'shift-danger-action'"
+                    [disabled]="shiftSaving"
+                    (click)="confirmShiftAction()">
+                    <i [class]="shiftSaving ? 'fa-solid fa-spinner fa-spin' : 'fa-solid fa-check'"></i>
+                    {{shiftSaving ? 'Procesando' : 'Confirmar'}}
+                </button>
+            </ng-container>
+        </footer>
+    </article>
 </section>
