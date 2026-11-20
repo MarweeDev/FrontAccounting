@@ -464,6 +464,9 @@
 .utility-button:hover {
     background: var(--background-primario);
 }
+.exit:hover span {
+    color: #fff;
+}
 
 .utility-button.exit:hover {
     background: var(--color-danger);
